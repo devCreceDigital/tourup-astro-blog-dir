@@ -3,9 +3,10 @@ type: "company"
 slug: "/company/c-d-t-t-o-s-a-c-san-sebastian"
 title: "C.D.T.T.O S.A.C"
 destination: "SAN SEBASTIAN, CUSCO"
-distribution_role: "tour_operator"
+category: "operador_turismo"
+agency_class_raw: "Operador Turismo"
 summary: "Travel Company based in SAN SEBASTIAN, CUSCO, Peru."
-contact: {}
+contact:
 location:
   city: "SAN SEBASTIAN"
   province: "CUSCO"

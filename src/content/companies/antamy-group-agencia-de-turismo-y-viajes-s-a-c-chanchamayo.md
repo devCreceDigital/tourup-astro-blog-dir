@@ -3,9 +3,10 @@ type: "company"
 slug: "/company/antamy-group-agencia-de-turismo-y-viajes-s-a-c-chanchamayo"
 title: "Antamy Group Agencia De Turismo Y Viajes S.A.C."
 destination: "CHANCHAMAYO, JUNÍN"
-distribution_role: "retail_travel_agency"
+category: "retail_travel_agency"
+agency_class_raw: "Minorista"
 summary: "Retail Travel Agency based in CHANCHAMAYO, JUNÍN, Peru."
-contact: {}
+contact:
 location:
   city: "CHANCHAMAYO"
   province: "CHANCHAMAYO"

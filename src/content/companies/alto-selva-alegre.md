@@ -3,9 +3,10 @@ type: "company"
 slug: "/company/alto-selva-alegre"
 title: "-"
 destination: "ALTO SELVA ALEGRE, AREQUIPA"
-distribution_role: "retail_travel_agency"
+category: "retail_travel_agency"
+agency_class_raw: "Minorista"
 summary: "Retail Travel Agency based in ALTO SELVA ALEGRE, AREQUIPA, Peru."
-contact: {}
+contact:
 location:
   city: "ALTO SELVA ALEGRE"
   province: "AREQUIPA"

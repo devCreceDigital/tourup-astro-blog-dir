@@ -3,9 +3,10 @@ type: "company"
 slug: "/company/destinos-viajes-tarapoto-tarapoto"
 title: "Destinos & Viajes Tarapoto"
 destination: "TARAPOTO, SAN MARTÍN"
-distribution_role: "retail_travel_agency"
+category: "retail_travel_agency"
+agency_class_raw: "Minorista"
 summary: "Retail Travel Agency based in TARAPOTO, SAN MARTÍN, Peru."
-contact: {}
+contact:
 location:
   city: "TARAPOTO"
   province: "SAN MARTÍN"

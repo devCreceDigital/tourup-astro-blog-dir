@@ -3,9 +3,10 @@ type: "company"
 slug: "/company/g-c-viajes-y-servicios-cusco"
 title: "G.C. Viajes Y Servicios"
 destination: "CUSCO, CUSCO"
-distribution_role: "tour_operator"
+category: "operador_turismo"
+agency_class_raw: "Operador Turismo"
 summary: "Travel Company based in CUSCO, CUSCO, Peru."
-contact: {}
+contact:
 location:
   city: "CUSCO"
   province: "CUSCO"

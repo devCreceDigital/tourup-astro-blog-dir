@@ -3,9 +3,10 @@ type: "company"
 slug: "/company/candelabro-express-s-a-c-pisco"
 title: "Candelabro Express S.A.C."
 destination: "PISCO, ICA"
-distribution_role: "tour_operator"
+category: "operador_turismo"
+agency_class_raw: "Operador Turismo"
 summary: "Travel Company based in PISCO, ICA, Peru."
-contact: {}
+contact:
 location:
   city: "PISCO"
   province: "PISCO"

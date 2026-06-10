@@ -3,9 +3,10 @@ type: "company"
 slug: "/company/cusco-peru-travel-cusco"
 title: "Cusco Peru Travel"
 destination: "CUSCO, CUSCO"
-distribution_role: "tour_operator"
+category: "operador_turismo"
+agency_class_raw: "Operador Turismo"
 summary: "Travel Company based in CUSCO, CUSCO, Peru."
-contact: {}
+contact:
 location:
   city: "CUSCO"
   province: "CUSCO"

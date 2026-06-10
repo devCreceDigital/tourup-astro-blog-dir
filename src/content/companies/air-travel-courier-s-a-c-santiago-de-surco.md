@@ -3,9 +3,10 @@ type: "company"
 slug: "/company/air-travel-courier-s-a-c-santiago-de-surco"
 title: "Air Travel & Courier S.A.C."
 destination: "SANTIAGO DE SURCO, LIMA"
-distribution_role: "retail_travel_agency"
+category: "retail_travel_agency"
+agency_class_raw: "Minorista"
 summary: "Retail Travel Agency based in SANTIAGO DE SURCO, LIMA, Peru."
-contact: {}
+contact:
 location:
   city: "SANTIAGO DE SURCO"
   province: "LIMA"

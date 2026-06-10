@@ -3,9 +3,10 @@ type: "company"
 slug: "/company/cumbres-andinas-huaraz-e-i-r-l-huaraz"
 title: "Cumbres Andinas Huaraz E.I.R.L."
 destination: "HUARAZ, ÁNCASH"
-distribution_role: "tour_operator"
+category: "operador_turismo"
+agency_class_raw: "Operador Turismo"
 summary: "Travel Company based in HUARAZ, ÁNCASH, Peru."
-contact: {}
+contact:
 location:
   city: "HUARAZ"
   province: "HUARAZ"

@@ -3,9 +3,10 @@ type: "company"
 slug: "/company/amazonia-tours-chanchamayo"
 title: "Amazonia Tours"
 destination: "CHANCHAMAYO, JUNÍN"
-distribution_role: "tour_operator"
+category: "operador_turismo"
+agency_class_raw: "Operador Turismo"
 summary: "Travel Company based in CHANCHAMAYO, JUNÍN, Peru."
-contact: {}
+contact:
 location:
   city: "CHANCHAMAYO"
   province: "CHANCHAMAYO"

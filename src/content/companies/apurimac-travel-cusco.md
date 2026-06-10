@@ -3,9 +3,10 @@ type: "company"
 slug: "/company/apurimac-travel-cusco"
 title: "Apurimac Travel"
 destination: "CUSCO, CUSCO"
-distribution_role: "wholesale_travel_agency"
+category: "wholesale_travel_agency"
+agency_class_raw: "Mayorista"
 summary: "Wholesale Travel Agency based in CUSCO, CUSCO, Peru."
-contact: {}
+contact:
 location:
   city: "CUSCO"
   province: "CUSCO"

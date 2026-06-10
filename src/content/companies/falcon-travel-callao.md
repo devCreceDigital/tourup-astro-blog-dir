@@ -3,9 +3,10 @@ type: "company"
 slug: "/company/falcon-travel-callao"
 title: "Falcon Travel"
 destination: "CALLAO, CALLAO"
-distribution_role: "retail_travel_agency"
+category: "retail_travel_agency"
+agency_class_raw: "Minorista"
 summary: "Retail Travel Agency based in CALLAO, CALLAO, Peru."
-contact: {}
+contact:
 location:
   city: "CALLAO"
   province: "PROV. CONST. DEL CALLAO"

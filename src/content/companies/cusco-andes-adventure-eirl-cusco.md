@@ -3,9 +3,10 @@ type: "company"
 slug: "/company/cusco-andes-adventure-eirl-cusco"
 title: "Cusco Andes Adventure Eirl"
 destination: "CUSCO, CUSCO"
-distribution_role: "tour_operator"
+category: "operador_turismo"
+agency_class_raw: "Operador Turismo"
 summary: "Travel Company based in CUSCO, CUSCO, Peru."
-contact: {}
+contact:
 location:
   city: "CUSCO"
   province: "CUSCO"

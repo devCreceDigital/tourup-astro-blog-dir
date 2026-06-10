@@ -3,9 +3,10 @@ type: "company"
 slug: "/company/canel-s-peru-travel-lince"
 title: "Canel´S Peru Travel"
 destination: "LINCE, LIMA"
-distribution_role: "retail_travel_agency"
+category: "retail_travel_agency"
+agency_class_raw: "Minorista, Operador Turismo"
 summary: "Retail Travel Agency based in LINCE, LIMA, Peru."
-contact: {}
+contact:
 location:
   city: "LINCE"
   province: "LIMA"
