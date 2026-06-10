@@ -8,7 +8,9 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "graphify": "python3 -m graphify extract src/content --backend gemini --max-concurrency 4",
+    "graph:bootstrap": "python3 scripts/generate_graph.py"
   },
   "dependencies": {
     "astro": "^5.2.5"

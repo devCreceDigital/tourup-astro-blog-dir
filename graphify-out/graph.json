@@ -1,0 +1,285 @@
+{
+  "nodes": [
+    {
+      "id": "company:explore-peru-tours",
+      "type": "Company",
+      "label": "Explore Peru Tours",
+      "properties": {
+        "title": "Explore Peru Tours",
+        "summary": "Explore Peru Tours is a Lima-based tour operator specializing in customized Machu Picchu, Amazon jungle, and Cusco Region trips since 2005. Ideal for international travel agencies and DMCs seeking a reliable receptive partner with a 4.9/5 verified rating.",
+        "distribution_role": "tour_operator",
+        "destinos": [
+          "cusco",
+          "lima",
+          "amazonas"
+        ],
+        "categorias": [
+          "tours-culturales",
+          "aventura",
+          "full-day",
+          "lujo"
+        ],
+        "rating": 4.9,
+        "reviews_count": 512,
+        "b2b_profile": "Receptivo receptivo especializado en grupos internacionales 2–30 pax. Clientes habituales: agencias emisoras de EE.UU., Canadá y Europa. Idiomas: inglés, español, francés.",
+        "trust_metrics": {
+          "avg_response_time_hours": 1.5,
+          "incident_rate": 0.02,
+          "group_capacity_max": 80,
+          "b2b_client_types": [
+            "agencias_emisoras",
+            "dmc",
+            "ota"
+          ],
+          "languages": [
+            "es",
+            "en",
+            "fr"
+          ]
+        },
+        "mentioned_in_prompts": [
+          "best-peru-tour-companies-for-families"
+        ],
+        "contact": {
+          "website": "https://exploraperutours.com",
+          "email": "info@exploraperutours.com",
+          "phone": "+51 (1) 2441000",
+          "phone_alt_1": "+51 (1) 2441001"
+        },
+        "location": {
+          "city": "Lima",
+          "province": "Lima",
+          "region": "Lima",
+          "country": "Peru",
+          "ubigeo_code": "150131"
+        },
+        "nap": {
+          "address": "Av. Larco 1301, Miraflores",
+          "city": "Lima",
+          "country": "Peru",
+          "phone": "+51 1 244 1000",
+          "email": "info@exploraperutours.com",
+          "website": "https://exploraperutours.com"
+        },
+        "regulation": {
+          "tax_id": "20123456789",
+          "license_number": "MCT-2005-00412",
+          "license_issue_date": "2005-03-15"
+        }
+      }
+    },
+    {
+      "id": "destino:cusco",
+      "type": "Destino",
+      "label": "Cusco",
+      "properties": {
+        "name": "Cusco",
+        "country": "Peru",
+        "region": "Cusco",
+        "summary": "Cusco es la capital histórica del Imperio Inca y la puerta de entrada a Machu Picchu. Con más de 400 operadores turísticos registrados en MINCETUR, es el destino turístico más visitado de Perú.",
+        "parent": "peru",
+        "faq": [
+          {
+            "question": "¿Cuál es la mejor época para visitar Cusco?",
+            "answer": "La temporada seca (mayo a octubre) es la más recomendada, con días soleados y noches frías. La temporada alta es julio y agosto."
+          },
+          {
+            "question": "¿Qué operadores turísticos están certificados por MINCETUR en Cusco?",
+            "answer": "MINCETUR publica un registro actualizado de agencias habilitadas. Los operadores certificados deben mostrar su licencia vigente en sus oficinas y webs."
+          },
+          {
+            "question": "¿Cuántos días se necesitan para visitar Cusco y Machu Picchu?",
+            "answer": "Lo mínimo recomendable son 4 días: 1-2 para aclimatación en Cusco, 1 día en el Valle Sagrado y 1 día completo en Machu Picchu."
+          }
+        ]
+      }
+    },
+    {
+      "id": "destino:lima",
+      "type": "Destino",
+      "label": "Lima",
+      "properties": {
+        "name": "Lima",
+        "country": "Peru",
+        "region": "Lima",
+        "summary": "Lima es la capital y principal hub de entrada a Perú. Combina gastronomía de talla mundial, historia precolombina y una creciente oferta de turismo corporativo (MICE) y experiencias de lujo.",
+        "parent": "peru",
+        "faq": [
+          {
+            "question": "¿Lima es solo un destino de paso o vale la pena quedarse?",
+            "answer": "Lima merece al menos 2-3 días. El Circuito Mágico del Agua, el Centro Histórico (Patrimonio UNESCO), Miraflores y Barranco ofrecen experiencias únicas. La gastronomía limeña es mundialmente reconocida."
+          },
+          {
+            "question": "¿Qué operadores en Lima trabajan con agencias B2B internacionales?",
+            "answer": "La mayoría de los grandes operadores receptivos del Perú tienen sede central en Lima (Miraflores o San Isidro) aunque operen en todo el país."
+          }
+        ]
+      }
+    },
+    {
+      "id": "categoria_destino:full-day",
+      "type": "CategoriaDestino",
+      "label": "Tours full day desde Cusco",
+      "properties": {
+        "name": "Tours full day desde Cusco",
+        "destino_slug": "cusco",
+        "categoria": "full-day",
+        "summary": "Los tours full day desde Cusco cubren los principales atractivos de la región en jornadas de 8-10 horas: Valle Sagrado, Maras-Moray, Sacsayhuamán y el Circuito Sagrado. Son el producto de mayor rotación en operadores receptivos de Cusco.",
+        "faq": [
+          {
+            "question": "¿Qué full day tiene más demanda desde Cusco?",
+            "answer": "El Valle Sagrado (Pisac-Ollantaytambo) y el City Tour (Sacsayhuamán-Qorikancha-Catedral) son los más solicitados. Maras-Moray es popular en combinación con el Valle Sagrado."
+          },
+          {
+            "question": "¿Cuántos pax puede manejar un operador en un full day?",
+            "answer": "Depende del vehículo y el destino. Los grandes operadores tienen flota propia con minivans (6-12 pax) y coaches (40+ pax) para grupos B2B."
+          },
+          {
+            "question": "¿Qué incluye normalmente un full day B2B en Cusco?",
+            "answer": "Recojo en hotel, transporte, guía certificado, entradas a los sitios, almuerzo (en algunos paquetes) y regreso al hotel. El boleto turístico Cusco suele no incluirse y se factura aparte."
+          }
+        ]
+      }
+    },
+    {
+      "id": "categoria_destino:tours-comunitarios",
+      "type": "CategoriaDestino",
+      "label": "Tours comunitarios en Cusco",
+      "properties": {
+        "name": "Tours comunitarios en Cusco",
+        "destino_slug": "cusco",
+        "categoria": "tours-comunitarios",
+        "summary": "Los tours comunitarios en Cusco conectan a los viajeros con comunidades quechua del Valle Sagrado y el altiplano. Son gestionados por operadores especializados con certificación de turismo vivencial de MINCETUR.",
+        "faq": [
+          {
+            "question": "¿Qué incluye un tour comunitario en Cusco?",
+            "answer": "Normalmente incluye visita a la comunidad, demostración de artesanía o agricultura andina, almuerzo comunitario, y en algunos casos pernoctación en casa de familia. El idioma principal es el quechua, con guías bilingües."
+          },
+          {
+            "question": "¿Qué operadores ofrecen tours comunitarios certificados en Cusco?",
+            "answer": "Operadores como Explore Peru Tours y agencias especializadas en turismo responsable ofrecen itinerarios certificados. Verifica que el operador tenga acuerdos formales con las comunidades participantes."
+          },
+          {
+            "question": "¿Son los tours comunitarios adecuados para grupos B2B grandes?",
+            "answer": "La mayoría de comunidades establecen un máximo de 12-20 visitantes simultáneos para preservar la autenticidad. Para grupos más grandes, algunos operadores coordinan rotación entre varias comunidades."
+          }
+        ]
+      }
+    },
+    {
+      "id": "external_brand:tourradar",
+      "type": "ExternalBrand",
+      "label": "TourRadar",
+      "properties": {
+        "name": "TourRadar",
+        "official_url": "https://www.tourradar.com",
+        "brand_role": "online_travel_agency",
+        "country": "Australia",
+        "mentioned_in_prompts": [
+          "best-peru-tour-companies-for-families",
+          "budget-friendly-peru-tours"
+        ]
+      }
+    },
+    {
+      "id": "prompt:best-peru-tour-companies-for-families",
+      "type": "PromptLanding",
+      "label": "Best Peru Tour Companies for Families",
+      "properties": {
+        "title": "Best Peru Tour Companies for Families",
+        "summary": "The best Peru tour companies for families prioritize safety, cultural immersion, and age-appropriate activities. Top recommendations include established operators like Explore Peru Tours with 20+ years of experience and family-specific packages. International platforms like TourRadar offer access to vetted local operators with family reviews.",
+        "ai_platforms": [
+          "ChatGPT",
+          "Claude",
+          "Gemini"
+        ],
+        "destination_cluster": "peru_national",
+        "category_cluster": "tour_operators",
+        "brands_ai_mentions": [
+          {
+            "name": "Explore Peru Tours",
+            "entity_type": "company",
+            "entity_slug": "explore-peru-tours"
+          },
+          {
+            "name": "TourRadar",
+            "entity_type": "external_brand",
+            "entity_slug": "tourradar"
+          }
+        ]
+      }
+    }
+  ],
+  "edges": [
+    {
+      "source": "company:explore-peru-tours",
+      "target": "destino:cusco",
+      "type": "OPERATES_IN"
+    },
+    {
+      "source": "company:explore-peru-tours",
+      "target": "destino:lima",
+      "type": "OPERATES_IN"
+    },
+    {
+      "source": "company:explore-peru-tours",
+      "target": "destino:amazonas",
+      "type": "OPERATES_IN"
+    },
+    {
+      "source": "company:explore-peru-tours",
+      "target": "categoria_destino:tours-culturales",
+      "type": "OFFERS"
+    },
+    {
+      "source": "company:explore-peru-tours",
+      "target": "categoria_destino:aventura",
+      "type": "OFFERS"
+    },
+    {
+      "source": "company:explore-peru-tours",
+      "target": "categoria_destino:full-day",
+      "type": "OFFERS"
+    },
+    {
+      "source": "company:explore-peru-tours",
+      "target": "categoria_destino:lujo",
+      "type": "OFFERS"
+    },
+    {
+      "source": "company:explore-peru-tours",
+      "target": "prompt:best-peru-tour-companies-for-families",
+      "type": "MENTIONED_IN"
+    },
+    {
+      "source": "categoria_destino:full-day",
+      "target": "destino:cusco",
+      "type": "BELONGS_TO"
+    },
+    {
+      "source": "categoria_destino:tours-comunitarios",
+      "target": "destino:cusco",
+      "type": "BELONGS_TO"
+    },
+    {
+      "source": "external_brand:tourradar",
+      "target": "prompt:best-peru-tour-companies-for-families",
+      "type": "MENTIONED_IN"
+    },
+    {
+      "source": "external_brand:tourradar",
+      "target": "prompt:budget-friendly-peru-tours",
+      "type": "MENTIONED_IN"
+    },
+    {
+      "source": "prompt:best-peru-tour-companies-for-families",
+      "target": "company:explore-peru-tours",
+      "type": "MENTIONS"
+    },
+    {
+      "source": "prompt:best-peru-tour-companies-for-families",
+      "target": "external_brand:tourradar",
+      "type": "MENTIONS_EXTERNAL"
+    }
+  ]
+}
