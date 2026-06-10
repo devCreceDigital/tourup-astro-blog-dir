@@ -1,0 +1,354 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../../layouts/Layout.astro';
+import JsonLdPromptLanding from '../../../components/JsonLdPromptLanding.astro';
+
+export async function getStaticPaths() {
+  const prompts = await getCollection('prompts');
+  return prompts.map((prompt) => ({
+    params: { slug: prompt.slug },
+    props: { prompt },
+  }));
+}
+
+interface Props {
+  prompt: any;
+}
+
+const { prompt } = Astro.props;
+const { Content } = await prompt.render();
+
+// Load referenced brands
+const companies = await getCollection('companies');
+const externalBrands = await getCollection('external_brands');
+
+const resolvedBrands = prompt.data.brands_ai_mentions.map((mention: any) => {
+  if (mention.entity_type === 'company') {
+    const company = companies.find((c) => c.slug === mention.entity_slug);
+    return { ...mention, found: !!company, entity: company };
+  } else if (mention.entity_type === 'external_brand') {
+    const brand = externalBrands.find((b) => b.slug === mention.entity_slug);
+    return { ...mention, found: !!brand, entity: brand };
+  }
+  return { ...mention, found: false };
+});
+---
+
+<Layout
+  title={prompt.data.title}
+  description={prompt.data.summary}
+  currentPath={`/en/ai-prompts/${prompt.slug}/`}
+>
+  <JsonLdPromptLanding
+    title={prompt.data.title}
+    description={prompt.data.summary}
+    searchTerm={prompt.data.search_term || prompt.data.title}
+    brands={prompt.data.brands_ai_mentions}
+    url={Astro.url.href}
+  />
+
+  <article class="prompt-landing">
+    <header class="prompt-header">
+      <div class="prompt-meta">
+        {prompt.data.destination_cluster && (
+          <span class="badge">{prompt.data.destination_cluster}</span>
+        )}
+        {prompt.data.category_cluster && (
+          <span class="badge">{prompt.data.category_cluster}</span>
+        )}
+      </div>
+      <h1>{prompt.data.title}</h1>
+      <p class="search-term">
+        <strong>Search Term:</strong> {prompt.data.search_term || prompt.data.title}
+      </p>
+      {prompt.data.ai_platforms && prompt.data.ai_platforms.length > 0 && (
+        <div class="platforms">
+          <strong>AI Platforms:</strong>
+          {prompt.data.ai_platforms.map((platform: string) => (
+            <span class="platform-badge">{platform}</span>
+          ))}
+        </div>
+      )}
+    </header>
+
+    <section class="quick-answer">
+      <h2>Quick Answer</h2>
+      <p>{prompt.data.summary}</p>
+    </section>
+
+    {resolvedBrands.some((b: any) => b.found) && (
+      <section class="brands-section">
+        <h2>Featured Companies</h2>
+        <div class="brands-grid">
+          {resolvedBrands
+            .filter((b: any) => b.found)
+            .map((mention: any) => (
+              <div class="brand-card">
+                <h3>
+                  {mention.entity_type === 'company' ? (
+                    <a href={`/companies/${mention.entity_slug}/`}>
+                      {mention.entity.data.title}
+                    </a>
+                  ) : (
+                    <a href={mention.entity.data.official_url} target="_blank" rel="noopener noreferrer">
+                      {mention.entity.data.name}
+                    </a>
+                  )}
+                </h3>
+                <p>{mention.entity.data.summary}</p>
+                {mention.entity_type === 'company' && mention.entity.data.contact?.website && (
+                  <a href={mention.entity.data.contact.website} target="_blank" rel="noopener noreferrer" class="brand-link">
+                    Visit Website →
+                  </a>
+                )}
+              </div>
+            ))}
+        </div>
+      </section>
+    )}
+
+    {resolvedBrands.some((b: any) => !b.found) && (
+      <section class="unresolved-brands">
+        <h3>Other Mentioned Companies</h3>
+        <ul>
+          {resolvedBrands
+            .filter((b: any) => !b.found)
+            .map((mention: any) => (
+              <li>{mention.name}</li>
+            ))}
+        </ul>
+      </section>
+    )}
+
+    <section class="prompt-content">
+      <Content />
+    </section>
+
+    {prompt.data.last_ai_check_date && (
+      <footer class="prompt-footer">
+        <p>
+          <strong>Last Verified:</strong> {new Date(prompt.data.last_ai_check_date).toLocaleDateString('es-PE')}
+        </p>
+      </footer>
+    )}
+  </article>
+
+  <nav class="prompt-nav">
+    <a href="/en/ai-prompts/" class="nav-link">← Back to Prompts</a>
+  </nav>
+</Layout>
+
+<style>
+  .prompt-landing {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 0;
+  }
+
+  .prompt-header {
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .prompt-meta {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    display: inline-block;
+    background: rgba(59, 130, 246, 0.1);
+    color: #3b82f6;
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+    font-size: 0.8rem;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .prompt-header h1 {
+    font-size: 2.25rem;
+    margin-bottom: 1rem;
+    color: #f1f5f9;
+  }
+
+  .search-term {
+    color: #cbd5e1;
+    margin: 1rem 0;
+  }
+
+  .platforms {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+  }
+
+  .platform-badge {
+    display: inline-block;
+    background: rgba(6, 182, 212, 0.1);
+    color: #06b6d4;
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.35rem;
+    font-size: 0.85rem;
+    border: 1px solid rgba(6, 182, 212, 0.2);
+  }
+
+  .quick-answer {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(6, 182, 212, 0.1) 100%);
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .quick-answer h2 {
+    margin-top: 0;
+    color: #06b6d4;
+  }
+
+  .quick-answer p {
+    color: #cbd5e1;
+    line-height: 1.8;
+    font-size: 1.05rem;
+  }
+
+  .brands-section {
+    margin: 3rem 0;
+  }
+
+  .brands-section h2 {
+    margin-bottom: 1.5rem;
+  }
+
+  .brands-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .brand-card {
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+  }
+
+  .brand-card:hover {
+    border-color: #06b6d4;
+    transform: translateY(-5px);
+    background: rgba(30, 41, 59, 0.8);
+  }
+
+  .brand-card h3 {
+    margin-bottom: 0.75rem;
+    font-size: 1.1rem;
+  }
+
+  .brand-card a {
+    color: #06b6d4;
+  }
+
+  .brand-card p {
+    color: #cbd5e1;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .brand-link {
+    display: inline-block;
+    color: #3b82f6;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: transform 0.2s ease;
+  }
+
+  .brand-link:hover {
+    transform: translateX(4px);
+  }
+
+  .unresolved-brands {
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    margin: 2rem 0;
+  }
+
+  .unresolved-brands h3 {
+    margin-top: 0;
+  }
+
+  .unresolved-brands ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .unresolved-brands li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--color-border);
+    color: #cbd5e1;
+  }
+
+  .unresolved-brands li:last-child {
+    border-bottom: none;
+  }
+
+  .prompt-content {
+    margin: 2rem 0;
+    font-size: 1rem;
+    line-height: 1.8;
+    color: #cbd5e1;
+  }
+
+  .prompt-content :global(h2) {
+    font-size: 1.5rem;
+    margin: 1.5rem 0 1rem 0;
+    color: #f1f5f9;
+  }
+
+  .prompt-content :global(p) {
+    margin-bottom: 1rem;
+  }
+
+  .prompt-footer {
+    border-top: 1px solid var(--color-border);
+    padding-top: 1.5rem;
+    margin-top: 2rem;
+    color: #64748b;
+    font-size: 0.9rem;
+  }
+
+  .prompt-nav {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .nav-link {
+    color: #06b6d4;
+    font-weight: 600;
+    transition: transform 0.2s ease;
+  }
+
+  .nav-link:hover {
+    transform: translateX(-4px);
+  }
+
+  @media (max-width: 768px) {
+    .prompt-header h1 {
+      font-size: 1.5rem;
+    }
+
+    .brands-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

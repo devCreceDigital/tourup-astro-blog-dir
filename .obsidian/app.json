@@ -1,0 +1,6 @@
+{
+  "attachmentFolderPath": "./assets",
+  "useMarkdownLinks": true,
+  "newFileFolderPath": "./content",
+  "newFileLocation": "folder"
+}
