@@ -1,0 +1,31 @@
+---
+type: "company"
+slug: "/company/grupo-caminos-del-sol-cusco"
+title: "Grupo Caminos Del Sol"
+destination: "CUSCO, CUSCO"
+category: "wholesale_travel_agency"
+agency_class_raw: "Mayorista, Operador Turismo"
+summary: "Wholesale Travel Agency based in CUSCO, CUSCO, Peru."
+contact:
+  website: "https://www.caminosdelsol.com"
+  email: "interjvp@caminosdelsol.com"
+location:
+  city: "CUSCO"
+  province: "CUSCO"
+  region: "CUSCO"
+  country: "Peru"
+  ubigeo_code: "80101"
+  street_type: "JR."
+  street_name: "Condorcanqui N°150 Dpt. 407"
+  street_number: "150"
+  unit: "407"
+regulation:
+  tax_id: "20535112101"
+  snapshot_date: "20260515"
+  license_number: "-"
+legal_representative: "Vargas Peralta Julio"
+---
+
+# Grupo Caminos Del Sol
+
+Wholesale Travel Agency based in CUSCO, CUSCO, Peru.

@@ -1,0 +1,30 @@
+---
+type: "company"
+slug: "/company/gatur-cusco-cusco"
+title: "Gatur Cusco"
+destination: "CUSCO, CUSCO"
+category: "wholesale_travel_agency"
+agency_class_raw: "Mayorista, Minorista"
+summary: "Wholesale Travel Agency based in CUSCO, CUSCO, Peru."
+contact:
+  website: "https://www.gaturcusco.com"
+  email: "administracion@gaturcusco.com"
+location:
+  city: "CUSCO"
+  province: "CUSCO"
+  region: "CUSCO"
+  country: "Peru"
+  ubigeo_code: "80101"
+  street_type: "CLLE"
+  street_name: "Puluchapata"
+  street_number: "140"
+regulation:
+  tax_id: "20114547558"
+  snapshot_date: "20260515"
+  license_number: "-"
+legal_representative: "Altamirano Vallenas Jose Federico"
+---
+
+# Gatur Cusco
+
+Wholesale Travel Agency based in CUSCO, CUSCO, Peru.

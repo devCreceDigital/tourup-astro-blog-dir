@@ -1,0 +1,30 @@
+---
+type: "company"
+slug: "/company/chusaq-trip-cusco"
+title: "Chusaq Trip"
+destination: "CUSCO, CUSCO"
+category: "operador_turismo"
+agency_class_raw: "Operador Turismo"
+summary: "Travel Company based in CUSCO, CUSCO, Peru."
+contact:
+  website: "https://www.chusaqtrip.com"
+  email: "info@chusaqtrip.com"
+location:
+  city: "CUSCO"
+  province: "CUSCO"
+  region: "CUSCO"
+  country: "Peru"
+  ubigeo_code: "80101"
+  street_type: "CLLE"
+  street_name: "Choquechaka 202"
+  street_number: "202"
+regulation:
+  tax_id: "20606920459"
+  snapshot_date: "20260515"
+  license_number: "-"
+legal_representative: "Maria Guerrero Sanchez"
+---
+
+# Chusaq Trip
+
+Travel Company based in CUSCO, CUSCO, Peru.

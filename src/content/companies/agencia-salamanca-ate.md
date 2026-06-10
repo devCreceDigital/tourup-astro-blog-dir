@@ -1,0 +1,29 @@
+---
+type: "company"
+slug: "/company/agencia-salamanca-ate"
+title: "Agencia Salamanca"
+destination: "ATE, LIMA"
+category: "retail_travel_agency"
+agency_class_raw: "Minorista"
+summary: "Retail Travel Agency based in ATE, LIMA, Peru."
+contact:
+  email: "salamancatravel@yahoo.com"
+location:
+  city: "ATE"
+  province: "LIMA"
+  region: "LIMA"
+  country: "Peru"
+  ubigeo_code: "150103"
+  street_type: "JR."
+  street_name: "Inca Garcilazo"
+  street_number: "155"
+regulation:
+  tax_id: "20254304418"
+  snapshot_date: "20260515"
+  license_number: "-"
+legal_representative: "Mariela Turin Ramos"
+---
+
+# Agencia Salamanca
+
+Retail Travel Agency based in ATE, LIMA, Peru.
