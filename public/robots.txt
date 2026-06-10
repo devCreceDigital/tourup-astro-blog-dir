@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /private/
+Disallow: /.env
+Disallow: /graphify-out/
+
+Sitemap: https://tourup.co/sitemap.xml

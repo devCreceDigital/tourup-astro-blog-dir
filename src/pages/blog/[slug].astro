@@ -1,0 +1,215 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+interface Props {
+  post: any;
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+---
+
+<Layout
+  title={post.data.title}
+  description={post.data.description}
+  currentPath={`/blog/${post.slug}/`}
+>
+  <article class="post-article">
+    <header class="post-header">
+      <h1>{post.data.title}</h1>
+      <p class="post-meta">
+        <time>{new Date(post.data.pubDate).toLocaleDateString('es-PE', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        })}</time>
+        {post.data.updatedDate && (
+          <span class="updated">
+            Actualizado: {new Date(post.data.updatedDate).toLocaleDateString('es-PE', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })}
+          </span>
+        )}
+      </p>
+      {post.data.heroImage && (
+        <img src={post.data.heroImage} alt={post.data.title} class="hero-image" />
+      )}
+    </header>
+
+    <div class="post-body">
+      <Content />
+    </div>
+
+    {post.data.tags && post.data.tags.length > 0 && (
+      <footer class="post-footer">
+        <div class="post-tags">
+          {post.data.tags.map((tag: string) => (
+            <span class="tag">{tag}</span>
+          ))}
+        </div>
+      </footer>
+    )}
+  </article>
+
+  <nav class="post-nav">
+    <a href="/blog/" class="nav-link">← Volver al Blog</a>
+  </nav>
+</Layout>
+
+<style>
+  .post-article {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 0;
+  }
+
+  .post-header {
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .post-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #f1f5f9;
+  }
+
+  .post-meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.95rem;
+    color: #64748b;
+    flex-wrap: wrap;
+  }
+
+  .updated {
+    padding-left: 1rem;
+    border-left: 1px solid var(--color-border);
+  }
+
+  .hero-image {
+    width: 100%;
+    height: auto;
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 0.75rem;
+    margin-top: 1.5rem;
+  }
+
+  .post-body {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: #cbd5e1;
+  }
+
+  .post-body :global(p) {
+    margin-bottom: 1.5rem;
+  }
+
+  .post-body :global(h2) {
+    font-size: 1.75rem;
+    margin: 2rem 0 1rem 0;
+    color: #f1f5f9;
+  }
+
+  .post-body :global(h3) {
+    font-size: 1.35rem;
+    margin: 1.5rem 0 0.75rem 0;
+    color: #f1f5f9;
+  }
+
+  .post-body :global(ul),
+  .post-body :global(ol) {
+    margin-left: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .post-body :global(li) {
+    margin-bottom: 0.5rem;
+  }
+
+  .post-body :global(blockquote) {
+    border-left: 4px solid #06b6d4;
+    padding-left: 1rem;
+    margin: 1.5rem 0;
+    color: #94a3b8;
+    font-style: italic;
+  }
+
+  .post-body :global(code) {
+    background: var(--color-dark-light);
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.25rem;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+  }
+
+  .post-body :global(pre) {
+    background: var(--color-dark-light);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    overflow-x: auto;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--color-border);
+  }
+
+  .post-footer {
+    border-top: 1px solid var(--color-border);
+    padding-top: 2rem;
+    margin-top: 3rem;
+  }
+
+  .post-tags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    display: inline-block;
+    background: rgba(59, 130, 246, 0.1);
+    color: #3b82f6;
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+  }
+
+  .post-nav {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .nav-link {
+    color: #06b6d4;
+    font-weight: 600;
+    transition: transform 0.2s ease;
+  }
+
+  .nav-link:hover {
+    transform: translateX(-4px);
+  }
+
+  @media (max-width: 768px) {
+    .post-header h1 {
+      font-size: 1.75rem;
+    }
+
+    .post-body {
+      font-size: 1rem;
+    }
+  }
+</style>
