@@ -3,9 +3,10 @@ type: "company"
 slug: "/company/culture-peru-santiago"
 title: "Culture Peru"
 destination: "SANTIAGO, CUSCO"
-distribution_role: "tour_operator"
+category: "operador_turismo"
+agency_class_raw: "Operador Turismo"
 summary: "Travel Company based in SANTIAGO, CUSCO, Peru."
-contact: {}
+contact:
 location:
   city: "SANTIAGO"
   province: "CUSCO"

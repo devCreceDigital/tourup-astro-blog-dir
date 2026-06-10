@@ -3,9 +3,10 @@ type: "company"
 slug: "/company/hangrin-s-a-c-lima"
 title: "Hangrin S.A.C"
 destination: "LIMA, LIMA"
-distribution_role: "retail_travel_agency"
+category: "retail_travel_agency"
+agency_class_raw: "Minorista"
 summary: "Retail Travel Agency based in LIMA, LIMA, Peru."
-contact: {}
+contact:
 location:
   city: "LIMA"
   province: "LIMA"

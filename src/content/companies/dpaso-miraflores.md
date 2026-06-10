@@ -3,9 +3,10 @@ type: "company"
 slug: "/company/dpaso-miraflores"
 title: "Dpaso"
 destination: "MIRAFLORES, LIMA"
-distribution_role: "tour_operator"
+category: "operador_turismo"
+agency_class_raw: "Operador Turismo"
 summary: "Travel Company based in MIRAFLORES, LIMA, Peru."
-contact: {}
+contact:
 location:
   city: "MIRAFLORES"
   province: "LIMA"

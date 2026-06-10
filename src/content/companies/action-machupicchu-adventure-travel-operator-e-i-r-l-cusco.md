@@ -3,9 +3,10 @@ type: "company"
 slug: "/company/action-machupicchu-adventure-travel-operator-e-i-r-l-cusco"
 title: "Action Machupicchu Adventure & Travel Operator E.I.R.L."
 destination: "CUSCO, CUSCO"
-distribution_role: "tour_operator"
+category: "operador_turismo"
+agency_class_raw: "Operador Turismo"
 summary: "Travel Company based in CUSCO, CUSCO, Peru."
-contact: {}
+contact:
 location:
   city: "CUSCO"
   province: "CUSCO"

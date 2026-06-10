@@ -3,9 +3,10 @@ type: "company"
 slug: "/company/inca-hike-santiago"
 title: "Inca Hike"
 destination: "SANTIAGO, CUSCO"
-distribution_role: "tour_operator"
+category: "operador_turismo"
+agency_class_raw: "Operador Turismo"
 summary: "Travel Company based in SANTIAGO, CUSCO, Peru."
-contact: {}
+contact:
 location:
   city: "SANTIAGO"
   province: "CUSCO"

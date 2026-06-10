@@ -3,9 +3,10 @@ type: "company"
 slug: "/company/andean-epix-s-a-c-san-jerónimo"
 title: "Andean Epix S.A.C."
 destination: "SAN JERÓNIMO, CUSCO"
-distribution_role: "tour_operator"
+category: "operador_turismo"
+agency_class_raw: "Operador Turismo"
 summary: "Travel Company based in SAN JERÓNIMO, CUSCO, Peru."
-contact: {}
+contact:
 location:
   city: "SAN JERÓNIMO"
   province: "CUSCO"

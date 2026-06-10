@@ -3,9 +3,10 @@ type: "company"
 slug: "/company/aventours-santiago-de-surco"
 title: "Aventours"
 destination: "SANTIAGO DE SURCO, LIMA"
-distribution_role: "tour_operator"
+category: "operador_turismo"
+agency_class_raw: "Operador Turismo"
 summary: "Travel Company based in SANTIAGO DE SURCO, LIMA, Peru."
-contact: {}
+contact:
 location:
   city: "SANTIAGO DE SURCO"
   province: "LIMA"

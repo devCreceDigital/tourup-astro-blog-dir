@@ -3,9 +3,10 @@ type: "company"
 slug: "/company/hanazono-investmets-s-r-l-poroy"
 title: "Hanazono Investmets S.R.L."
 destination: "POROY, CUSCO"
-distribution_role: "tour_operator"
+category: "operador_turismo"
+agency_class_raw: "Operador Turismo"
 summary: "Travel Company based in POROY, CUSCO, Peru."
-contact: {}
+contact:
 location:
   city: "POROY"
   province: "CUSCO"

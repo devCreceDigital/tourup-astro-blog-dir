@@ -3,9 +3,10 @@ type: "company"
 slug: "/company/felix-tours-san-sebastian"
 title: "Felix Tours"
 destination: "SAN SEBASTIAN, CUSCO"
-distribution_role: "retail_travel_agency"
+category: "retail_travel_agency"
+agency_class_raw: "Minorista"
 summary: "Retail Travel Agency based in SAN SEBASTIAN, CUSCO, Peru."
-contact: {}
+contact:
 location:
   city: "SAN SEBASTIAN"
   province: "CUSCO"

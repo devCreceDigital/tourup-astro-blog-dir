@@ -3,9 +3,10 @@ type: "company"
 slug: "/company/brisas-travel-tours-santiago-de-surco"
 title: "Brisas Travel Tours"
 destination: "SANTIAGO DE SURCO, LIMA"
-distribution_role: "retail_travel_agency"
+category: "retail_travel_agency"
+agency_class_raw: "Minorista"
 summary: "Retail Travel Agency based in SANTIAGO DE SURCO, LIMA, Peru."
-contact: {}
+contact:
 location:
   city: "SANTIAGO DE SURCO"
   province: "LIMA"

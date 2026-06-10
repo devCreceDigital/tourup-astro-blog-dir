@@ -3,9 +3,10 @@ type: "company"
 slug: "/company/huayruros-tours-satipo"
 title: "Huayruros Tours"
 destination: "SATIPO, JUNÍN"
-distribution_role: "tour_operator"
+category: "operador_turismo"
+agency_class_raw: "Operador Turismo"
 summary: "Travel Company based in SATIPO, JUNÍN, Peru."
-contact: {}
+contact:
 location:
   city: "SATIPO"
   province: "SATIPO"

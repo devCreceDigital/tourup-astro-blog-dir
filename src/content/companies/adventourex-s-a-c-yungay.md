@@ -3,9 +3,10 @@ type: "company"
 slug: "/company/adventourex-s-a-c-yungay"
 title: "Adventourex S.A.C"
 destination: "YUNGAY, ÁNCASH"
-distribution_role: "tour_operator"
+category: "operador_turismo"
+agency_class_raw: "Operador Turismo"
 summary: "Travel Company based in YUNGAY, ÁNCASH, Peru."
-contact: {}
+contact:
 location:
   city: "YUNGAY"
   province: "YUNGAY"

@@ -3,9 +3,10 @@ type: "company"
 slug: "/company/conejo-tours-sauce"
 title: "Conejo Tours"
 destination: "SAUCE, SAN MARTÍN"
-distribution_role: "tour_operator"
+category: "operador_turismo"
+agency_class_raw: "Operador Turismo"
 summary: "Travel Company based in SAUCE, SAN MARTÍN, Peru."
-contact: {}
+contact:
 location:
   city: "SAUCE"
   province: "SAN MARTÍN"

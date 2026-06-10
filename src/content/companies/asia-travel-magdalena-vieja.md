@@ -3,9 +3,10 @@ type: "company"
 slug: "/company/asia-travel-magdalena-vieja"
 title: "Asia Travel"
 destination: "MAGDALENA VIEJA, LIMA"
-distribution_role: "retail_travel_agency"
+category: "retail_travel_agency"
+agency_class_raw: "Minorista"
 summary: "Retail Travel Agency based in MAGDALENA VIEJA, LIMA, Peru."
-contact: {}
+contact:
 location:
   city: "MAGDALENA VIEJA"
   province: "LIMA"

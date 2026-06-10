@@ -3,9 +3,10 @@ type: "company"
 slug: "/company/empresa-de-servicios-generales-bbvb-s-a-c-independencia"
 title: "Empresa De Servicios Generales Bbvb S.A.C."
 destination: "INDEPENDENCIA, ÁNCASH"
-distribution_role: "tour_operator"
+category: "operador_turismo"
+agency_class_raw: "Operador Turismo"
 summary: "Travel Company based in INDEPENDENCIA, ÁNCASH, Peru."
-contact: {}
+contact:
 location:
   city: "INDEPENDENCIA"
   province: "HUARAZ"

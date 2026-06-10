@@ -3,9 +3,10 @@ type: "company"
 slug: "/company/alpacas-south-wanchaq"
 title: "Alpacas  South"
 destination: "WANCHAQ, CUSCO"
-distribution_role: "tour_operator"
+category: "operador_turismo"
+agency_class_raw: "Operador Turismo"
 summary: "Travel Company based in WANCHAQ, CUSCO, Peru."
-contact: {}
+contact:
 location:
   city: "WANCHAQ"
   province: "CUSCO"

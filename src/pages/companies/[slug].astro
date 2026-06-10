@@ -5,7 +5,7 @@ import Layout from '../../layouts/Layout.astro';
 export async function getStaticPaths() {
   const companies = await getCollection('companies');
   return companies.map((company) => ({
-    params: { slug: company.slug.replace(/^\/company\//, '') },
+    params: { slug: company.slug },
     props: { company },
   }));
 }

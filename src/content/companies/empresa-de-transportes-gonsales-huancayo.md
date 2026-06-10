@@ -3,9 +3,10 @@ type: "company"
 slug: "/company/empresa-de-transportes-gonsales-huancayo"
 title: "Empresa De Transportes Gonsales"
 destination: "HUANCAYO, JUNÍN"
-distribution_role: "tour_operator"
+category: "operador_turismo"
+agency_class_raw: "Operador Turismo"
 summary: "Travel Company based in HUANCAYO, JUNÍN, Peru."
-contact: {}
+contact:
 location:
   city: "HUANCAYO"
   province: "HUANCAYO"

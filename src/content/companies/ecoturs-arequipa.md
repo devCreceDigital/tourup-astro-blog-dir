@@ -3,9 +3,10 @@ type: "company"
 slug: "/company/ecoturs-arequipa"
 title: "Ecoturs"
 destination: "AREQUIPA, AREQUIPA"
-distribution_role: "retail_travel_agency"
+category: "retail_travel_agency"
+agency_class_raw: "Minorista"
 summary: "Retail Travel Agency based in AREQUIPA, AREQUIPA, Peru."
-contact: {}
+contact:
 location:
   city: "AREQUIPA"
   province: "AREQUIPA"

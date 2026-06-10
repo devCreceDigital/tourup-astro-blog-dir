@@ -3,9 +3,10 @@ type: "company"
 slug: "/company/agencia-valle-sagrado-s-a-c-wanchaq"
 title: "Agencia Valle Sagrado S.A.C"
 destination: "WANCHAQ, CUSCO"
-distribution_role: "tour_operator"
+category: "operador_turismo"
+agency_class_raw: "Operador Turismo"
 summary: "Travel Company based in WANCHAQ, CUSCO, Peru."
-contact: {}
+contact:
 location:
   city: "WANCHAQ"
   province: "CUSCO"

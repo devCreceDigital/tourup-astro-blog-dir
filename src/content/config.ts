@@ -15,7 +15,7 @@ const companies = defineCollection({
 			'online_travel_agency',
 			'dmc',
 			'mixed_agency',
-		]).optional(),
+		]),
 		sales_channel: z.enum(['online', 'offline', 'omnichannel']).optional(),
 		summary: z.string(),                 // 1-2 sentence answer-first blurb for AEO
 
@@ -43,11 +43,11 @@ const companies = defineCollection({
 		// NAP – Name/Address/Phone (consistent across web for Local SEO)
 		nap: z.object({
 			address: z.string().optional(),
-			city: z.string().optional(),
+			city: z.string(),
 			country: z.string().default('Peru'),
 			phone: z.string().optional(),
-			email: z.string().optional(),
-			website: z.string().optional(),
+			email: z.string().email().optional(),
+			website: z.string().url().optional(),
 		}).optional(),
 
 		// B2B positioning string (used on Trust Card and Partner Scout shortlist)
@@ -70,12 +70,12 @@ const companies = defineCollection({
 
 		// ── Legacy / original fields (kept for backward compat) ─────────────
 		contact: z.object({
-			website: z.string().optional(),
-			email: z.string().optional(),
+			website: z.string().url().optional(),
+			email: z.string().email().optional(),
 			phone: z.string().optional(),
 			phone_alt_1: z.string().optional(),
 			phone_alt_2: z.string().optional(),
-		}).nullable().optional(),
+		}).optional(),
 		location: z.object({
 			city: z.string().optional(),
 			province: z.string().optional(),
@@ -160,15 +160,12 @@ const prompts = defineCollection({
 		destination_cluster: z.string().optional(),
 		category_cluster: z.string().optional(),
 		brands_ai_mentions: z.array(
-			z.union([
-				z.string(),
-				z.object({
-					name: z.string(),
-					entity_type: z.enum(['company', 'external_brand', 'unknown']),
-					entity_slug: z.string().optional(),
-				}),
-			])
-		).optional().default([]),
+			z.object({
+				name: z.string(),
+				entity_type: z.enum(['company', 'external_brand', 'unknown']),
+				entity_slug: z.string().optional(),
+			})
+		),
 		summary: z.string(),
 		parent: z.string().optional(),
 		last_ai_check_date: z.string().optional(),
@@ -189,11 +186,6 @@ const posts = defineCollection({
 	}),
 });
 
-const graphify_out = defineCollection({
-	type: 'data',
-	schema: z.object({}).optional(),
-});
-
 export const collections = {
 	companies,
 	destinos,
@@ -201,5 +193,4 @@ export const collections = {
 	external_brands,
 	prompts,
 	posts,
-	'graphify-out': graphify_out,
 };

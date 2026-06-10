@@ -3,9 +3,10 @@ type: "company"
 slug: "/company/conretur-jacobo-hunter"
 title: "Conretur"
 destination: "JACOBO HUNTER, AREQUIPA"
-distribution_role: "tour_operator"
+category: "operador_turismo"
+agency_class_raw: "Operador Turismo"
 summary: "Travel Company based in JACOBO HUNTER, AREQUIPA, Peru."
-contact: {}
+contact:
 location:
   city: "JACOBO HUNTER"
   province: "AREQUIPA"

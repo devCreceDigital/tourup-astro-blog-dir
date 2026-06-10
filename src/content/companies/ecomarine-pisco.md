@@ -3,9 +3,10 @@ type: "company"
 slug: "/company/ecomarine-pisco"
 title: "Ecomarine"
 destination: "PISCO, ICA"
-distribution_role: "tour_operator"
+category: "operador_turismo"
+agency_class_raw: "Operador Turismo"
 summary: "Travel Company based in PISCO, ICA, Peru."
-contact: {}
+contact:
 location:
   city: "PISCO"
   province: "PISCO"

@@ -3,9 +3,10 @@ type: "company"
 slug: "/company/agvt-oliver-expeditions-chimbote"
 title: "Agvt Oliver Expeditions"
 destination: "CHIMBOTE, ÁNCASH"
-distribution_role: "tour_operator"
+category: "operador_turismo"
+agency_class_raw: "Operador Turismo"
 summary: "Travel Company based in CHIMBOTE, ÁNCASH, Peru."
-contact: {}
+contact:
 location:
   city: "CHIMBOTE"
   province: "SANTA"

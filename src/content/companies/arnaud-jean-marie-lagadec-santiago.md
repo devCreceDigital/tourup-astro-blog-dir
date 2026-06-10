@@ -3,9 +3,10 @@ type: "company"
 slug: "/company/arnaud-jean-marie-lagadec-santiago"
 title: "Arnaud Jean Marie Lagadec"
 destination: "SANTIAGO, CUSCO"
-distribution_role: "tour_operator"
+category: "operador_turismo"
+agency_class_raw: "Operador Turismo"
 summary: "Travel Company based in SANTIAGO, CUSCO, Peru."
-contact: {}
+contact:
 location:
   city: "SANTIAGO"
   province: "CUSCO"

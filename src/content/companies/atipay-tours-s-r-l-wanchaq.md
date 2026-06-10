@@ -3,9 +3,10 @@ type: "company"
 slug: "/company/atipay-tours-s-r-l-wanchaq"
 title: "Atipay Tours S.R.L."
 destination: "WANCHAQ, CUSCO"
-distribution_role: "tour_operator"
+category: "operador_turismo"
+agency_class_raw: "Operador Turismo"
 summary: "Travel Company based in WANCHAQ, CUSCO, Peru."
-contact: {}
+contact:
 location:
   city: "WANCHAQ"
   province: "CUSCO"
