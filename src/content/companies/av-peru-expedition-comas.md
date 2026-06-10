@@ -3,10 +3,9 @@ type: "company"
 slug: "/company/av-peru-expedition-comas"
 title: "Av Peru Expedition"
 destination: "COMAS, LIMA"
-category: "operador_turismo"
-agency_class_raw: "Operador Turismo"
+distribution_role: "tour_operator"
 summary: "Travel Company based in COMAS, LIMA, Peru."
-contact:
+contact: {}
 location:
   city: "COMAS"
   province: "LIMA"

@@ -3,10 +3,9 @@ type: "company"
 slug: "/company/ausangate-mountain-adventure-eirl-cusco"
 title: "Ausangate Mountain & Adventure Eirl"
 destination: "CUSCO, CUSCO"
-category: "retail_travel_agency"
-agency_class_raw: "Minorista"
+distribution_role: "retail_travel_agency"
 summary: "Retail Travel Agency based in CUSCO, CUSCO, Peru."
-contact:
+contact: {}
 location:
   city: "CUSCO"
   province: "CUSCO"

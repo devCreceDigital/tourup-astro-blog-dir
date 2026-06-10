@@ -3,10 +3,9 @@ type: "company"
 slug: "/company/comas"
 title: "--"
 destination: "COMAS, LIMA"
-category: "retail_travel_agency"
-agency_class_raw: "Minorista"
+distribution_role: "retail_travel_agency"
 summary: "Retail Travel Agency based in COMAS, LIMA, Peru."
-contact:
+contact: {}
 location:
   city: "COMAS"
   province: "LIMA"

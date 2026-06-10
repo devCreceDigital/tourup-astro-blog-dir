@@ -3,10 +3,9 @@ type: "company"
 slug: "/company/a-de-via-turismo-sierra-blanca-s-r-ltda-huaraz"
 title: "A.De Via. Turismo Sierra Blanca S.R.Ltda"
 destination: "HUARAZ, ÁNCASH"
-category: "retail_travel_agency"
-agency_class_raw: "Minorista, Operador Turismo"
+distribution_role: "retail_travel_agency"
 summary: "Retail Travel Agency based in HUARAZ, ÁNCASH, Peru."
-contact:
+contact: {}
 location:
   city: "HUARAZ"
   province: "HUARAZ"

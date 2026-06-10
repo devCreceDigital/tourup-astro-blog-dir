@@ -3,10 +3,9 @@ type: "company"
 slug: "/company/cusco-golden-travel-santiago"
 title: "Cusco Golden Travel"
 destination: "SANTIAGO, CUSCO"
-category: "operador_turismo"
-agency_class_raw: "Operador Turismo"
+distribution_role: "tour_operator"
 summary: "Travel Company based in SANTIAGO, CUSCO, Peru."
-contact:
+contact: {}
 location:
   city: "SANTIAGO"
   province: "CUSCO"

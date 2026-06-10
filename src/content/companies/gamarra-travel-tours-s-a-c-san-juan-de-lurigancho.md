@@ -3,10 +3,9 @@ type: "company"
 slug: "/company/gamarra-travel-tours-s-a-c-san-juan-de-lurigancho"
 title: "Gamarra Travel Tours S.A.C."
 destination: "SAN JUAN DE LURIGANCHO, LIMA"
-category: "retail_travel_agency"
-agency_class_raw: "Minorista, Operador Turismo"
+distribution_role: "retail_travel_agency"
 summary: "Retail Travel Agency based in SAN JUAN DE LURIGANCHO, LIMA, Peru."
-contact:
+contact: {}
 location:
   city: "SAN JUAN DE LURIGANCHO"
   province: "LIMA"

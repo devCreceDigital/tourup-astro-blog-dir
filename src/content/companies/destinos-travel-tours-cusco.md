@@ -3,10 +3,9 @@ type: "company"
 slug: "/company/destinos-travel-tours-cusco"
 title: "Destinos Travel Tours"
 destination: "CUSCO, CUSCO"
-category: "retail_travel_agency"
-agency_class_raw: "Minorista, Operador Turismo"
+distribution_role: "retail_travel_agency"
 summary: "Retail Travel Agency based in CUSCO, CUSCO, Peru."
-contact:
+contact: {}
 location:
   city: "CUSCO"
   province: "CUSCO"

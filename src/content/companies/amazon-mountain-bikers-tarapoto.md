@@ -3,10 +3,9 @@ type: "company"
 slug: "/company/amazon-mountain-bikers-tarapoto"
 title: "Amazon Mountain Bikers"
 destination: "TARAPOTO, SAN MARTÍN"
-category: "operador_turismo"
-agency_class_raw: "Operador Turismo"
+distribution_role: "tour_operator"
 summary: "Travel Company based in TARAPOTO, SAN MARTÍN, Peru."
-contact:
+contact: {}
 location:
   city: "TARAPOTO"
   province: "SAN MARTÍN"

@@ -3,10 +3,9 @@ type: "company"
 slug: "/company/belac-peru-travel-e-i-r-l-cusco"
 title: "Belac Peru Travel E.I.R.L."
 destination: "CUSCO, CUSCO"
-category: "wholesale_travel_agency"
-agency_class_raw: "Mayorista"
+distribution_role: "wholesale_travel_agency"
 summary: "Wholesale Travel Agency based in CUSCO, CUSCO, Peru."
-contact:
+contact: {}
 location:
   city: "CUSCO"
   province: "CUSCO"

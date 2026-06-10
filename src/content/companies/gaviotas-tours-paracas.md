@@ -3,10 +3,9 @@ type: "company"
 slug: "/company/gaviotas-tours-paracas"
 title: "Gaviotas Tours"
 destination: "PARACAS, ICA"
-category: "operador_turismo"
-agency_class_raw: "Operador Turismo"
+distribution_role: "tour_operator"
 summary: "Travel Company based in PARACAS, ICA, Peru."
-contact:
+contact: {}
 location:
   city: "PARACAS"
   province: "PISCO"

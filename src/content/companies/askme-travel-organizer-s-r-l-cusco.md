@@ -3,10 +3,9 @@ type: "company"
 slug: "/company/askme-travel-organizer-s-r-l-cusco"
 title: "Askme Travel Organizer S.R.L."
 destination: "CUSCO, CUSCO"
-category: "operador_turismo"
-agency_class_raw: "Operador Turismo"
+distribution_role: "tour_operator"
 summary: "Travel Company based in CUSCO, CUSCO, Peru."
-contact:
+contact: {}
 location:
   city: "CUSCO"
   province: "CUSCO"

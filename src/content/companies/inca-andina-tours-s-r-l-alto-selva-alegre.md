@@ -3,10 +3,9 @@ type: "company"
 slug: "/company/inca-andina-tours-s-r-l-alto-selva-alegre"
 title: "Inca Andina Tours S.R.L."
 destination: "ALTO SELVA ALEGRE, AREQUIPA"
-category: "operador_turismo"
-agency_class_raw: "Operador Turismo"
+distribution_role: "tour_operator"
 summary: "Travel Company based in ALTO SELVA ALEGRE, AREQUIPA, Peru."
-contact:
+contact: {}
 location:
   city: "ALTO SELVA ALEGRE"
   province: "AREQUIPA"

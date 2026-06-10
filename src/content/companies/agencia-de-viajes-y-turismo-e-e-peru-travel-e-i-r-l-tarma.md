@@ -3,10 +3,9 @@ type: "company"
 slug: "/company/agencia-de-viajes-y-turismo-e-e-peru-travel-e-i-r-l-tarma"
 title: "Agencia De Viajes Y Turismo E&E Peru Travel E.I.R.L."
 destination: "TARMA, JUNÍN"
-category: "operador_turismo"
-agency_class_raw: "Operador Turismo"
+distribution_role: "tour_operator"
 summary: "Travel Company based in TARMA, JUNÍN, Peru."
-contact:
+contact: {}
 location:
   city: "TARMA"
   province: "TARMA"

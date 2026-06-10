@@ -3,10 +3,9 @@ type: "company"
 slug: "/company/dharma-tours-arequipa"
 title: "Dharma Tours"
 destination: "AREQUIPA, AREQUIPA"
-category: "retail_travel_agency"
-agency_class_raw: "Minorista"
+distribution_role: "retail_travel_agency"
 summary: "Retail Travel Agency based in AREQUIPA, AREQUIPA, Peru."
-contact:
+contact: {}
 location:
   city: "AREQUIPA"
   province: "AREQUIPA"

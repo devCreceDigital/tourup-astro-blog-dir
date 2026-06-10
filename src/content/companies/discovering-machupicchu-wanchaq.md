@@ -3,10 +3,9 @@ type: "company"
 slug: "/company/discovering-machupicchu-wanchaq"
 title: "Discovering Machupicchu"
 destination: "WANCHAQ, CUSCO"
-category: "operador_turismo"
-agency_class_raw: "Operador Turismo"
+distribution_role: "tour_operator"
 summary: "Travel Company based in WANCHAQ, CUSCO, Peru."
-contact:
+contact: {}
 location:
   city: "WANCHAQ"
   province: "CUSCO"

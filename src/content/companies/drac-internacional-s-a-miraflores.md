@@ -3,10 +3,9 @@ type: "company"
 slug: "/company/drac-internacional-s-a-miraflores"
 title: "Drac Internacional S.A."
 destination: "MIRAFLORES, LIMA"
-category: "wholesale_travel_agency"
-agency_class_raw: "Mayorista, Minorista"
+distribution_role: "wholesale_travel_agency"
 summary: "Wholesale Travel Agency based in MIRAFLORES, LIMA, Peru."
-contact:
+contact: {}
 location:
   city: "MIRAFLORES"
   province: "LIMA"

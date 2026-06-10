@@ -3,10 +3,9 @@ type: "company"
 slug: "/company/aventura-selva-chanchamayo"
 title: "Aventura Selva"
 destination: "CHANCHAMAYO, JUNÍN"
-category: "retail_travel_agency"
-agency_class_raw: "Minorista"
+distribution_role: "retail_travel_agency"
 summary: "Retail Travel Agency based in CHANCHAMAYO, JUNÍN, Peru."
-contact:
+contact: {}
 location:
   city: "CHANCHAMAYO"
   province: "CHANCHAMAYO"

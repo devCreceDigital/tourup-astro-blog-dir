@@ -3,10 +3,9 @@ type: "company"
 slug: "/company/fuera-de-ruta-chavin-de-huantar"
 title: "Fuera De Ruta"
 destination: "CHAVIN DE HUANTAR, ÁNCASH"
-category: "operador_turismo"
-agency_class_raw: "Operador Turismo"
+distribution_role: "tour_operator"
 summary: "Travel Company based in CHAVIN DE HUANTAR, ÁNCASH, Peru."
-contact:
+contact: {}
 location:
   city: "CHAVIN DE HUANTAR"
   province: "HUARI"

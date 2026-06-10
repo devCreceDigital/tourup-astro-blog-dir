@@ -6,7 +6,7 @@ import JsonLdPromptLanding from '../../../components/JsonLdPromptLanding.astro';
 export async function getStaticPaths() {
   const prompts = await getCollection('prompts');
   return prompts.map((prompt) => ({
-    params: { slug: prompt.slug },
+    params: { slug: prompt.slug.replace(/^\/en\/ai-prompts\//, '').replace(/\/$/, '') },
     props: { prompt },
   }));
 }

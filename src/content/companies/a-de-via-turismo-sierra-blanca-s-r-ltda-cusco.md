@@ -3,10 +3,9 @@ type: "company"
 slug: "/company/a-de-via-turismo-sierra-blanca-s-r-ltda-cusco"
 title: "A.De Via. Turismo Sierra Blanca S.R.Ltda"
 destination: "CUSCO, CUSCO"
-category: "retail_travel_agency"
-agency_class_raw: "Minorista, Operador Turismo"
+distribution_role: "retail_travel_agency"
 summary: "Retail Travel Agency based in CUSCO, CUSCO, Peru."
-contact:
+contact: {}
 location:
   city: "CUSCO"
   province: "CUSCO"

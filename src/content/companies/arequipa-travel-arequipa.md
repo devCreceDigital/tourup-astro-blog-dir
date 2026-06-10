@@ -3,10 +3,9 @@ type: "company"
 slug: "/company/arequipa-travel-arequipa"
 title: "Arequipa Travel"
 destination: "AREQUIPA, AREQUIPA"
-category: "operador_turismo"
-agency_class_raw: "Operador Turismo"
+distribution_role: "tour_operator"
 summary: "Travel Company based in AREQUIPA, AREQUIPA, Peru."
-contact:
+contact: {}
 location:
   city: "AREQUIPA"
   province: "AREQUIPA"

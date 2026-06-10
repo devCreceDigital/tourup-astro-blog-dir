@@ -3,10 +3,9 @@ type: "company"
 slug: "/company/goliat-adventure-urubamba"
 title: "Goliat Adventure"
 destination: "URUBAMBA, CUSCO"
-category: "operador_turismo"
-agency_class_raw: "Operador Turismo"
+distribution_role: "tour_operator"
 summary: "Travel Company based in URUBAMBA, CUSCO, Peru."
-contact:
+contact: {}
 location:
   city: "URUBAMBA"
   province: "URUBAMBA"

@@ -3,10 +3,9 @@ type: "company"
 slug: "/company/cusco-coaching-san-sebastian"
 title: "Cusco Coaching"
 destination: "SAN SEBASTIAN, CUSCO"
-category: "operador_turismo"
-agency_class_raw: "Operador Turismo"
+distribution_role: "tour_operator"
 summary: "Travel Company based in SAN SEBASTIAN, CUSCO, Peru."
-contact:
+contact: {}
 location:
   city: "SAN SEBASTIAN"
   province: "CUSCO"

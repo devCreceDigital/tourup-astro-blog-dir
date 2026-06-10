@@ -3,10 +3,9 @@ type: "company"
 slug: "/company/abad-la-punta"
 title: "Abad"
 destination: "LA PUNTA, CALLAO"
-category: "operador_turismo"
-agency_class_raw: "Operador Turismo"
+distribution_role: "tour_operator"
 summary: "Travel Company based in LA PUNTA, CALLAO, Peru."
-contact:
+contact: {}
 location:
   city: "LA PUNTA"
   province: "PROV. CONST. DEL CALLAO"

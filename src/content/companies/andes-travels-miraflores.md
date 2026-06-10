@@ -3,10 +3,9 @@ type: "company"
 slug: "/company/andes-travels-miraflores"
 title: "Andes Travels"
 destination: "MIRAFLORES, LIMA"
-category: "retail_travel_agency"
-agency_class_raw: "Minorista"
+distribution_role: "retail_travel_agency"
 summary: "Retail Travel Agency based in MIRAFLORES, LIMA, Peru."
-contact:
+contact: {}
 location:
   city: "MIRAFLORES"
   province: "LIMA"

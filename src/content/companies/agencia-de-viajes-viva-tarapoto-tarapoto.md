@@ -3,10 +3,9 @@ type: "company"
 slug: "/company/agencia-de-viajes-viva-tarapoto-tarapoto"
 title: "Agencia De Viajes Viva Tarapoto"
 destination: "TARAPOTO, SAN MARTÍN"
-category: "operador_turismo"
-agency_class_raw: "Operador Turismo"
+distribution_role: "tour_operator"
 summary: "Travel Company based in TARAPOTO, SAN MARTÍN, Peru."
-contact:
+contact: {}
 location:
   city: "TARAPOTO"
   province: "SAN MARTÍN"

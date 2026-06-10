@@ -3,10 +3,9 @@ type: "company"
 slug: "/company/agencia-de-viajes-y-turismo-cusco-destino-e-i-r-l-cusco"
 title: "Agencia De Viajes Y Turismo Cusco Destino E.I.R.L"
 destination: "CUSCO, CUSCO"
-category: "operador_turismo"
-agency_class_raw: "Operador Turismo"
+distribution_role: "tour_operator"
 summary: "Travel Company based in CUSCO, CUSCO, Peru."
-contact:
+contact: {}
 location:
   city: "CUSCO"
   province: "CUSCO"

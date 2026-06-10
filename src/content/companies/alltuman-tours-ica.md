@@ -3,10 +3,9 @@ type: "company"
 slug: "/company/alltuman-tours-ica"
 title: "Alltuman Tours"
 destination: "ICA, ICA"
-category: "operador_turismo"
-agency_class_raw: "Operador Turismo"
+distribution_role: "tour_operator"
 summary: "Travel Company based in ICA, ICA, Peru."
-contact:
+contact: {}
 location:
   city: "ICA"
   province: "ICA"

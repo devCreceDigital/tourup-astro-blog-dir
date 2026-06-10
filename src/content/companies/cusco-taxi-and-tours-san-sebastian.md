@@ -3,10 +3,9 @@ type: "company"
 slug: "/company/cusco-taxi-and-tours-san-sebastian"
 title: "Cusco Taxi And Tours"
 destination: "SAN SEBASTIAN, CUSCO"
-category: "retail_travel_agency"
-agency_class_raw: "Minorista"
+distribution_role: "retail_travel_agency"
 summary: "Retail Travel Agency based in SAN SEBASTIAN, CUSCO, Peru."
-contact:
+contact: {}
 location:
   city: "SAN SEBASTIAN"
   province: "CUSCO"

@@ -3,10 +3,9 @@ type: "company"
 slug: "/company/i-love-cusco-cusco"
 title: "I Love Cusco"
 destination: "CUSCO, CUSCO"
-category: "operador_turismo"
-agency_class_raw: "Operador Turismo"
+distribution_role: "tour_operator"
 summary: "Travel Company based in CUSCO, CUSCO, Peru."
-contact:
+contact: {}
 location:
   city: "CUSCO"
   province: "CUSCO"
