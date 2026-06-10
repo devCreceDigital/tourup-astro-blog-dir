@@ -18,23 +18,26 @@ import Layout from '../../layouts/Layout.astro';
 
 export async function getStaticPaths() {
   const companies = await getCollection('companies');
-  return companies.map((company) => ({
-    params: { slug: company.slug.replace(/^\/company\//, '') },
-    props: { company },
-  }));
+  return companies.map((company) => {
+    const slug = company.slug.replace(/^\/company\//, '');
+    return {
+      params: { slug },
+      props: { company, slug },
+    };
+  });
 }
 
 interface Props {
   company: Awaited<ReturnType<typeof getCollection<'companies'>>>[number];
 }
 
-const { company } = Astro.props;
+const { company, slug } = Astro.props;
 const { Content } = await company.render();
 const d = company.data;
 
 // ── JSON-LD construction ──────────────────────────────────────────────────────
 const siteUrl = 'https://tourup.co';
-const pageUrl = `${siteUrl}/empresas/${company.slug}/`;
+const pageUrl = `${siteUrl}/empresas/${slug}/`;
 
 // Resolve NAP from `nap` field, falling back to legacy `contact`/`location` fields.
 const napPhone = d.nap?.phone ?? d.contact?.phone;
@@ -106,7 +109,7 @@ function stars(rating: number): string {
 <Layout
   title={`${d.title} – Ficha de Confianza B2B | TourUp`}
   description={d.summary}
-  currentPath={`/empresas/${company.slug}/`}
+  currentPath={`/empresas/${slug}/`}
 >
   <!-- JSON-LD: TravelAgency + AggregateRating + FAQPage -->
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd, null, 2)} />

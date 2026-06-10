@@ -3,11 +3,10 @@ type: "company"
 slug: "/company/feliz-viaje-peru-tours-cusco-jesús-maría"
 title: "Feliz Viaje Peru Tours Cusco"
 destination: "JESÚS MARÍA, LIMA"
-category: "retail_travel_agency"
-agency_class_raw: "Minorista"
+distribution_role: "retail_travel_agency"
 summary: "Retail Travel Agency based in JESÚS MARÍA, LIMA, Peru."
 contact:
-location:
+  location:
   city: "JESÚS MARÍA"
   province: "LIMA"
   region: "LIMA"

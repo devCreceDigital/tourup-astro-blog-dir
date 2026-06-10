@@ -3,11 +3,10 @@ type: "company"
 slug: "/company/arequipa-wonders-peru-camaná"
 title: "Arequipa Wonders Peru"
 destination: "CAMANÁ, AREQUIPA"
-category: "operador_turismo"
-agency_class_raw: "Operador Turismo"
+distribution_role: "tour_operator"
 summary: "Travel Company based in CAMANÁ, AREQUIPA, Peru."
 contact:
-location:
+  location:
   city: "CAMANÁ"
   province: "CAMANÁ"
   region: "AREQUIPA"

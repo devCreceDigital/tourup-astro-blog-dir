@@ -4,24 +4,28 @@ import Layout from '../../layouts/Layout.astro';
 
 export async function getStaticPaths() {
   const companies = await getCollection('companies');
-  return companies.map((company) => ({
-    params: { slug: company.slug.replace(/^\/company\//, '') },
-    props: { company },
-  }));
+  return companies.map((company) => {
+    const slug = company.slug.replace(/^\/company\//, '');
+    return {
+      params: { slug },
+      props: { company, slug },
+    };
+  });
 }
 
 interface Props {
   company: any;
+  slug: string;
 }
 
-const { company } = Astro.props;
+const { company, slug } = Astro.props;
 const { Content } = await company.render();
 ---
 
 <Layout
   title={company.data.title}
   description={company.data.summary}
-  currentPath={`/companies/${company.slug}/`}
+  currentPath={`/companies/${slug}/`}
 >
   <article class="company-page">
     <header class="company-header">
