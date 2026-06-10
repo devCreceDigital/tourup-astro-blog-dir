@@ -5,21 +5,17 @@ import JsonLdPromptLanding from '../../../components/JsonLdPromptLanding.astro';
 
 export async function getStaticPaths() {
   const prompts = await getCollection('prompts');
-  return prompts.map((prompt) => {
-    const slug = prompt.slug.replace(/^\/en\/ai-prompts\//, '').replace(/\/$/, '');
-    return {
-      params: { slug },
-      props: { prompt, slug },
-    };
-  });
+  return prompts.map((prompt) => ({
+    params: { slug: prompt.slug },
+    props: { prompt },
+  }));
 }
 
 interface Props {
   prompt: any;
-  slug: string;
 }
 
-const { prompt, slug } = Astro.props;
+const { prompt } = Astro.props;
 const { Content } = await prompt.render();
 
 // Load referenced brands
@@ -41,7 +37,7 @@ const resolvedBrands = prompt.data.brands_ai_mentions.map((mention: any) => {
 <Layout
   title={prompt.data.title}
   description={prompt.data.summary}
-  currentPath={`/en/ai-prompts/${slug}/`}
+  currentPath={`/en/ai-prompts/${prompt.slug}/`}
 >
   <JsonLdPromptLanding
     title={prompt.data.title}
