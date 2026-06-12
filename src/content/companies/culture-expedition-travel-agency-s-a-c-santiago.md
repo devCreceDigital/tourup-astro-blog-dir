@@ -1,29 +1,35 @@
 ---
-type: "company"
-slug: "/company/culture-expedition-travel-agency-s-a-c-santiago"
-title: "Culture Expedition Travel Agency S.A.C"
-destination: "SANTIAGO, CUSCO"
-category: "operador_turismo"
-agency_class_raw: "Operador Turismo"
-summary: "Travel Company based in SANTIAGO, CUSCO, Peru."
+type: company
+slug: /company/culture-expedition-travel-agency-s-a-c-santiago
+title: Culture Expedition Travel Agency S.A.C
+summary: Travel Company based in SANTIAGO, CUSCO, Peru.
 contact:
-  website: "https://www.expeditioncusco.com"
-  email: "julush_14@hotmail.com"
+  website: https://www.expeditioncusco.com
+  email: julush_14@hotmail.com
 location:
-  city: "SANTIAGO"
-  province: "CUSCO"
-  region: "CUSCO"
-  country: "Peru"
-  ubigeo_code: "80106"
-  street_type: "AV."
-  street_name: "Antonio Lorena."
+  city: SANTIAGO
+  province: CUSCO
+  region: CUSCO
+  country: Peru
+  ubigeo_code: '80106'
+  street_type: AV.
+  street_name: Antonio Lorena.
 regulation:
-  tax_id: "20600998308"
-  snapshot_date: "20260515"
-  license_number: "-"
-legal_representative: "Rosmel Yepez Casafranca"
----
-
-# Culture Expedition Travel Agency S.A.C
-
-Travel Company based in SANTIAGO, CUSCO, Peru.
+  tax_id: '20600998308'
+  snapshot_date: '20260515'
+  license_number: '-'
+legal_representative: Rosmel Yepez Casafranca
+destinos:
+- cusco
+categorias:
+- full-day
+- tours-culturales
+- aventura
+- trekking
+- arqueologico
+distribution_role: tour_operator
+---
+
+# Culture Expedition Travel Agency S.A.C
+
+Travel Company based in SANTIAGO, CUSCO, Peru.

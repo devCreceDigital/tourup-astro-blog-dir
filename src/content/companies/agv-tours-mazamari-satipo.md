@@ -1,29 +1,33 @@
 ---
-type: "company"
-slug: "/company/agv-tours-mazamari-satipo"
-title: "Agv Tours Mazamari"
-destination: "SATIPO, JUNÍN"
-category: "operador_turismo"
-agency_class_raw: "Operador Turismo"
-summary: "Travel Company based in SATIPO, JUNÍN, Peru."
+type: company
+slug: /company/agv-tours-mazamari-satipo
+title: Agv Tours Mazamari
+summary: Travel Company based in SATIPO, JUNÍN, Peru.
 contact:
-  email: "agvtoursmaz@hotmail.com"
+  email: agvtoursmaz@hotmail.com
 location:
-  city: "SATIPO"
-  province: "SATIPO"
-  region: "JUNÍN"
-  country: "Peru"
-  ubigeo_code: "120601"
-  street_type: "AV."
-  street_name: "Carlos Botto Bernales"
-  street_number: "855"
+  city: SATIPO
+  province: SATIPO
+  region: JUNÍN
+  country: Peru
+  ubigeo_code: '120601'
+  street_type: AV.
+  street_name: Carlos Botto Bernales
+  street_number: '855'
 regulation:
-  tax_id: "20602444865"
-  snapshot_date: "20260515"
-  license_number: "-"
-legal_representative: "Zila Chipana Cardenas"
----
-
-# Agv Tours Mazamari
-
-Travel Company based in SATIPO, JUNÍN, Peru.
+  tax_id: '20602444865'
+  snapshot_date: '20260515'
+  license_number: '-'
+legal_representative: Zila Chipana Cardenas
+destinos:
+- tarma
+categorias:
+- full-day
+- tours-culturales
+- aventura
+distribution_role: tour_operator
+---
+
+# Agv Tours Mazamari
+
+Travel Company based in SATIPO, JUNÍN, Peru.

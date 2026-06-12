@@ -1,7 +1,37 @@
 User-agent: *
-Allow: /
+Disallow: /admin/
+Disallow: /api/private/
 Disallow: /private/
 Disallow: /.env
 Disallow: /graphify-out/
+Allow: /
 
-Sitemap: https://tourup.co/sitemap.xml
+# Explicitly allow AI crawlers
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+Sitemap: https://tourup.co/sitemap-index.xml
+Sitemap: https://tourup.co/sitemap-companies.xml
+Sitemap: https://tourup.co/sitemap-destinos.xml
+Sitemap: https://tourup.co/sitemap-prompts.xml

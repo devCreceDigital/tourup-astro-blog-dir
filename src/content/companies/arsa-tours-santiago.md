@@ -1,30 +1,36 @@
 ---
-type: "company"
-slug: "/company/arsa-tours-santiago"
-title: "Arsa Tours"
-destination: "SANTIAGO, CUSCO"
-category: "operador_turismo"
-agency_class_raw: "Operador Turismo"
-summary: "Travel Company based in SANTIAGO, CUSCO, Peru."
+type: company
+slug: /company/arsa-tours-santiago
+title: Arsa Tours
+summary: Travel Company based in SANTIAGO, CUSCO, Peru.
 contact:
-  website: "https://www.arsatours.com"
-  email: "arsatour@hotmail.com"
+  website: https://www.arsatours.com
+  email: arsatour@hotmail.com
 location:
-  city: "SANTIAGO"
-  province: "CUSCO"
-  region: "CUSCO"
-  country: "Peru"
-  ubigeo_code: "80106"
-  street_type: "AV."
-  street_name: "Teodocio Serrudo"
-  street_number: "LT. D-2"
+  city: SANTIAGO
+  province: CUSCO
+  region: CUSCO
+  country: Peru
+  ubigeo_code: '80106'
+  street_type: AV.
+  street_name: Teodocio Serrudo
+  street_number: LT. D-2
 regulation:
-  tax_id: "20527733775"
-  snapshot_date: "20260515"
-  license_number: "-"
-legal_representative: "Valdeiglesias Cconcho Libia"
----
-
-# Arsa Tours
-
-Travel Company based in SANTIAGO, CUSCO, Peru.
+  tax_id: '20527733775'
+  snapshot_date: '20260515'
+  license_number: '-'
+legal_representative: Valdeiglesias Cconcho Libia
+destinos:
+- cusco
+categorias:
+- full-day
+- tours-culturales
+- aventura
+- trekking
+- arqueologico
+distribution_role: tour_operator
+---
+
+# Arsa Tours
+
+Travel Company based in SANTIAGO, CUSCO, Peru.

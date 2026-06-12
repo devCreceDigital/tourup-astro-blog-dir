@@ -1,30 +1,36 @@
 ---
-type: "company"
-slug: "/company/bohem-travel-santiago-de-surco"
-title: "Bohem Travel"
-destination: "SANTIAGO DE SURCO, LIMA"
-category: "retail_travel_agency"
-agency_class_raw: "Minorista, Operador Turismo"
-summary: "Retail Travel Agency based in SANTIAGO DE SURCO, LIMA, Peru."
+type: company
+slug: /company/bohem-travel-santiago-de-surco
+title: Bohem Travel
+summary: Retail Travel Agency based in SANTIAGO DE SURCO, LIMA, Peru.
 contact:
-  email: "bohemtravel@terra.com.pe"
+  email: bohemtravel@terra.com.pe
 location:
-  city: "SANTIAGO DE SURCO"
-  province: "LIMA"
-  region: "LIMA"
-  country: "Peru"
-  ubigeo_code: "150140"
-  street_type: "AV."
-  street_name: "La Encalada"
-  street_number: "1615"
-  unit: "209"
+  city: SANTIAGO DE SURCO
+  province: LIMA
+  region: LIMA
+  country: Peru
+  ubigeo_code: '150140'
+  street_type: AV.
+  street_name: La Encalada
+  street_number: '1615'
+  unit: '209'
 regulation:
-  tax_id: "20509550108"
-  snapshot_date: "20260515"
-  license_number: "-"
-legal_representative: "Rocio Del Pilar Oliveira Oliveira"
----
-
-# Bohem Travel
-
-Retail Travel Agency based in SANTIAGO DE SURCO, LIMA, Peru.
+  tax_id: '20509550108'
+  snapshot_date: '20260515'
+  license_number: '-'
+legal_representative: Rocio Del Pilar Oliveira Oliveira
+destinos:
+- lima
+categorias:
+- full-day
+- tours-culturales
+- aventura
+- gastronomico
+- mice
+distribution_role: retail_travel_agency
+---
+
+# Bohem Travel
+
+Retail Travel Agency based in SANTIAGO DE SURCO, LIMA, Peru.

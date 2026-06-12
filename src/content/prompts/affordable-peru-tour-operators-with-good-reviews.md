@@ -15,12 +15,18 @@ negative_sentiment: "0%"
 destination_cluster: "Peru"
 category_cluster: "tour_companies"
 brands_ai_mentions:
-  - "Inkayni Peru Tours"
-  - "Kantu Peru Tours"
-  - "TreXperience"
-  - "Waman Adventures"
-  - "Peru For Less"
-  - "Alpaca Expeditions"
+  - entity_type: external_brand
+    entity_slug: inkayni-peru-tours
+  - entity_type: external_brand
+    entity_slug: kantu-peru-tours
+  - entity_type: external_brand
+    entity_slug: trexperience
+  - entity_type: external_brand
+    entity_slug: waman-adventures
+  - entity_type: external_brand
+    entity_slug: peru-for-less
+  - entity_type: company
+    entity_slug: alpaca-expeditions-cusco
 summary: "Landing page answering the AI search prompt: 'Affordable Peru tour operators with good reviews', focused on Peru tour companies and related travel brands."
 parent: "/en/peru/"
 ---

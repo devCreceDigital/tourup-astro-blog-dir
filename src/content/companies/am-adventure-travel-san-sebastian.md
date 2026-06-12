@@ -1,28 +1,34 @@
 ---
-type: "company"
-slug: "/company/am-adventure-travel-san-sebastian"
-title: "Am+Adventure &Travel"
-destination: "SAN SEBASTIAN, CUSCO"
-category: "retail_travel_agency"
-agency_class_raw: "Minorista"
-summary: "Retail Travel Agency based in SAN SEBASTIAN, CUSCO, Peru."
+type: company
+slug: /company/am-adventure-travel-san-sebastian
+title: Am+Adventure &Travel
+summary: Retail Travel Agency based in SAN SEBASTIAN, CUSCO, Peru.
 contact:
-  email: "ariannastours@hotmail.com"
+  email: ariannastours@hotmail.com
 location:
-  city: "SAN SEBASTIAN"
-  province: "CUSCO"
-  region: "CUSCO"
-  country: "Peru"
-  ubigeo_code: "80105"
-  street_type: "VIA"
-  street_name: "Apv. Coviduc Mza B Lt16"
+  city: SAN SEBASTIAN
+  province: CUSCO
+  region: CUSCO
+  country: Peru
+  ubigeo_code: '80105'
+  street_type: VIA
+  street_name: Apv. Coviduc Mza B Lt16
 regulation:
-  tax_id: "20601337381"
-  snapshot_date: "20260515"
-  license_number: "-"
-legal_representative: "Maria Adriana Cabrera Vasquez"
----
-
-# Am+Adventure &Travel
-
-Retail Travel Agency based in SAN SEBASTIAN, CUSCO, Peru.
+  tax_id: '20601337381'
+  snapshot_date: '20260515'
+  license_number: '-'
+legal_representative: Maria Adriana Cabrera Vasquez
+destinos:
+- cusco
+categorias:
+- full-day
+- tours-culturales
+- aventura
+- trekking
+- arqueologico
+distribution_role: retail_travel_agency
+---
+
+# Am+Adventure &Travel
+
+Retail Travel Agency based in SAN SEBASTIAN, CUSCO, Peru.

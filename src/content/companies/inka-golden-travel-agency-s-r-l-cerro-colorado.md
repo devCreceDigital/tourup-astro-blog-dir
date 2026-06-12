@@ -1,30 +1,35 @@
 ---
-type: "company"
-slug: "/company/inka-golden-travel-agency-s-r-l-cerro-colorado"
-title: "Inka Golden Travel Agency S.R.L."
-destination: "CERRO COLORADO, AREQUIPA"
-category: "operador_turismo"
-agency_class_raw: "Operador Turismo"
-summary: "Travel Company based in CERRO COLORADO, AREQUIPA, Peru."
+type: company
+slug: /company/inka-golden-travel-agency-s-r-l-cerro-colorado
+title: Inka Golden Travel Agency S.R.L.
+summary: Travel Company based in CERRO COLORADO, AREQUIPA, Peru.
 contact:
-  website: "https://www.inkagolden-travelperu.com"
-  email: "inkagolden.info@gmail.com"
+  website: https://www.inkagolden-travelperu.com
+  email: inkagolden.info@gmail.com
 location:
-  city: "CERRO COLORADO"
-  province: "AREQUIPA"
-  region: "AREQUIPA"
-  country: "Peru"
-  ubigeo_code: "40104"
-  street_type: "CLLE"
-  street_name: "Progreso"
-  street_number: "221"
+  city: CERRO COLORADO
+  province: AREQUIPA
+  region: AREQUIPA
+  country: Peru
+  ubigeo_code: '40104'
+  street_type: CLLE
+  street_name: Progreso
+  street_number: '221'
 regulation:
-  tax_id: "20602258506"
-  snapshot_date: "20260515"
-  license_number: "-"
-legal_representative: "Lili Yuliana Zárate Cáceres"
----
-
-# Inka Golden Travel Agency S.R.L.
-
-Travel Company based in CERRO COLORADO, AREQUIPA, Peru.
+  tax_id: '20602258506'
+  snapshot_date: '20260515'
+  license_number: '-'
+legal_representative: Lili Yuliana Zárate Cáceres
+destinos:
+- arequipa
+categorias:
+- full-day
+- tours-culturales
+- aventura
+- trekking
+distribution_role: tour_operator
+---
+
+# Inka Golden Travel Agency S.R.L.
+
+Travel Company based in CERRO COLORADO, AREQUIPA, Peru.

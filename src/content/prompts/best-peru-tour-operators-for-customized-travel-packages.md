@@ -15,17 +15,28 @@ negative_sentiment: "0%"
 destination_cluster: "Peru"
 category_cluster: "tour_companies"
 brands_ai_mentions:
-  - "Machu Travel Peru"
-  - "Alpaca Expeditions"
-  - "TourRadar"
-  - "Waman Adventures"
-  - "TreXperience"
-  - "Kantu Peru Tours"
-  - "Inkayni Peru Tours"
-  - "Peru For Less"
-  - "TravelStride"
-  - "Exodus Adventure Travels"
-  - "Insight Vacations"
+  - entity_type: external_brand
+    entity_slug: machu-travel-peru
+  - entity_type: company
+    entity_slug: alpaca-expeditions-cusco
+  - entity_type: external_brand
+    entity_slug: tourradar
+  - entity_type: external_brand
+    entity_slug: waman-adventures
+  - entity_type: external_brand
+    entity_slug: trexperience
+  - entity_type: external_brand
+    entity_slug: kantu-peru-tours
+  - entity_type: external_brand
+    entity_slug: inkayni-peru-tours
+  - entity_type: external_brand
+    entity_slug: peru-for-less
+  - entity_type: external_brand
+    entity_slug: travelstride
+  - entity_type: external_brand
+    entity_slug: exodus-adventure-travels
+  - entity_type: external_brand
+    entity_slug: insight-vacations
 summary: "Landing page answering the AI search prompt: 'Best Peru tour operators for customized travel packages', focused on Peru tour companies and related travel brands."
 parent: "/en/peru/"
 ---

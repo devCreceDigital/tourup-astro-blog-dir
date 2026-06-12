@@ -15,16 +15,26 @@ negative_sentiment: "0%"
 destination_cluster: "Peru"
 category_cluster: "tour_companies"
 brands_ai_mentions:
-  - "Alpaca Expeditions"
-  - "Machu Travel Peru"
-  - "SAM Travel Peru"
-  - "G Adventures"
-  - "Waman Adventures"
-  - "TreXperience"
-  - "Kantu Peru Tours"
-  - "Inkayni Peru Tours"
-  - "Intrepid Travel"
-  - "PeruAgency.com"
+  - entity_type: company
+    entity_slug: alpaca-expeditions-cusco
+  - entity_type: external_brand
+    entity_slug: machu-travel-peru
+  - entity_type: external_brand
+    entity_slug: sam-travel-peru
+  - entity_type: external_brand
+    entity_slug: g-adventures
+  - entity_type: external_brand
+    entity_slug: waman-adventures
+  - entity_type: external_brand
+    entity_slug: trexperience
+  - entity_type: external_brand
+    entity_slug: kantu-peru-tours
+  - entity_type: external_brand
+    entity_slug: inkayni-peru-tours
+  - entity_type: external_brand
+    entity_slug: intrepid-travel
+  - entity_type: external_brand
+    entity_slug: peruagency-com
 summary: "Landing page answering the AI search prompt: 'What are the top-rated tour operators for Peru travel?', focused on Peru tour companies and related travel brands."
 parent: "/en/peru/"
 ---

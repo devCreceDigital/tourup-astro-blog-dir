@@ -1,29 +1,33 @@
 ---
-type: "company"
-slug: "/company/agencia-de-viajes-y-turismo-e-e-peru-travel-e-i-r-l-tarma"
-title: "Agencia De Viajes Y Turismo E&E Peru Travel E.I.R.L."
-destination: "TARMA, JUNÍN"
-category: "operador_turismo"
-agency_class_raw: "Operador Turismo"
-summary: "Travel Company based in TARMA, JUNÍN, Peru."
-contact:
+type: company
+slug: /company/agencia-de-viajes-y-turismo-e-e-peru-travel-e-i-r-l-tarma
+title: Agencia De Viajes Y Turismo E&E Peru Travel E.I.R.L.
+summary: Travel Company based in TARMA, JUNÍN, Peru.
+contact: null
 location:
-  city: "TARMA"
-  province: "TARMA"
-  region: "JUNÍN"
-  country: "Peru"
-  ubigeo_code: "120701"
-  street_type: "JR."
-  street_name: "Lima"
-  street_number: "320"
-  unit: "B"
+  city: TARMA
+  province: TARMA
+  region: JUNÍN
+  country: Peru
+  ubigeo_code: '120701'
+  street_type: JR.
+  street_name: Lima
+  street_number: '320'
+  unit: B
 regulation:
-  tax_id: "20603035284"
-  snapshot_date: "20260515"
-  license_number: "-"
-legal_representative: "Elias Heber Peñaloza Galarza"
----
-
-# Agencia De Viajes Y Turismo E&E Peru Travel E.I.R.L.
-
-Travel Company based in TARMA, JUNÍN, Peru.
+  tax_id: '20603035284'
+  snapshot_date: '20260515'
+  license_number: '-'
+legal_representative: Elias Heber Peñaloza Galarza
+destinos:
+- tarma
+categorias:
+- full-day
+- tours-culturales
+- aventura
+distribution_role: tour_operator
+---
+
+# Agencia De Viajes Y Turismo E&E Peru Travel E.I.R.L.
+
+Travel Company based in TARMA, JUNÍN, Peru.

@@ -1,29 +1,35 @@
 ---
-type: "company"
-slug: "/company/cusco-mountain-treks-and-tours-s-a-c-santiago"
-title: "Cusco Mountain Treks And Tours S.A.C."
-destination: "SANTIAGO, CUSCO"
-category: "operador_turismo"
-agency_class_raw: "Operador Turismo"
-summary: "Travel Company based in SANTIAGO, CUSCO, Peru."
+type: company
+slug: /company/cusco-mountain-treks-and-tours-s-a-c-santiago
+title: Cusco Mountain Treks And Tours S.A.C.
+summary: Travel Company based in SANTIAGO, CUSCO, Peru.
 contact:
-  website: "https://www.cuscomountaintrek.com"
-  email: "info@cuscomountaintrek.com"
+  website: https://www.cuscomountaintrek.com
+  email: info@cuscomountaintrek.com
 location:
-  city: "SANTIAGO"
-  province: "CUSCO"
-  region: "CUSCO"
-  country: "Peru"
-  ubigeo_code: "80106"
-  street_type: "VIA"
-  street_name: "."
+  city: SANTIAGO
+  province: CUSCO
+  region: CUSCO
+  country: Peru
+  ubigeo_code: '80106'
+  street_type: VIA
+  street_name: .
 regulation:
-  tax_id: "20602125042"
-  snapshot_date: "20260515"
-  license_number: "-"
-legal_representative: "Daniel Yupanqui Ccapcha"
----
-
-# Cusco Mountain Treks And Tours S.A.C.
-
-Travel Company based in SANTIAGO, CUSCO, Peru.
+  tax_id: '20602125042'
+  snapshot_date: '20260515'
+  license_number: '-'
+legal_representative: Daniel Yupanqui Ccapcha
+destinos:
+- cusco
+categorias:
+- full-day
+- tours-culturales
+- aventura
+- trekking
+- arqueologico
+distribution_role: tour_operator
+---
+
+# Cusco Mountain Treks And Tours S.A.C.
+
+Travel Company based in SANTIAGO, CUSCO, Peru.

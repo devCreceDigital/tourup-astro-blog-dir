@@ -46,8 +46,8 @@ const companies = defineCollection({
 			city: z.string(),
 			country: z.string().default('Peru'),
 			phone: z.string().optional(),
-			email: z.string().email().optional(),
-			website: z.string().url().optional(),
+			email: z.string().optional(),
+			website: z.string().optional(),
 		}).optional(),
 
 		// B2B positioning string (used on Trust Card and Partner Scout shortlist)
@@ -70,12 +70,12 @@ const companies = defineCollection({
 
 		// ── Legacy / original fields (kept for backward compat) ─────────────
 		contact: z.object({
-			website: z.string().url().optional(),
-			email: z.string().email().optional(),
+			website: z.string().optional(),
+			email: z.string().optional(),
 			phone: z.string().optional(),
 			phone_alt_1: z.string().optional(),
 			phone_alt_2: z.string().optional(),
-		}).optional(),
+		}).nullable().optional(),
 		location: z.object({
 			city: z.string().optional(),
 			province: z.string().optional(),
@@ -137,7 +137,7 @@ const external_brands = defineCollection({
 	schema: z.object({
 		type: z.literal('external_brand'),
 		name: z.string(),
-		official_url: z.string().url(),
+		official_url: z.string(),
 		brand_role: z.string().optional(),
 		country: z.string().optional(),
 		mentioned_in_prompts: z.array(z.string()).optional(),
@@ -161,7 +161,7 @@ const prompts = defineCollection({
 		category_cluster: z.string().optional(),
 		brands_ai_mentions: z.array(
 			z.object({
-				name: z.string(),
+				name: z.string().optional(),
 				entity_type: z.enum(['company', 'external_brand', 'unknown']),
 				entity_slug: z.string().optional(),
 			})

@@ -1,29 +1,35 @@
 ---
-type: "company"
-slug: "/company/california-garden-tours-santiago"
-title: "California Garden Tours"
-destination: "SANTIAGO, CUSCO"
-category: "operador_turismo"
-agency_class_raw: "Operador Turismo"
-summary: "Travel Company based in SANTIAGO, CUSCO, Peru."
+type: company
+slug: /company/california-garden-tours-santiago
+title: California Garden Tours
+summary: Travel Company based in SANTIAGO, CUSCO, Peru.
 contact:
-  website: "https://abeltaina@yahoo.com"
+  website: https://abeltaina@yahoo.com
 location:
-  city: "SANTIAGO"
-  province: "CUSCO"
-  region: "CUSCO"
-  country: "Peru"
-  ubigeo_code: "80106"
-  street_type: "JR."
-  street_name: "21 De Mayo  I Belempampa"
-  street_number: "16"
+  city: SANTIAGO
+  province: CUSCO
+  region: CUSCO
+  country: Peru
+  ubigeo_code: '80106'
+  street_type: JR.
+  street_name: 21 De Mayo  I Belempampa
+  street_number: '16'
 regulation:
-  tax_id: "20564472451"
-  snapshot_date: "20260515"
-  license_number: "-"
-legal_representative: "-"
----
-
-# California Garden Tours
-
-Travel Company based in SANTIAGO, CUSCO, Peru.
+  tax_id: '20564472451'
+  snapshot_date: '20260515'
+  license_number: '-'
+legal_representative: '-'
+destinos:
+- cusco
+categorias:
+- full-day
+- tours-culturales
+- aventura
+- trekking
+- arqueologico
+distribution_role: tour_operator
+---
+
+# California Garden Tours
+
+Travel Company based in SANTIAGO, CUSCO, Peru.

@@ -1,30 +1,36 @@
 ---
-type: "company"
-slug: "/company/gsv-travel-s-a-c-san-luis"
-title: "Gsv Travel S.A.C."
-destination: "SAN LUIS, LIMA"
-category: "retail_travel_agency"
-agency_class_raw: "Minorista, Operador Turismo"
-summary: "Retail Travel Agency based in SAN LUIS, LIMA, Peru."
+type: company
+slug: /company/gsv-travel-s-a-c-san-luis
+title: Gsv Travel S.A.C.
+summary: Retail Travel Agency based in SAN LUIS, LIMA, Peru.
 contact:
-  website: "https://www.gsv-travel.com"
-  email: "gsuarez@gsv-travel.com"
+  website: https://www.gsv-travel.com
+  email: gsuarez@gsv-travel.com
 location:
-  city: "SAN LUIS"
-  province: "LIMA"
-  region: "LIMA"
-  country: "Peru"
-  ubigeo_code: "150134"
-  street_type: "CLLE"
-  street_name: "Puerto Pisco"
-  street_number: "166"
+  city: SAN LUIS
+  province: LIMA
+  region: LIMA
+  country: Peru
+  ubigeo_code: '150134'
+  street_type: CLLE
+  street_name: Puerto Pisco
+  street_number: '166'
 regulation:
-  tax_id: "20553744220"
-  snapshot_date: "20260515"
-  license_number: "-"
-legal_representative: "Suarez Espinoza Olga Gisella"
----
-
-# Gsv Travel S.A.C.
-
-Retail Travel Agency based in SAN LUIS, LIMA, Peru.
+  tax_id: '20553744220'
+  snapshot_date: '20260515'
+  license_number: '-'
+legal_representative: Suarez Espinoza Olga Gisella
+destinos:
+- lima
+categorias:
+- full-day
+- tours-culturales
+- aventura
+- gastronomico
+- mice
+distribution_role: retail_travel_agency
+---
+
+# Gsv Travel S.A.C.
+
+Retail Travel Agency based in SAN LUIS, LIMA, Peru.

@@ -1,5 +1,6 @@
 ---
 type: prompt_landing
+slug: "/en/ai-prompts/best-peru-tour-companies-for-families/"
 title: Best Peru Tour Companies for Families
 lang: en
 search_term: best Peru tour companies families

@@ -1,30 +1,34 @@
 ---
-type: "company"
-slug: "/company/heliconias-destinos-chanchamayo"
-title: "Heliconias Destinos"
-destination: "CHANCHAMAYO, JUNÍN"
-category: "operador_turismo"
-agency_class_raw: "Operador Turismo"
-summary: "Travel Company based in CHANCHAMAYO, JUNÍN, Peru."
+type: company
+slug: /company/heliconias-destinos-chanchamayo
+title: Heliconias Destinos
+summary: Travel Company based in CHANCHAMAYO, JUNÍN, Peru.
 contact:
-  website: "https://www.heliconiadestinos.com"
-  email: "gerencia@heliconiadestinos.com"
+  website: https://www.heliconiadestinos.com
+  email: gerencia@heliconiadestinos.com
 location:
-  city: "CHANCHAMAYO"
-  province: "CHANCHAMAYO"
-  region: "JUNÍN"
-  country: "Peru"
-  ubigeo_code: "120301"
-  street_type: "JR."
-  street_name: "Junin"
-  street_number: "926"
+  city: CHANCHAMAYO
+  province: CHANCHAMAYO
+  region: JUNÍN
+  country: Peru
+  ubigeo_code: '120301'
+  street_type: JR.
+  street_name: Junin
+  street_number: '926'
 regulation:
-  tax_id: "20541356704"
-  snapshot_date: "20260515"
-  license_number: "-"
-legal_representative: "Sire Aurum Martinez Gutierrez"
----
-
-# Heliconias Destinos
-
-Travel Company based in CHANCHAMAYO, JUNÍN, Peru.
+  tax_id: '20541356704'
+  snapshot_date: '20260515'
+  license_number: '-'
+legal_representative: Sire Aurum Martinez Gutierrez
+destinos:
+- tarma
+categorias:
+- full-day
+- tours-culturales
+- aventura
+distribution_role: tour_operator
+---
+
+# Heliconias Destinos
+
+Travel Company based in CHANCHAMAYO, JUNÍN, Peru.
