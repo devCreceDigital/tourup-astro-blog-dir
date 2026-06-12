@@ -1,30 +1,36 @@
 ---
-type: "company"
-slug: "/company/cusco-mistico-tours-cusco"
-title: "Cusco Mistico Tours"
-destination: "CUSCO, CUSCO"
-category: "operador_turismo"
-agency_class_raw: "Operador Turismo"
-summary: "Travel Company based in CUSCO, CUSCO, Peru."
+type: company
+slug: /company/cusco-mistico-tours-cusco
+title: Cusco Mistico Tours
+summary: Travel Company based in CUSCO, CUSCO, Peru.
 contact:
-  website: "https://www.cuscomisticotours-peru.com"
-  email: "cuscomisticotours@hotmail.com"
+  website: https://www.cuscomisticotours-peru.com
+  email: cuscomisticotours@hotmail.com
 location:
-  city: "CUSCO"
-  province: "CUSCO"
-  region: "CUSCO"
-  country: "Peru"
-  ubigeo_code: "80101"
-  street_type: "PJ."
-  street_name: "Tres Cruces"
-  street_number: "111"
+  city: CUSCO
+  province: CUSCO
+  region: CUSCO
+  country: Peru
+  ubigeo_code: '80101'
+  street_type: PJ.
+  street_name: Tres Cruces
+  street_number: '111'
 regulation:
-  tax_id: "20490680421"
-  snapshot_date: "20260515"
-  license_number: "-"
-legal_representative: "Juan Willian Enriquez Gutierrez"
----
-
-# Cusco Mistico Tours
-
-Travel Company based in CUSCO, CUSCO, Peru.
+  tax_id: '20490680421'
+  snapshot_date: '20260515'
+  license_number: '-'
+legal_representative: Juan Willian Enriquez Gutierrez
+destinos:
+- cusco
+categorias:
+- full-day
+- tours-culturales
+- aventura
+- trekking
+- arqueologico
+distribution_role: tour_operator
+---
+
+# Cusco Mistico Tours
+
+Travel Company based in CUSCO, CUSCO, Peru.

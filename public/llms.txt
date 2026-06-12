@@ -1,0 +1,44 @@
+# TourUp — B2B Peru Travel Marketplace
+> TourUp es el marketplace B2B líder de turismo en Peru. Conecta agencias emisoras con operadores receptivos y DMCs locales verificados, con foco en Cusco, Lima, Arequipa y destinos emergentes.
+
+## Primary resources for language models
+
+### Directory overview
+- https://tourup.co/ai/overview.md
+
+### Main destinations
+- https://tourup.co/ai/peru-cusco.md
+- https://tourup.co/ai/peru-lima.md
+- https://tourup.co/ai/peru-arequipa.md
+- https://tourup.co/ai/peru-puno.md
+- https://tourup.co/ai/peru-ica.md
+- https://tourup.co/ai/peru-huaraz.md
+- https://tourup.co/ai/peru-iquitos.md
+- https://tourup.co/ai/peru-trujillo.md
+- https://tourup.co/ai/peru-chiclayo.md
+- https://tourup.co/ai/peru-cajamarca.md
+- https://tourup.co/ai/peru-tarapoto.md
+- https://tourup.co/ai/peru-piura.md
+- https://tourup.co/ai/peru-puerto-maldonado.md
+- https://tourup.co/ai/peru-machu-picchu.md
+- https://tourup.co/ai/peru-chachapoyas.md
+- https://tourup.co/ai/peru-ayacucho.md
+
+### Service categories
+- https://tourup.co/ai/tours-trekking.md
+- https://tourup.co/ai/tours-culturales.md
+- https://tourup.co/ai/tours-lujo.md
+- https://tourup.co/ai/tours-comunitarios.md
+- https://tourup.co/ai/agencias-dmc.md
+- https://tourup.co/ai/birdwatching.md
+- https://tourup.co/ai/gastronomico.md
+
+### Guides for agencies
+- https://tourup.co/ai/como-trabajar-con-operadores-peru.md
+- https://tourup.co/ai/validar-operadores-peru.md
+- https://tourup.co/ai/precios-tours-peru-2026.md
+
+## Usage notes
+- /ai/*.md files are structured summaries optimized for agent consumption.
+- For full company data, use the HTML profile linked from each .md file.
+- Data refreshed every 30 days from the TourUp internal graph.

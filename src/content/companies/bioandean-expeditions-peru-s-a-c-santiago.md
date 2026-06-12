@@ -1,29 +1,35 @@
 ---
-type: "company"
-slug: "/company/bioandean-expeditions-peru-s-a-c-santiago"
-title: "Bioandean Expeditions Peru S.A.C."
-destination: "SANTIAGO, CUSCO"
-category: "retail_travel_agency"
-agency_class_raw: "Minorista, Operador Turismo"
-summary: "Retail Travel Agency based in SANTIAGO, CUSCO, Peru."
+type: company
+slug: /company/bioandean-expeditions-peru-s-a-c-santiago
+title: Bioandean Expeditions Peru S.A.C.
+summary: Retail Travel Agency based in SANTIAGO, CUSCO, Peru.
 contact:
-  website: "https://www.bioandeanexpeditions.com"
-  email: "biondeanexpeditions@gmail.com"
+  website: https://www.bioandeanexpeditions.com
+  email: biondeanexpeditions@gmail.com
 location:
-  city: "SANTIAGO"
-  province: "CUSCO"
-  region: "CUSCO"
-  country: "Peru"
-  ubigeo_code: "80106"
-  street_type: "CLLE"
-  street_name: "Luis Vallejo Santoni N-4"
+  city: SANTIAGO
+  province: CUSCO
+  region: CUSCO
+  country: Peru
+  ubigeo_code: '80106'
+  street_type: CLLE
+  street_name: Luis Vallejo Santoni N-4
 regulation:
-  tax_id: "20564126897"
-  snapshot_date: "20260515"
-  license_number: "-"
-legal_representative: "Rider Valderrama Sandoval"
----
-
-# Bioandean Expeditions Peru S.A.C.
-
-Retail Travel Agency based in SANTIAGO, CUSCO, Peru.
+  tax_id: '20564126897'
+  snapshot_date: '20260515'
+  license_number: '-'
+legal_representative: Rider Valderrama Sandoval
+destinos:
+- cusco
+categorias:
+- full-day
+- tours-culturales
+- aventura
+- trekking
+- arqueologico
+distribution_role: retail_travel_agency
+---
+
+# Bioandean Expeditions Peru S.A.C.
+
+Retail Travel Agency based in SANTIAGO, CUSCO, Peru.

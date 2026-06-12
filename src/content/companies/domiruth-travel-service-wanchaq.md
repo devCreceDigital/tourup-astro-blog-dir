@@ -1,31 +1,37 @@
 ---
-type: "company"
-slug: "/company/domiruth-travel-service-wanchaq"
-title: "Domiruth Travel Service"
-destination: "WANCHAQ, CUSCO"
-category: "wholesale_travel_agency"
-agency_class_raw: "Mayorista, Operador Turismo"
-summary: "Wholesale Travel Agency based in WANCHAQ, CUSCO, Peru."
+type: company
+slug: /company/domiruth-travel-service-wanchaq
+title: Domiruth Travel Service
+summary: Wholesale Travel Agency based in WANCHAQ, CUSCO, Peru.
 contact:
-  website: "https://www.domiruth.com.pe"
-  email: "cusco@domiruth.com"
+  website: https://www.domiruth.com.pe
+  email: cusco@domiruth.com
 location:
-  city: "WANCHAQ"
-  province: "CUSCO"
-  region: "CUSCO"
-  country: "Peru"
-  ubigeo_code: "80108"
-  street_type: "AV."
-  street_name: "Huascar N° 222 Ofic.302"
-  street_number: "222"
-  unit: "302"
+  city: WANCHAQ
+  province: CUSCO
+  region: CUSCO
+  country: Peru
+  ubigeo_code: '80108'
+  street_type: AV.
+  street_name: Huascar N° 222 Ofic.302
+  street_number: '222'
+  unit: '302'
 regulation:
-  tax_id: "20100999430"
-  snapshot_date: "20260515"
-  license_number: "-"
-legal_representative: "Doris Beatriz Samaniego Ramos De Medina"
----
-
-# Domiruth Travel Service
-
-Wholesale Travel Agency based in WANCHAQ, CUSCO, Peru.
+  tax_id: '20100999430'
+  snapshot_date: '20260515'
+  license_number: '-'
+legal_representative: Doris Beatriz Samaniego Ramos De Medina
+destinos:
+- cusco
+categorias:
+- full-day
+- tours-culturales
+- aventura
+- trekking
+- arqueologico
+distribution_role: wholesale_travel_agency
+---
+
+# Domiruth Travel Service
+
+Wholesale Travel Agency based in WANCHAQ, CUSCO, Peru.

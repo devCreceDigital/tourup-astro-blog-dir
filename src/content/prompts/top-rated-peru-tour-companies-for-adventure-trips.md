@@ -15,12 +15,18 @@ negative_sentiment: "0%"
 destination_cluster: "Peru"
 category_cluster: "tour_companies"
 brands_ai_mentions:
-  - "Alpaca Expeditions"
-  - "SAM Travel Peru"
-  - "Waman Adventures"
-  - "TreXperience"
-  - "Machu Travel Peru"
-  - "Exodus Adventure Travels"
+  - entity_type: company
+    entity_slug: alpaca-expeditions-cusco
+  - entity_type: external_brand
+    entity_slug: sam-travel-peru
+  - entity_type: external_brand
+    entity_slug: waman-adventures
+  - entity_type: external_brand
+    entity_slug: trexperience
+  - entity_type: external_brand
+    entity_slug: machu-travel-peru
+  - entity_type: external_brand
+    entity_slug: exodus-adventure-travels
 summary: "Landing page answering the AI search prompt: 'Top-rated Peru tour companies for adventure trips', focused on Peru tour companies and related travel brands."
 parent: "/en/peru/"
 ---

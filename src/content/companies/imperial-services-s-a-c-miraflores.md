@@ -1,31 +1,37 @@
 ---
-type: "company"
-slug: "/company/imperial-services-s-a-c-miraflores"
-title: "Imperial Services S A C"
-destination: "MIRAFLORES, LIMA"
-category: "wholesale_travel_agency"
-agency_class_raw: "Mayorista, Minorista, Operador Turismo"
-summary: "Wholesale Travel Agency based in MIRAFLORES, LIMA, Peru."
+type: company
+slug: /company/imperial-services-s-a-c-miraflores
+title: Imperial Services S A C
+summary: Wholesale Travel Agency based in MIRAFLORES, LIMA, Peru.
 contact:
-  website: "https://www.imperialperu.com"
-  email: "ventas@imperialperu.net"
+  website: https://www.imperialperu.com
+  email: ventas@imperialperu.net
 location:
-  city: "MIRAFLORES"
-  province: "LIMA"
-  region: "LIMA"
-  country: "Peru"
-  ubigeo_code: "150122"
-  street_type: "AV."
-  street_name: "28 De julio"
-  street_number: "569"
-  unit: "301"
+  city: MIRAFLORES
+  province: LIMA
+  region: LIMA
+  country: Peru
+  ubigeo_code: '150122'
+  street_type: AV.
+  street_name: 28 De julio
+  street_number: '569'
+  unit: '301'
 regulation:
-  tax_id: "20100910986"
-  snapshot_date: "20260515"
-  license_number: "-"
-legal_representative: "Aurelio Aquise Ordoñez"
----
-
-# Imperial Services S A C
-
-Wholesale Travel Agency based in MIRAFLORES, LIMA, Peru.
+  tax_id: '20100910986'
+  snapshot_date: '20260515'
+  license_number: '-'
+legal_representative: Aurelio Aquise Ordoñez
+destinos:
+- lima
+categorias:
+- full-day
+- tours-culturales
+- aventura
+- gastronomico
+- mice
+distribution_role: wholesale_travel_agency
+---
+
+# Imperial Services S A C
+
+Wholesale Travel Agency based in MIRAFLORES, LIMA, Peru.

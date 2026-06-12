@@ -1,29 +1,35 @@
 ---
-type: "company"
-slug: "/company/antara-peru-santiago"
-title: "Antara Peru"
-destination: "SANTIAGO, CUSCO"
-category: "operador_turismo"
-agency_class_raw: "Operador Turismo"
-summary: "Travel Company based in SANTIAGO, CUSCO, Peru."
+type: company
+slug: /company/antara-peru-santiago
+title: Antara Peru
+summary: Travel Company based in SANTIAGO, CUSCO, Peru.
 contact:
-  website: "https://www.antaraperu.com"
-  email: "info@antaraperu.com"
+  website: https://www.antaraperu.com
+  email: info@antaraperu.com
 location:
-  city: "SANTIAGO"
-  province: "CUSCO"
-  region: "CUSCO"
-  country: "Peru"
-  ubigeo_code: "80106"
-  street_type: "JR."
-  street_name: "Sacsayhuaman  B-10- Urb Dolorespata"
+  city: SANTIAGO
+  province: CUSCO
+  region: CUSCO
+  country: Peru
+  ubigeo_code: '80106'
+  street_type: JR.
+  street_name: Sacsayhuaman  B-10- Urb Dolorespata
 regulation:
-  tax_id: "20526897081"
-  snapshot_date: "20260515"
-  license_number: "-"
-legal_representative: "Pardo Miranda Eufemia"
----
-
-# Antara Peru
-
-Travel Company based in SANTIAGO, CUSCO, Peru.
+  tax_id: '20526897081'
+  snapshot_date: '20260515'
+  license_number: '-'
+legal_representative: Pardo Miranda Eufemia
+destinos:
+- cusco
+categorias:
+- full-day
+- tours-culturales
+- aventura
+- trekking
+- arqueologico
+distribution_role: tour_operator
+---
+
+# Antara Peru
+
+Travel Company based in SANTIAGO, CUSCO, Peru.

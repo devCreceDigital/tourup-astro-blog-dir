@@ -1,31 +1,37 @@
 ---
-type: "company"
-slug: "/company/conecta-vacaciones-magdalena-del-mar"
-title: "Conecta Vacaciones"
-destination: "MAGDALENA DEL MAR, LIMA"
-category: "retail_travel_agency"
-agency_class_raw: "Minorista"
-summary: "Retail Travel Agency based in MAGDALENA DEL MAR, LIMA, Peru."
+type: company
+slug: /company/conecta-vacaciones-magdalena-del-mar
+title: Conecta Vacaciones
+summary: Retail Travel Agency based in MAGDALENA DEL MAR, LIMA, Peru.
 contact:
-  website: "https://www.conectapv.com"
-  email: "jpv@conectapv.com"
+  website: https://www.conectapv.com
+  email: jpv@conectapv.com
 location:
-  city: "MAGDALENA DEL MAR"
-  province: "LIMA"
-  region: "LIMA"
-  country: "Peru"
-  ubigeo_code: "150120"
-  street_type: "JR."
-  street_name: "Yungay"
-  street_number: "910"
-  unit: "102-A"
+  city: MAGDALENA DEL MAR
+  province: LIMA
+  region: LIMA
+  country: Peru
+  ubigeo_code: '150120'
+  street_type: JR.
+  street_name: Yungay
+  street_number: '910'
+  unit: 102-A
 regulation:
-  tax_id: "20546677797"
-  snapshot_date: "20260515"
-  license_number: "-"
-legal_representative: "Julio Ricardo Perez Vargas"
----
-
-# Conecta Vacaciones
-
-Retail Travel Agency based in MAGDALENA DEL MAR, LIMA, Peru.
+  tax_id: '20546677797'
+  snapshot_date: '20260515'
+  license_number: '-'
+legal_representative: Julio Ricardo Perez Vargas
+destinos:
+- lima
+categorias:
+- full-day
+- tours-culturales
+- aventura
+- gastronomico
+- mice
+distribution_role: retail_travel_agency
+---
+
+# Conecta Vacaciones
+
+Retail Travel Agency based in MAGDALENA DEL MAR, LIMA, Peru.

@@ -1,30 +1,36 @@
 ---
-type: "company"
-slug: "/company/dream-travels-breña"
-title: "Dream Travels"
-destination: "BREÑA, LIMA"
-category: "retail_travel_agency"
-agency_class_raw: "Minorista"
-summary: "Retail Travel Agency based in BREÑA, LIMA, Peru."
+type: company
+slug: /company/dream-travels-breña
+title: Dream Travels
+distribution_role: tour_operator
+summary: Retail Travel Agency based in BREÑA, LIMA, Peru.
 contact:
-  email: "dreamtravels@outlook.com"
+  email: dreamtravels@outlook.com
 location:
-  city: "BREÑA"
-  province: "LIMA"
-  region: "LIMA"
-  country: "Peru"
-  ubigeo_code: "150105"
-  street_type: "AV."
-  street_name: "España"
-  street_number: "566"
-  unit: "2"
+  city: BREÑA
+  province: LIMA
+  region: LIMA
+  country: Peru
+  ubigeo_code: '150105'
+  street_type: AV.
+  street_name: España
+  street_number: '566'
+  unit: '2'
 regulation:
-  tax_id: "10700728779"
-  snapshot_date: "20260515"
-  license_number: "-"
-legal_representative: "-"
----
-
-# Dream Travels
-
-Retail Travel Agency based in BREÑA, LIMA, Peru.
+  tax_id: '10700728779'
+  snapshot_date: '20260515'
+  license_number: '-'
+legal_representative: '-'
+destinos:
+- lima
+categorias:
+- full-day
+- tours-culturales
+- aventura
+- gastronomico
+- mice
+---
+
+# Dream Travels
+
+Retail Travel Agency based in BREÑA, LIMA, Peru.

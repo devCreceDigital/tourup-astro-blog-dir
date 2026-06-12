@@ -1,29 +1,35 @@
 ---
-type: "company"
-slug: "/company/a-p-tours-s-a-c-wanchaq"
-title: "A&P Tours S.A.C."
-destination: "WANCHAQ, CUSCO"
-category: "operador_turismo"
-agency_class_raw: "Operador Turismo"
-summary: "Travel Company based in WANCHAQ, CUSCO, Peru."
+type: company
+slug: /company/a-p-tours-s-a-c-wanchaq
+title: A&P Tours S.A.C.
+summary: Travel Company based in WANCHAQ, CUSCO, Peru.
 contact:
-  website: "https://www.aptourscusco.com"
-  email: "info@aptourscusco.com"
+  website: https://www.aptourscusco.com
+  email: info@aptourscusco.com
 location:
-  city: "WANCHAQ"
-  province: "CUSCO"
-  region: "CUSCO"
-  country: "Peru"
-  ubigeo_code: "80108"
-  street_type: "Dato no Definido"
-  street_number: "D-8"
+  city: WANCHAQ
+  province: CUSCO
+  region: CUSCO
+  country: Peru
+  ubigeo_code: '80108'
+  street_type: Dato no Definido
+  street_number: D-8
 regulation:
-  tax_id: "20527754853"
-  snapshot_date: "20260515"
-  license_number: "-"
-legal_representative: "Prado Alzamora Jesus Abelardo"
----
-
-# A&P Tours S.A.C.
-
-Travel Company based in WANCHAQ, CUSCO, Peru.
+  tax_id: '20527754853'
+  snapshot_date: '20260515'
+  license_number: '-'
+legal_representative: Prado Alzamora Jesus Abelardo
+destinos:
+- cusco
+categorias:
+- full-day
+- tours-culturales
+- aventura
+- trekking
+- arqueologico
+distribution_role: tour_operator
+---
+
+# A&P Tours S.A.C.
+
+Travel Company based in WANCHAQ, CUSCO, Peru.

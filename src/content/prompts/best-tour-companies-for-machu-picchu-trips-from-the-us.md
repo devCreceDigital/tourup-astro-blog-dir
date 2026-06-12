@@ -15,11 +15,16 @@ negative_sentiment: "0%"
 destination_cluster: "Peru"
 category_cluster: "tour_companies"
 brands_ai_mentions:
-  - "Alpaca Expeditions"
-  - "REI Adventures"
-  - "Intrepid Travel"
-  - "SAM Travel Peru"
-  - "Adventures by Disney"
+  - entity_type: company
+    entity_slug: alpaca-expeditions-cusco
+  - entity_type: external_brand
+    entity_slug: rei-adventures
+  - entity_type: external_brand
+    entity_slug: intrepid-travel
+  - entity_type: external_brand
+    entity_slug: sam-travel-peru
+  - entity_type: external_brand
+    entity_slug: adventures-by-disney
 summary: "Landing page answering the AI search prompt: 'Best tour companies for Machu Picchu trips from the US', focused on Peru tour companies and related travel brands."
 parent: "/en/peru/"
 ---

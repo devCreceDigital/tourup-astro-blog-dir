@@ -1,29 +1,35 @@
 ---
-type: "company"
-slug: "/company/arqueotrekking-peru-wanchaq"
-title: "Arqueotrekking Peru"
-destination: "WANCHAQ, CUSCO"
-category: "operador_turismo"
-agency_class_raw: "Operador Turismo"
-summary: "Travel Company based in WANCHAQ, CUSCO, Peru."
+type: company
+slug: /company/arqueotrekking-peru-wanchaq
+title: Arqueotrekking Peru
+summary: Travel Company based in WANCHAQ, CUSCO, Peru.
 contact:
-  email: "agencias@arqueotrekking.com"
+  email: agencias@arqueotrekking.com
 location:
-  city: "WANCHAQ"
-  province: "CUSCO"
-  region: "CUSCO"
-  country: "Peru"
-  ubigeo_code: "80108"
-  street_type: "JR."
-  street_name: "Jr. Anta L-14 Urb. San Borja"
-  unit: "L-14"
+  city: WANCHAQ
+  province: CUSCO
+  region: CUSCO
+  country: Peru
+  ubigeo_code: '80108'
+  street_type: JR.
+  street_name: Jr. Anta L-14 Urb. San Borja
+  unit: L-14
 regulation:
-  tax_id: "20607212946"
-  snapshot_date: "20260515"
-  license_number: "-"
-legal_representative: "Alegria Sanchez Richard"
----
-
-# Arqueotrekking Peru
-
-Travel Company based in WANCHAQ, CUSCO, Peru.
+  tax_id: '20607212946'
+  snapshot_date: '20260515'
+  license_number: '-'
+legal_representative: Alegria Sanchez Richard
+destinos:
+- cusco
+categorias:
+- full-day
+- tours-culturales
+- aventura
+- trekking
+- arqueologico
+distribution_role: tour_operator
+---
+
+# Arqueotrekking Peru
+
+Travel Company based in WANCHAQ, CUSCO, Peru.

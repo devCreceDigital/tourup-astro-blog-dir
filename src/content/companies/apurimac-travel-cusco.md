@@ -1,29 +1,35 @@
 ---
-type: "company"
-slug: "/company/apurimac-travel-cusco"
-title: "Apurimac Travel"
-destination: "CUSCO, CUSCO"
-category: "wholesale_travel_agency"
-agency_class_raw: "Mayorista"
-summary: "Wholesale Travel Agency based in CUSCO, CUSCO, Peru."
-contact:
+type: company
+slug: /company/apurimac-travel-cusco
+title: Apurimac Travel
+summary: Wholesale Travel Agency based in CUSCO, CUSCO, Peru.
+contact: null
 location:
-  city: "CUSCO"
-  province: "CUSCO"
-  region: "CUSCO"
-  country: "Peru"
-  ubigeo_code: "80101"
-  street_type: "CLLE"
-  street_name: "Siete Cuartones"
-  street_number: "290"
-  unit: "HOSP. TUPAQ"
+  city: CUSCO
+  province: CUSCO
+  region: CUSCO
+  country: Peru
+  ubigeo_code: '80101'
+  street_type: CLLE
+  street_name: Siete Cuartones
+  street_number: '290'
+  unit: HOSP. TUPAQ
 regulation:
-  tax_id: "20600101529"
-  snapshot_date: "20260515"
-  license_number: "-"
-legal_representative: "-"
----
-
-# Apurimac Travel
-
-Wholesale Travel Agency based in CUSCO, CUSCO, Peru.
+  tax_id: '20600101529'
+  snapshot_date: '20260515'
+  license_number: '-'
+legal_representative: '-'
+destinos:
+- cusco
+categorias:
+- full-day
+- tours-culturales
+- aventura
+- trekking
+- arqueologico
+distribution_role: wholesale_travel_agency
+---
+
+# Apurimac Travel
+
+Wholesale Travel Agency based in CUSCO, CUSCO, Peru.

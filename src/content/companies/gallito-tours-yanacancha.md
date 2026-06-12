@@ -21,6 +21,12 @@ regulation:
   snapshot_date: "20260515"
   license_number: "-"
 legal_representative: "Jacinto Abdias Ninahuaman Jara"
+destinos:
+  - pasco
+categorias:
+  - tours-culturales
+  - aventura
+distribution_role: tour_operator
 ---
 
 # Gallito Tours
