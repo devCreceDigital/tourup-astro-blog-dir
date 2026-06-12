@@ -2,7 +2,6 @@
 type: company
 slug: /company/indiana-travel-perú-jesús-maría
 title: Indiana Travel Perú
-distribution_role: tour_operator
 summary: Travel Company based in JESÚS MARÍA, LIMA, Peru.
 contact:
   website: https://www.indianatravelperu.com
@@ -29,6 +28,7 @@ categorias:
 - aventura
 - gastronomico
 - mice
+distribution_role: tour_operator
 ---
 
 # Indiana Travel Perú

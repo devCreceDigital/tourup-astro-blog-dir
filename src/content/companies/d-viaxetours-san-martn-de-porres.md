@@ -2,7 +2,6 @@
 type: company
 slug: /company/d-viaxetours-san-martín-de-porres
 title: D ´Viaxetours
-distribution_role: tour_operator
 summary: Retail Travel Agency based in SAN MARTÍN DE PORRES, LIMA, Peru.
 contact:
   website: https://www.d.viaxetours.com
@@ -30,6 +29,7 @@ categorias:
 - aventura
 - gastronomico
 - mice
+distribution_role: retail_travel_agency
 ---
 
 # D ´Viaxetours

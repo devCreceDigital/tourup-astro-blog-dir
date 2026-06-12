@@ -2,7 +2,6 @@
 type: company
 slug: /company/apu-ex-san-jerónimo
 title: Apu Ex
-distribution_role: tour_operator
 summary: Travel Company based in SAN JERÓNIMO, CUSCO, Peru.
 contact:
   website: https://www.apuex.com
@@ -29,6 +28,7 @@ categorias:
 - aventura
 - trekking
 - arqueologico
+distribution_role: tour_operator
 ---
 
 # Apu Ex

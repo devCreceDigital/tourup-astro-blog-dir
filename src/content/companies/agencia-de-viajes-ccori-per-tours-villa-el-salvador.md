@@ -2,7 +2,6 @@
 type: company
 slug: /company/agencia-de-viajes-ccori-perú-tours-villa-el-salvador
 title: Agencia De Viajes Ccori Perú Tours
-distribution_role: tour_operator
 summary: Retail Travel Agency based in VILLA EL SALVADOR, LIMA, Peru.
 contact:
   website: https://www.ccoriperutours.com
@@ -28,6 +27,7 @@ categorias:
 - aventura
 - gastronomico
 - mice
+distribution_role: retail_travel_agency
 ---
 
 # Agencia De Viajes Ccori Perú Tours

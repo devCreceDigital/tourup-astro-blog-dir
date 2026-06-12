@@ -2,7 +2,6 @@
 type: company
 slug: /company/all-peru-viajes-y-turismo-e-i-r-l-san-jerónimo
 title: All Peru Viajes Y Turismo E.I.R.L.
-distribution_role: tour_operator
 summary: Travel Company based in SAN JERÓNIMO, CUSCO, Peru.
 contact:
   website: https://www.allperuviajesyturismo.com
@@ -29,6 +28,7 @@ categorias:
 - aventura
 - trekking
 - arqueologico
+distribution_role: tour_operator
 ---
 
 # All Peru Viajes Y Turismo E.I.R.L.

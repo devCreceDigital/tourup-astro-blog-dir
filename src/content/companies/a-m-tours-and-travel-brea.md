@@ -2,7 +2,6 @@
 type: company
 slug: /company/a-m-tours-and-travel-breña
 title: A & M Tours And Travel
-distribution_role: tour_operator
 summary: Retail Travel Agency based in BREÑA, LIMA, Peru.
 contact:
   website: https://www.aymtours.com
@@ -29,13 +28,9 @@ categorias:
 - aventura
 - gastronomico
 - mice
----
-
-
-
-# A & M Tours And Travel
-
-
-
-Retail Travel Agency based in BREÑA, LIMA, Peru.
-
+distribution_role: retail_travel_agency
+---
+
+# A & M Tours And Travel
+
+Retail Travel Agency based in BREÑA, LIMA, Peru.

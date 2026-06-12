@@ -2,7 +2,6 @@
 type: company
 slug: /company/dream-travels-breña
 title: Dream Travels
-distribution_role: tour_operator
 summary: Retail Travel Agency based in BREÑA, LIMA, Peru.
 contact:
   email: dreamtravels@outlook.com
@@ -29,6 +28,7 @@ categorias:
 - aventura
 - gastronomico
 - mice
+distribution_role: retail_travel_agency
 ---
 
 # Dream Travels

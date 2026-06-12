@@ -2,7 +2,6 @@
 type: company
 slug: /company/agencia-de-viajes-y-turismo-ccapacñan-sicuani
 title: Agencia De Viajes Y Turismo Ccapacñan
-distribution_role: tour_operator
 summary: Retail Travel Agency based in SICUANI, CUSCO, Peru.
 contact:
   email: ccapacaguilas@gmail.com
@@ -28,6 +27,7 @@ categorias:
 - aventura
 - trekking
 - arqueologico
+distribution_role: retail_travel_agency
 ---
 
 # Agencia De Viajes Y Turismo Ccapacñan

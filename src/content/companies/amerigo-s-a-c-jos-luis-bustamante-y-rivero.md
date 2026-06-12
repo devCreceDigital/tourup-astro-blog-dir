@@ -2,7 +2,6 @@
 type: company
 slug: /company/amerigo-s-a-c-josé-luis-bustamante-y-rivero
 title: Amerigo S.A.C.
-distribution_role: tour_operator
 summary: Travel Company based in JOSÉ LUIS BUSTAMANTE Y RIVERO, AREQUIPA, Peru.
 contact:
   website: https://www.voyagetourperou.com
@@ -27,6 +26,7 @@ categorias:
 - tours-culturales
 - aventura
 - trekking
+distribution_role: tour_operator
 ---
 
 # Amerigo S.A.C.

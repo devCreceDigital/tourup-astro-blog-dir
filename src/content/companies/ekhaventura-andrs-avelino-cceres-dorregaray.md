@@ -2,7 +2,6 @@
 type: company
 slug: /company/ekhaventura-andrés-avelino-cáceres-dorregaray
 title: Ekhaventura
-distribution_role: tour_operator
 summary: Travel Company based in ANDRÉS AVELINO CÁCERES DORREGARAY, AYACUCHO, Peru.
 contact:
   website: https://pumamayu@hotmail.com
@@ -26,6 +25,7 @@ categorias:
 - full-day
 - tours-culturales
 - aventura
+distribution_role: tour_operator
 ---
 
 # Ekhaventura

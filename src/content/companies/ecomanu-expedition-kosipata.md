@@ -2,7 +2,6 @@
 type: company
 slug: /company/ecomanu-expedition-kosñipata
 title: Ecomanu Expedition
-distribution_role: tour_operator
 summary: Travel Company based in KOSÑIPATA, CUSCO, Peru.
 contact:
   website: https://www.ecomanuperu.com
@@ -28,6 +27,7 @@ categorias:
 - aventura
 - trekking
 - arqueologico
+distribution_role: tour_operator
 ---
 
 # Ecomanu Expedition

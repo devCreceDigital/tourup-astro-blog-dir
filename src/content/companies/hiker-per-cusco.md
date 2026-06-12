@@ -2,7 +2,6 @@
 type: company
 slug: /company/hiker-perú-cusco
 title: Hiker Perú
-distribution_role: tour_operator
 summary: Travel Company based in CUSCO, CUSCO, Peru.
 contact:
   website: https://www.hikerperu.com
@@ -28,6 +27,7 @@ categorias:
 - aventura
 - trekking
 - arqueologico
+distribution_role: tour_operator
 ---
 
 # Hiker Perú

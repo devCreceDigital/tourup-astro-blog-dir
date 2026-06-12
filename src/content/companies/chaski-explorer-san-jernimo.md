@@ -2,7 +2,6 @@
 type: company
 slug: /company/chaski-explorer-san-jerónimo
 title: Chaski Explorer
-distribution_role: tour_operator
 summary: Travel Company based in SAN JERÓNIMO, CUSCO, Peru.
 contact:
   email: willywrm@hotmail.com
@@ -28,6 +27,7 @@ categorias:
 - aventura
 - trekking
 - arqueologico
+distribution_role: tour_operator
 ---
 
 # Chaski Explorer

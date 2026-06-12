@@ -2,7 +2,6 @@
 type: company
 slug: /company/club-del-tour-breña
 title: Club Del Tour
-distribution_role: tour_operator
 summary: Travel Company based in BREÑA, LIMA, Peru.
 contact:
   website: https://www.clubdeltour.com
@@ -30,6 +29,7 @@ categorias:
 - aventura
 - gastronomico
 - mice
+distribution_role: tour_operator
 ---
 
 # Club Del Tour

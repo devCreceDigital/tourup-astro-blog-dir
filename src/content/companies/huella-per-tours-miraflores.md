@@ -2,7 +2,6 @@
 type: company
 slug: /company/huella-perú-tours-miraflores
 title: Huella Perú Tours
-distribution_role: tour_operator
 summary: Travel Company based in MIRAFLORES, LIMA, Peru.
 contact:
   website: https://www.huellaperutours.com
@@ -30,6 +29,7 @@ categorias:
 - aventura
 - gastronomico
 - mice
+distribution_role: tour_operator
 ---
 
 # Huella Perú Tours

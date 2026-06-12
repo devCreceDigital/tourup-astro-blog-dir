@@ -2,7 +2,6 @@
 type: company
 slug: /company/emotion-tour-perú-e-i-r-l-paracas
 title: Emotion Tour Perú E.I.R.L.
-distribution_role: tour_operator
 summary: Travel Company based in PARACAS, ICA, Peru.
 contact:
   website: https://www.emotiontourperu.com.pe
@@ -27,6 +26,7 @@ categorias:
 - tours-culturales
 - aventura
 - arqueologico
+distribution_role: tour_operator
 ---
 
 # Emotion Tour Perú E.I.R.L.

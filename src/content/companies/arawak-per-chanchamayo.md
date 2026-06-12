@@ -2,7 +2,6 @@
 type: company
 slug: /company/arawak-perú-chanchamayo
 title: Arawak Perú
-distribution_role: tour_operator
 summary: Travel Company based in CHANCHAMAYO, JUNÍN, Peru.
 contact:
   email: arawaktravel@gmail.com
@@ -26,6 +25,7 @@ categorias:
 - full-day
 - tours-culturales
 - aventura
+distribution_role: tour_operator
 ---
 
 # Arawak Perú

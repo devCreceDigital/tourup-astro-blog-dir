@@ -2,7 +2,6 @@
 type: company
 slug: /company/cusco-your-way-eirl-san-jerónimo
 title: Cusco Your Way Eirl
-distribution_role: tour_operator
 summary: Travel Company based in SAN JERÓNIMO, CUSCO, Peru.
 contact:
   website: https://www.cuscoyourway.com
@@ -29,6 +28,7 @@ categorias:
 - aventura
 - trekking
 - arqueologico
+distribution_role: tour_operator
 ---
 
 # Cusco Your Way Eirl

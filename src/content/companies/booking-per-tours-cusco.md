@@ -2,7 +2,6 @@
 type: company
 slug: /company/booking-perú-tours-cusco
 title: Booking Perú Tours
-distribution_role: tour_operator
 summary: Travel Company based in CUSCO, CUSCO, Peru.
 contact:
   website: https://www.bookingperutours.com
@@ -28,6 +27,7 @@ categorias:
 - aventura
 - trekking
 - arqueologico
+distribution_role: tour_operator
 ---
 
 # Booking Perú Tours

@@ -2,7 +2,6 @@
 type: company
 slug: /company/click-viajes-e-i-r-l-breña
 title: Click Viajes E.I.R.L.
-distribution_role: tour_operator
 summary: Retail Travel Agency based in BREÑA, LIMA, Peru.
 contact:
   email: kathy_13_jrb@hotmail.com
@@ -28,6 +27,7 @@ categorias:
 - aventura
 - gastronomico
 - mice
+distribution_role: retail_travel_agency
 ---
 
 # Click Viajes E.I.R.L.

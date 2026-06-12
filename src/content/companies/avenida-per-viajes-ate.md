@@ -2,7 +2,6 @@
 type: company
 slug: /company/avenida-perú-viajes-ate
 title: Avenida Perú Viajes
-distribution_role: tour_operator
 summary: Retail Travel Agency based in ATE, LIMA, Peru.
 contact:
   website: https://www.avenidaperuviajes.com
@@ -29,6 +28,7 @@ categorias:
 - aventura
 - gastronomico
 - mice
+distribution_role: retail_travel_agency
 ---
 
 # Avenida Perú Viajes

@@ -2,7 +2,6 @@
 type: company
 slug: /company/inka-project-san-jerónimo
 title: Inka Project
-distribution_role: tour_operator
 summary: Travel Company based in SAN JERÓNIMO, CUSCO, Peru.
 contact:
   website: https://www.inkaproject.com
@@ -28,6 +27,7 @@ categorias:
 - aventura
 - trekking
 - arqueologico
+distribution_role: tour_operator
 ---
 
 # Inka Project

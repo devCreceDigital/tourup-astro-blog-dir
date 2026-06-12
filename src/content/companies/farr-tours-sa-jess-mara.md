@@ -2,7 +2,6 @@
 type: company
 slug: /company/farr-tours-sa-jesús-maría
 title: Farr Tours Sa
-distribution_role: tour_operator
 summary: Retail Travel Agency based in JESÚS MARÍA, LIMA, Peru.
 contact:
   email: farrtours@farrtours-peru.com
@@ -28,6 +27,7 @@ categorias:
 - aventura
 - gastronomico
 - mice
+distribution_role: retail_travel_agency
 ---
 
 # Farr Tours Sa

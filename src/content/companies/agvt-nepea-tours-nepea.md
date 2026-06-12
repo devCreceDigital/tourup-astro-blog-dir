@@ -2,7 +2,6 @@
 type: company
 slug: /company/agvt-nepeña-tours-nepeña
 title: Agvt Nepeña Tours
-distribution_role: tour_operator
 summary: Travel Company based in NEPEÑA, ÁNCASH, Peru.
 contact:
   email: vyofre30@hotmail.com
@@ -26,6 +25,7 @@ categorias:
 - tours-culturales
 - aventura
 - trekking
+distribution_role: tour_operator
 ---
 
 # Agvt Nepeña Tours

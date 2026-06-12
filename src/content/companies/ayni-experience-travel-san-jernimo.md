@@ -2,7 +2,6 @@
 type: company
 slug: /company/ayni-experience-travel-san-jerónimo
 title: Ayni Experience Travel
-distribution_role: tour_operator
 summary: Travel Company based in SAN JERÓNIMO, CUSCO, Peru.
 contact:
   website: https://www.ayniexperienceperu.com
@@ -28,6 +27,7 @@ categorias:
 - aventura
 - trekking
 - arqueologico
+distribution_role: tour_operator
 ---
 
 # Ayni Experience Travel

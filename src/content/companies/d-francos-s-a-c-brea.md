@@ -2,7 +2,6 @@
 type: company
 slug: /company/d-francos-s-a-c-breña
 title: D Francos S.A.C.
-distribution_role: tour_operator
 summary: Retail Travel Agency based in BREÑA, LIMA, Peru.
 contact:
   email: dfrancos.sac@gmail.com
@@ -28,6 +27,7 @@ categorias:
 - aventura
 - gastronomico
 - mice
+distribution_role: retail_travel_agency
 ---
 
 # D Francos S.A.C.

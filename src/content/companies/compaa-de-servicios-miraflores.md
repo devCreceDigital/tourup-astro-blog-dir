@@ -2,7 +2,6 @@
 type: company
 slug: /company/compañía-de-servicios-miraflores
 title: Compañía De Servicios
-distribution_role: tour_operator
 summary: Retail Travel Agency based in MIRAFLORES, LIMA, Peru.
 contact:
   email: turiemoengrupo@hotmail.com
@@ -29,6 +28,7 @@ categorias:
 - aventura
 - gastronomico
 - mice
+distribution_role: retail_travel_agency
 ---
 
 # Compañía De Servicios

@@ -2,7 +2,6 @@
 type: company
 slug: /company/geckos-reisen-perú-huaraz
 title: Geckos Reisen Perú
-distribution_role: tour_operator
 summary: Travel Company based in HUARAZ, ÁNCASH, Peru.
 contact:
   website: https://www.geckosreisen.com
@@ -29,6 +28,7 @@ categorias:
 - tours-culturales
 - aventura
 - trekking
+distribution_role: tour_operator
 ---
 
 # Geckos Reisen Perú

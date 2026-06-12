@@ -2,7 +2,6 @@
 type: company
 slug: /company/expe-perú-marcara
 title: Expe Perú
-distribution_role: tour_operator
 summary: Travel Company based in MARCARA, ÁNCASH, Peru.
 contact:
   email: info@expe-peru.com
@@ -26,6 +25,7 @@ categorias:
 - tours-culturales
 - aventura
 - trekking
+distribution_role: tour_operator
 ---
 
 # Expe Perú

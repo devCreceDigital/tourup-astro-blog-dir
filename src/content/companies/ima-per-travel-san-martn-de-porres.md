@@ -2,7 +2,6 @@
 type: company
 slug: /company/ima-perú-travel-san-martín-de-porres
 title: Ima Perú Travel
-distribution_role: tour_operator
 summary: Travel Company based in SAN MARTÍN DE PORRES, LIMA, Peru.
 contact:
   website: https://www.imaperutravel.com
@@ -28,6 +27,7 @@ categorias:
 - aventura
 - gastronomico
 - mice
+distribution_role: tour_operator
 ---
 
 # Ima Perú Travel

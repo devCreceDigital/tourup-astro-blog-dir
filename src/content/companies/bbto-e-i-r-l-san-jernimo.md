@@ -2,7 +2,6 @@
 type: company
 slug: /company/bbto-e-i-r-l-san-jerónimo
 title: Bbto E.I.R.L.
-distribution_role: tour_operator
 summary: Travel Company based in SAN JERÓNIMO, CUSCO, Peru.
 contact:
   email: bbttotravel@gmail.com
@@ -27,6 +26,7 @@ categorias:
 - aventura
 - trekking
 - arqueologico
+distribution_role: tour_operator
 ---
 
 # Bbto E.I.R.L.

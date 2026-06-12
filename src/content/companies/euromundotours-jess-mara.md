@@ -2,7 +2,6 @@
 type: company
 slug: /company/euromundotours-jesús-maría
 title: Euromundotours
-distribution_role: tour_operator
 summary: Retail Travel Agency based in JESÚS MARÍA, LIMA, Peru.
 contact:
   website: https://www.euromundotours.com.pe
@@ -30,6 +29,7 @@ categorias:
 - aventura
 - gastronomico
 - mice
+distribution_role: retail_travel_agency
 ---
 
 # Euromundotours

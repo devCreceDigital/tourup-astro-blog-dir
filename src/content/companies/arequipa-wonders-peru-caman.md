@@ -2,10 +2,9 @@
 type: company
 slug: /company/arequipa-wonders-peru-camaná
 title: Arequipa Wonders Peru
-distribution_role: tour_operator
 summary: Travel Company based in CAMANÁ, AREQUIPA, Peru.
-contact:
-  location: null
+contact: null
+location:
   city: CAMANÁ
   province: CAMANÁ
   region: AREQUIPA
@@ -26,6 +25,7 @@ categorias:
 - tours-culturales
 - aventura
 - trekking
+distribution_role: tour_operator
 ---
 
 # Arequipa Wonders Peru

@@ -2,7 +2,6 @@
 type: company
 slug: /company/around-peru-travel-san-jerónimo
 title: Around Peru Travel
-distribution_role: tour_operator
 summary: Retail Travel Agency based in SAN JERÓNIMO, CUSCO, Peru.
 contact:
   website: https://www.aroundperutravel.com
@@ -27,6 +26,7 @@ categorias:
 - aventura
 - trekking
 - arqueologico
+distribution_role: retail_travel_agency
 ---
 
 # Around Peru Travel
