@@ -1,31 +1,9 @@
 ---
 /**
- * Journey 5 – Partner Scout B2B
- *
- * URL: /partner-scout/
- *
- * Purpose: allow professional buyers (emisoras, DMCs, OTAs, hotel chains)
- * to find local Peruvian operators matching specific criteria.
- *
- * Implementation note:
- *   The site is deployed as static HTML (Astro SSG). Company data is embedded
- *   as JSON at build time; filtering runs entirely in the browser.
- *   When the project is migrated to a hybrid/server output, replace the
- *   client-side filter logic with a fetch to /api/partner-scout/search.
- *
- * Future agent integration (OpenClaw/Hermes PartnerScout skill):
- *   POST /api/partner-scout/search  → { brief } → { shortlist, reasons }
+ * Partner Scout B2B Hub
+ * Premium landing for sourcing Peruvian operators
  */
-import { getAllCompaniesCatalog } from '../../utils/graphify';
 import Layout from '../../layouts/Layout.astro';
-
-// Embed full company catalog at build time for client-side filtering.
-const catalog = await getAllCompaniesCatalog();
-const catalogJson = JSON.stringify(catalog);
-
-// Derive available filter options from the catalog.
-const allDestinos = [...new Set(catalog.flatMap((c) => c.destinos))].sort();
-const allCategorias = [...new Set(catalog.flatMap((c) => c.categorias))].sort();
 ---
 
 <Layout
@@ -33,681 +11,689 @@ const allCategorias = [...new Set(catalog.flatMap((c) => c.categorias))].sort();
   description="Encuentra operadores turísticos receptivos en Perú que cumplan tus criterios B2B: destino, categoría, rating, idioma y capacidad de grupo."
   currentPath="/partner-scout/"
 >
-  <div class="ps-page">
+  <div class="ps-hub">
 
-    <!-- ── Hero ──────────────────────────────────────────────────────────── -->
-    <header class="ps-hero">
-      <div class="ps-hero-badge">Partner Scout B2B</div>
-      <h1>Encuentra tu operador receptivo ideal en Perú</h1>
-      <p>
-        Filtra por destino, categoría de producto, capacidad de grupo e idioma.
-        La decisión final es tuya — Partner Scout genera una preselección basada
-        en datos verificados del directorio TourUp.
-      </p>
-    </header>
-
-    <!-- ── Form + Results layout ─────────────────────────────────────────── -->
-    <div class="ps-layout">
-
-      <!-- Form panel -->
-      <aside class="ps-filters">
-        <form id="scout-form" novalidate>
-
-          <div class="field-group">
-            <label class="field-label">Destinos</label>
-            <div class="chip-group" id="chips-destinos">
-              {allDestinos.map((d) => (
-                <label class="chip">
-                  <input type="checkbox" name="destinos" value={d} />
-                  <span>{d}</span>
-                </label>
-              ))}
-              {!allDestinos.length && (
-                <p class="empty-hint">Sin opciones (añade destinos a los archivos de empresa)</p>
-              )}
-            </div>
-          </div>
-
-          <div class="field-group">
-            <label class="field-label">Tipo de producto</label>
-            <div class="chip-group" id="chips-categorias">
-              {allCategorias.map((c) => (
-                <label class="chip">
-                  <input type="checkbox" name="categorias" value={c} />
-                  <span>{c.replace(/-/g, ' ')}</span>
-                </label>
-              ))}
-              {!allCategorias.length && (
-                <p class="empty-hint">Sin opciones (añade categorias a los archivos de empresa)</p>
-              )}
-            </div>
-          </div>
-
-          <div class="field-group">
-            <label class="field-label" for="rating-min">Rating mínimo</label>
-            <div class="range-row">
-              <input type="range" id="rating-min" name="rating_min"
-                min="0" max="5" step="0.5" value="0" />
-              <span id="rating-display">Sin mínimo</span>
-            </div>
-          </div>
-
-          <div class="field-group">
-            <label class="field-label" for="capacity-min">Capacidad mínima (pax)</label>
-            <div class="range-row">
-              <input type="range" id="capacity-min" name="group_capacity_min"
-                min="0" max="100" step="5" value="0" />
-              <span id="capacity-display">Sin mínimo</span>
-            </div>
-          </div>
-
-          <div class="field-group">
-            <label class="field-label">Idiomas de operación</label>
-            <div class="chip-group">
-              {['es', 'en', 'fr', 'de', 'pt'].map((lang) => (
-                <label class="chip">
-                  <input type="checkbox" name="languages" value={lang} />
-                  <span>{lang.toUpperCase()}</span>
-                </label>
-              ))}
-            </div>
-          </div>
-
-          <div class="field-group">
-            <label class="field-label">Tipo de cliente B2B</label>
-            <div class="chip-group">
-              {['agencias_emisoras', 'dmc', 'ota', 'corporativo'].map((t) => (
-                <label class="chip">
-                  <input type="checkbox" name="b2b_client_types" value={t} />
-                  <span>{t.replace(/_/g, ' ')}</span>
-                </label>
-              ))}
-            </div>
-          </div>
-
-          <button type="submit" class="btn-search">
-            Ver operadores recomendados
-          </button>
-          <button type="reset" class="btn-reset">Limpiar filtros</button>
-        </form>
-      </aside>
-
-      <!-- Results panel -->
-      <section class="ps-results" id="results-panel" aria-live="polite">
-        <div class="results-header" id="results-header">
-          <p class="results-hint">
-            Selecciona criterios y pulsa "Ver operadores recomendados".
-          </p>
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-bg"></div>
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span class="material-symbols-outlined">travel_explore</span>
+          Partner Scout B2B
         </div>
-        <div id="shortlist" class="shortlist"></div>
-      </section>
-    </div>
+        <h1>Encuentra tu operador receptivo ideal en Perú</h1>
+        <p class="hero-subtitle">
+          Sourcing inteligente para agencias emisoras, DMCs y OTAs.
+          Te conectamos con operadores verificados.
+        </p>
+
+        <div class="search-bar">
+          <span class="material-symbols-outlined search-icon">search</span>
+          <input type="text" placeholder="Buscar por destino, operador o categoría..." id="global-search" />
+          <button class="btn-primary" onclick="window.location.href='/partner-scout/brief/'">
+            <span class="material-symbols-outlined">arrow_forward</span>
+            Crear Cotización Rápida
+          </button>
+        </div>
+
+        <div class="hero-stats">
+          <div class="stat">
+            <strong>150+</strong>
+            <span>Operadores</span>
+          </div>
+          <div class="stat">
+            <strong>24</strong>
+            <span>Destinos</span>
+          </div>
+          <div class="stat">
+            <strong>98%</strong>
+            <span>Tasa de Match</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Destinos Grid -->
+    <section class="destinos-section">
+      <div class="section-header">
+        <h2>Explora por Destino</h2>
+        <a href="/partner-scout/brief/?destino=cusco" class="view-all">
+          Ver Todos <span class="material-symbols-outlined">arrow_forward</span>
+        </a>
+      </div>
+
+      <div class="destinos-grid">
+        <div class="destino-card" onclick="window.location.href='/partner-scout/brief/?destino=cusco'">
+          <div class="destino-image">
+            <img src="https://images.pexels.com/photos/2356045/pexels-photo-2356045.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Machu Picchu, Cusco" />
+            <div class="destino-overlay"></div>
+          </div>
+          <div class="destino-content">
+            <span class="destino-badge">Más solicitado</span>
+            <h3>Cusco</h3>
+            <p>Imperio Inca, Machu Picchu, Valle Sagrado</p>
+            <div class="destino-meta">
+              <span><span class="material-symbols-outlined">business</span> 45 operadores</span>
+              <span><span class="material-symbols-outlined">star</span> 4.8 avg</span>
+            </div>
+          </div>
+          <div class="destino-hover-panel">
+            <span class="material-symbols-outlined">trending_flat</span>
+            Crear Brief
+          </div>
+        </div>
+
+        <div class="destino-card" onclick="window.location.href='/partner-scout/brief/?destino=lima'">
+          <div class="destino-image">
+            <img src="https://images.pexels.com/photos/1781054/pexels-photo-1781054.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Lima" />
+            <div class="destino-overlay"></div>
+          </div>
+          <div class="destino-content">
+            <h3>Lima</h3>
+            <p>Capital gastronómica, city tours, cultura</p>
+            <div class="destino-meta">
+              <span><span class="material-symbols-outlined">business</span> 38 operadores</span>
+              <span><span class="material-symbols-outlined">star</span> 4.6 avg</span>
+            </div>
+          </div>
+          <div class="destino-hover-panel">
+            <span class="material-symbols-outlined">trending_flat</span>
+            Crear Brief
+          </div>
+        </div>
+
+        <div class="destino-card" onclick="window.location.href='/partner-scout/brief/?destino=arequipa'">
+          <div class="destino-image">
+            <img src="https://images.pexels.com/photos/2195467/pexels-photo-2195467.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Colca Canyon, Arequipa" />
+            <div class="destino-overlay"></div>
+          </div>
+          <div class="destino-content">
+            <h3>Arequipa</h3>
+            <p>Cañón del Colca, volcán Misti, aventura</p>
+            <div class="destino-meta">
+              <span><span class="material-symbols-outlined">business</span> 22 operadores</span>
+              <span><span class="material-symbols-outlined">star</span> 4.7 avg</span>
+            </div>
+          </div>
+          <div class="destino-hover-panel">
+            <span class="material-symbols-outlined">trending_flat</span>
+            Crear Brief
+          </div>
+        </div>
+
+        <div class="destino-card" onclick="window.location.href='/partner-scout/brief/?destino=puno'">
+          <div class="destino-image">
+            <img src="https://images.pexels.com/photos/2087174/pexels-photo-2087174.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Titicaca Lake, Puno" />
+            <div class="destino-overlay"></div>
+          </div>
+          <div class="destino-content">
+            <h3>Puno</h3>
+            <p>Lago Titicaca, Uros, Taquile</p>
+            <div class="destino-meta">
+              <span><span class="material-symbols-outlined">business</span> 18 operadores</span>
+              <span><span class="material-symbols-outlined">star</span> 4.5 avg</span>
+            </div>
+          </div>
+          <div class="destino-hover-panel">
+            <span class="material-symbols-outlined">trending_flat</span>
+            Crear Brief
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Value Props -->
+    <section class="features-section">
+      <div class="section-header centered">
+        <h2>¿Por qué Partner Scout?</h2>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card glass-panel">
+          <div class="feature-icon">
+            <span class="material-symbols-outlined">verified</span>
+          </div>
+          <h3>Operadores Verificados</h3>
+          <p>Cada operador pasa por validación de licencias, RUC y referencias B2B.</p>
+        </div>
+
+        <div class="feature-card glass-panel">
+          <div class="feature-icon">
+            <span class="material-symbols-outlined">speed</span>
+          </div>
+          <h3>Match Inteligente</h3>
+          <p>Algoritmo que prioriza capacidad, idiomas y experiencia en tu categoría.</p>
+        </div>
+
+        <div class="feature-card glass-panel">
+          <div class="feature-icon">
+            <span class="material-symbols-outlined">handshake</span>
+          </div>
+          <h3>Sin Intermediarios</h3>
+          <p>Contacto directo con el operador. Sin comisiones ocultas ni sorpresas.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Actions -->
+    <section class="cta-section">
+      <div class="cta-panel glass-panel-dark">
+        <div class="cta-content">
+          <h2>¿Listo para encontrar tu socio perfecto?</h2>
+          <p>Crea un brief detallado y recibe una preselección de operadores calificados en minutos.</p>
+        </div>
+        <div class="cta-actions">
+          <a href="/partner-scout/brief/" class="btn-primary large">
+            <span class="material-symbols-outlined">edit_note</span>
+            Crear Brief
+          </a>
+          <a href="/empresas/" class="btn-secondary">
+            Ver Directorio
+          </a>
+        </div>
+      </div>
+    </section>
+
   </div>
 </Layout>
 
-<!-- Embed catalog as JSON for client-side filtering -->
-<script define:vars={{ catalogJson }}>
-  const CATALOG = JSON.parse(catalogJson);
-
-  // ── DOM refs ────────────────────────────────────────────────────────────────
-  const form = document.getElementById('scout-form');
-  const shortlistEl = document.getElementById('shortlist');
-  const resultsHeader = document.getElementById('results-header');
-  const ratingInput = document.getElementById('rating-min');
-  const ratingDisplay = document.getElementById('rating-display');
-  const capacityInput = document.getElementById('capacity-min');
-  const capacityDisplay = document.getElementById('capacity-display');
-
-  // ── Range display ───────────────────────────────────────────────────────────
-  ratingInput?.addEventListener('input', () => {
-    const v = parseFloat(ratingInput.value);
-    ratingDisplay.textContent = v === 0 ? 'Sin mínimo' : `≥ ${v}/5 ★`;
-  });
-
-  capacityInput?.addEventListener('input', () => {
-    const v = parseInt(capacityInput.value);
-    capacityDisplay.textContent = v === 0 ? 'Sin mínimo' : `≥ ${v} pax`;
-  });
-
-  // ── Reset ───────────────────────────────────────────────────────────────────
-  form?.addEventListener('reset', () => {
-    setTimeout(() => {
-      ratingDisplay.textContent = 'Sin mínimo';
-      capacityDisplay.textContent = 'Sin mínimo';
-      shortlistEl.innerHTML = '';
-      resultsHeader.innerHTML = '<p class="results-hint">Selecciona criterios y pulsa "Ver operadores recomendados".</p>';
-    }, 0);
-  });
-
-  // ── Submit & filter ─────────────────────────────────────────────────────────
-  form?.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const data = new FormData(form);
-
-    const filters = {
-      destinos: data.getAll('destinos'),
-      categorias: data.getAll('categorias'),
-      rating_min: parseFloat(data.get('rating_min')) || 0,
-      group_capacity_min: parseInt(data.get('group_capacity_min')) || 0,
-      languages: data.getAll('languages'),
-      b2b_client_types: data.getAll('b2b_client_types'),
-    };
-
-    const results = filterCatalog(CATALOG, filters);
-    renderResults(results, filters);
-  });
-
-  // ── Client-side filter (mirrors src/utils/graphify.ts logic) ───────────────
-  function filterCatalog(catalog, filters) {
-    return catalog.filter((company) => {
-      const reasons = [];
-
-      if (filters.destinos.length) {
-        const matched = filters.destinos.filter((d) => company.destinos.includes(d));
-        if (!matched.length) return false;
-        reasons.push(`destino: ${matched.join(', ')}`);
-      }
-
-      if (filters.categorias.length) {
-        const matched = filters.categorias.filter((c) => company.categorias.includes(c));
-        if (!matched.length) return false;
-        reasons.push(`categoría: ${matched.join(', ')}`);
-      }
-
-      if (filters.rating_min > 0) {
-        if (!company.rating || company.rating < filters.rating_min) return false;
-        reasons.push(`rating ${company.rating}/5`);
-      }
-
-      if (filters.languages.length) {
-        const langs = company.trust_metrics?.languages ?? [];
-        const matched = filters.languages.filter((l) => langs.includes(l));
-        if (!matched.length) return false;
-        reasons.push(`idioma: ${matched.join(', ')}`);
-      }
-
-      if (filters.b2b_client_types.length) {
-        const types = company.trust_metrics?.b2b_client_types ?? [];
-        const matched = filters.b2b_client_types.filter((t) => types.includes(t));
-        if (!matched.length) return false;
-        reasons.push(`cliente: ${matched.join(', ')}`);
-      }
-
-      if (filters.group_capacity_min > 0) {
-        const cap = company.trust_metrics?.group_capacity_max ?? 0;
-        if (cap < filters.group_capacity_min) return false;
-        reasons.push(`capacidad ≥ ${filters.group_capacity_min} pax`);
-      }
-
-      company._match_reasons = reasons.length ? reasons : ['coincidencia general'];
-      return true;
-    });
-  }
-
-  // ── Render shortlist ────────────────────────────────────────────────────────
-  function stars(rating) {
-    if (!rating) return '';
-    const full = Math.floor(rating);
-    const half = rating % 1 >= 0.5;
-    return '★'.repeat(full) + (half ? '½' : '') + '☆'.repeat(5 - full - (half ? 1 : 0));
-  }
-
-  function renderResults(results, filters) {
-    const activeFilters = [
-      ...filters.destinos,
-      ...filters.categorias,
-      filters.rating_min > 0 ? `rating ≥${filters.rating_min}` : null,
-      filters.group_capacity_min > 0 ? `≥${filters.group_capacity_min} pax` : null,
-      ...filters.languages,
-      ...filters.b2b_client_types,
-    ].filter(Boolean);
-
-    resultsHeader.innerHTML = `
-      <div class="results-meta">
-        <strong>${results.length}</strong> operador${results.length !== 1 ? 'es' : ''} encontrado${results.length !== 1 ? 's' : ''}
-        ${activeFilters.length ? `<span class="filter-tags">${activeFilters.map((f) => `<span class="ftag">${f}</span>`).join('')}</span>` : ''}
-      </div>
-    `;
-
-    if (!results.length) {
-      shortlistEl.innerHTML = `
-        <div class="no-results">
-          <p>No se encontraron operadores con esos criterios.</p>
-          <p>Prueba a reducir los filtros o a consultar el directorio completo.</p>
-        </div>
-      `;
-      return;
-    }
-
-    shortlistEl.innerHTML = results
-      .slice(0, 10)
-      .map(
-        (c) => `
-        <article class="result-card">
-          <div class="rc-header">
-            <div>
-              <h3><a href="${c.url}">${c.title}</a></h3>
-              ${
-                c.rating
-                  ? `<div class="rc-rating">
-                      <span class="stars">${stars(c.rating)}</span>
-                      <strong>${c.rating}/5</strong>
-                      ${c.reviews_count ? `<span class="rc-count">(${c.reviews_count} reseñas)</span>` : ''}
-                    </div>`
-                  : ''
-              }
-            </div>
-            <a href="${c.url}" class="rc-cta">Ver ficha →</a>
-          </div>
-          <p class="rc-summary">${c.summary}</p>
-          <div class="rc-tags">
-            ${c.destinos.map((d) => `<span class="tag destino">${d}</span>`).join('')}
-            ${c.categorias
-              .slice(0, 3)
-              .map((cat) => `<span class="tag">${cat.replace(/-/g, ' ')}</span>`)
-              .join('')}
-          </div>
-          ${
-            c._match_reasons?.length
-              ? `<div class="rc-reasons">
-                  <span class="reasons-label">Match por:</span>
-                  ${c._match_reasons.map((r) => `<span class="reason">${r}</span>`).join('')}
-                </div>`
-              : ''
-          }
-          ${c.b2b_profile ? `<p class="rc-b2b">${c.b2b_profile}</p>` : ''}
-        </article>
-      `
-      )
-      .join('');
-  }
-</script>
-
 <style>
-  .ps-page {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem 0 4rem;
+  .ps-hub {
+    padding-bottom: 4rem;
   }
 
-  /* ── Hero ────────────────────────────────────────────────────────────────── */
-  .ps-hero {
+  /* Hero */
+  .hero {
+    position: relative;
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-align: center;
-    padding: 3rem 0 2.5rem;
-    border-bottom: 1px solid var(--color-border);
-    margin-bottom: 2.5rem;
-  }
-
-  .ps-hero-badge {
-    display: inline-block;
-    background: rgba(6, 182, 212, 0.1);
-    color: #06b6d4;
-    border: 1px solid rgba(6, 182, 212, 0.25);
-    padding: 0.3rem 1rem;
-    border-radius: 9999px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    margin-bottom: 1rem;
-  }
-
-  .ps-hero h1 {
-    font-size: 2rem;
-    color: #f1f5f9;
-    margin-bottom: 0.75rem;
-  }
-
-  .ps-hero p {
-    color: #94a3b8;
-    max-width: 600px;
-    margin: 0 auto;
-    font-size: 1rem;
-    line-height: 1.7;
-  }
-
-  /* ── Layout ──────────────────────────────────────────────────────────────── */
-  .ps-layout {
-    display: grid;
-    grid-template-columns: 300px 1fr;
-    gap: 2rem;
-    align-items: start;
-  }
-
-  /* ── Filter panel ────────────────────────────────────────────────────────── */
-  .ps-filters {
-    background: rgba(30, 41, 59, 0.5);
-    border: 1px solid var(--color-border);
-    border-radius: 1rem;
-    padding: 1.5rem;
-    position: sticky;
-    top: 1rem;
-  }
-
-  .field-group {
-    margin-bottom: 1.5rem;
-  }
-
-  .field-label {
-    display: block;
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: #94a3b8;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 0.6rem;
-  }
-
-  /* ── Chips ───────────────────────────────────────────────────────────────── */
-  .chip-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-  }
-
-  .chip {
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-    cursor: pointer;
-  }
-
-  .chip input[type='checkbox'] {
-    display: none;
-  }
-
-  .chip span {
-    display: inline-block;
-    padding: 0.25rem 0.7rem;
-    border-radius: 9999px;
-    font-size: 0.78rem;
-    border: 1px solid rgba(71, 85, 105, 0.4);
-    color: #64748b;
-    background: transparent;
-    transition: all 0.15s ease;
-    cursor: pointer;
-    text-transform: capitalize;
-    user-select: none;
-  }
-
-  .chip:has(input:checked) span {
-    background: rgba(6, 182, 212, 0.15);
-    border-color: rgba(6, 182, 212, 0.4);
-    color: #06b6d4;
-  }
-
-  .empty-hint {
-    font-size: 0.8rem;
-    color: #475569;
-    font-style: italic;
-  }
-
-  /* ── Range inputs ────────────────────────────────────────────────────────── */
-  .range-row {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  .range-row input[type='range'] {
-    flex: 1;
-    accent-color: #06b6d4;
-  }
-
-  .range-row span {
-    font-size: 0.85rem;
-    color: #06b6d4;
-    white-space: nowrap;
-    min-width: 80px;
-  }
-
-  /* ── Buttons ─────────────────────────────────────────────────────────────── */
-  .btn-search {
-    width: 100%;
-    padding: 0.75rem;
-    background: var(--gradient-main);
-    color: white;
-    border: none;
-    border-radius: 0.5rem;
-    font-weight: 600;
-    font-size: 0.9rem;
-    cursor: pointer;
-    margin-bottom: 0.5rem;
-    transition: opacity 0.2s ease;
-  }
-
-  .btn-search:hover {
-    opacity: 0.9;
-  }
-
-  .btn-reset {
-    width: 100%;
-    padding: 0.6rem;
-    background: transparent;
-    color: #64748b;
-    border: 1px solid rgba(71, 85, 105, 0.3);
-    border-radius: 0.5rem;
-    font-size: 0.85rem;
-    cursor: pointer;
-    transition: border-color 0.2s ease;
-  }
-
-  .btn-reset:hover {
-    border-color: rgba(71, 85, 105, 0.6);
-    color: #94a3b8;
-  }
-
-  /* ── Results panel ───────────────────────────────────────────────────────── */
-  .ps-results {
-    min-height: 200px;
-  }
-
-  .results-hint {
-    color: #64748b;
-    font-size: 0.95rem;
-    padding: 2rem;
-    text-align: center;
-  }
-
-  .results-meta {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: 1.25rem;
-    font-size: 0.9rem;
-    color: #94a3b8;
-  }
-
-  .results-meta strong {
-    color: #f1f5f9;
-    font-size: 1.1rem;
-  }
-
-  .filter-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.35rem;
-  }
-
-  .ftag {
-    display: inline-block;
-    background: rgba(6, 182, 212, 0.08);
-    color: #06b6d4;
-    border: 1px solid rgba(6, 182, 212, 0.2);
-    padding: 0.15rem 0.55rem;
-    border-radius: 9999px;
-    font-size: 0.75rem;
-  }
-
-  /* ── Result cards ────────────────────────────────────────────────────────── */
-  .shortlist {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .result-card {
-    background: rgba(30, 41, 59, 0.5);
-    border: 1px solid var(--color-border);
-    border-radius: 0.75rem;
-    padding: 1.25rem 1.5rem;
-    transition: border-color 0.2s ease;
-  }
-
-  .result-card:hover {
-    border-color: rgba(6, 182, 212, 0.3);
-  }
-
-  .rc-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 1rem;
-    margin-bottom: 0.75rem;
-  }
-
-  .rc-header h3 {
-    font-size: 1.1rem;
-    margin-bottom: 0.25rem;
-  }
-
-  .rc-header h3 a {
-    color: #f1f5f9;
-    transition: color 0.2s ease;
-  }
-
-  .rc-header h3 a:hover {
-    color: #06b6d4;
-  }
-
-  .rc-rating {
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
-    font-size: 0.85rem;
-  }
-
-  .rc-rating .stars {
-    color: #fbbf24;
-    font-size: 0.9rem;
-  }
-
-  .rc-rating strong {
-    color: #f1f5f9;
-  }
-
-  .rc-count {
-    color: #64748b;
-  }
-
-  .rc-cta {
-    display: inline-block;
-    padding: 0.4rem 0.9rem;
-    background: rgba(6, 182, 212, 0.1);
-    border: 1px solid rgba(6, 182, 212, 0.25);
-    color: #06b6d4;
-    border-radius: 0.5rem;
-    font-size: 0.82rem;
-    font-weight: 600;
-    white-space: nowrap;
-    transition: background 0.2s ease;
-  }
-
-  .rc-cta:hover {
-    background: rgba(6, 182, 212, 0.2);
-    color: #06b6d4;
-  }
-
-  .rc-summary {
-    font-size: 0.9rem;
-    color: #94a3b8;
-    line-height: 1.6;
-    margin-bottom: 0.75rem;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
+    padding: 4rem 2rem;
+    margin: -2rem -2rem 0;
     overflow: hidden;
   }
 
-  .rc-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-    margin-bottom: 0.6rem;
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+    z-index: -2;
   }
 
-  .tag {
-    display: inline-block;
-    background: rgba(71, 85, 105, 0.2);
-    color: #94a3b8;
-    border: 1px solid rgba(71, 85, 105, 0.3);
-    padding: 0.15rem 0.55rem;
+  .hero-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url('https://images.pexels.com/photos/2356045/pexels-photo-2356045.jpeg?auto=compress&cs=tinysrgb&w=1920') center/cover;
+    opacity: 0.15;
+    filter: grayscale(40%);
+  }
+
+  .hero-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, transparent 0%, #0f172a 70%);
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(6, 182, 212, 0.15);
+    border: 1px solid rgba(6, 182, 212, 0.3);
+    color: #06b6d4;
+    padding: 0.5rem 1.25rem;
     border-radius: 9999px;
-    font-size: 0.75rem;
-    text-transform: capitalize;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1.5rem;
   }
 
-  .tag.destino {
-    background: rgba(34, 197, 94, 0.08);
-    color: #4ade80;
-    border-color: rgba(34, 197, 94, 0.2);
+  .hero-badge .material-symbols-outlined {
+    font-size: 1.1rem;
   }
 
-  .rc-reasons {
+  .hero h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #f1f5f9 0%, #94a3b8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-subtitle {
+    font-size: 1.15rem;
+    color: #94a3b8;
+    margin-bottom: 2rem;
+    line-height: 1.7;
+  }
+
+  .search-bar {
     display: flex;
-    flex-wrap: wrap;
+    align-items: center;
+    background: rgba(30, 41, 59, 0.8);
+    border: 1px solid rgba(71, 85, 105, 0.4);
+    border-radius: 1rem;
+    padding: 0.5rem 0.5rem 0.5rem 1.25rem;
+    margin-bottom: 2.5rem;
+    backdrop-filter: blur(12px);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .search-icon {
+    color: #64748b;
+    font-size: 1.25rem;
+  }
+
+  .search-bar input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: #f1f5f9;
+    font-size: 1rem;
+    padding: 0.75rem;
+    outline: none;
+  }
+
+  .search-bar input::placeholder {
+    color: #64748b;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.625rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(6, 182, 212, 0.35);
+  }
+
+  .btn-primary .material-symbols-outlined {
+    font-size: 1.1rem;
+  }
+
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat strong {
+    display: block;
+    font-size: 2rem;
+    color: #06b6d4;
+    line-height: 1.2;
+  }
+
+  .stat span {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* Sections */
+  .destinos-section,
+  .features-section,
+  .cta-section {
+    padding: 4rem 0;
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+
+  .section-header.centered {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .section-header h2 {
+    font-size: 1.75rem;
+    color: #f1f5f9;
+    margin: 0;
+  }
+
+  .view-all {
+    display: inline-flex;
     align-items: center;
     gap: 0.35rem;
-    margin-top: 0.6rem;
+    color: #06b6d4;
+    font-weight: 600;
+    font-size: 0.9rem;
   }
 
-  .reasons-label {
-    font-size: 0.75rem;
-    color: #475569;
+  .view-all .material-symbols-outlined {
+    font-size: 1.1rem;
+    transition: transform 0.2s ease;
   }
 
-  .reason {
+  .view-all:hover .material-symbols-outlined {
+    transform: translateX(4px);
+  }
+
+  /* Destino Cards */
+  .destinos-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+
+  .destino-card {
+    position: relative;
+    border-radius: 1rem;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(71, 85, 105, 0.3);
+  }
+
+  .destino-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(6, 182, 212, 0.4);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+  }
+
+  .destino-image {
+    position: relative;
+    height: 180px;
+    overflow: hidden;
+  }
+
+  .destino-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+
+  .destino-card:hover .destino-image img {
+    transform: scale(1.1);
+  }
+
+  .destino-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.4) 50%, transparent 100%);
+  }
+
+  .destino-content {
+    padding: 1.25rem;
+    position: relative;
+  }
+
+  .destino-badge {
     display: inline-block;
-    background: rgba(59, 130, 246, 0.08);
-    color: #60a5fa;
-    border: 1px solid rgba(59, 130, 246, 0.18);
-    padding: 0.1rem 0.5rem;
-    border-radius: 9999px;
+    background: rgba(34, 197, 94, 0.15);
+    color: #4ade80;
+    padding: 0.2rem 0.6rem;
+    border-radius: 0.25rem;
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+  }
+
+  .destino-content h3 {
+    font-size: 1.25rem;
+    margin: 0 0 0.35rem;
+    color: #f1f5f9;
+  }
+
+  .destino-content p {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    margin: 0 0 0.75rem;
+    line-height: 1.5;
+  }
+
+  .destino-meta {
+    display: flex;
+    gap: 1rem;
     font-size: 0.75rem;
-  }
-
-  .rc-b2b {
-    font-size: 0.82rem;
     color: #64748b;
-    margin-top: 0.5rem;
-    font-style: italic;
-    margin-bottom: 0;
   }
 
-  .no-results {
+  .destino-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .destino-meta .material-symbols-outlined {
+    font-size: 0.9rem;
+  }
+
+  .destino-hover-panel {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+    color: white;
+    padding: 0.75rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+  }
+
+  .destino-card:hover .destino-hover-panel {
+    transform: translateY(0);
+  }
+
+  /* Glass panels */
+  .glass-panel {
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(71, 85, 105, 0.3);
+    border-radius: 1rem;
+    backdrop-filter: blur(12px);
+  }
+
+  .glass-panel-dark {
+    background: rgba(15, 23, 42, 0.7);
+    border: 1px solid rgba(71, 85, 105, 0.25);
+    border-radius: 1.5rem;
+    backdrop-filter: blur(16px);
+  }
+
+  /* Features */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .feature-card {
     padding: 2rem;
     text-align: center;
-    color: #64748b;
+    transition: all 0.2s ease;
   }
 
-  /* ── Responsive ──────────────────────────────────────────────────────────── */
-  @media (max-width: 900px) {
-    .ps-layout {
+  .feature-card:hover {
+    border-color: rgba(6, 182, 212, 0.4);
+    transform: translateY(-4px);
+  }
+
+  .feature-icon {
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(6, 182, 212, 0.15) 100%);
+    border-radius: 1rem;
+    margin: 0 auto 1.25rem;
+  }
+
+  .feature-icon .material-symbols-outlined {
+    font-size: 1.75rem;
+    color: #06b6d4;
+  }
+
+  .feature-card h3 {
+    font-size: 1.1rem;
+    color: #f1f5f9;
+    margin: 0 0 0.75rem;
+  }
+
+  .feature-card p {
+    font-size: 0.9rem;
+    color: #94a3b8;
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  /* CTA */
+  .cta-panel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 3rem;
+    gap: 2rem;
+  }
+
+  .cta-content h2 {
+    font-size: 1.5rem;
+    color: #f1f5f9;
+    margin: 0 0 0.5rem;
+  }
+
+  .cta-content p {
+    color: #94a3b8;
+    margin: 0;
+    font-size: 1rem;
+  }
+
+  .cta-actions {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .btn-primary.large {
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: transparent;
+    border: 1px solid rgba(148, 163, 184, 0.3);
+    color: #94a3b8;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.625rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+  }
+
+  .btn-secondary:hover {
+    border-color: rgba(148, 163, 184, 0.5);
+    color: #f1f5f9;
+    background: rgba(148, 163, 184, 0.1);
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .destinos-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .features-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .cta-panel {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .hero {
+      padding: 3rem 1.5rem;
+      min-height: auto;
+    }
+
+    .hero h1 {
+      font-size: 2rem;
+    }
+
+    .search-bar {
+      flex-direction: column;
+      gap: 0.75rem;
+      padding: 0.75rem;
+    }
+
+    .search-bar input {
+      width: 100%;
+      text-align: center;
+    }
+
+    .btn-primary {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .hero-stats {
+      gap: 1.5rem;
+    }
+
+    .stat strong {
+      font-size: 1.5rem;
+    }
+
+    .destinos-grid,
+    .features-grid {
       grid-template-columns: 1fr;
     }
 
-    .ps-filters {
-      position: static;
-    }
-  }
-
-  @media (max-width: 600px) {
-    .ps-hero h1 {
-      font-size: 1.5rem;
-    }
-    .rc-header {
-      flex-direction: column;
+    .destino-image {
+      height: 140px;
     }
   }
 </style>
+
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet" />
