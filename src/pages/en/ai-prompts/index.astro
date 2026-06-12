@@ -22,7 +22,7 @@ const prompts = await getCollection('prompts');
   <ul class="prompts-list">
     {prompts.map((prompt) => (
       <li class="prompt-item">
-        <a href={`/en/ai-prompts/${prompt.slug}/`} class="prompt-link">
+        <a href={`/en/ai-prompts/${prompt.id}/`} class="prompt-link">
           <div class="prompt-title">{prompt.data.title}</div>
           <div class="prompt-meta">
             {prompt.data.ai_platforms.map((p) => (

@@ -1,0 +1,1010 @@
+---
+/**
+ * Partner Scout Shortlist
+ * Display matching operators with selection
+ */
+import { getAllCompaniesCatalog } from '../../utils/graphify';
+import Layout from '../../layouts/Layout.astro';
+
+const catalog = await getAllCompaniesCatalog();
+const catalogJson = JSON.stringify(catalog);
+
+// Parse URL params
+const url = new URL(Astro.request.url);
+const destino = url.searchParams.get('destino') || 'cusco';
+const categorias = url.searchParams.getAll('categorias[]');
+const languages = url.searchParams.getAll('languages[]');
+const groupMin = parseInt(url.searchParams.get('group_min') || '2');
+const groupMax = parseInt(url.searchParams.get('group_max') || '15');
+const ratingMin = parseFloat(url.searchParams.get('rating_min') || '4');
+
+// Get unique destinos and categorias for filters
+const allDestinos = [...new Set(catalog.flatMap(c => c.destinos))].sort();
+const allCategorias = [...new Set(catalog.flatMap(c => c.categorias))].sort();
+---
+
+<Layout
+  title="Shortlist – Partner Scout | TourUp"
+  description="Operadores preseleccionados según tu brief."
+  currentPath="/partner-scout/shortlist/"
+>
+  <div class="shortlist-page">
+
+    <!-- Progress -->
+    <div class="progress-bar">
+      <div class="step completed">
+        <span class="step-number">
+          <span class="material-symbols-outlined">check</span>
+        </span>
+        <span class="step-label">Brief</span>
+      </div>
+      <div class="step-line completed"></div>
+      <div class="step active">
+        <span class="step-number">2</span>
+        <span class="step-label">Shortlist</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="step">
+        <span class="step-number">3</span>
+        <span class="step-label">Confirm</span>
+      </div>
+    </div>
+
+    <div class="shortlist-layout">
+
+      <!-- Main Content -->
+      <main class="shortlist-main">
+        <header class="shortlist-header">
+          <div class="header-top">
+            <div>
+              <h1>Operadores Preseleccionados</h1>
+              <p class="destino-tag">
+                <span class="material-symbols-outlined">place</span>
+                {destino.charAt(0).toUpperCase() + destino.slice(1)}
+              </p>
+            </div>
+            <a href="/partner-scout/brief/" class="btn-edit">
+              <span class="material-symbols-outlined">edit</span>
+              Editar Brief
+            </a>
+          </div>
+
+          <!-- Quick Filters -->
+          <div class="quick-filters">
+            <button class="filter-pill active" data-filter="all">
+              Todos
+            </button>
+            <button class="filter-pill" data-filter="score-high">
+              <span class="material-symbols-outlined">trending_up</span>
+              Score 80+
+            </button>
+            <button class="filter-pill" data-filter="rating-high">
+              <span class="material-symbols-outlined">star</span>
+              Rating 4.5+
+            </button>
+            <button class="filter-pill" data-filter="capacity">
+              <span class="material-symbols-outlined">groups</span>
+              Alta Capacidad
+            </button>
+          </div>
+        </header>
+
+        <!-- Results -->
+        <div class="results-header">
+          <span id="results-count">Cargando...</span>
+          <div class="sort-select">
+            <label>Ordenar por:</label>
+            <select id="sort-select">
+              <option value="score">Fit Score</option>
+              <option value="rating">Rating</option>
+              <option value="capacity">Capacidad</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="operators-grid" id="operators-grid">
+          <!-- Filled by JS -->
+        </div>
+
+        <div class="no-results" id="no-results" style="display: none;">
+          <span class="material-symbols-outlined">search_off</span>
+          <h3>No se encontraron operadores</h3>
+          <p>Intenta ajustar los filtros o editar tu brief.</p>
+        </div>
+      </main>
+
+      <!-- RFP Panel -->
+      <aside class="rfp-panel glass-panel">
+        <div class="rfp-header">
+          <h2>
+            <span class="material-symbols-outlined">request_quote</span>
+            Solicitud RFP
+          </h2>
+          <span class="selection-count" id="selection-count">0 operadores</span>
+        </div>
+
+        <div class="rfp-selected" id="rfp-selected">
+          <p class="empty-hint">Selecciona operadores para enviar solicitud RFP</p>
+        </div>
+
+        <div class="rfp-summary">
+          <div class="summary-row">
+            <span>Destino</span>
+            <strong>{destino}</strong>
+          </div>
+          <div class="summary-row">
+            <span>Grupo</span>
+            <strong>{groupMin}-{groupMax} pax</strong>
+          </div>
+          <div class="summary-row">
+            <span>Rating mínimo</span>
+            <strong>{ratingMin}+</strong>
+          </div>
+        </div>
+
+        <button class="btn-send-rfp" id="btn-send-rfp" disabled>
+          <span class="material-symbols-outlined">send</span>
+          Enviar Solicitud RFP
+        </button>
+
+        <p class="rfp-note">
+          Los operadores recibirán tu solicitud y responderán en 24-48h.
+        </p>
+      </aside>
+
+    </div>
+  </div>
+</Layout>
+
+<script define:vars={{ catalogJson, destino, categorias, languages, groupMin, groupMax, ratingMin }}>
+  const CATALOG = JSON.parse(catalogJson);
+  const selectedOperators = new Set();
+
+  // Initial filters from URL
+  const initialFilters = {
+    destino: destino,
+    categorias: categorias,
+    languages: languages,
+    groupMin: groupMin,
+    groupMax: groupMax,
+    ratingMin: ratingMin
+  };
+
+  // Filter catalog
+  function filterCatalog(filters) {
+    return CATALOG.filter(company => {
+      // Destino check
+      if (filters.destino && !company.destinos.includes(filters.destino)) return false;
+
+      // Categoria check
+      if (filters.categorias && filters.categorias.length > 0) {
+        const hasCategory = filters.categorias.some(c => company.categorias.includes(c));
+        if (!hasCategory) return false;
+      }
+
+      // Rating check
+      if (filters.ratingMin && company.rating && company.rating < filters.ratingMin) return false;
+
+      // Language check
+      if (filters.languages && filters.languages.length > 0) {
+        const langs = company.trust_metrics?.languages || [];
+        const hasLang = filters.languages.some(l => langs.includes(l));
+        if (!hasLang) return false;
+      }
+
+      // Capacity check
+      if (filters.groupMax && company.trust_metrics?.group_capacity_max) {
+        if (company.trust_metrics.group_capacity_max < filters.groupMin) return false;
+      }
+
+      return true;
+    }).map(company => {
+      // Calculate Fit Score
+      let score = 50;
+
+      if (company.rating) score += company.rating * 8;
+      if (company.trust_metrics?.group_capacity_max >= filters.groupMax) score += 10;
+      if (company.trust_metrics?.languages?.length > 1) score += 10;
+      if (company.reviews_count && company.reviews_count > 50) score += 5;
+      if (company.destinos.length > 1) score += 5;
+
+      return {
+        ...company,
+        fitScore: Math.min(100, Math.round(score))
+      };
+    }).sort((a, b) => b.fitScore - a.fitScore);
+  }
+
+  // Render operators
+  function renderOperators(operators) {
+    const grid = document.getElementById('operators-grid');
+    const countEl = document.getElementById('results-count');
+    const noResults = document.getElementById('no-results');
+
+    countEl.textContent = `${operators.length} operadores encontrados`;
+
+    if (operators.length === 0) {
+      grid.style.display = 'none';
+      noResults.style.display = 'block';
+      return;
+    }
+
+    grid.style.display = 'grid';
+    noResults.style.display = 'none';
+
+    grid.innerHTML = operators.map(op => {
+      const isSelected = selectedOperators.has(op.id);
+      const grade = op.fitScore >= 90 ? 'A+' : op.fitScore >= 80 ? 'A' : op.fitScore >= 70 ? 'B' : op.fitScore >= 60 ? 'C' : 'D';
+
+      return `
+        <article class="operator-card ${isSelected ? 'selected' : ''}" data-id="${op.id}">
+          <div class="card-header">
+            <div class="fit-score score-${grade.charAt(0)}">
+              <span class="score-value">${op.fitScore}</span>
+              <span class="score-grade">${grade}</span>
+            </div>
+            <label class="select-checkbox">
+              <input type="checkbox" ${isSelected ? 'checked' : ''} onchange="toggleSelection('${op.id}')" />
+              <span class="checkmark"><span class="material-symbols-outlined">check</span></span>
+            </label>
+          </div>
+
+          <h3>${op.title}</h3>
+
+          ${op.rating ? `
+            <div class="rating-row">
+              <span class="stars">${'★'.repeat(Math.floor(op.rating))}${op.rating % 1 >= 0.5 ? '½' : ''}${'☆'.repeat(5 - Math.ceil(op.rating))}</span>
+              <strong>${op.rating}/5</strong>
+              ${op.reviews_count ? `<span class="reviews">(${op.reviews_count})</span>` : ''}
+            </div>
+          ` : ''}
+
+          <p class="summary">${op.summary || 'Operador turístico receptivo en Perú'}</p>
+
+          <div class="tags-row">
+            ${op.destinos.slice(0, 2).map(d => `<span class="tag destino-tag">${d}</span>`).join('')}
+            ${op.categorias.slice(0, 2).map(c => `<span class="tag">${c.replace(/-/g, ' ')}</span>`).join('')}
+          </div>
+
+          ${op.trust_metrics ? `
+            <div class="metrics-row">
+              ${op.trust_metrics.group_capacity_max ? `
+                <span class="metric">
+                  <span class="material-symbols-outlined">groups</span>
+                  ${op.trust_metrics.group_capacity_max} pax
+                </span>
+              ` : ''}
+              ${op.trust_metrics.languages?.length ? `
+                <span class="metric">
+                  <span class="material-symbols-outlined">translate</span>
+                  ${op.trust_metrics.languages.map(l => l.toUpperCase()).join(', ')}
+                </span>
+              ` : ''}
+            </div>
+          ` : ''}
+
+          <div class="card-actions">
+            <a href="${op.url}" class="btn-view">Ver Ficha</a>
+            <button class="btn-select" onclick="toggleSelection('${op.id}')">
+              ${isSelected ? 'Seleccionado' : 'Seleccionar'}
+            </button>
+          </div>
+        </article>
+      `;
+    }).join('');
+  }
+
+  // Toggle selection
+  window.toggleSelection = function(id) {
+    if (selectedOperators.has(id)) {
+      selectedOperators.delete(id);
+    } else {
+      selectedOperators.add(id);
+    }
+    updateSelectionPanel();
+    renderOperators(currentOperators);
+  };
+
+  // Update selection panel
+  function updateSelectionPanel() {
+    const countEl = document.getElementById('selection-count');
+    const selectedEl = document.getElementById('rfp-selected');
+    const sendBtn = document.getElementById('btn-send-rfp');
+
+    countEl.textContent = `${selectedOperators.size} operadores`;
+
+    if (selectedOperators.size === 0) {
+      selectedEl.innerHTML = '<p class="empty-hint">Selecciona operadores para enviar solicitud RFP</p>';
+      sendBtn.disabled = true;
+    } else {
+      const selectedOps = CATALOG.filter(c => selectedOperators.has(c.id));
+      selectedEl.innerHTML = `
+        <ul class="selected-list">
+          ${selectedOps.map(op => `
+            <li>
+              <span>${op.title}</span>
+              <button onclick="toggleSelection('${op.id}')" class="btn-remove">
+                <span class="material-symbols-outlined">close</span>
+              </button>
+            </li>
+          `).join('')}
+        </ul>
+      `;
+      sendBtn.disabled = false;
+    }
+  }
+
+  // Quick filters
+  document.querySelectorAll('.filter-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+
+      const filter = pill.dataset.filter;
+      let filtered = [...currentOperators];
+
+      if (filter === 'score-high') {
+        filtered = filtered.filter(op => op.fitScore >= 80);
+      } else if (filter === 'rating-high') {
+        filtered = filtered.filter(op => op.rating >= 4.5);
+      } else if (filter === 'capacity') {
+        filtered = filtered.filter(op => op.trust_metrics?.group_capacity_max >= 20);
+      }
+
+      renderOperators(filtered);
+    });
+  });
+
+  // Sort
+  document.getElementById('sort-select')?.addEventListener('change', (e) => {
+    const sortBy = e.target.value;
+    currentOperators.sort((a, b) => {
+      if (sortBy === 'score') return b.fitScore - a.fitScore;
+      if (sortBy === 'rating') return (b.rating || 0) - (a.rating || 0);
+      if (sortBy === 'capacity') return (b.trust_metrics?.group_capacity_max || 0) - (a.trust_metrics?.group_capacity_max || 0);
+      return 0;
+    });
+    renderOperators(currentOperators);
+  });
+
+  // Send RFP
+  document.getElementById('btn-send-rfp')?.addEventListener('click', () => {
+    const selected = Array.from(selectedOperators).join(',');
+    const params = new URLSearchParams({
+      destino: initialFilters.destino,
+      operators: selected,
+      group: `${initialFilters.groupMin}-${initialFilters.groupMax}`
+    });
+    window.location.href = `/partner-scout/confirm/?${params.toString()}`;
+  });
+
+  // Initial render
+  let currentOperators = filterCatalog(initialFilters);
+  renderOperators(currentOperators);
+</script>
+
+<style>
+  .shortlist-page {
+    padding-bottom: 4rem;
+  }
+
+  /* Progress */
+  .progress-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 3rem;
+    padding-top: 1rem;
+  }
+
+  .step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .step-number {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(30, 41, 59, 0.8);
+    border: 2px solid rgba(71, 85, 105, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1rem;
+    color: #64748b;
+    transition: all 0.3s ease;
+  }
+
+  .step.completed .step-number {
+    background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+    border-color: transparent;
+    color: white;
+  }
+
+  .step.active .step-number {
+    background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+    border-color: transparent;
+    color: white;
+  }
+
+  .step-label {
+    font-size: 0.8rem;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .step.completed .step-label,
+  .step.active .step-label {
+    color: #06b6d4;
+  }
+
+  .step .step-number .material-symbols-outlined {
+    font-size: 1.1rem;
+  }
+
+  .step-line {
+    width: 80px;
+    height: 2px;
+    background: rgba(71, 85, 105, 0.3);
+    margin: 0 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .step-line.completed {
+    background: linear-gradient(90deg, #3b82f6 0%, #06b6d4 100%);
+  }
+
+  /* Layout */
+  .shortlist-layout {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 2rem;
+  }
+
+  /* Header */
+  .shortlist-header {
+    margin-bottom: 2rem;
+  }
+
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+  }
+
+  .shortlist-header h1 {
+    font-size: 1.75rem;
+    color: #f1f5f9;
+    margin: 0 0 0.5rem;
+  }
+
+  .destino-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: #06b6d4;
+    font-weight: 600;
+    font-size: 1rem;
+    margin: 0;
+  }
+
+  .destino-tag .material-symbols-outlined {
+    font-size: 1.1rem;
+  }
+
+  .btn-edit {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #94a3b8;
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid rgba(71, 85, 105, 0.4);
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+  }
+
+  .btn-edit:hover {
+    border-color: #06b6d4;
+    color: #06b6d4;
+  }
+
+  /* Quick Filters */
+  .quick-filters {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .filter-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.5rem 1rem;
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(71, 85, 105, 0.4);
+    border-radius: 9999px;
+    color: #94a3b8;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .filter-pill .material-symbols-outlined {
+    font-size: 1rem;
+  }
+
+  .filter-pill:hover,
+  .filter-pill.active {
+    background: rgba(6, 182, 212, 0.15);
+    border-color: rgba(6, 182, 212, 0.4);
+    color: #06b6d4;
+  }
+
+  /* Results Header */
+  .results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  #results-count {
+    color: #94a3b8;
+    font-size: 0.95rem;
+  }
+
+  .sort-select {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .sort-select label {
+    color: #64748b;
+    font-size: 0.85rem;
+  }
+
+  .sort-select select {
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(71, 85, 105, 0.4);
+    border-radius: 0.375rem;
+    padding: 0.4rem 0.75rem;
+    color: #f1f5f9;
+    font-size: 0.9rem;
+  }
+
+  /* Operators Grid */
+  .operators-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+
+  .operator-card {
+    position: relative;
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(71, 85, 105, 0.3);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    transition: all 0.2s ease;
+  }
+
+  .operator-card:hover {
+    border-color: rgba(6, 182, 212, 0.4);
+    transform: translateY(-4px);
+  }
+
+  .operator-card.selected {
+    border-color: #06b6d4;
+    background: rgba(6, 182, 212, 0.05);
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+  }
+
+  /* Fit Score */
+  .fit-score {
+    display: flex;
+    align-items: baseline;
+    gap: 0.25rem;
+  }
+
+  .score-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .score-grade {
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 0.15rem 0.35rem;
+    border-radius: 0.25rem;
+  }
+
+  .score-A .score-value { color: #4ade80; }
+  .score-A .score-grade { background: rgba(34, 197, 94, 0.2); color: #4ade80; }
+  .score-B .score-value { color: #06b6d4; }
+  .score-B .score-grade { background: rgba(6, 182, 212, 0.2); color: #06b6d4; }
+  .score-C .score-value { color: #fbbf24; }
+  .score-C .score-grade { background: rgba(251, 191, 36, 0.2); color: #fbbf24; }
+  .score-D .score-value { color: #f87171; }
+  .score-D .score-grade { background: rgba(248, 113, 113, 0.2); color: #f87171; }
+
+  /* Checkbox */
+  .select-checkbox {
+    cursor: pointer;
+  }
+
+  .select-checkbox input {
+    display: none;
+  }
+
+  .checkmark {
+    width: 28px;
+    height: 28px;
+    border-radius: 0.5rem;
+    border: 2px solid rgba(71, 85, 105, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+
+  .checkmark .material-symbols-outlined {
+    font-size: 1.1rem;
+    color: white;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 0.2s ease;
+  }
+
+  .select-checkbox input:checked + .checkmark,
+  .operator-card.selected .checkmark {
+    background: #06b6d4;
+    border-color: #06b6d4;
+  }
+
+  .select-checkbox input:checked + .checkmark .material-symbols-outlined,
+  .operator-card.selected .checkmark .material-symbols-outlined {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .operator-card h3 {
+    font-size: 1.15rem;
+    color: #f1f5f9;
+    margin: 0 0 0.5rem;
+  }
+
+  .rating-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .stars {
+    color: #fbbf24;
+    font-size: 0.9rem;
+  }
+
+  .rating-row strong {
+    color: #f1f5f9;
+    font-size: 0.95rem;
+  }
+
+  .reviews {
+    color: #64748b;
+    font-size: 0.85rem;
+  }
+
+  .summary {
+    font-size: 0.9rem;
+    color: #94a3b8;
+    line-height: 1.5;
+    margin: 0 0 1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .tags-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .tag {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 9999px;
+    background: rgba(71, 85, 105, 0.2);
+    color: #94a3b8;
+    text-transform: capitalize;
+  }
+
+  .tag.destino-tag {
+    background: rgba(34, 197, 94, 0.1);
+    color: #4ade80;
+  }
+
+  .metrics-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .metric {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.8rem;
+    color: #64748b;
+  }
+
+  .metric .material-symbols-outlined {
+    font-size: 1rem;
+  }
+
+  .card-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(71, 85, 105, 0.2);
+  }
+
+  .btn-view {
+    flex: 1;
+    text-align: center;
+    padding: 0.6rem;
+    background: transparent;
+    border: 1px solid rgba(71, 85, 105, 0.4);
+    border-radius: 0.5rem;
+    color: #94a3b8;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+  }
+
+  .btn-view:hover {
+    border-color: #06b6d4;
+    color: #06b6d4;
+  }
+
+  .btn-select {
+    flex: 1;
+    padding: 0.6rem;
+    background: rgba(6, 182, 212, 0.1);
+    border: 1px solid rgba(6, 182, 212, 0.3);
+    border-radius: 0.5rem;
+    color: #06b6d4;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .operator-card.selected .btn-select {
+    background: #06b6d4;
+    border-color: #06b6d4;
+    color: white;
+  }
+
+  /* No Results */
+  .no-results {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #64748b;
+  }
+
+  .no-results .material-symbols-outlined {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+  }
+
+  .no-results h3 {
+    color: #94a3b8;
+    margin-bottom: 0.5rem;
+  }
+
+  /* RFP Panel */
+  .rfp-panel {
+    position: sticky;
+    top: 1rem;
+    padding: 1.5rem;
+    height: fit-content;
+  }
+
+  .rfp-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(71, 85, 105, 0.2);
+  }
+
+  .rfp-header h2 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.1rem;
+    color: #f1f5f9;
+    margin: 0;
+  }
+
+  .rfp-header h2 .material-symbols-outlined {
+    color: #06b6d4;
+  }
+
+  .selection-count {
+    font-size: 0.9rem;
+    color: #06b6d4;
+    font-weight: 600;
+  }
+
+  .rfp-selected {
+    min-height: 80px;
+    margin-bottom: 1.5rem;
+  }
+
+  .empty-hint {
+    color: #64748b;
+    font-size: 0.9rem;
+    text-align: center;
+    padding: 1rem 0;
+    margin: 0;
+  }
+
+  .selected-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .selected-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid rgba(71, 85, 105, 0.2);
+  }
+
+  .selected-list li span {
+    font-size: 0.9rem;
+    color: #f1f5f9;
+  }
+
+  .btn-remove {
+    background: transparent;
+    border: none;
+    padding: 0.25rem;
+    cursor: pointer;
+    color: #64748b;
+    transition: color 0.2s ease;
+  }
+
+  .btn-remove:hover {
+    color: #f87171;
+  }
+
+  .btn-remove .material-symbols-outlined {
+    font-size: 1rem;
+  }
+
+  .rfp-summary {
+    background: rgba(15, 23, 42, 0.5);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    padding: 0.4rem 0;
+  }
+
+  .summary-row span {
+    color: #94a3b8;
+  }
+
+  .summary-row strong {
+    color: #f1f5f9;
+  }
+
+  .btn-send-rfp {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+    border: none;
+    border-radius: 0.5rem;
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .btn-send-rfp:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .btn-send-rfp:not(:disabled):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(6, 182, 212, 0.35);
+  }
+
+  .rfp-note {
+    font-size: 0.8rem;
+    color: #64748b;
+    text-align: center;
+    margin-top: 1rem;
+  }
+
+  .glass-panel {
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(71, 85, 105, 0.3);
+    border-radius: 1rem;
+    backdrop-filter: blur(12px);
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .shortlist-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .rfp-panel {
+      position: static;
+    }
+
+    .operators-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .header-top {
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .quick-filters {
+      overflow-x: auto;
+      flex-wrap: nowrap;
+      padding-bottom: 0.5rem;
+    }
+
+    .results-header {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+  }
+</style>
+
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet" />

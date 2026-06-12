@@ -6,7 +6,7 @@ import JsonLdPromptLanding from '../../../components/JsonLdPromptLanding.astro';
 export async function getStaticPaths() {
   const prompts = await getCollection('prompts');
   return prompts.map((prompt) => ({
-    params: { slug: prompt.slug },
+    params: { slug: prompt.id },
     props: { prompt },
   }));
 }
@@ -23,21 +23,23 @@ const companies = await getCollection('companies');
 const externalBrands = await getCollection('external_brands');
 
 const resolvedBrands = prompt.data.brands_ai_mentions.map((mention: any) => {
-  if (mention.entity_type === 'company') {
-    const company = companies.find((c) => c.slug === mention.entity_slug);
-    return { ...mention, found: !!company, entity: company };
-  } else if (mention.entity_type === 'external_brand') {
-    const brand = externalBrands.find((b) => b.slug === mention.entity_slug);
-    return { ...mention, found: !!brand, entity: brand };
+  // Handle both string and object format mentions
+  const mentionObj = typeof mention === 'string' ? { name: mention, entity_type: 'unknown' } : mention;
+  if (mentionObj.entity_type === 'company') {
+    const company = companies.find((c) => c.id === mentionObj.entity_slug);
+    return { ...mentionObj, found: !!company, entity: company };
+  } else if (mentionObj.entity_type === 'external_brand') {
+    const brand = externalBrands.find((b) => b.id === mentionObj.entity_slug);
+    return { ...mentionObj, found: !!brand, entity: brand };
   }
-  return { ...mention, found: false };
+  return { ...mentionObj, found: false };
 });
 ---
 
 <Layout
   title={prompt.data.title}
   description={prompt.data.summary}
-  currentPath={`/en/ai-prompts/${prompt.slug}/`}
+  currentPath={`/en/ai-prompts/${prompt.id}/`}
 >
   <JsonLdPromptLanding
     title={prompt.data.title}

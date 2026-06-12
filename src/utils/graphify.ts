@@ -202,7 +202,7 @@ async function filterViaCollection(filters: CompanyFilters): Promise<CompanyResu
     }
 
     results.push({
-      slug: entry.slug,
+      slug: entry.id,
       title: d.title,
       summary: d.summary,
       destinos: nodeDestinos,
@@ -212,7 +212,7 @@ async function filterViaCollection(filters: CompanyFilters): Promise<CompanyResu
       b2b_profile: d.b2b_profile,
       trust_metrics: d.trust_metrics as Record<string, unknown> | undefined,
       match_reasons: reasons.length ? reasons : ['match general'],
-      url: `/empresas/${entry.slug}/`,
+      url: `/empresas/${entry.id}/`,
     });
   }
 
