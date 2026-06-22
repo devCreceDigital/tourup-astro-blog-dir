@@ -174,8 +174,19 @@ ai_platforms: string[]
 prompt_text: string
 primary_intent: string?
 secondary_intent: string?
+
+# Legacy flat taxonomy (kept for backward compat)
 destination_cluster: string?
 category_cluster: string?
+
+# Structured taxonomy (graph-first, replaces flat clusters)
+destinos:
+  - entity_type: enum["destino"]
+    entity_slug: string         # e.g. "cusco", "lima"
+categorias:
+  - entity_type: enum["categoria"]
+    entity_slug: string         # e.g. "full-day", "tours-comunitarios"
+
 brands_ai_mentions:
   - name: string
     entity_type: enum["company","external_brand","unknown"]
@@ -183,7 +194,7 @@ brands_ai_mentions:
 summary: string
 parent: string?
 last_ai_check_date: string?
-ai_cited_domains: string[]?
+ai_cited_domains: string[]
 ```
 
 ---
@@ -310,29 +321,48 @@ graphify-out/graph.json  (run `graphify . --backend gemini --update` to refresh)
 ### 6.2 Skill: ContentBuilder
 
 ```
-# ContentBuilder – CSV to Markdown ingestion
+# ContentBuilder – CSV to Markdown ingestion (8-step pipeline)
 
 ## Role
-Transform CSV data (bd_agencias_en.csv, ai_models-*.csv) into structured Markdown
-following OPEN_SPECS.md schemas. Update brands-map.yaml accordingly.
+Orchestrate the TourUp AI Search Prompt Ingestion pipeline: CSV → normalized
+frontmatter → graph → Gemini-enriched content → validated publish.
+Defined in full at `docs/skills/tourup-ai-search-prompt-ingestion/SKILL.md`.
+
+## 8-step pipeline
+1. **Read & validate CSV** — confirm required columns (Prompt, Plataforma, Marcas)
+2. **Normalize** — infer slug, intent, ai_platforms deterministically
+3. **Infer entities** — resolve destinos[], categorias[], brands_ai_mentions via
+   brands-map.yaml + keyword matching + graphify query
+4. **Create frontmatter** — write structured YAML per §3.5 schema
+5. **Connect with graph** — rebuild graphify-out/graph.json via generate_graph.py
+6. **Generate content** — Gemini batch (5 prompts per call) for quick answer,
+   comparison table, FAQs, trust signals; template fallback if no API key
+7. **Validate** — `astro check` + schema conformance (destinos[] reference
+   existing graph nodes, slug matches URL pattern)
+8. **Publish** — `astro build` + sitemap update + link from hub pages
 
 ## Graphify usage
 1. Before creating new content:
    - graphify query "existing nodes for <brand>" --graph graphify-out/graph.json
    - If node exists: UPDATE the .md file, don't create a duplicate.
 2. After bulk ingestion: trigger graphify . --backend gemini --update
+3. After step 5, verify edges: prompt → destino, prompt → categoria, prompt → company
 
 ## Content rules
 - Frontmatter must exactly match schemas in OPEN_SPECS.md section 3.
 - Never invent regulatory data (RUC, licenses); leave fields empty if missing from CSV.
 - For companies: populate destinos, categorias, nap, and b2b_profile when data is available.
-- For PromptLanding: fill brands_ai_mentions from brands-map.yaml + GraphNavigator.
-- Body structure: H1, BLUF answer, sections, FAQs (for prompts: ItemList of brands).
+- For PromptLanding: use destinos[]/categorias[] structured arrays (not flat clusters).
+  Keep destination_cluster/category_cluster for backward compat only.
+- Body structure: H1, BLUF answer, sections, FAQs (for prompts: ItemList of brands +
+  comparison table + "How to choose" section).
 
 ## Scripts
-- python scripts/bootstrap_brands_map.py  → update brands-map.yaml
-- python scripts/prompts_to_md.py         → generate prompts from CSV
-- python scripts/brands_to_md.py          → generate companies from CSV
+- python scripts/run_pipeline.py          → orchestrator (steps 1-8)
+- python scripts/prompts_to_md.py         → CSV → prompt .md (steps 1-4)
+- python scripts/generate_graph.py        → rebuild graph.json (step 5)
+- python scripts/bootstrap_brands_map.py  → generate brands-map.yaml (prerequisite)
+- python scripts/migrate_prompts_schema.py → one-time migrate to destinos[]
 ```
 
 ---
@@ -473,7 +503,25 @@ y se basa en los datos del directorio TourUp. Verifica licencias vigentes direct
 - [x] Python scripts stubbed: `bootstrap_brands_map.py`, `prompts_to_md.py`, `brands_to_md.py`
 - [ ] Graphify configured with Gemini backend (`GEMINI_API_KEY` in env)
 - [ ] `npm run graphify` script in `package.json`
+- [x] Schema migration: prompts migrated to `destinos[]`/`categorias[]` structured arrays
+- [x] `scripts/migrate_prompts_schema.py` — one-time migration complete (201 prompts)
+- [x] `scripts/bootstrap_brands_map.py` — brands-map.yaml generation from CSV
+- [x] `scripts/prompts_to_md.py` — CSV → frontmatter pipeline (steps 1-4)
+- [x] `scripts/generate_graph.py` — graph rebuild from content (step 5)
+- [x] `scripts/run_pipeline.py` — orchestrator with Gemini batch content generation (step 6)
+- [x] `docs/skills/tourup-ai-search-prompt-ingestion/SKILL.md` — dual skill spec (repo)
+- [x] `~/.hermes/skills/content/tourup-ai-search-prompt-ingestion/SKILL.md` — dual skill spec (Hermes)
+- [ ] Gemini batch content generation tested on subset (3-5 prompts)
+- [ ] `astro check` passes with migrated prompts
+- [ ] `astro build` succeeds post-migration
 - [ ] MCP server `travel-content` implementation
 - [ ] ContentBuilder agent wired to MCP
 - [ ] AEOAuditor agent wired to MCP
 - [ ] PartnerScout agent (POST endpoint + Hermes skill)
+
+### 9.1 Improvements from arqui01.md (Prompt Landing Page v2)
+
+- [ ] **Add comparison table (HTML `<table>`)** to prompt landing template (`src/pages/en/ai-prompts/[slug].astro`) with columns: Company, Base, Trip style, Group size, Good for — matching the existing `ItemList` JSON-LD.
+- [ ] **Add "How to choose" section** after the comparison table with actionable tips (safety records, guide quality, group size, inclusions, cancellation policies).
+- [ ] **Render FAQ visually** on prompt landing pages — currently FAQPage exists only in JSON-LD but is not displayed as HTML. Use `<section aria-label="Frequently asked questions">` with `<article>` per Q&A.
+- [ ] **Align brand list with semantic `<ol>` + `<li>` ItemList** per schema.org (currently uses `<div class="brands-grid">`). Add hidden `ItemList` or switch to ordered list for better AEO semantics.

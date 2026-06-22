@@ -30,8 +30,12 @@ categorias:
 - trekking
 - arqueologico
 distribution_role: tour_operator
----
-
-# Alpaca Expeditions
-
-Travel Company based in CUSCO, CUSCO, Peru.
+mentioned_in_prompts:
+- top-rated-peru-tour-companies-for-adventure-trips
+---
+# Alpaca Expeditions
+
+
+
+Travel Company based in CUSCO, CUSCO, Peru.
+

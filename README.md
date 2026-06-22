@@ -184,3 +184,10 @@ Integration points:
   - 1–2 `PromptLanding`
 - [ ] Graphify run & validated
 - [ ] MCP `travel-content` server prototype
+
+### Pending improvements (from arqui01.md)
+
+- [ ] **Comparison table** – Add HTML `<table>` (Company, Base, Trip style, Group size, Good for) to prompt landing pages
+- [ ] **"How to choose" section** – Add actionable tips section after brands/comparison
+- [ ] **Visual FAQ** – Render FAQPage JSON-LD as visible HTML on prompt landings
+- [ ] **Semantic ItemList** – Use `<ol>` + `<li>` for brand list to match schema.org ItemList

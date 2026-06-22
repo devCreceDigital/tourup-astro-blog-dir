@@ -201,7 +201,7 @@ def main():
     with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
         json.dump(graph, f, ensure_ascii=False, indent=2)
 
-    print(f"[generate_graph] Written → {OUTPUT_PATH}")
+    print(f"[generate_graph] Written -> {OUTPUT_PATH}")
     print("[generate_graph] Done. Run `npm run graphify` to upgrade with Gemini AI edges.")
 
 

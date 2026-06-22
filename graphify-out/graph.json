@@ -4794,7 +4794,9 @@
         "reviews_count": null,
         "b2b_profile": null,
         "trust_metrics": null,
-        "mentioned_in_prompts": [],
+        "mentioned_in_prompts": [
+          "top-rated-peru-tour-companies-for-adventure-trips"
+        ],
         "contact": {
           "website": "https://www.alpacaexpeditons.com",
           "email": "info@alpacaexpeditions.com"
@@ -44326,6 +44328,48 @@
       }
     },
     {
+      "id": "external_brand:exodus-adventure-travels",
+      "type": "ExternalBrand",
+      "label": "Exodus Adventure Travels",
+      "properties": {
+        "name": "Exodus Adventure Travels",
+        "official_url": "",
+        "brand_role": "",
+        "country": "",
+        "mentioned_in_prompts": [
+          "top-rated-peru-tour-companies-for-adventure-trips"
+        ]
+      }
+    },
+    {
+      "id": "external_brand:machu-travel-peru",
+      "type": "ExternalBrand",
+      "label": "Machu Travel Peru",
+      "properties": {
+        "name": "Machu Travel Peru",
+        "official_url": "",
+        "brand_role": "",
+        "country": "",
+        "mentioned_in_prompts": [
+          "top-rated-peru-tour-companies-for-adventure-trips"
+        ]
+      }
+    },
+    {
+      "id": "external_brand:sam-travel-peru",
+      "type": "ExternalBrand",
+      "label": "Sam Travel Peru",
+      "properties": {
+        "name": "Sam Travel Peru",
+        "official_url": "",
+        "brand_role": "",
+        "country": "",
+        "mentioned_in_prompts": [
+          "top-rated-peru-tour-companies-for-adventure-trips"
+        ]
+      }
+    },
+    {
       "id": "external_brand:tourradar",
       "type": "ExternalBrand",
       "label": "TourRadar",
@@ -44337,6 +44381,34 @@
         "mentioned_in_prompts": [
           "best-peru-tour-companies-for-families",
           "budget-friendly-peru-tours"
+        ]
+      }
+    },
+    {
+      "id": "external_brand:trexperience",
+      "type": "ExternalBrand",
+      "label": "Trexperience",
+      "properties": {
+        "name": "Trexperience",
+        "official_url": "",
+        "brand_role": "",
+        "country": "",
+        "mentioned_in_prompts": [
+          "top-rated-peru-tour-companies-for-adventure-trips"
+        ]
+      }
+    },
+    {
+      "id": "external_brand:waman-adventures",
+      "type": "ExternalBrand",
+      "label": "Waman Adventures",
+      "properties": {
+        "name": "Waman Adventures",
+        "official_url": "",
+        "brand_role": "",
+        "country": "",
+        "mentioned_in_prompts": [
+          "top-rated-peru-tour-companies-for-adventure-trips"
         ]
       }
     },
@@ -44420,26 +44492,32 @@
         "category_cluster": "tour_companies",
         "brands_ai_mentions": [
           {
+            "name": "Inkayni Peru Tours",
             "entity_type": "external_brand",
             "entity_slug": "inkayni-peru-tours"
           },
           {
+            "name": "Kantu Peru Tours",
             "entity_type": "external_brand",
             "entity_slug": "kantu-peru-tours"
           },
           {
+            "name": "Trexperience",
             "entity_type": "external_brand",
             "entity_slug": "trexperience"
           },
           {
+            "name": "Waman Adventures",
             "entity_type": "external_brand",
             "entity_slug": "waman-adventures"
           },
           {
+            "name": "Peru For Less",
             "entity_type": "external_brand",
             "entity_slug": "peru-for-less"
           },
           {
+            "name": "Alpaca Expeditions",
             "entity_type": "company",
             "entity_slug": "alpaca-expeditions-cusco"
           }
@@ -45412,46 +45490,57 @@
         "category_cluster": "tour_companies",
         "brands_ai_mentions": [
           {
+            "name": "Machu Travel Peru",
             "entity_type": "external_brand",
             "entity_slug": "machu-travel-peru"
           },
           {
+            "name": "Alpaca Expeditions",
             "entity_type": "company",
             "entity_slug": "alpaca-expeditions-cusco"
           },
           {
+            "name": "Tourradar",
             "entity_type": "external_brand",
             "entity_slug": "tourradar"
           },
           {
+            "name": "Waman Adventures",
             "entity_type": "external_brand",
             "entity_slug": "waman-adventures"
           },
           {
+            "name": "Trexperience",
             "entity_type": "external_brand",
             "entity_slug": "trexperience"
           },
           {
+            "name": "Kantu Peru Tours",
             "entity_type": "external_brand",
             "entity_slug": "kantu-peru-tours"
           },
           {
+            "name": "Inkayni Peru Tours",
             "entity_type": "external_brand",
             "entity_slug": "inkayni-peru-tours"
           },
           {
+            "name": "Peru For Less",
             "entity_type": "external_brand",
             "entity_slug": "peru-for-less"
           },
           {
+            "name": "Travelstride",
             "entity_type": "external_brand",
             "entity_slug": "travelstride"
           },
           {
+            "name": "Exodus Adventure Travels",
             "entity_type": "external_brand",
             "entity_slug": "exodus-adventure-travels"
           },
           {
+            "name": "Insight Vacations",
             "entity_type": "external_brand",
             "entity_slug": "insight-vacations"
           }
@@ -45538,22 +45627,27 @@
         "category_cluster": "tour_companies",
         "brands_ai_mentions": [
           {
+            "name": "Alpaca Expeditions",
             "entity_type": "company",
             "entity_slug": "alpaca-expeditions-cusco"
           },
           {
+            "name": "REI Adventures",
             "entity_type": "external_brand",
             "entity_slug": "rei-adventures"
           },
           {
+            "name": "Intrepid Travel",
             "entity_type": "external_brand",
             "entity_slug": "intrepid-travel"
           },
           {
+            "name": "Sam Travel Peru",
             "entity_type": "external_brand",
             "entity_slug": "sam-travel-peru"
           },
           {
+            "name": "Adventures By Disney",
             "entity_type": "external_brand",
             "entity_slug": "adventures-by-disney"
           }
@@ -52438,26 +52532,32 @@
         "category_cluster": "tour_companies",
         "brands_ai_mentions": [
           {
+            "name": "Alpaca Expeditions",
             "entity_type": "company",
             "entity_slug": "alpaca-expeditions-cusco"
           },
           {
+            "name": "Sam Travel Peru",
             "entity_type": "external_brand",
             "entity_slug": "sam-travel-peru"
           },
           {
+            "name": "Waman Adventures",
             "entity_type": "external_brand",
             "entity_slug": "waman-adventures"
           },
           {
+            "name": "Trexperience",
             "entity_type": "external_brand",
             "entity_slug": "trexperience"
           },
           {
+            "name": "Machu Travel Peru",
             "entity_type": "external_brand",
             "entity_slug": "machu-travel-peru"
           },
           {
+            "name": "Exodus Adventure Travels",
             "entity_type": "external_brand",
             "entity_slug": "exodus-adventure-travels"
           }
@@ -53534,42 +53634,52 @@
         "category_cluster": "tour_companies",
         "brands_ai_mentions": [
           {
+            "name": "Alpaca Expeditions",
             "entity_type": "company",
             "entity_slug": "alpaca-expeditions-cusco"
           },
           {
+            "name": "Machu Travel Peru",
             "entity_type": "external_brand",
             "entity_slug": "machu-travel-peru"
           },
           {
+            "name": "Sam Travel Peru",
             "entity_type": "external_brand",
             "entity_slug": "sam-travel-peru"
           },
           {
+            "name": "G Adventures",
             "entity_type": "external_brand",
             "entity_slug": "g-adventures"
           },
           {
+            "name": "Waman Adventures",
             "entity_type": "external_brand",
             "entity_slug": "waman-adventures"
           },
           {
+            "name": "Trexperience",
             "entity_type": "external_brand",
             "entity_slug": "trexperience"
           },
           {
+            "name": "Kantu Peru Tours",
             "entity_type": "external_brand",
             "entity_slug": "kantu-peru-tours"
           },
           {
+            "name": "Inkayni Peru Tours",
             "entity_type": "external_brand",
             "entity_slug": "inkayni-peru-tours"
           },
           {
+            "name": "Intrepid Travel",
             "entity_type": "external_brand",
             "entity_slug": "intrepid-travel"
           },
           {
+            "name": "Peruagency Com",
             "entity_type": "external_brand",
             "entity_slug": "peruagency-com"
           }
@@ -60596,6 +60706,11 @@
       "source": "company:alpaca-expeditions-cusco",
       "target": "categoria_destino:arqueologico",
       "type": "OFFERS"
+    },
+    {
+      "source": "company:alpaca-expeditions-cusco",
+      "target": "prompt:top-rated-peru-tour-companies-for-adventure-trips",
+      "type": "MENTIONED_IN"
     },
     {
       "source": "company:alpaca-tours-peru-cusco",
@@ -87483,6 +87598,21 @@
       "type": "BELONGS_TO"
     },
     {
+      "source": "external_brand:exodus-adventure-travels",
+      "target": "prompt:top-rated-peru-tour-companies-for-adventure-trips",
+      "type": "MENTIONED_IN"
+    },
+    {
+      "source": "external_brand:machu-travel-peru",
+      "target": "prompt:top-rated-peru-tour-companies-for-adventure-trips",
+      "type": "MENTIONED_IN"
+    },
+    {
+      "source": "external_brand:sam-travel-peru",
+      "target": "prompt:top-rated-peru-tour-companies-for-adventure-trips",
+      "type": "MENTIONED_IN"
+    },
+    {
       "source": "external_brand:tourradar",
       "target": "prompt:best-peru-tour-companies-for-families",
       "type": "MENTIONED_IN"
@@ -87490,6 +87620,16 @@
     {
       "source": "external_brand:tourradar",
       "target": "prompt:budget-friendly-peru-tours",
+      "type": "MENTIONED_IN"
+    },
+    {
+      "source": "external_brand:trexperience",
+      "target": "prompt:top-rated-peru-tour-companies-for-adventure-trips",
+      "type": "MENTIONED_IN"
+    },
+    {
+      "source": "external_brand:waman-adventures",
+      "target": "prompt:top-rated-peru-tour-companies-for-adventure-trips",
       "type": "MENTIONED_IN"
     },
     {

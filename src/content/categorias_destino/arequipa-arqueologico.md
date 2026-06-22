@@ -10,3 +10,4 @@ faq:
   - question: "¿Cuál es el precio neto B2B para arqueologico en Arequipa?"
     answer: "Los precios varían según operador y grupo. Regístrate en TourUp como agencia para acceder a tarifas netas directas."
 ---
+d
