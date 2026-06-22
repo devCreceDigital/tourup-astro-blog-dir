@@ -2,7 +2,6 @@
 type: company
 slug: /company/dt-travel-tours-jesús-maría
 title: Dt Travel & Tours
-distribution_role: tour_operator
 summary: Retail Travel Agency based in JESÚS MARÍA, LIMA, Peru.
 contact:
   website: https://www.dt-travelservice.com
@@ -30,6 +29,7 @@ categorias:
 - aventura
 - gastronomico
 - mice
+distribution_role: retail_travel_agency
 ---
 
 # Dt Travel & Tours

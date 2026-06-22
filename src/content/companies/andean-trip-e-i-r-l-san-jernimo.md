@@ -2,7 +2,6 @@
 type: company
 slug: /company/andean-trip-e-i-r-l-san-jerónimo
 title: Andean Trip E.I.R.L.
-distribution_role: tour_operator
 summary: Travel Company based in SAN JERÓNIMO, CUSCO, Peru.
 contact:
   website: https://www.andeantrip.com
@@ -28,6 +27,7 @@ categorias:
 - aventura
 - trekking
 - arqueologico
+distribution_role: tour_operator
 ---
 
 # Andean Trip E.I.R.L.

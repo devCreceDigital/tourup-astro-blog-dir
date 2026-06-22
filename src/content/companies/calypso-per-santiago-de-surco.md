@@ -2,7 +2,6 @@
 type: company
 slug: /company/calypso-perú-santiago-de-surco
 title: Calypso Perú
-distribution_role: tour_operator
 summary: Wholesale Travel Agency based in SANTIAGO DE SURCO, LIMA, Peru.
 contact:
   website: https://www.calypsoperu.com
@@ -30,6 +29,7 @@ categorias:
 - aventura
 - gastronomico
 - mice
+distribution_role: wholesale_travel_agency
 ---
 
 # Calypso Perú

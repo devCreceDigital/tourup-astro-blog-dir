@@ -2,7 +2,6 @@
 type: company
 slug: /company/difference-travel-sac-jesús-maría
 title: Difference Travel Sac
-distribution_role: tour_operator
 summary: Retail Travel Agency based in JESÚS MARÍA, LIMA, Peru.
 contact:
   website: https://www.defferencetravel.com
@@ -29,6 +28,7 @@ categorias:
 - aventura
 - gastronomico
 - mice
+distribution_role: retail_travel_agency
 ---
 
 # Difference Travel Sac

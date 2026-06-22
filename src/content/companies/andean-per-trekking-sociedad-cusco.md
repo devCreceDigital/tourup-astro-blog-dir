@@ -2,7 +2,6 @@
 type: company
 slug: /company/andean-perú-trekking-sociedad-cusco
 title: Andean Perú Trekking Sociedad
-distribution_role: tour_operator
 summary: Retail Travel Agency based in CUSCO, CUSCO, Peru.
 contact:
   website: https://www.andeanperutrekking.com
@@ -29,6 +28,7 @@ categorias:
 - aventura
 - trekking
 - arqueologico
+distribution_role: retail_travel_agency
 ---
 
 # Andean Perú Trekking Sociedad

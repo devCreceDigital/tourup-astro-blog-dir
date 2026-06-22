@@ -2,7 +2,6 @@
 type: company
 slug: /company/expediciones-gallito-de-las-rocas-kosñipata
 title: Expediciones Gallito De Las Rocas
-distribution_role: tour_operator
 summary: Travel Company based in KOSÑIPATA, CUSCO, Peru.
 contact:
   website: https://www.manugallitorocas.com
@@ -29,6 +28,7 @@ categorias:
 - aventura
 - trekking
 - arqueologico
+distribution_role: tour_operator
 ---
 
 # Expediciones Gallito De Las Rocas

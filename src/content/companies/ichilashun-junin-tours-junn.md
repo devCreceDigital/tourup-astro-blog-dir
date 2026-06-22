@@ -2,7 +2,6 @@
 type: company
 slug: /company/ichilashun-junin-tours-junín
 title: Ichilashun Junin Tours
-distribution_role: tour_operator
 summary: Travel Company based in JUNÍN, JUNÍN, Peru.
 contact:
   email: noemi70026@gmail.com
@@ -26,6 +25,7 @@ categorias:
 - full-day
 - tours-culturales
 - aventura
+distribution_role: tour_operator
 ---
 
 # Ichilashun Junin Tours

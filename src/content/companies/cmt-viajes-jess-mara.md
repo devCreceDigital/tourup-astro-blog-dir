@@ -2,7 +2,6 @@
 type: company
 slug: /company/cmt-viajes-jesús-maría
 title: Cmt Viajes
-distribution_role: tour_operator
 summary: Retail Travel Agency based in JESÚS MARÍA, LIMA, Peru.
 contact:
   website: https://www.cmtviajes.com
@@ -29,6 +28,7 @@ categorias:
 - aventura
 - gastronomico
 - mice
+distribution_role: retail_travel_agency
 ---
 
 # Cmt Viajes

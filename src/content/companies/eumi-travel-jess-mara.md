@@ -2,7 +2,6 @@
 type: company
 slug: /company/eumi-travel-jesús-maría
 title: Eumi Travel
-distribution_role: tour_operator
 summary: Retail Travel Agency based in JESÚS MARÍA, LIMA, Peru.
 contact:
   email: eumitours@terra.com.pe
@@ -28,6 +27,7 @@ categorias:
 - aventura
 - gastronomico
 - mice
+distribution_role: retail_travel_agency
 ---
 
 # Eumi Travel

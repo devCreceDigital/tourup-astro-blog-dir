@@ -2,7 +2,6 @@
 type: company
 slug: /company/ausangate-travel-s-c-r-l-san-jerónimo
 title: Ausangate Travel S.C.R.L.
-distribution_role: tour_operator
 summary: Travel Company based in SAN JERÓNIMO, CUSCO, Peru.
 contact:
   website: https://www.ausangatetravel.com
@@ -29,6 +28,7 @@ categorias:
 - aventura
 - trekking
 - arqueologico
+distribution_role: tour_operator
 ---
 
 # Ausangate Travel S.C.R.L.

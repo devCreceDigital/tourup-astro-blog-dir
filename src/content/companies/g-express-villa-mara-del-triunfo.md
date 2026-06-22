@@ -2,7 +2,6 @@
 type: company
 slug: /company/gí-express-villa-maría-del-triunfo
 title: Gí Express
-distribution_role: tour_operator
 summary: Retail Travel Agency based in VILLA MARÍA DEL TRIUNFO, LIMA, Peru.
 contact:
   website: https://www.giaexpress.wordpress.com
@@ -29,6 +28,7 @@ categorias:
 - aventura
 - gastronomico
 - mice
+distribution_role: retail_travel_agency
 ---
 
 # Gí Express

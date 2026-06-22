@@ -2,7 +2,6 @@
 type: company
 slug: /company/covitour-perú-cusco
 title: Covitour Perú
-distribution_role: tour_operator
 summary: Retail Travel Agency based in CUSCO, CUSCO, Peru.
 contact:
   website: https://www.covitourperu.com
@@ -30,6 +29,7 @@ categorias:
 - aventura
 - trekking
 - arqueologico
+distribution_role: retail_travel_agency
 ---
 
 # Covitour Perú

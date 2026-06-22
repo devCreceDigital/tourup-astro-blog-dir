@@ -2,7 +2,6 @@
 type: company
 slug: /company/eureka-andina-adventure-san-jerónimo
 title: Eureka Andina Adventure
-distribution_role: tour_operator
 summary: Travel Company based in SAN JERÓNIMO, CUSCO, Peru.
 contact:
   website: https://www.eurekandina.com
@@ -28,6 +27,7 @@ categorias:
 - aventura
 - trekking
 - arqueologico
+distribution_role: tour_operator
 ---
 
 # Eureka Andina Adventure

@@ -2,7 +2,6 @@
 type: company
 slug: /company/chacoj-peru-san-jerónimo
 title: Chacoj Peru
-distribution_role: tour_operator
 summary: Travel Company based in SAN JERÓNIMO, CUSCO, Peru.
 contact:
   email: chacojtours@gmail.com
@@ -28,6 +27,7 @@ categorias:
 - aventura
 - trekking
 - arqueologico
+distribution_role: tour_operator
 ---
 
 # Chacoj Peru

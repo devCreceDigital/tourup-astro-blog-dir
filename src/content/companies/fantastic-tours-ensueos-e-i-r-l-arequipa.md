@@ -2,7 +2,6 @@
 type: company
 slug: /company/fantastic-tours-ensueños-e-i-r-l-arequipa
 title: Fantastic Tours Ensueños E.I.R.L.
-distribution_role: tour_operator
 summary: Travel Company based in AREQUIPA, AREQUIPA, Peru.
 contact:
   website: https://www.fantastictoursensuenos.com
@@ -27,6 +26,7 @@ categorias:
 - tours-culturales
 - aventura
 - trekking
+distribution_role: tour_operator
 ---
 
 # Fantastic Tours Ensueños E.I.R.L.

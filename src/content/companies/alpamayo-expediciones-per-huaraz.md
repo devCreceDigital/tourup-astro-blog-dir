@@ -2,7 +2,6 @@
 type: company
 slug: /company/alpamayo-expediciones-perú-huaraz
 title: Alpamayo Expediciones Perú
-distribution_role: tour_operator
 summary: Travel Company based in HUARAZ, ÁNCASH, Peru.
 contact:
   website: https://www.miguelexpediciones.naxlogil.com
@@ -28,6 +27,7 @@ categorias:
 - tours-culturales
 - aventura
 - trekking
+distribution_role: tour_operator
 ---
 
 # Alpamayo Expediciones Perú

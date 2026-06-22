@@ -2,7 +2,6 @@
 type: company
 slug: /company/group-travel-toscal-jesús-maría
 title: Group Travel Toscal
-distribution_role: tour_operator
 summary: Wholesale Travel Agency based in JESÚS MARÍA, LIMA, Peru.
 contact:
   website: https://www.grouptraveltoscal.com
@@ -29,6 +28,7 @@ categorias:
 - aventura
 - gastronomico
 - mice
+distribution_role: wholesale_travel_agency
 ---
 
 # Group Travel Toscal

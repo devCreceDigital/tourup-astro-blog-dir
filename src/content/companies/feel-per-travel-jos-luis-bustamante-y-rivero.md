@@ -2,7 +2,6 @@
 type: company
 slug: /company/feel-perú-travel-josé-luis-bustamante-y-rivero
 title: Feel Perú Travel
-distribution_role: tour_operator
 summary: Travel Company based in JOSÉ LUIS BUSTAMANTE Y RIVERO, AREQUIPA, Peru.
 contact:
   website: https://www.feelperutravel.pl/es/
@@ -28,6 +27,7 @@ categorias:
 - tours-culturales
 - aventura
 - trekking
+distribution_role: tour_operator
 ---
 
 # Feel Perú Travel

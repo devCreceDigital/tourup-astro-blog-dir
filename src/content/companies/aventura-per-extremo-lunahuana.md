@@ -2,7 +2,6 @@
 type: company
 slug: /company/aventura-perú-extremo-lunahuana
 title: Aventura Perú Extremo
-distribution_role: tour_operator
 summary: Travel Company based in LUNAHUANA, LIMA, Peru.
 contact:
   email: lunahuanatours@hotmail.com
@@ -27,6 +26,7 @@ categorias:
 - aventura
 - gastronomico
 - mice
+distribution_role: tour_operator
 ---
 
 # Aventura Perú Extremo

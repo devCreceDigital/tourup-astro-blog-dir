@@ -2,7 +2,6 @@
 type: company
 slug: /company/hanyna-travels-s-a-c-san-jerónimo
 title: Hanyna Travels S.A.C
-distribution_role: tour_operator
 summary: Travel Company based in SAN JERÓNIMO, CUSCO, Peru.
 contact:
   email: info@hanyna.com
@@ -28,6 +27,7 @@ categorias:
 - aventura
 - trekking
 - arqueologico
+distribution_role: tour_operator
 ---
 
 # Hanyna Travels S.A.C

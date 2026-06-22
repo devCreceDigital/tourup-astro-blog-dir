@@ -2,7 +2,6 @@
 type: company
 slug: /company/inka-rainbow-travel-service-san-jerónimo
 title: Inka Rainbow Travel Service
-distribution_role: tour_operator
 summary: Travel Company based in SAN JERÓNIMO, CUSCO, Peru.
 contact:
   website: https://www.inkarainbow.com
@@ -29,6 +28,7 @@ categorias:
 - aventura
 - trekking
 - arqueologico
+distribution_role: tour_operator
 ---
 
 # Inka Rainbow Travel Service

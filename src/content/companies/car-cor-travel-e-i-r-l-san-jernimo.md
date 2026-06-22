@@ -2,7 +2,6 @@
 type: company
 slug: /company/car-cor-travel-e-i-r-l-san-jerónimo
 title: Car Cor Travel E.I.R.L.
-distribution_role: tour_operator
 summary: Travel Company based in SAN JERÓNIMO, CUSCO, Peru.
 contact:
   email: amparocarcor@gmail.com
@@ -27,6 +26,7 @@ categorias:
 - aventura
 - trekking
 - arqueologico
+distribution_role: tour_operator
 ---
 
 # Car Cor Travel E.I.R.L.

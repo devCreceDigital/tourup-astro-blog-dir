@@ -2,7 +2,6 @@
 type: company
 slug: /company/agencia-de-viajes-sueños-peruanos-la-molina
 title: Agencia De Viajes Sueños Peruanos
-distribution_role: tour_operator
 summary: Retail Travel Agency based in LA MOLINA, LIMA, Peru.
 contact:
   website: https://www.peruviandreams.net
@@ -30,6 +29,7 @@ categorias:
 - aventura
 - gastronomico
 - mice
+distribution_role: retail_travel_agency
 ---
 
 # Agencia De Viajes Sueños Peruanos

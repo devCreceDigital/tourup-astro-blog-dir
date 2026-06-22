@@ -2,7 +2,6 @@
 type: company
 slug: /company/grupo-amable-s-a-c-san-jerónimo
 title: Grupo Amable S.A.C
-distribution_role: tour_operator
 summary: Retail Travel Agency based in SAN JERÓNIMO, CUSCO, Peru.
 contact:
   website: https://www.grupoamable.org
@@ -28,6 +27,7 @@ categorias:
 - aventura
 - trekking
 - arqueologico
+distribution_role: retail_travel_agency
 ---
 
 # Grupo Amable S.A.C

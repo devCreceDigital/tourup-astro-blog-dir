@@ -2,10 +2,9 @@
 type: company
 slug: /company/andean-epix-s-a-c-san-jerónimo
 title: Andean Epix S.A.C.
-distribution_role: tour_operator
 summary: Travel Company based in SAN JERÓNIMO, CUSCO, Peru.
-contact:
-  location: null
+contact: null
+location:
   city: SAN JERÓNIMO
   province: CUSCO
   region: CUSCO
@@ -27,6 +26,7 @@ categorias:
 - aventura
 - trekking
 - arqueologico
+distribution_role: tour_operator
 ---
 
 # Andean Epix S.A.C.

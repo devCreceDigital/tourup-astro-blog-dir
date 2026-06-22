@@ -2,7 +2,6 @@
 type: company
 slug: /company/borgoña-tours-chanchamayo
 title: Borgoña Tours
-distribution_role: tour_operator
 summary: Travel Company based in CHANCHAMAYO, JUNÍN, Peru.
 contact:
   email: jebaritour@hotmail.com
@@ -26,6 +25,7 @@ categorias:
 - full-day
 - tours-culturales
 - aventura
+distribution_role: tour_operator
 ---
 
 # Borgoña Tours

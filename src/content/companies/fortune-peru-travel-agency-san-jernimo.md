@@ -2,7 +2,6 @@
 type: company
 slug: /company/fortune-peru-travel-agency-san-jerónimo
 title: Fortune Peru Travel Agency
-distribution_role: tour_operator
 summary: Travel Company based in SAN JERÓNIMO, CUSCO, Peru.
 contact:
   website: https://www.fortuneperutravel.com
@@ -27,6 +26,7 @@ categorias:
 - aventura
 - trekking
 - arqueologico
+distribution_role: tour_operator
 ---
 
 # Fortune Peru Travel Agency

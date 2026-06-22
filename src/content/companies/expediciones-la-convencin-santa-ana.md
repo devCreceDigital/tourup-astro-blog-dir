@@ -2,7 +2,6 @@
 type: company
 slug: /company/expediciones-la-convención-santa-ana
 title: Expediciones La Convención
-distribution_role: tour_operator
 summary: Travel Company based in SANTA ANA, CUSCO, Peru.
 contact:
   email: publicidadescristorey@gmail.com
@@ -27,6 +26,7 @@ categorias:
 - aventura
 - trekking
 - arqueologico
+distribution_role: tour_operator
 ---
 
 # Expediciones La Convención

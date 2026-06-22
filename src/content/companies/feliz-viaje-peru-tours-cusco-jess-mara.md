@@ -2,10 +2,9 @@
 type: company
 slug: /company/feliz-viaje-peru-tours-cusco-jesús-maría
 title: Feliz Viaje Peru Tours Cusco
-distribution_role: tour_operator
 summary: Retail Travel Agency based in JESÚS MARÍA, LIMA, Peru.
-contact:
-  location: null
+contact: null
+location:
   city: JESÚS MARÍA
   province: LIMA
   region: LIMA
@@ -27,6 +26,7 @@ categorias:
 - aventura
 - gastronomico
 - mice
+distribution_role: retail_travel_agency
 ---
 
 # Feliz Viaje Peru Tours Cusco

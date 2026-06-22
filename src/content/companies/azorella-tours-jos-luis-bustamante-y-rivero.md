@@ -2,7 +2,6 @@
 type: company
 slug: /company/azorella-tours-josé-luis-bustamante-y-rivero
 title: Azorella Tours
-distribution_role: tour_operator
 summary: Travel Company based in JOSÉ LUIS BUSTAMANTE Y RIVERO, AREQUIPA, Peru.
 contact:
   website: https://www.azorellatours.com
@@ -27,6 +26,7 @@ categorias:
 - tours-culturales
 - aventura
 - trekking
+distribution_role: tour_operator
 ---
 
 # Azorella Tours

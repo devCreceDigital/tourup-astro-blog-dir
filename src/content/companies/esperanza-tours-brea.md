@@ -2,7 +2,6 @@
 type: company
 slug: /company/esperanza-tours-breña
 title: Esperanza Tours
-distribution_role: tour_operator
 summary: Retail Travel Agency based in BREÑA, LIMA, Peru.
 contact:
   email: larryjesus1960@hotmail.com
@@ -28,6 +27,7 @@ categorias:
 - aventura
 - gastronomico
 - mice
+distribution_role: retail_travel_agency
 ---
 
 # Esperanza Tours

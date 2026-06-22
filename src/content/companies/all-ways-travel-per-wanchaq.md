@@ -2,7 +2,6 @@
 type: company
 slug: /company/all-ways-travel-perú-wanchaq
 title: All Ways Travel  Perú
-distribution_role: tour_operator
 summary: Retail Travel Agency based in WANCHAQ, CUSCO, Peru.
 contact:
   website: https://www.allwaystravelcusco
@@ -29,6 +28,7 @@ categorias:
 - aventura
 - trekking
 - arqueologico
+distribution_role: retail_travel_agency
 ---
 
 # All Ways Travel  Perú

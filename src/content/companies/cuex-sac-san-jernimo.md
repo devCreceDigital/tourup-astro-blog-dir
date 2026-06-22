@@ -2,7 +2,6 @@
 type: company
 slug: /company/cuex-sac-san-jerónimo
 title: Cuex Sac
-distribution_role: tour_operator
 summary: Travel Company based in SAN JERÓNIMO, CUSCO, Peru.
 contact:
   website: https://www.cuscoexperience.com
@@ -29,6 +28,7 @@ categorias:
 - aventura
 - trekking
 - arqueologico
+distribution_role: tour_operator
 ---
 
 # Cuex Sac

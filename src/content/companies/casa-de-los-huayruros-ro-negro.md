@@ -2,7 +2,6 @@
 type: company
 slug: /company/casa-de-los-huayruros-río-negro
 title: Casa De Los Huayruros
-distribution_role: tour_operator
 summary: Travel Company based in RÍO NEGRO, JUNÍN, Peru.
 contact:
   website: https://www.casadeloshuayruros.com
@@ -27,6 +26,7 @@ categorias:
 - full-day
 - tours-culturales
 - aventura
+distribution_role: tour_operator
 ---
 
 # Casa De Los Huayruros

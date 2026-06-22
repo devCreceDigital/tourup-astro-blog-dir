@@ -2,7 +2,6 @@
 type: company
 slug: /company/andean-key-travel-san-jerónimo
 title: Andean Key Travel
-distribution_role: tour_operator
 summary: Travel Company based in SAN JERÓNIMO, CUSCO, Peru.
 contact:
   website: https://www.andeankey.com
@@ -28,6 +27,7 @@ categorias:
 - aventura
 - trekking
 - arqueologico
+distribution_role: tour_operator
 ---
 
 # Andean Key Travel

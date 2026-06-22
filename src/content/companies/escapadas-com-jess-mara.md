@@ -2,7 +2,6 @@
 type: company
 slug: /company/escapadas-com-jesús-maría
 title: Escapadas.Com
-distribution_role: tour_operator
 summary: Retail Travel Agency based in JESÚS MARÍA, LIMA, Peru.
 contact:
   email: silvia@escapadasconsilvia.com
@@ -28,6 +27,7 @@ categorias:
 - aventura
 - gastronomico
 - mice
+distribution_role: retail_travel_agency
 ---
 
 # Escapadas.Com

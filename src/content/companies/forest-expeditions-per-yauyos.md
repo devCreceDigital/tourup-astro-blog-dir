@@ -2,10 +2,9 @@
 type: company
 slug: /company/forest-expeditions-perú-yauyos
 title: Forest Expeditions Perú
-distribution_role: tour_operator
 summary: Travel Company based in YAUYOS, JUNÍN, Peru.
-contact:
-  location: null
+contact: null
+location:
   city: YAUYOS
   province: JAUJA
   region: JUNÍN
@@ -25,6 +24,7 @@ categorias:
 - full-day
 - tours-culturales
 - aventura
+distribution_role: tour_operator
 ---
 
 # Forest Expeditions Perú

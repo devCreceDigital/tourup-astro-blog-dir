@@ -2,7 +2,6 @@
 type: company
 slug: /company/adventure-holiday-peru-com-san-jerónimo
 title: Adventure Holiday Peru.Com
-distribution_role: tour_operator
 summary: Travel Company based in SAN JERÓNIMO, CUSCO, Peru.
 contact:
   website: https://www.adventureholidaysperu.com
@@ -28,6 +27,7 @@ categorias:
 - aventura
 - trekking
 - arqueologico
+distribution_role: tour_operator
 ---
 
 # Adventure Holiday Peru.Com

@@ -2,7 +2,6 @@
 type: company
 slug: /company/inca-picchu-tours-empresa-josé-luis-bustamante-y-rivero
 title: Inca Picchu Tours Empresa
-distribution_role: tour_operator
 summary: Retail Travel Agency based in JOSÉ LUIS BUSTAMANTE Y RIVERO, AREQUIPA, Peru.
 contact:
   email: chezjulieauperou@yahoo.com
@@ -26,6 +25,7 @@ categorias:
 - tours-culturales
 - aventura
 - trekking
+distribution_role: retail_travel_agency
 ---
 
 # Inca Picchu Tours Empresa
