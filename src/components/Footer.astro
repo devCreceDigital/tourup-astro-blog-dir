@@ -5,40 +5,56 @@ const currentYear = new Date().getFullYear();
 <footer class="footer">
   <div class="footer-container">
     <div class="footer-content">
-      <div class="footer-section">
+      <div class="footer-section brand">
         <h3>TourUp</h3>
-        <p>AI-optimized directory for Peru's tourism ecosystem.</p>
+        <p>AI-optimized directory for Peru's tourism ecosystem. Directorio inteligente de prestadores turísticos optimizado para motores de búsqueda con IA.</p>
       </div>
 
       <div class="footer-section">
-        <h4>Content</h4>
+        <h4>Explorar</h4>
         <ul>
           <li><a href="/">Home</a></li>
+          <li><a href="/empresas/">Empresas</a></li>
+          <li><a href="/en/ai-prompts/">AI Prompts</a></li>
+          <li><a href="/partner-scout/">Partner Scout</a></li>
           <li><a href="/blog/">Blog</a></li>
-          <li><a href="/en/ai-prompts/">Directory</a></li>
         </ul>
       </div>
 
       <div class="footer-section">
-        <h4>Resources</h4>
+        <h4>Destinos</h4>
         <ul>
-          <li><a href="https://tourup.co">Main App</a></li>
+          <li><a href="/en/peru/cusco/">Cusco</a></li>
+          <li><a href="/en/peru/lima/">Lima</a></li>
+          <li><a href="/en/peru/arequipa/">Arequipa</a></li>
+          <li><a href="/en/peru/huaraz/">Huaraz</a></li>
+          <li><a href="/en/peru/iquitos/">Iquitos</a></li>
+          <li><a href="/en/peru/machu_picchu/">Machu Picchu</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h4>Partner Scout</h4>
+        <ul>
+          <li><a href="/partner-scout/">Scout</a></li>
+          <li><a href="/partner-scout/shortlist/">Shortlist</a></li>
+          <li><a href="/partner-scout/confirm/">Confirm</a></li>
+          <li><a href="/partner-scout/brief/">Brief</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h4>Recursos</h4>
+        <ul>
+          <li><a href="https://tourup.co">App Principal</a></li>
           <li><a href="https://github.com/devCreceDigital/tourup-astro-blog">GitHub</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-section">
-        <h4>Legal</h4>
-        <ul>
-          <li><a href="/privacy">Privacy Policy</a></li>
-          <li><a href="/terms">Terms of Service</a></li>
         </ul>
       </div>
     </div>
 
     <div class="footer-bottom">
       <p>&copy; {currentYear} TourUp. All rights reserved.</p>
-      <p>Built with <a href="https://astro.build">Astro</a></p>
+      <p>Built with <a href="https://astro.build">Astro</a> &middot; Optimizado para AEO</p>
     </div>
   </div>
 </footer>
@@ -60,7 +76,7 @@ const currentYear = new Date().getFullYear();
 
   .footer-content {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
     gap: 2rem;
     margin-bottom: 2rem;
   }
@@ -84,6 +100,7 @@ const currentYear = new Date().getFullYear();
     margin: 0;
     line-height: 1.6;
     color: #94a3b8;
+    font-size: 0.9rem;
   }
 
   .footer-section ul {
@@ -96,13 +113,14 @@ const currentYear = new Date().getFullYear();
     margin: 0.5rem 0;
   }
 
-  .footer-section a {
+  .footer-section li a {
     color: #cbd5e1;
     text-decoration: none;
     transition: color 0.2s ease;
+    font-size: 0.9rem;
   }
 
-  .footer-section a:hover {
+  .footer-section li a:hover {
     color: #06b6d4;
   }
 
@@ -128,6 +146,16 @@ const currentYear = new Date().getFullYear();
     color: #3b82f6;
   }
 
+  @media (max-width: 1024px) {
+    .footer-content {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .footer-section.brand {
+      grid-column: 1 / -1;
+    }
+  }
+
   @media (max-width: 768px) {
     .footer-container {
       padding: 2rem 1rem 1rem;
@@ -136,6 +164,10 @@ const currentYear = new Date().getFullYear();
     .footer-content {
       grid-template-columns: 1fr;
       gap: 1.5rem;
+    }
+
+    .footer-section.brand {
+      grid-column: 1;
     }
   }
 </style>

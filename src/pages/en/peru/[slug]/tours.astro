@@ -5,7 +5,7 @@ import Layout from '../../../../layouts/Layout.astro';
 export async function getStaticPaths() {
   const destinos = await getCollection('destinos');
   return destinos.map((destino) => ({
-    params: { slug: destino.slug },
+    params: { slug: destino.id },
     props: { destino },
   }));
 }
@@ -20,11 +20,11 @@ const allCompanies = await getCollection('companies');
 const allCatDest = await getCollection('categorias_destino');
 
 const companies = allCompanies.filter(
-  (c) => c.data.destinos && c.data.destinos.includes(destino.slug)
+  (c) => c.data.destinos && c.data.destinos.includes(destino.id)
 );
 
 const categoriasDestino = allCatDest.filter(
-  (cd) => cd.data.destino_slug === destino.slug
+  (cd) => cd.data.destino_slug === destino.id
 );
 
 const companiesByCategory: Record<string, any[]> = {};
@@ -45,7 +45,7 @@ const totalCompanies = companies.length;
 <Layout
   title={`Tours in ${destino.data.name} – TourUp Peru`}
   description={`Browse tour categories and operators in ${destino.data.name}, Peru. ${totalCompanies} companies across ${categoriasDestino.length} categories.`}
-  currentPath={`/en/peru/${destino.slug}/tours/`}
+  currentPath={`/en/peru/${destino.id}/tours/`}
 >
   <article class="tours-page">
     <header class="tours-header">
@@ -54,7 +54,7 @@ const totalCompanies = companies.length;
         <span>/</span>
         <a href="/en/ai-prompts/">Peru</a>
         <span>/</span>
-        <a href={`/en/peru/${destino.slug}/`}>{destino.data.name}</a>
+        <a href={`/en/peru/${destino.id}/`}>{destino.data.name}</a>
         <span>/</span>
         <span>Tours</span>
       </nav>
@@ -73,7 +73,7 @@ const totalCompanies = companies.length;
           const count = companiesByCategory[cd.data.categoria]?.length || 0;
           return (
             <a
-              href={`/en/peru/${destino.slug}/tours/${cd.data.categoria}/`}
+              href={`/en/peru/${destino.id}/tours/${cd.data.categoria}/`}
               class="category-row"
             >
               <div class="category-info">

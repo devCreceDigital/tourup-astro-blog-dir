@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "src/content/destinos/arequipa.md",
+                "file": "src/content/categorias_destino/arequipa-gastronomico.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "arequipa"
+              "title": "arequipa-gastronomico"
             }
           }
         ]
@@ -185,11 +185,17 @@
   },
   "active": "acdb8a6326682545",
   "lastOpenFiles": [
+    "src/content/categorias_destino/arequipa-educativo.md",
+    "src/content/categorias_destino/arequipa-birdwatching.md",
+    "src/content/categorias_destino/arequipa-bienestar.md",
+    "src/content/categorias_destino/arequipa-aventura.md",
+    "src/content/categorias_destino/arequipa-arqueologico.md",
+    "src/content/destinos/ayacucho.md",
+    "src/content/destinos/arequipa.md",
     "src/content/companies/4x4-valle-adventure-s-r-l-urubamba.md",
     "tourup-astro-blog/Bienvenido.md",
     "docs/agent.md.md",
     "src/content/prompts/affordable-peru-tour-operators-with-good-reviews.md",
-    "src/content/destinos/arequipa.md",
     "src/content/external_brands/tourradar.md",
     "src/content/companies/a-m-tours-and-travel-brea.md",
     "src/content/companies/a-de-via-turismo-sierra-blanca-s-r-ltda-cusco.md",
@@ -212,12 +218,6 @@
     "dist/ai/peru-puerto_maldonado.md",
     "dist/ai/peru-piura.md",
     "dist/ai/peru-nazca.md",
-    "dist/ai/peru-paracas.md",
-    "dist/ai/peru-manu.md",
-    "dist/ai/peru-machu_picchu.md",
-    "dist/ai/peru-iquitos.md",
-    "dist/ai/peru-ica.md",
-    "dist/ai/peru-lima.md",
     "dist/ai",
     "dist/en/peru/trujillo/tours/trekking/index.html",
     "dist/en/peru/trujillo/tours/tours-culturales/index.html",

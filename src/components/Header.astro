@@ -1,15 +1,62 @@
 ---
+import { getCollection } from 'astro:content';
+
 interface Props {
   currentPath?: string;
 }
 
 const { currentPath = '/' } = Astro.props;
 
-const navItems = [
-  { label: 'Home', href: '/' },
-  { label: 'Blog', href: '/blog/' },
-  { label: 'Directory', href: '/en/ai-prompts/' },
+const destinos = await getCollection('destinos');
+const sortedDestinos = destinos.sort((a, b) => a.data.name.localeCompare(b.data.name));
+
+interface NavChild {
+  label: string;
+  href: string;
+}
+
+interface NavItem {
+  label: string;
+  href: string;
+  children: NavChild[];
+}
+
+const navItems: NavItem[] = [
+  { label: 'Home', href: '/', children: [] },
+  {
+    label: 'Empresas',
+    href: '/empresas/',
+    children: sortedDestinos.slice(0, 8).map(d => ({
+      label: d.data.name,
+      href: `/en/peru/${d.id}/`
+    }))
+  },
+  {
+    label: 'Destinos',
+    href: '/en/peru/cusco/',
+    children: sortedDestinos.map(d => ({
+      label: d.data.name,
+      href: `/en/peru/${d.id}/`
+    }))
+  },
+  { label: 'AI Prompts', href: '/en/ai-prompts/', children: [] },
+  {
+    label: 'Partner Scout',
+    href: '/partner-scout/',
+    children: [
+      { label: 'Scout', href: '/partner-scout/' },
+      { label: 'Shortlist', href: '/partner-scout/shortlist/' },
+      { label: 'Confirm', href: '/partner-scout/confirm/' },
+      { label: 'Brief', href: '/partner-scout/brief/' },
+    ]
+  },
+  { label: 'Blog', href: '/blog/', children: [] },
 ];
+
+function isActive(href: string): boolean {
+  if (href === '/') return currentPath === '/';
+  return currentPath.startsWith(href);
+}
 ---
 
 <header class="header">
@@ -19,14 +66,47 @@ const navItems = [
       <span class="logo-text">TourUp</span>
     </a>
 
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" />
+    <label for="nav-toggle" class="nav-toggle-label">
+      <span></span>
+      <span></span>
+      <span></span>
+    </label>
+
     <nav class="nav">
       {navItems.map((item) => (
-        <a
-          href={item.href}
-          class={`nav-link ${currentPath === item.href ? 'active' : ''}`}
-        >
-          {item.label}
-        </a>
+        <div class="dropdown">
+          {item.children.length > 0 ? (
+            <>
+              <a
+                href={item.href}
+                class={`nav-link ${isActive(item.href) ? 'active' : ''}`}
+              >
+                {item.label}
+                <svg class="chevron" viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+                  <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                </svg>
+              </a>
+              <div class="dropdown-menu">
+                {item.children.map((child) => (
+                  <a
+                    href={child.href}
+                    class={`dropdown-link ${currentPath === child.href ? 'active' : ''}`}
+                  >
+                    {child.label}
+                  </a>
+                ))}
+              </div>
+            </>
+          ) : (
+            <a
+              href={item.href}
+              class={`nav-link ${isActive(item.href) ? 'active' : ''}`}
+            >
+              {item.label}
+            </a>
+          )}
+        </div>
       ))}
     </nav>
 
@@ -67,6 +147,7 @@ const navItems = [
     font-size: 1.25rem;
     color: #fff;
     transition: opacity 0.2s ease;
+    flex-shrink: 0;
   }
 
   .logo:hover {
@@ -84,53 +165,119 @@ const navItems = [
     background-clip: text;
   }
 
+  .nav-toggle {
+    display: none;
+  }
+
+  .nav-toggle-label {
+    display: none;
+    cursor: pointer;
+    flex-direction: column;
+    gap: 5px;
+    padding: 4px;
+  }
+
+  .nav-toggle-label span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: #cbd5e1;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+  }
+
   .nav {
     display: flex;
     align-items: center;
-    gap: 2rem;
+    gap: 0.25rem;
     flex: 1;
+    justify-content: center;
+  }
+
+  .dropdown {
+    position: relative;
   }
 
   .nav-link {
-    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
     font-weight: 500;
     color: #cbd5e1;
     text-decoration: none;
     transition: color 0.2s ease;
-    position: relative;
-  }
-
-  .nav-link::after {
-    content: '';
-    position: absolute;
-    bottom: -4px;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
-    transition: width 0.2s ease;
+    border-radius: 0.375rem;
+    white-space: nowrap;
   }
 
   .nav-link:hover {
     color: #f1f5f9;
-  }
-
-  .nav-link:hover::after {
-    width: 100%;
+    background: rgba(71, 85, 105, 0.2);
   }
 
   .nav-link.active {
     color: #06b6d4;
   }
 
-  .nav-link.active::after {
-    width: 100%;
+  .chevron {
+    transition: transform 0.2s ease;
+  }
+
+  .dropdown:hover .chevron {
+    transform: rotate(180deg);
+  }
+
+  .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 200px;
+    background: rgba(30, 41, 59, 0.98);
+    border: 1px solid rgba(71, 85, 105, 0.3);
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-4px);
+    transition: all 0.2s ease;
+    z-index: 200;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+  }
+
+  .dropdown:hover .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .dropdown-link {
+    display: block;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    color: #cbd5e1;
+    text-decoration: none;
+    border-radius: 0.375rem;
+    transition: all 0.2s ease;
+  }
+
+  .dropdown-link:hover {
+    background: rgba(59, 130, 246, 0.15);
+    color: #06b6d4;
+  }
+
+  .dropdown-link.active {
+    color: #06b6d4;
+    background: rgba(6, 182, 212, 0.1);
   }
 
   .header-actions {
     display: flex;
     align-items: center;
     gap: 1rem;
+    flex-shrink: 0;
   }
 
   .btn-ingresar {
@@ -142,6 +289,7 @@ const navItems = [
     font-weight: 600;
     font-size: 0.875rem;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    white-space: nowrap;
   }
 
   .btn-ingresar:hover {
@@ -149,22 +297,82 @@ const navItems = [
     box-shadow: 0 8px 16px rgba(6, 182, 212, 0.3);
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 1024px) {
     .header-container {
       flex-wrap: wrap;
-      padding: 1rem;
-      gap: 1rem;
+      padding: 0.75rem 1rem;
+    }
+
+    .nav-toggle-label {
+      display: flex;
+      order: 1;
     }
 
     .nav {
+      display: none;
       order: 3;
       width: 100%;
-      gap: 1rem;
-      flex-wrap: wrap;
+      flex-direction: column;
+      gap: 0;
+      padding: 0.5rem 0;
+      border-top: 1px solid rgba(71, 85, 105, 0.2);
+      margin-top: 0.75rem;
+    }
+
+    .nav-toggle:checked ~ .nav {
+      display: flex;
+    }
+
+    .dropdown {
+      width: 100%;
+    }
+
+    .nav-link {
+      width: 100%;
+      justify-content: space-between;
+      padding: 0.75rem 0.5rem;
+    }
+
+    .nav-link:hover {
+      background: transparent;
+    }
+
+    .dropdown-menu {
+      position: static;
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      backdrop-filter: none;
+      padding: 0 0 0 1rem;
+      display: none;
+    }
+
+    .dropdown:hover .dropdown-menu {
+      display: block;
+    }
+
+    .dropdown-link {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.85rem;
     }
 
     .header-actions {
       order: 2;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .header-container {
+      padding: 0.75rem;
+      gap: 0.75rem;
+    }
+
+    .btn-ingresar {
+      padding: 0.4rem 1rem;
+      font-size: 0.8rem;
     }
   }
 </style>

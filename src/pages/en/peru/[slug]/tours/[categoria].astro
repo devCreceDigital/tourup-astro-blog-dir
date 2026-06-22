@@ -23,7 +23,7 @@ const categoria = cd.data.categoria;
 const allCompanies = await getCollection('companies');
 const allDestinos = await getCollection('destinos');
 
-const destino = allDestinos.find((d) => d.slug === slug);
+const destino = allDestinos.find((d) => d.id === slug);
 
 const companies = allCompanies.filter(
   (c) =>

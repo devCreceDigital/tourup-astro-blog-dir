@@ -91,10 +91,11 @@ def build_graph() -> dict:
                 dest_node_id = f"destino:{destino}"
                 add_edge(node_id, dest_node_id, "OPERATES_IN")
 
-            # OFFERS edges: company → categoria_destino
-            for cat in (fm.get("categorias") or []):
-                cat_node_id = f"categoria_destino:{cat}"
-                add_edge(node_id, cat_node_id, "OFFERS")
+            # OFFERS edges: company → categoria_destino (cross-product of destinos × categorias)
+            for destino in (fm.get("destinos") or []):
+                for cat in (fm.get("categorias") or []):
+                    cat_node_id = f"categoria_destino:{destino}-{cat}"
+                    add_edge(node_id, cat_node_id, "OFFERS")
 
             # MENTIONED_IN edges (backlinks)
             for prompt_slug in (fm.get("mentioned_in_prompts") or []):
@@ -122,7 +123,7 @@ def build_graph() -> dict:
         for md in sorted(cats_dir.glob("*.md")):
             fm = parse_frontmatter(md)
             slug = slug_from_path(md)
-            node_id = f"categoria_destino:{fm.get('categoria', slug)}"
+            node_id = f"categoria_destino:{fm.get('destino_slug', 'unknown')}-{fm.get('categoria', slug)}"
             add_node(node_id, "CategoriaDestino", fm.get("name", slug), {
                 "name": fm.get("name", slug),
                 "destino_slug": fm.get("destino_slug", ""),

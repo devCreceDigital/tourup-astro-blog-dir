@@ -127,12 +127,28 @@ for fp in glob.glob('src/content/destinos/*.md'):
         destinos[node_id] = {'name': name}
         G.add_node(node_id, label=name, type='destino', title=name, group=3)
 
-# Also add destino/categoria nodes that were referenced but have no source file
+# Also add destino nodes that were referenced but have no source file
 for d in destino_names:
     node_id = f'destino:{d}'
     if node_id not in destinos and node_id not in G:
         G.add_node(node_id, label=d.title(), type='destino', title=d.title(), group=3)
 
+# Categorias Destino: read from content collection (per-destino-per-categoria)
+for fp in glob.glob('src/content/categorias_destino/*.md'):
+    fm = parse_frontmatter(fp)
+    if not fm:
+        continue
+    ds = fm.get('destino_slug', '').lower().strip()
+    cat = fm.get('categoria', '')
+    if ds and cat:
+        node_id = f'categoria_destino:{ds}-{cat}'
+        if node_id not in G:
+            name = fm.get('name', f'{cat} en {ds}')
+            G.add_node(node_id, label=name, type='categoria_destino',
+                       title=name, group=5)
+        categorias.discard(cat)
+
+# Virtual categoria nodes for legacy flat references (category_cluster, entity_type:categoria)
 for c in categorias:
     node_id = f'categoria:{c}'
     if node_id not in G:
@@ -152,14 +168,15 @@ for nid, data in companies.items():
             edge_count += 1
             cross_collection += 1
 
-# company → categoria
+# company → categoria_destino (cross-product of destinos × categorias)
 for nid, data in companies.items():
-    for c in data['categorias']:
-        target = f'categoria:{c.lower().strip()}'
-        if target in G:
-            G.add_edge(nid, target, relation='categorized_as', confidence='EXTRACTED')
-            edge_count += 1
-            cross_collection += 1
+    for d in data['destinos']:
+        for c in data['categorias']:
+            target = f'categoria_destino:{d.lower().strip()}-{c.lower().strip()}'
+            if target in G:
+                G.add_edge(nid, target, relation='categorized_as', confidence='EXTRACTED')
+                edge_count += 1
+                cross_collection += 1
 
 # Build lookup: company title → node_id (for string-only mentions)
 company_title_to_id = {}

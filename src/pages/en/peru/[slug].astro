@@ -5,7 +5,7 @@ import Layout from '../../../layouts/Layout.astro';
 export async function getStaticPaths() {
   const destinos = await getCollection('destinos');
   return destinos.map((destino) => ({
-    params: { slug: destino.slug },
+    params: { slug: destino.id },
     props: { destino },
   }));
 }
@@ -21,11 +21,11 @@ const allCompanies = await getCollection('companies');
 const allCatDest = await getCollection('categorias_destino');
 
 const companies = allCompanies.filter(
-  (c) => c.data.destinos && c.data.destinos.includes(destino.slug)
+  (c) => c.data.destinos && c.data.destinos.includes(destino.id)
 );
 
 const categoriasDestino = allCatDest.filter(
-  (cd) => cd.data.destino_slug === destino.slug
+  (cd) => cd.data.destino_slug === destino.id
 );
 
 const companiesByCategory: Record<string, any[]> = {};
@@ -44,7 +44,7 @@ for (const company of companies) {
 <Layout
   title={destino.data.seo_title || `${destino.data.name} – TourUp Peru`}
   description={destino.data.summary}
-  currentPath={`/en/peru/${destino.slug}/`}
+  currentPath={`/en/peru/${destino.id}/`}
 >
   <article class="destino-page">
     <header class="destino-header">
@@ -72,7 +72,7 @@ for (const company of companies) {
         <h2>Tours & Categories in {destino.data.name}</h2>
         <div class="categories-grid">
           {categoriasDestino.map((cd) => (
-            <a href={`/en/peru/${destino.slug}/tours/${cd.data.categoria}/`} class="category-card">
+            <a href={`/en/peru/${destino.id}/tours/${cd.data.categoria}/`} class="category-card">
               <h3>{cd.data.name}</h3>
               <p>{cd.data.summary}</p>
               <span class="company-count">
