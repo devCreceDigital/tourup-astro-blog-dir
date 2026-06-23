@@ -96,21 +96,29 @@ const companies = defineCollection({
 // ─── Destinos ─────────────────────────────────────────────────────────────────
 // Intermediate taxonomy node: Home → Destino → CategoriaDestino → Empresa
 // Required for Graphify to build the geo hierarchy and for Partner Scout filters.
+const destinoFields = {
+	type: z.literal('destino'),
+	name: z.string(),
+	country: z.string().default('Peru'),
+	region: z.string().optional(),
+	summary: z.string(),
+	parent: z.string().optional(),
+	seo_title: z.string().optional(),
+	lang: z.string().default('es'),
+	faq: z.array(z.object({
+		question: z.string(),
+		answer: z.string(),
+	})).optional(),
+};
+
 const destinos = defineCollection({
 	type: 'content',
-	schema: z.object({
-		type: z.literal('destino'),
-		name: z.string(),
-		country: z.string().default('Peru'),
-		region: z.string().optional(),
-		summary: z.string(),
-		parent: z.string().optional(),          // parent destino slug (e.g. "peru")
-		seo_title: z.string().optional(),
-		faq: z.array(z.object({
-			question: z.string(),
-			answer: z.string(),
-		})).optional(),
-	}),
+	schema: z.object(destinoFields),
+});
+
+const destinos_en = defineCollection({
+	type: 'content',
+	schema: z.object({ ...destinoFields, lang: z.string().default('en') }),
 });
 
 // ─── Categorias Destino ───────────────────────────────────────────────────────
@@ -144,7 +152,7 @@ const external_brands = defineCollection({
 	}),
 });
 
-// ─── Prompts ─────────────────────────────────────────────────────────────────
+// ─── Prompts (English) ────────────────────────────────────────────────────────
 // AEO prompt landing pages – answer queries that LLMs receive about Peru tourism.
 const prompts = defineCollection({
 	type: 'content',
@@ -152,6 +160,37 @@ const prompts = defineCollection({
 		type: z.literal('prompt_landing'),
 		title: z.string(),
 		lang: z.string().default('en'),
+		search_term: z.string().optional(),
+		ai_platforms: z.array(z.string()),
+		prompt_text: z.string(),
+		primary_intent: z.string().optional(),
+		secondary_intent: z.string().optional(),
+		destination_cluster: z.string().optional(),
+		category_cluster: z.string().optional(),
+		brands_ai_mentions: z.array(
+			z.union([
+				z.string(),
+				z.object({
+					name: z.string(),
+					entity_type: z.enum(['company', 'external_brand', 'unknown']),
+					entity_slug: z.string().optional(),
+				})
+			])
+		).optional().default([]),
+		summary: z.string(),
+		parent: z.string().optional(),
+		last_ai_check_date: z.string().optional(),
+		ai_cited_domains: z.array(z.string()).optional(),
+	}),
+});
+
+// ─── Prompts (Spanish) ────────────────────────────────────────────────────────
+const prompts_es = defineCollection({
+	type: 'content',
+	schema: z.object({
+		type: z.literal('prompt_landing'),
+		title: z.string(),
+		lang: z.string().default('es'),
 		search_term: z.string().optional(),
 		ai_platforms: z.array(z.string()),
 		prompt_text: z.string(),
@@ -192,8 +231,10 @@ const posts = defineCollection({
 export const collections = {
 	companies,
 	destinos,
+	destinos_en,
 	categorias_destino,
 	external_brands,
 	prompts,
+	prompts_es,
 	posts,
 };

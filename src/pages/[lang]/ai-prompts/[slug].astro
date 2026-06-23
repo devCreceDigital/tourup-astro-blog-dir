@@ -1,0 +1,564 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../../layouts/Layout.astro';
+import JsonLdPromptLanding from '../../../components/JsonLdPromptLanding.astro';
+
+export async function getStaticPaths() {
+  const prompts = await getCollection('prompts');
+  const promptsEs = await getCollection('prompts_es');
+  return [
+    ...prompts.map((prompt) => ({
+      params: { lang: 'en', slug: prompt.id },
+      props: { prompt, lang: 'en' },
+    })),
+    ...promptsEs.map((prompt) => ({
+      params: { lang: 'es', slug: prompt.id },
+      props: { prompt, lang: 'es' },
+    })),
+  ];
+}
+
+interface Props {
+  prompt: any;
+  lang: string;
+}
+
+interface FAQItem {
+  question: string;
+  answer: string;
+}
+
+const { prompt, lang } = Astro.props;
+const { Content } = await prompt.render();
+
+const companies = await getCollection('companies');
+const externalBrands = await getCollection('external_brands');
+
+const resolvedBrands = prompt.data.brands_ai_mentions.map((mention: any) => {
+  const mentionObj = typeof mention === 'string' ? { name: mention, entity_type: 'unknown' } : mention;
+  if (mentionObj.entity_type === 'company') {
+    const company = companies.find((c) => c.id === mentionObj.entity_slug);
+    return { ...mentionObj, found: !!company, entity: company };
+  } else if (mentionObj.entity_type === 'external_brand') {
+    const brand = externalBrands.find((b) => b.id === mentionObj.entity_slug);
+    return { ...mentionObj, found: !!brand, entity: brand };
+  }
+  return { ...mentionObj, found: false };
+});
+
+const destName = prompt.data.destination_cluster || 'Peru tour';
+
+function generateFAQs(dest: string, cat: string): FAQItem[] {
+  const dc = dest.toLowerCase();
+  const faqs: FAQItem[] = [];
+
+  if (dc.includes('machu picchu') || dc.includes('cusco') || dc.includes('inca')) {
+    faqs.push({
+      question: `How far in advance should I book a ${dest} tour?`,
+      answer: 'For high season dates (June–August) and Inca Trail permits, booking 4–6 months in advance is recommended. For shoulder season, 2–3 months is often enough.'
+    });
+    faqs.push({
+      question: 'Is it better to book with a US-based company or a local Peruvian operator?',
+      answer: 'US-based brands can offer familiar customer service and payment options, while local operators may provide more flexible itineraries and better on-the-ground expertise. Many travelers compare both and choose based on reviews, inclusions, and overall value.'
+    });
+    faqs.push({
+      question: `Are ${dest} tours suitable for first-time international travelers?`,
+      answer: 'Yes, as long as you choose an operator with clear pre-departure guidance, acclimatization days in Cusco, and 24/7 support during the trip.'
+    });
+  } else if (dc.includes('amazon')) {
+    faqs.push({
+      question: `What is the best time to visit the ${dest}?`,
+      answer: 'The dry season (May–October) offers better wildlife spotting and fewer mosquitoes, while the wet season (November–April) has higher water levels for boat-based exploration.'
+    });
+    faqs.push({
+      question: `What should I pack for a ${dest} expedition?`,
+      answer: 'Lightweight long-sleeve clothing, insect repellent, waterproof gear, binoculars, and sturdy hiking boots are recommended.'
+    });
+    faqs.push({
+      question: 'Are these tours suitable for families?',
+      answer: 'Many operators offer family-friendly itineraries with shorter excursions and comfortable lodge accommodations.'
+    });
+  } else {
+    faqs.push({
+      question: `How far in advance should I book a ${dest} tour?`,
+      answer: 'For popular destinations and peak season (June–August), booking 3–4 months in advance is recommended. For shoulder season, 1–2 months is often sufficient.'
+    });
+    faqs.push({
+      question: `What should I look for when choosing a ${dest} tour company?`,
+      answer: 'Focus on safety records, guide quality, group size, inclusions (permits, meals, accommodation), and clear cancellation policies. Read recent reviews from travelers with similar profiles to yours.'
+    });
+    faqs.push({
+      question: `Are ${dest} tours suitable for first-time travelers to Peru?`,
+      answer: 'Yes, most operators design itineraries that cater to different experience levels. Look for companies that provide pre-departure briefings, airport transfers, and 24/7 support.'
+    });
+  }
+
+  if (cat.includes('trekking') || cat.includes('hiking')) {
+    faqs.push({
+      question: 'What fitness level is required for trekking tours?',
+      answer: 'Most trekking tours require moderate to high fitness levels. Some acclimatization days in high-altitude locations are typically included in itineraries.'
+    });
+  }
+  if (cat.includes('luxury')) {
+    faqs.push({
+      question: 'What level of accommodation can I expect on a luxury tour?',
+      answer: 'Luxury tours typically include boutique hotels, upscale lodges, and in some cases, premium train services like the Hiram Bingham or Belmond Andean Explorer.'
+    });
+  }
+
+  return faqs;
+}
+
+const faqItems = generateFAQs(prompt.data.destination_cluster || '', prompt.data.category_cluster || '');
+---
+
+<Layout
+  title={prompt.data.title}
+  description={prompt.data.summary}
+  currentPath={`/${lang}/ai-prompts/${prompt.id}/`}
+>
+  <JsonLdPromptLanding
+    title={prompt.data.title}
+    description={prompt.data.summary}
+    searchTerm={prompt.data.search_term || prompt.data.title}
+    brands={prompt.data.brands_ai_mentions}
+    faqItems={faqItems}
+    url={Astro.url.href}
+  />
+
+  <article class="prompt-landing">
+    <header class="prompt-header">
+      <div class="prompt-meta">
+        {prompt.data.destination_cluster && (
+          <span class="badge">{prompt.data.destination_cluster}</span>
+        )}
+        {prompt.data.category_cluster && (
+          <span class="badge">{prompt.data.category_cluster}</span>
+        )}
+      </div>
+      <h1>{prompt.data.title}</h1>
+      <p class="search-term">
+        <strong>Search Term:</strong> {prompt.data.search_term || prompt.data.title}
+      </p>
+      {prompt.data.ai_platforms && prompt.data.ai_platforms.length > 0 && (
+        <div class="platforms">
+          <strong>AI Platforms:</strong>
+          {prompt.data.ai_platforms.map((platform: string) => (
+            <span class="platform-badge">{platform}</span>
+          ))}
+        </div>
+      )}
+    </header>
+
+    <section class="quick-answer">
+      <h2>Quick Answer</h2>
+      <p>{prompt.data.summary}</p>
+    </section>
+
+    {resolvedBrands.some((b: any) => b.found) && (
+      <section aria-label="Featured tour companies">
+        <h2>Featured Companies</h2>
+        <ol class="brands-grid">
+          {resolvedBrands
+            .filter((b: any) => b.found)
+            .map((mention: any) => (
+              <li class="brand-card">
+                <h3>
+                  {mention.entity_type === 'company' ? (
+                    <a href={`/${lang}/companies/${mention.entity_slug}/`}>
+                      {mention.entity.data.title}
+                    </a>
+                  ) : (
+                    <a href={mention.entity.data.official_url} target="_blank" rel="noopener noreferrer">
+                      {mention.entity.data.name}
+                    </a>
+                  )}
+                </h3>
+                <p>{mention.entity.data.summary}</p>
+                {mention.entity_type === 'company' && mention.entity.data.contact?.website && (
+                  <a href={mention.entity.data.contact.website} target="_blank" rel="noopener noreferrer" class="brand-link">
+                    Visit Website →
+                  </a>
+                )}
+              </li>
+            ))}
+        </ol>
+      </section>
+    )}
+
+    {resolvedBrands.some((b: any) => b.found) && (
+      <section aria-label="Comparison table">
+        <h2>Compare {destName} Companies</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Company</th>
+              <th>Base</th>
+              <th>Trip style</th>
+              <th>Good for</th>
+            </tr>
+          </thead>
+          <tbody>
+            {resolvedBrands.filter((b: any) => b.found).map((brand: any) => (
+              <tr>
+                <td><strong>{brand.entity.data.title || brand.name}</strong></td>
+                <td>{brand.entity_type === 'company' ? (brand.entity.data.location?.city || brand.entity.data.location?.region || '—') : (brand.entity.data.country || '—')}</td>
+                <td>{brand.entity_type === 'company' ? ((brand.entity.data.categorias || []).join(', ') || '—') : (brand.entity.data.brand_role || '—')}</td>
+                <td>{brand.entity.data.summary || '—'}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
+    )}
+
+    {resolvedBrands.some((b: any) => !b.found) && (
+      <section class="unresolved-brands">
+        <h3>Other Mentioned Companies</h3>
+        <ul>
+          {resolvedBrands
+            .filter((b: any) => !b.found)
+            .map((mention: any) => (
+              <li>{mention.name}</li>
+            ))}
+        </ul>
+      </section>
+    )}
+
+    <section aria-label={`How to choose a ${destName} tour company`}>
+      <h2>How to choose a {destName} tour company</h2>
+      <p>
+        When comparing operators, focus on safety records, guide quality, group size,
+        and how clearly they communicate what's included (permits, trains, porters,
+        hotels, and meals). Look for recent reviews from travelers with a similar profile to yours.
+      </p>
+      <ul>
+        <li>Check that permits and tickets for key attractions are included in the price.</li>
+        <li>Look for English-speaking guides with strong local knowledge.</li>
+        <li>Review cancellation and rescheduling policies in detail.</li>
+        <li>Compare group size and accommodation standards across operators.</li>
+        <li>Verify licensing and regulatory compliance (MINCETUR, tax ID).</li>
+      </ul>
+    </section>
+
+    {faqItems.length > 0 && (
+      <section aria-label="Frequently asked questions">
+        <h2>Frequently asked questions</h2>
+        {faqItems.map((item: FAQItem) => (
+          <article class="faq-item">
+            <h3>{item.question}</h3>
+            <p>{item.answer}</p>
+          </article>
+        ))}
+      </section>
+    )}
+
+    <section class="prompt-content">
+      <Content />
+    </section>
+
+    {prompt.data.last_ai_check_date && (
+      <footer class="prompt-footer">
+        <p>
+          <strong>Last Verified:</strong> {new Date(prompt.data.last_ai_check_date).toLocaleDateString('es-PE')}
+        </p>
+      </footer>
+    )}
+  </article>
+
+  <nav class="prompt-nav">
+    <a href={`/${lang}/ai-prompts/`} class="nav-link">← Back to Prompts</a>
+  </nav>
+</Layout>
+
+<style>
+  .prompt-landing {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 0;
+  }
+
+  .prompt-header {
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .prompt-meta {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    display: inline-block;
+    background: rgba(59, 130, 246, 0.1);
+    color: #3b82f6;
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+    font-size: 0.8rem;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .prompt-header h1 {
+    font-size: 2.25rem;
+    margin-bottom: 1rem;
+    color: #f1f5f9;
+  }
+
+  .search-term {
+    color: #cbd5e1;
+    margin: 1rem 0;
+  }
+
+  .platforms {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+  }
+
+  .platform-badge {
+    display: inline-block;
+    background: rgba(6, 182, 212, 0.1);
+    color: #06b6d4;
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.35rem;
+    font-size: 0.85rem;
+    border: 1px solid rgba(6, 182, 212, 0.2);
+  }
+
+  .quick-answer {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(6, 182, 212, 0.1) 100%);
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .quick-answer h2 {
+    margin-top: 0;
+    color: #06b6d4;
+  }
+
+  .quick-answer p {
+    color: #cbd5e1;
+    line-height: 1.8;
+    font-size: 1.05rem;
+  }
+
+  .brands-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0;
+  }
+
+  .brand-card {
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+  }
+
+  .brand-card:hover {
+    border-color: #06b6d4;
+    transform: translateY(-5px);
+    background: rgba(30, 41, 59, 0.8);
+  }
+
+  .brand-card h3 {
+    margin-bottom: 0.75rem;
+    font-size: 1.1rem;
+  }
+
+  .brand-card a {
+    color: #06b6d4;
+  }
+
+  .brand-card p {
+    color: #cbd5e1;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .brand-link {
+    display: inline-block;
+    color: #3b82f6;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: transform 0.2s ease;
+  }
+
+  .brand-link:hover {
+    transform: translateX(4px);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    background: rgba(30, 41, 59, 0.3);
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    overflow: hidden;
+  }
+
+  table th, table td {
+    padding: 0.85rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--color-border);
+    color: #cbd5e1;
+    font-size: 0.9rem;
+  }
+
+  table th {
+    background: rgba(59, 130, 246, 0.1);
+    color: #06b6d4;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 0.8rem;
+  }
+
+  table tr:last-child td {
+    border-bottom: none;
+  }
+
+  table tr:hover td {
+    background: rgba(59, 130, 246, 0.05);
+  }
+
+  .faq-item {
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .faq-item h3 {
+    font-size: 1.05rem;
+    color: #f1f5f9;
+    margin-bottom: 0.6rem;
+  }
+
+  .faq-item p {
+    color: #cbd5e1;
+    line-height: 1.7;
+    font-size: 0.95rem;
+  }
+
+  section[aria-label^="How to choose"] ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  section[aria-label^="How to choose"] li {
+    padding: 0.5rem 0 0.5rem 1.5rem;
+    position: relative;
+    color: #cbd5e1;
+    line-height: 1.6;
+  }
+
+  section[aria-label^="How to choose"] li::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: #06b6d4;
+    font-weight: 600;
+  }
+
+  section[aria-label="Featured tour companies"] h2,
+  section[aria-label="Comparison table"] h2,
+  section[aria-label^="How to choose"] h2,
+  section[aria-label="Frequently asked questions"] h2 {
+    margin-bottom: 1.5rem;
+  }
+
+  .unresolved-brands {
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    margin: 2rem 0;
+  }
+
+  .unresolved-brands h3 {
+    margin-top: 0;
+  }
+
+  .unresolved-brands ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .unresolved-brands li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--color-border);
+    color: #cbd5e1;
+  }
+
+  .unresolved-brands li:last-child {
+    border-bottom: none;
+  }
+
+  .prompt-content {
+    margin: 2rem 0;
+    font-size: 1rem;
+    line-height: 1.8;
+    color: #cbd5e1;
+  }
+
+  .prompt-content :global(h2) {
+    font-size: 1.5rem;
+    margin: 1.5rem 0 1rem 0;
+    color: #f1f5f9;
+  }
+
+  .prompt-content :global(p) {
+    margin-bottom: 1rem;
+  }
+
+  .prompt-footer {
+    border-top: 1px solid var(--color-border);
+    padding-top: 1.5rem;
+    margin-top: 2rem;
+    color: #64748b;
+    font-size: 0.9rem;
+  }
+
+  .prompt-nav {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .nav-link {
+    color: #06b6d4;
+    font-weight: 600;
+    transition: transform 0.2s ease;
+  }
+
+  .nav-link:hover {
+    transform: translateX(-4px);
+  }
+
+  @media (max-width: 768px) {
+    .prompt-header h1 {
+      font-size: 1.5rem;
+    }
+
+    .brands-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
