@@ -1,5 +1,72 @@
 ---
+import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
+
+const companies = await getCollection('companies');
+const prompts = await getCollection('prompts');
+const destinos = await getCollection('destinos');
+const posts = await getCollection('posts');
+
+interface SearchItem {
+  title: string;
+  summary: string;
+  type: 'company' | 'prompt' | 'destino' | 'post';
+  url: string;
+  tags: string[];
+  location?: string;
+}
+
+const searchIndex: SearchItem[] = [
+  ...companies.map(c => ({
+    title: c.data.title || c.id,
+    summary: (c.data.summary || '').slice(0, 200),
+    type: 'company' as const,
+    url: `/empresas/${c.id}/`,
+    tags: [...(c.data.destinos || []), c.data.distribution_role || ''],
+    location: c.data.location?.city,
+  })),
+  ...prompts.map(p => ({
+    title: p.data.title,
+    summary: (p.data.summary || '').slice(0, 200),
+    type: 'prompt' as const,
+    url: `/en/ai-prompts/${p.id}/`,
+    tags: p.data.ai_platforms || [],
+  })),
+  ...destinos.map(d => ({
+    title: d.data.name,
+    summary: (d.data.summary || '').slice(0, 200),
+    type: 'destino' as const,
+    url: `/en/peru/${d.id}/`,
+    tags: [d.data.region || ''],
+  })),
+  ...posts.map(p => ({
+    title: p.data.title,
+    summary: (p.data.description || '').slice(0, 200),
+    type: 'post' as const,
+    url: `/blog/${p.id}/`,
+    tags: p.data.tags || [],
+  })),
+];
+
+const siteUrl = 'https://tourup.co';
+const homepageJsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'CollectionPage',
+      '@id': `${siteUrl}/#collectionpage`,
+      url: siteUrl,
+      name: 'TourUp - AI-Optimized Peru Tourism Directory',
+      description: 'Intelligent directory of tourism service providers in Peru, optimized for AI search engines.',
+      isPartOf: { '@id': `${siteUrl}/#website` },
+      about: { '@id': `${siteUrl}/#organization` },
+      mainEntity: {
+        '@type': 'ItemList',
+        numberOfItems: companies.length + prompts.length + destinos.length + posts.length,
+      },
+    },
+  ],
+};
 ---
 
 <Layout
@@ -7,6 +74,7 @@ import Layout from '../layouts/Layout.astro';
   description="Intelligent directory of tourism service providers in Peru, optimized for AI search engines."
   currentPath="/"
 >
+  <script type="application/ld+json" set:html={JSON.stringify(homepageJsonLd, null, 2)} />
   <div class="hero">
     <div class="hero-content">
       <h1 class="hero-title">
@@ -38,6 +106,30 @@ import Layout from '../layouts/Layout.astro';
       </svg>
     </div>
   </div>
+
+  <section class="search-section" id="search-section">
+    <div class="search-container">
+      <h2 class="search-heading">Busca en el directorio</h2>
+      <p class="search-subtitle">{companies.length + prompts.length + destinos.length + posts.length} entradas entre empresas, destinos, prompts y artículos</p>
+      <div class="search-box">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input
+          type="text"
+          id="search-input"
+          class="search-input"
+          placeholder="Buscar empresas, destinos, tours, prompts..."
+          autocomplete="off"
+        />
+        <span id="search-status" class="search-status"></span>
+      </div>
+    </div>
+    <div id="search-results" class="results-grid"></div>
+    <div id="search-empty" class="search-empty">
+      <p>Escribe algo para comenzar la búsqueda</p>
+    </div>
+  </section>
 
   <section class="features">
     <h2>¿Por qué TourUp?</h2>
@@ -75,6 +167,100 @@ import Layout from '../layouts/Layout.astro';
     </div>
   </section>
 </Layout>
+
+<script id="search-data" type="application/json">{JSON.stringify(searchIndex)}</script>
+
+<script is:inline>
+  (function() {
+    const index = JSON.parse(document.getElementById('search-data').textContent);
+    const input = document.getElementById('search-input');
+    const results = document.getElementById('search-results');
+    const empty = document.getElementById('search-empty');
+    const status = document.getElementById('search-status');
+
+    if (!input || !results || !empty || !status) return;
+
+    let timer;
+
+    function normalize(t) {
+      return t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    }
+
+    function search(query) {
+      const q = normalize(query).trim();
+      if (!q) return [];
+      const terms = q.split(/\s+/).filter(Boolean);
+      return index
+        .map(item => {
+          const title = normalize(item.title);
+          const summary = normalize(item.summary);
+          const tags = item.tags.map(t => normalize(t)).join(' ');
+          const haystack = `${title} ${summary} ${tags}`;
+          let score = 0;
+          for (const term of terms) {
+            if (title.includes(term)) score += 10;
+            if (title.startsWith(term)) score += 20;
+            if (tags.includes(term)) score += 5;
+            if (summary.includes(term)) score += 2;
+            if (haystack.includes(term)) score += 1;
+          }
+          return { item, score };
+        })
+        .filter(r => r.score > 0)
+        .sort((a, b) => b.score - a.score)
+        .map(r => r.item);
+    }
+
+    function render(hits) {
+      if (hits.length === 0) {
+        results.innerHTML = '';
+        empty.classList.remove('hidden');
+        return;
+      }
+      empty.classList.add('hidden');
+      const map = { company: 'Empresa', prompt: 'Prompt', destino: 'Destino', post: 'Blog' };
+      results.innerHTML = hits.map(item => {
+        const badge = map[item.type] || item.type;
+        const loc = item.location ? `<span class="card-location">${item.location}</span>` : '';
+        const tags = item.tags.slice(0, 3).map(t => `<span class="card-tag">${t}</span>`).join('');
+        return `<a href="${item.url}" class="result-card" data-type="${item.type}">
+          <div class="card-type type-${item.type}">${badge}</div>
+          <h3 class="card-title">${item.title}</h3>
+          <p class="card-summary">${item.summary}</p>
+          <div class="card-footer">${loc}<div class="card-tags">${tags}</div></div>
+        </a>`;
+      }).join('');
+    }
+
+    input.addEventListener('input', () => {
+      clearTimeout(timer);
+      const q = input.value;
+      if (q.length < 2) {
+        results.innerHTML = '';
+        empty.classList.remove('hidden');
+        empty.querySelector('p').textContent = 'Escribe al menos 2 caracteres para buscar';
+        status.textContent = '';
+        return;
+      }
+      status.textContent = 'Buscando...';
+      timer = setTimeout(() => {
+        const hits = search(q);
+        render(hits);
+        status.textContent = hits.length > 0 ? `${hits.length} resultado${hits.length !== 1 ? 's' : ''}` : 'Sin resultados';
+      }, 200);
+    });
+
+    input.addEventListener('focus', () => {
+      document.getElementById('search-section').classList.add('focused');
+    });
+
+    input.addEventListener('blur', () => {
+      setTimeout(() => {
+        document.getElementById('search-section').classList.remove('focused');
+      }, 200);
+    });
+  })();
+</script>
 
 <style>
   .hero {
@@ -169,12 +355,198 @@ import Layout from '../layouts/Layout.astro';
   }
 
   @keyframes float {
-    0%, 100% {
-      transform: translateY(0px);
-    }
-    50% {
-      transform: translateY(-20px);
-    }
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
+
+  .search-section {
+    padding: 3rem 0;
+    margin: 2rem 0;
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+    background: rgba(30, 41, 59, 0.3);
+    border-radius: 1rem;
+    transition: all 0.3s ease;
+  }
+
+  .search-section.focused {
+    border-color: rgba(6, 182, 212, 0.3);
+    box-shadow: 0 0 30px rgba(6, 182, 212, 0.05);
+  }
+
+  .search-container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    text-align: center;
+  }
+
+  .search-heading {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .search-subtitle {
+    font-size: 0.9rem;
+    color: #64748b;
+    margin-bottom: 1.5rem;
+  }
+
+  .search-box {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid rgba(71, 85, 105, 0.4);
+    border-radius: 1rem;
+    padding: 0.75rem 1.25rem;
+    transition: all 0.3s ease;
+  }
+
+  .search-box:focus-within {
+    border-color: #06b6d4;
+    box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.15);
+  }
+
+  .search-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: #64748b;
+    flex-shrink: 0;
+  }
+
+  .search-input {
+    flex: 1;
+    background: none;
+    border: none;
+    outline: none;
+    color: #f1f5f9;
+    font-size: 1.05rem;
+    font-family: inherit;
+  }
+
+  .search-input::placeholder {
+    color: #475569;
+  }
+
+  .search-status {
+    font-size: 0.8rem;
+    color: #64748b;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1rem;
+    padding: 1.5rem 2rem 0;
+    max-height: 600px;
+    overflow-y: auto;
+  }
+
+  .results-grid:empty {
+    display: none;
+  }
+
+  .result-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    animation: cardIn 0.2s ease;
+  }
+
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .result-card:hover {
+    border-color: #06b6d4;
+    background: rgba(30, 41, 59, 0.8);
+    transform: translateY(-2px);
+  }
+
+  .card-type {
+    display: inline-block;
+    align-self: flex-start;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 0.2rem 0.6rem;
+    border-radius: 0.25rem;
+  }
+
+  .type-company { background: rgba(6, 182, 212, 0.15); color: #22d3ee; }
+  .type-prompt { background: rgba(168, 85, 247, 0.15); color: #c084fc; }
+  .type-destino { background: rgba(34, 197, 94, 0.15); color: #4ade80; }
+  .type-post { background: rgba(251, 191, 36, 0.15); color: #fbbf24; }
+
+  .card-title {
+    font-size: 1rem;
+    color: #f1f5f9;
+    font-weight: 600;
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  .card-summary {
+    font-size: 0.83rem;
+    color: #94a3b8;
+    margin: 0;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-top: auto;
+    padding-top: 0.5rem;
+  }
+
+  .card-location {
+    font-size: 0.75rem;
+    color: #60a5fa;
+    background: rgba(59, 130, 246, 0.12);
+    padding: 0.15rem 0.5rem;
+    border-radius: 0.25rem;
+  }
+
+  .card-tags {
+    display: flex;
+    gap: 0.35rem;
+    flex-wrap: wrap;
+  }
+
+  .card-tag {
+    font-size: 0.7rem;
+    color: #64748b;
+    background: rgba(71, 85, 105, 0.3);
+    padding: 0.15rem 0.4rem;
+    border-radius: 0.25rem;
+  }
+
+  .search-empty {
+    text-align: center;
+    padding: 2rem;
+    color: #64748b;
+  }
+
+  .search-empty.hidden {
+    display: none;
   }
 
   .features {
@@ -290,6 +662,15 @@ import Layout from '../layouts/Layout.astro';
 
     .cta-content h2 {
       font-size: 1.5rem;
+    }
+
+    .results-grid {
+      grid-template-columns: 1fr;
+      max-height: 400px;
+    }
+
+    .search-container {
+      padding: 0 1rem;
     }
   }
 </style>

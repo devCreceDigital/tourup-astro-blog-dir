@@ -21,55 +21,52 @@ interface Props {
 
 const { title, description, searchTerm, brands, faqItems = [], url } = Astro.props;
 
-// Build WebPage schema
-const webPageSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'WebPage',
-  name: title,
-  description: description,
-  url: url || Astro.url.href,
-};
+const siteUrl = 'https://tourup.co';
+const pageUrl = url || Astro.url.href;
 
-// Build ItemList schema for brands
 const brandItems = brands.map((brand, index) => ({
   '@type': 'ListItem',
   position: index + 1,
   name: brand.name,
-  url: brand.entity_slug ? `/companies/${brand.entity_slug}/` : undefined,
+  url: brand.entity_slug ? `${siteUrl}/companies/${brand.entity_slug}/` : undefined,
 })).filter((item) => item.url);
 
-const itemListSchema = {
+const graph: Record<string, unknown>[] = [
+  {
+    '@type': 'WebPage',
+    '@id': pageUrl + '#webpage',
+    url: pageUrl,
+    name: title,
+    description: description,
+    isPartOf: { '@id': `${siteUrl}/#website` },
+  },
+];
+
+if (brandItems.length > 0) {
+  graph.push({
+    '@type': 'ItemList',
+    itemListElement: brandItems,
+  });
+}
+
+if (faqItems.length > 0) {
+  graph.push({
+    '@type': 'FAQPage',
+    mainEntity: faqItems.map((item) => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.answer,
+      },
+    })),
+  });
+}
+
+const unifiedSchema = {
   '@context': 'https://schema.org',
-  '@type': 'ItemList',
-  itemListElement: brandItems,
+  '@graph': graph,
 };
-
-// Build FAQPage schema
-const faqPageSchema = faqItems.length > 0 ? {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: faqItems.map((item) => ({
-    '@type': 'Question',
-    name: item.question,
-    acceptedAnswer: {
-      '@type': 'Answer',
-      text: item.answer,
-    },
-  })),
-} : null;
-
-// TODO: Combine these into a single, richer schema
-// that includes breadcrumbs, offers, ratings, etc.
 ---
 
-{webPageSchema && (
-  <script type="application/ld+json" set:html={JSON.stringify(webPageSchema)} />
-)}
-
-{brandItems.length > 0 && (
-  <script type="application/ld+json" set:html={JSON.stringify(itemListSchema)} />
-)}
-
-{faqPageSchema && (
-  <script type="application/ld+json" set:html={JSON.stringify(faqPageSchema)} />
-)}
+<script type="application/ld+json" set:html={JSON.stringify(unifiedSchema)} />

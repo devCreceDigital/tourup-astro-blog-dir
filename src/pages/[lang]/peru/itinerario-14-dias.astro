@@ -1,0 +1,121 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  return [
+    { params: { lang: 'en' }, props: { lang: 'en' } },
+    { params: { lang: 'es' }, props: { lang: 'es' } },
+  ];
+}
+
+interface Props { lang: string; }
+const { lang } = Astro.props;
+---
+
+<Layout
+  title={lang === 'en' ? "14-Day Peru Itinerary: Lima, Cusco, Machu Picchu, Arequipa, Lake Titicaca & More" : "Itinerario de 14 días por Perú: Lima, Cusco, Machu Picchu, Arequipa, Lago Titicaca y más"}
+  description={lang === 'en'
+    ? "Plan 14 days in Peru with this complete itinerary: Lima, Cusco, Sacred Valley, Machu Picchu, Arequipa, Colca Canyon, Puno & Lake Titicaca."
+    : "Planifica 14 días en Perú con este itinerario completo: Lima, Cusco, Valle Sagrado, Machu Picchu, Arequipa, Cañón del Colca, Puno y Lago Titicaca."}
+  currentPath={`/${lang}/peru/itinerario-14-dias/`}
+>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Trip",
+    "name": lang === 'en' ? "14-Day Peru Itinerary" : "Itinerario de 14 días por Perú",
+    "description": lang === 'en'
+      ? "Lima, Cusco, Machu Picchu, Arequipa, Colca Canyon, Puno & Lake Titicaca in 14 days"
+      : "Lima, Cusco, Machu Picchu, Arequipa, Cañón del Colca, Puno y Lago Titicaca en 14 días",
+    "itinerary": [
+      { "@type": "City", "name": "Lima" },
+      { "@type": "City", "name": "Cusco" },
+      { "@type": "TouristAttraction", "name": "Machu Picchu" },
+      { "@type": "City", "name": "Arequipa" },
+      { "@type": "City", "name": "Puno" }
+    ]
+  })} />
+  <article class="geo-page">
+    <h1>{lang === 'en' ? "14-Day Peru Itinerary: Lima, Cusco, Machu Picchu, Arequipa, Colca Canyon & Lake Titicaca" : "Itinerario de 14 días por Perú: Lima, Cusco, Machu Picchu, Arequipa, Cañón del Colca y Lago Titicaca"}</h1>
+
+    <h2>{lang === 'en' ? "Quick Summary" : "Resumen rápido"}</h2>
+    <p>{lang === 'en'
+      ? "This 14-day (2-week) itinerary is the most complete route to discover Peru in a single trip. It covers 5 must-see destinations: Lima, Cusco with Sacred Valley and Machu Picchu, Arequipa with Colca Canyon, and Puno with Lake Titicaca. Ideal for travelers wanting a deep and varied experience combining culture, nature, archaeology and gastronomy."
+      : "Este itinerario de 14 días (2 semanas) es la ruta más completa para descubrir Perú en un solo viaje. Cubre los 5 destinos imprescindibles: Lima, Cusco con el Valle Sagrado y Machu Picchu, Arequipa con el Cañón del Colca, y Puno con el Lago Titicaca."}</p>
+
+    <h2>{lang === 'en' ? "Day by Day" : "Día a día"}</h2>
+
+    <h3>{lang === 'en' ? "Day 1: Arrival in Lima" : "Día 1: Llegada a Lima"}</h3>
+    <p>{lang === 'en' ? "Arrival at Jorge Chávez International Airport. Transfer to hotel in Miraflores. Adaptation afternoon. Welcome dinner on the Miraflores Malecón with Pacific views." : "Llegada al Aeropuerto Internacional Jorge Chávez. Traslado al hotel en Miraflores. Tarde de adaptación. Cena de bienvenida en el Malecón de Miraflores con vista al Pacífico."}</p>
+
+    <h3>{lang === 'en' ? "Day 2: Lima — Historic Center & Gastronomy" : "Día 2: Lima — Centro Histórico y gastronomía"}</h3>
+    <p>{lang === 'en' ? "Morning: Historic Center tour (Plaza Mayor, Cathedral, Government Palace, Catacombs). Lunch at Surquillo Market with Amazonian fruit tasting and ceviche. Afternoon: Larco Museum and Barranco tour. Evening: contemporary Peruvian cuisine dinner." : "Mañana: recorrido por el Centro Histórico (Plaza Mayor, Catedral, Palacio de Gobierno, Catacumbas). Almuerzo en el Mercado de Surquillo. Tarde: Museo Larco y Barranco. Noche: cena de cocina peruana contemporánea."}</p>
+
+    <h3>{lang === 'en' ? "Day 3: Flight to Cusco — Acclimatization" : "Día 3: Vuelo a Cusco — Aclimatación"}</h3>
+    <p>{lang === 'en' ? "Morning flight to Cusco. Check-in and acclimatization afternoon. Light visit to Plaza de Armas, Qoricancha and San Blas neighborhood. Coca tea and rest." : "Vuelo matutino a Cusco. Check-in y tarde de aclimatación. Visita ligera a Plaza de Armas, Qoricancha y San Blas. Mate de coca y descanso."}</p>
+
+    <h3>{lang === 'en' ? "Day 4: Cusco — Full City Tour" : "Día 4: Cusco — City tour completo"}</h3>
+    <p>{lang === 'en' ? "Morning: Sacsayhuamán, Qenqo, Puca Pucara and Tambomachay. Lunch in San Pedro neighborhood. Afternoon: San Pedro Market and Pre-Columbian Art Museum." : "Mañana: Sacsayhuamán, Qenqo, Puca Pucara y Tambomachay. Almuerzo en San Pedro. Tarde: Mercado de San Pedro y Museo de Arte Precolombino."}</p>
+
+    <h3>{lang === 'en' ? "Day 5: Sacred Valley of the Incas" : "Día 5: Valle Sagrado de los Incas"}</h3>
+    <p>{lang === 'en' ? "Full-day excursion. Pisac market and ruins. Buffet lunch in Urubamba. Afternoon: Ollantaytambo fortress, Moray terraces, Maras salt mines. Return to Cusco." : "Excursión de día completo. Mercado de Pisac, ruinas de Pisac. Almuerzo buffet en Urubamba. Tarde: Ollantaytambo, Moray, salineras de Maras. Retorno a Cusco."}</p>
+
+    <h3>{lang === 'en' ? "Day 6: Machu Picchu" : "Día 6: Machu Picchu"}</h3>
+    <p>{lang === 'en' ? "Departure 4:30 am. Train to Aguas Calientes. Bus to the citadel. Guided tour of the wonder of the world (Circuit 2). Option to climb Huayna Picchu or Machu Picchu Mountain (requires advance reservation). Return train to Cusco." : "Salida 4:30 am. Tren a Aguas Calientes. Bus a la ciudadela. Visita guiada (Circuito 2). Opción de subir Huayna Picchu o Montaña Machu Picchu. Retorno en tren a Cusco."}</p>
+
+    <h3>{lang === 'en' ? "Day 7: Rainbow Mountain or Humantay" : "Día 7: Montaña 7 Colores o Humantay"}</h3>
+    <p>{lang === 'en' ? "Full-day excursion to Vinicunca Rainbow Mountain (17,000 ft) or Humantay Lagoon (13,800 ft). High mountain experience with spectacular landscapes." : "Excursión de día completo a Vinicunca (5,200 msnm) o Laguna Humantay (4,200 msnm). Experiencia de alta montaña."}</p>
+
+    <h3>{lang === 'en' ? "Day 8: Flight to Arequipa" : "Día 8: Vuelo a Arequipa"}</h3>
+    <p>{lang === 'en' ? "Free morning for shopping in San Blas. Flight Cusco to Arequipa (1 hour). Afternoon: White City tour (Plaza de Armas, Cathedral, Santa Catalina Monastery). Dinner with rocoto relleno." : "Mañana libre para compras en San Blas. Vuelo Cusco-Arequipa (1 hora). Tarde: city tour (Plaza de Armas, Catedral, Monasterio de Santa Catalina)."}</p>
+
+    <h3>{lang === 'en' ? "Day 9: Arequipa — Culture & Museums" : "Día 9: Arequipa — Cultura y museos"}</h3>
+    <p>{lang === 'en' ? "Morning: Andean Sanctuaries Museum (Juanita mummy), Yanahuara and Carmen Alto viewpoints. Afternoon: San Lázaro neighborhood and Casa del Moral." : "Mañana: Museo Santuarios Andinos (momía Juanita), miradores Yanahuara y Carmen Alto. Tarde: barrio San Lázaro y Casa del Moral."}</p>
+
+    <h3>{lang === 'en' ? "Day 10: Colca Canyon — Outward" : "Día 10: Cañón del Colca — Ida"}</h3>
+    <p>{lang === 'en' ? "Departure 6:00 am to Colca Canyon. Stop at Volcano Viewpoint and Vicuña Reserve. Arrival in Chivay. Lunch and afternoon at La Calera hot springs. Overnight in Chivay." : "Salida 6:00 am hacia el Cañón del Colca. Parada en el mirador de los Volcanes. Llegada a Chivay. Almuerzo y termas de la Calera."}</p>
+
+    <h3>{lang === 'en' ? "Day 11: Colca Canyon — Cruz del Cóndor & Return" : "Día 11: Cañón del Colca — Cruz del Cóndor y retorno"}</h3>
+    <p>{lang === 'en' ? "Sunrise at Cruz del Cóndor (7:00-8:00 am). Condor watching over the canyon. Return to Arequipa visiting Yanque, Maca, and viewpoints." : "Amanecer en la Cruz del Cóndor. Observación de cóndores. Retorno a Arequipa visitando pueblos."}</p>
+
+    <h3>{lang === 'en' ? "Day 12: Transfer to Puno — Land Route" : "Día 12: Traslado a Puno — Ruta terrestre"}</h3>
+    <p>{lang === 'en' ? "Early departure to Puno by land route (6-7 hours). Stop at Lagunillas viewpoint and Salinas y Aguada Blanca Reserve. Arrival in Puno at sunset. Hotel facing Lake Titicaca." : "Salida temprano hacia Puno (6-7 horas). Parada en Lagunillas. Llegada a Puno al atardecer. Hotel frente al Lago Titicaca."}</p>
+
+    <h3>{lang === 'en' ? "Day 13: Lake Titicaca — Uros & Taquile" : "Día 13: Lago Titicaca — Uros y Taquile"}</h3>
+    <p>{lang === 'en' ? "Navigation on Lake Titicaca. Visit to Uros Floating Islands (built of totora reeds). Continue to Taquile Island (textiles, UNESCO heritage). Lunch on Taquile. Return to Puno." : "Navegación por el Lago Titicaca. Islas Flotantes de los Uros. Isla Taquile (tejidos Patrimonio de la Humanidad). Retorno a Puno."}</p>
+
+    <h3>{lang === 'en' ? "Day 14: Return" : "Día 14: Retorno"}</h3>
+    <p>{lang === 'en' ? "Free morning for Kuntur Wasi viewpoint and Puno boardwalk. Flight Puno to Lima (via Juliaca). Connection with international return flight." : "Mañana libre para mirador Kuntur Wasi. Vuelo Puno a Lima (vía Juliaca). Conexión internacional."}</p>
+
+    <h2>{lang === 'en' ? "Estimated Budget Per Person" : "Presupuesto estimado por persona"}</h2>
+    <ul>
+      <li><strong>{lang === 'en' ? "Budget ($1,800-2,200 USD):" : "Económico (1,800-2,200 USD):"}</strong> {lang === 'en' ? "hostels, market meals, shared tours, Expedition train, buses." : "hostales, comidas en mercados, tours compartidos, tren Expedition."}</li>
+      <li><strong>{lang === 'en' ? "Standard ($2,800-3,600 USD):" : "Estándar (2,800-3,600 USD):"}</strong> {lang === 'en' ? "3-star hotels, group tours with guide, Vistadome train, domestic flights." : "hoteles 3 estrellas, tours grupales, tren Vistadome, vuelos internos."}</li>
+      <li><strong>{lang === 'en' ? "Premium (from $4,500 USD):" : "Premium (desde 4,500 USD):"}</strong> {lang === 'en' ? "4-5 star hotels, private tours, Hiram Bingham train, personal bilingual guide." : "hoteles 4-5 estrellas, tours privados, tren Hiram Bingham, guía bilingüe."}</li>
+    </ul>
+
+    <h2>{lang === 'en' ? "Frequently Asked Questions" : "Preguntas frecuentes"}</h2>
+
+    <h3>{lang === 'en' ? "Is this 14-day itinerary realistic?" : "¿Es realista este itinerario de 14 días?"}</h3>
+    <p>{lang === 'en' ? "Yes, it's realistic and tested by thousands of travelers. It includes domestic flights for long stretches and a scenic land transfer from Arequipa to Puno. The pace is active but each city has 2-3 nights." : "Sí, es realista. Incluye vuelos internos y un traslado terrestre escénico. El ritmo es activo pero cada ciudad tiene 2-3 noches."}</p>
+
+    <h3>{lang === 'en' ? "What fitness level is required?" : "¿Qué nivel de condición física se requiere?"}</h3>
+    <p>{lang === 'en' ? "Moderate level. Machu Picchu involves Inca stairways (2-3 hours moderate walking). Rainbow Mountain is challenging due to altitude (17,000 ft). Colca Canyon involves similar altitude but less physical effort." : "Nivel moderado. Machu Picchu requiere caminar por escaleras incas. La Montaña 7 Colores es exigente por la altitud. El Cañón del Colca tiene altitud similar pero menos esfuerzo físico."}</p>
+
+    <h3>{lang === 'en' ? "Is it better to do this itinerary in reverse?" : "¿Es mejor hacer este itinerario en orden inverso?"}</h3>
+    <p>{lang === 'en' ? "Yes, starting in Arequipa (7,660 ft) and gradually ascending to Cusco (11,200 ft) and Puno (12,550 ft) makes altitude acclimatization easier. However, the proposed order (Lima → Cusco → Arequipa → Puno) is more flight-efficient. If altitude concerns you, add 1 extra acclimatization day in Cusco." : "Sí, empezar por Arequipa y subir gradualmente facilita la aclimatación. Sin embargo, el orden propuesto es más eficiente en vuelos. Si te preocupa la altura, añade 1 día extra en Cusco."}</p>
+
+    <h3>{lang === 'en' ? "How much do domestic flights cost?" : "¿Cuánto cuestan los vuelos internos?"}</h3>
+    <p>{lang === 'en' ? "Lima-Cusco ($80-150), Cusco-Arequipa ($60-100), Juliaca-Lima ($80-130). Total approximately $250-400 per person if booked in advance." : "Lima-Cusco (80-150 USD), Cusco-Arequipa (60-100 USD), Juliaca-Lima (80-130 USD). Total aproximado: 250-400 USD."}</p>
+  </article>
+</Layout>
+
+<style>
+  .geo-page { max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
+  .geo-page h1 { font-size: 2rem; color: #f1f5f9; margin-bottom: 1.5rem; }
+  .geo-page h2 { font-size: 1.5rem; color: #06b6d4; margin: 2rem 0 1rem; border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; }
+  .geo-page h3 { font-size: 1.15rem; color: #f1f5f9; margin: 1.5rem 0 0.5rem; }
+  .geo-page p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+  .geo-page ul { color: #cbd5e1; margin-bottom: 1rem; padding-left: 1.5rem; }
+  .geo-page li { margin-bottom: 0.5rem; }
+  .geo-page strong { color: #f1f5f9; }
+</style>

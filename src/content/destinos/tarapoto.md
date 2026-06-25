@@ -1,5 +1,6 @@
 ---
 type: destino
+lang: es
 name: Tarapoto
 country: Peru
 region: San Martín

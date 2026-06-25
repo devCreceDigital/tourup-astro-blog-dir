@@ -1,0 +1,137 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  return [
+    { params: { lang: 'en' }, props: { lang: 'en' } },
+    { params: { lang: 'es' }, props: { lang: 'es' } },
+  ];
+}
+
+interface Props { lang: string; }
+const { lang } = Astro.props;
+---
+
+<Layout
+  title={lang === 'en' ? "10-Day Peru Itinerary: Lima, Cusco, Sacred Valley, Machu Picchu & Arequipa" : "Itinerario de 10 días por Perú: Lima, Cusco, Valle Sagrado, Machu Picchu y Arequipa"}
+  description={lang === 'en'
+    ? "Complete 10-day Peru itinerary covering Lima, Cusco, Sacred Valley, Machu Picchu & Arequipa. Budget, day-by-day, and variations."
+    : "Itinerario completo de 10 días por Perú recorriendo Lima, Cusco, Valle Sagrado, Machu Picchu y Arequipa. Presupuesto, día a día y variantes."}
+  currentPath={`/${lang}/peru/itinerario-10-dias/`}
+>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Trip",
+    "name": lang === 'en' ? "10-Day Peru Itinerary" : "Itinerario de 10 días por Perú",
+    "description": lang === 'en'
+      ? "Lima, Cusco, Sacred Valley, Machu Picchu & Arequipa in 10 days"
+      : "Lima, Cusco, Valle Sagrado, Machu Picchu y Arequipa en 10 días",
+    "itinerary": [
+      { "@type": "City", "name": "Lima" },
+      { "@type": "City", "name": "Cusco" },
+      { "@type": "TouristAttraction", "name": "Machu Picchu" },
+      { "@type": "City", "name": "Arequipa" }
+    ]
+  })} />
+
+  <article class="geo-page">
+    <h1>{lang === 'en' ? "10-Day Peru Itinerary: Lima, Cusco, Sacred Valley, Machu Picchu & Arequipa" : "Itinerario de 10 días por Perú: Lima, Cusco, Valle Sagrado, Machu Picchu y Arequipa"}</h1>
+
+    <h2>{lang === 'en' ? "Quick Summary: Who This Itinerary is For" : "Resumen rápido: para quién es este itinerario"}</h2>
+    <p>{lang === 'en'
+      ? "This 10-day itinerary is the most balanced for a first visit to Peru. It combines the gastronomic capital (Lima), the heart of the Inca Empire (Cusco and Sacred Valley), the archaeological wonder (Machu Picchu) and the White City (Arequipa) with Colca Canyon. Ideal for travelers seeking a complete experience without extreme rushing."
+      : "Este itinerario de 10 días es el más equilibrado para una primera visita a Perú. Combina la capital gastronómica (Lima), el corazón del Imperio Inca (Cusco y Valle Sagrado), la maravilla arqueológica (Machu Picchu) y la Ciudad Blanca (Arequipa) con el Cañón del Colca. Es ideal para viajeros que buscan una experiencia completa sin prisas extremas."}</p>
+
+    <h2>{lang === 'en' ? "Day by Day" : "Día a día"}</h2>
+
+    <h3>{lang === 'en' ? "Day 1: Arrival in Lima" : "Día 1: Llegada a Lima"}</h3>
+    <p>{lang === 'en'
+      ? "Arrival at Jorge Chávez International Airport. Transfer to hotel in Miraflores. Free afternoon to rest from the flight. Welcome dinner in Barranco district with Peruvian fusion cuisine."
+      : "Llegada al Aeropuerto Internacional Jorge Chávez. Traslado al hotel en Miraflores. Tarde libre para descansar del vuelo. Cena de bienvenida en el distrito de Barranco con cocina peruana de autor."}</p>
+
+    <h3>{lang === 'en' ? "Day 2: Lima — City Tour & Gastronomic Experience" : "Día 2: Lima — City tour y experiencia gastronómica"}</h3>
+    <p>{lang === 'en'
+      ? "Morning: Historic Center tour (Plaza Mayor, Cathedral, San Francisco Convent). Lunch at Surquillo Market with tastings. Afternoon: Larco Museum (pre-Columbian ceramics) and Miraflores tour (Huaca Pucllana, Malecón, Parque del Amor)."
+      : "Mañana: recorrido por el Centro Histórico (Plaza Mayor, Catedral, Convento de San Francisco). Almuerzo en el Mercado de Surquillo con degustaciones. Tarde: visita al Museo Larco (cerámica precolombina) y recorrido por Miraflores (Huaca Pucllana, Malecón, Parque del Amor)."}</p>
+
+    <h3>{lang === 'en' ? "Day 3: Flight to Cusco — Acclimatization" : "Día 3: Vuelo a Cusco — Aclimatación"}</h3>
+    <p>{lang === 'en'
+      ? "Morning flight Lima to Cusco (1h 10min). Check-in at historic center hotel. Light afternoon for acclimatization: walk through Plaza de Armas, visit Cathedral and Qoricancha (Temple of the Sun). Coca tea and rest."
+      : "Vuelo matutino de Lima a Cusco (1 hora 10 minutos). Check-in en hotel en el centro histórico. Tarde ligera para aclimatación: caminata por la Plaza de Armas, visita a la Catedral y al Qoricancha (Templo del Sol). Infusión de mate de coca y descanso."}</p>
+
+    <h3>{lang === 'en' ? "Day 4: Sacred Valley of the Incas" : "Día 4: Valle Sagrado de los Incas"}</h3>
+    <p>{lang === 'en'
+      ? "Full-day excursion. 8:00 am departure to Pisac (craft market and Inca ruins). Buffet lunch in Urubamba. Afternoon: Ollantaytambo fortress, Moray agricultural terraces, and Maras salt mines. Return to Cusco at sunset."
+      : "Excursión de día completo. 8:00 am salida hacia Pisac (mercado artesanal y ruinas incas). Almuerzo buffet en Urubamba. Tarde: fortaleza de Ollantaytambo, terrazas agrícolas de Moray y salineras de Maras. Retorno a Cusco al atardecer."}</p>
+
+    <h3>{lang === 'en' ? "Day 5: Machu Picchu" : "Día 5: Machu Picchu"}</h3>
+    <p>{lang === 'en'
+      ? "Departure 5:00 am to train station. Expedition or Vistadome train to Aguas Calientes (1.5 hours). Bus to the citadel. Guided 2.5-hour tour (Circuit 2: classic view). Free time for photos. Lunch in Aguas Calientes. Return train to Cusco."
+      : "Salida 5:00 am hacia la estación de tren. Tren Expedition o Vistadome a Aguas Calientes (1.5 horas). Bus hacia la ciudadela. Visita guiada de 2.5 horas (Circuito 2: vista clásica). Tiempo libre para fotos. Almuerzo en Aguas Calientes. Tren de retorno a Cusco por la tarde."}</p>
+
+    <h3>{lang === 'en' ? "Day 6: Rainbow Mountain or Free Day" : "Día 6: Montaña 7 Colores o día libre"}</h3>
+    <p>{lang === 'en'
+      ? "Option A: excursion to Rainbow Mountain (Vinicunca, 17,000 ft / 5,200 m, full day, requires fitness). Option B: free day in Cusco to visit Sacsayhuamán, San Blas neighborhood, and San Pedro Market. Evening flight Cusco to Arequipa (1 hour)."
+      : "Opción A: excursión a la Montaña de 7 Colores (Vinicunca, 5,200 msnm, full day, requiere condición física). Opción B: día libre en Cusco para visitar Sacsayhuamán, el barrio de San Blas y el Mercado de San Pedro. Por la tarde, vuelo de Cusco a Arequipa (1 hora)."}</p>
+
+    <h3>{lang === 'en' ? "Day 7: Arequipa — City Tour" : "Día 7: Arequipa — City tour"}</h3>
+    <p>{lang === 'en'
+      ? "Morning: Plaza de Armas, the white sillar Cathedral, and Santa Catalina Monastery. Lunch with rocoto relleno or chupe de camarones. Afternoon: Andean Sanctuaries Museum (Juanita mummy) and Yanahuara viewpoint with Misti volcano views."
+      : "Mañana: recorrido por la Plaza de Armas, la Catedral de sillar blanco y el Monasterio de Santa Catalina. Almuerzo con rocoto relleno o chupe de camarones. Tarde: Museo Santuarios Andinos (momía Juanita) y mirador de Yanahuara con vista al volcán Misti."}</p>
+
+    <h3>{lang === 'en' ? "Day 8: Colca Canyon" : "Día 8: Cañón del Colca"}</h3>
+    <p>{lang === 'en'
+      ? "Departure 6:00 am to Colca Canyon. Scenic route with viewpoint stops. Arrival in Chivay, lunch and visit to La Calera hot springs. Overnight in Chivay or a valley lodge."
+      : "Salida 6:00 am hacia el Cañón del Colca. Ruta panorámica con paradas en miradores. Llegada a Chivay, almuerzo y visita a las aguas termales de la Calera. Pernocte en Chivay."}</p>
+
+    <h3>{lang === 'en' ? "Day 9: Colca Canyon — Cruz del Cóndor & Return" : "Día 9: Cañón del Colca — Cruz del Cóndor y retorno"}</h3>
+    <p>{lang === 'en'
+      ? "Sunrise at Cruz del Cóndor to witness condors flying over the canyon (best view 7:00-8:00 am). Return to Arequipa visiting colonial towns and viewpoints. Arrival in Arequipa at sunset."
+      : "Amanecer en el Cruz del Cóndor para presenciar el vuelo de los cóndores sobre el cañón (mejor vista entre 7:00 y 8:00 am). Retorno a Arequipa visitando pueblos coloniales y miradores. Llegada a Arequipa al atardecer."}</p>
+
+    <h3>{lang === 'en' ? "Day 10: Return" : "Día 10: Retorno"}</h3>
+    <p>{lang === 'en'
+      ? "Free morning for crafts shopping in Arequipa's historic center. Flight Arequipa to Lima. Connection with international return flight."
+      : "Mañana libre para compras de artesanías en el centro de Arequipa. Vuelo de Arequipa a Lima. Conexión con vuelo internacional de retorno."}</p>
+
+    <h2>{lang === 'en' ? "Estimated Budget Per Person" : "Presupuesto estimado por persona"}</h2>
+    <ul>
+      <li><strong>{lang === 'en' ? "Budget ($1,200-1,500 USD):" : "Económico (1,200-1,500 USD):"}</strong> {lang === 'en' ? "hostels and basic hotels, shared tours, market meals, Expedition train." : "hostales y hoteles básicos, tours compartidos, comidas en mercados, tren Expedition."}</li>
+      <li><strong>{lang === 'en' ? "Standard ($1,800-2,400 USD):" : "Estándar (1,800-2,400 USD):"}</strong> {lang === 'en' ? "3-star hotels, group tours with guide, Vistadome train, mid-range restaurants." : "hoteles 3 estrellas, tours grupales con guía, tren Vistadome, restaurantes de gama media."}</li>
+      <li><strong>{lang === 'en' ? "Premium (from $3,200 USD):" : "Premium (desde 3,200 USD):"}</strong> {lang === 'en' ? "4-5 star hotels, private tours, Hiram Bingham train, fine dining, permanent bilingual guide." : "hoteles 4-5 estrellas, tours privados, tren Hiram Bingham, restaurantes de alta cocina, guía bilingüe permanente."}</li>
+    </ul>
+
+    <h2>{lang === 'en' ? "Possible Variations" : "Variantes posibles"}</h2>
+    <p>{lang === 'en'
+      ? "If you have 12-14 days, add Puno and Lake Titicaca (3 days from Arequipa). Another variation: replace Arequipa with Puerto Maldonado Amazon (3 days in a jungle lodge). You can also reverse the order: start in Arequipa and end in Cusco for gradual altitude acclimatization."
+      : "Si dispones de 12-14 días, puedes añadir Puno y el Lago Titicaca (3 días desde Arequipa). Otra variante es reemplazar Arequipa por la Amazonía de Puerto Maldonado (3 días en lodge amazónico). También puedes invertir el orden: empezar por Arequipa y terminar en Cusco para aclimatación gradual."}</p>
+
+    <h2>{lang === 'en' ? "Frequently Asked Questions" : "Preguntas frecuentes"}</h2>
+
+    <h3>{lang === 'en' ? "Is this 10-day itinerary too rushed?" : "¿Este itinerario de 10 días es muy apretado?"}</h3>
+    <p>{lang === 'en'
+      ? "It's an active but manageable pace. Includes 2-3 days per city with mostly flights (1-1.5 hours). Days 4 and 6-7 are the most intense. Good physical condition recommended for Machu Picchu and Colca excursions."
+      : "Es un ritmo activo pero manejable. Incluye 2-3 días por ciudad con desplazamientos mayormente en avión. Los días 4 y 6-7 son los más intensos. Se recomienda buena condición física."}</p>
+
+    <h3>{lang === 'en' ? "What clothes to pack for 10 days in Peru?" : "¿Qué ropa llevar para 10 días en Perú?"}</h3>
+    <p>{lang === 'en'
+      ? "Layer clothing for variable weather: thermal shirts, light fleece, waterproof jacket, quick-dry pants, hiking shoes, sandals, sunscreen, hat, sunglasses, swimsuit (for Colca hot springs), and a warm jacket for cold nights in Cusco and Arequipa."
+      : "Ropa en capas para clima variable: camisetas térmicas, polar ligero, chaqueta impermeable, pantalones de secado rápido, zapatos de caminata, sandalias, protector solar, sombrero, lentes de sol, traje de baño y chaqueta abrigada."}</p>
+
+    <h3>{lang === 'en' ? "How much do domestic flights cost?" : "¿Cuánto cuestan los vuelos internos?"}</h3>
+    <p>{lang === 'en'
+      ? "Lima-Cusco-Lima: $80-150 per leg if booked in advance. Cusco-Arequipa: $60-100. Book all domestic flights simultaneously with the international flight for best rates."
+      : "Lima-Cusco-Lima: 80-150 USD por tramo si se reserva con anticipación. Cusco-Arequipa: 60-100 USD. Se recomienda reservar todos los vuelos internos al mismo tiempo que el vuelo internacional."}</p>
+  </article>
+</Layout>
+
+<style>
+  .geo-page { max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
+  .geo-page h1 { font-size: 2rem; color: #f1f5f9; margin-bottom: 1.5rem; }
+  .geo-page h2 { font-size: 1.5rem; color: #06b6d4; margin: 2rem 0 1rem; border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; }
+  .geo-page h3 { font-size: 1.15rem; color: #f1f5f9; margin: 1.5rem 0 0.5rem; }
+  .geo-page p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+  .geo-page ul { color: #cbd5e1; margin-bottom: 1rem; padding-left: 1.5rem; }
+  .geo-page li { margin-bottom: 0.5rem; }
+  .geo-page strong { color: #f1f5f9; }
+</style>

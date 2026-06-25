@@ -1,5 +1,6 @@
 ---
 type: destino
+lang: es
 name: Cajamarca
 country: Peru
 region: Cajamarca
@@ -23,3 +24,4 @@ Cajamarca, destino histórico con el Cuarto del Rescate, baños termales del Inc
 ## Productos turísticos principales
 
 Los operadores receptivos en Cajamarca ofrecen servicios para agencias emisoras y compradores B2B que buscan experiencias auténticas y operadores verificados en Perú.
+

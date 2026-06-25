@@ -1,5 +1,6 @@
 ---
 type: destino
+lang: es
 name: Puerto Maldonado
 country: Peru
 region: Madre de Dios

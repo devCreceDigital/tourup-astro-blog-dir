@@ -1,0 +1,121 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  return [
+    { params: { lang: 'en' }, props: { lang: 'en' } },
+    { params: { lang: 'es' }, props: { lang: 'es' } },
+  ];
+}
+
+interface Props { lang: string; }
+const { lang } = Astro.props;
+---
+
+<Layout
+  title={lang === 'en' ? "7-Day Peru Itinerary: Lima, Cusco & Machu Picchu" : "Itinerario de 7 días por Perú: Lima, Cusco y Machu Picchu"}
+  description={lang === 'en'
+    ? "Plan 7 days in Peru with this optimized itinerary: Lima, Cusco, Sacred Valley & Machu Picchu. Includes day-by-day, budget, and variations."
+    : "Planifica 7 días en Perú con este itinerario optimizado: Lima, Cusco, Valle Sagrado y Machu Picchu. Incluye días, presupuesto y variantes."}
+  currentPath={`/${lang}/peru/itinerario-7-dias/`}
+>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Trip",
+    "name": lang === 'en' ? "7-Day Peru Itinerary" : "Itinerario de 7 días por Perú",
+    "description": lang === 'en'
+      ? "Lima, Cusco, Sacred Valley & Machu Picchu in 7 days"
+      : "Lima, Cusco, Valle Sagrado y Machu Picchu en 7 días",
+    "itinerary": [
+      { "@type": "City", "name": "Lima" },
+      { "@type": "City", "name": "Cusco" },
+      { "@type": "TouristAttraction", "name": "Machu Picchu" }
+    ]
+  })} />
+
+  <article class="geo-page">
+    <h1>{lang === 'en' ? "7-Day Peru Itinerary: Lima, Cusco & Machu Picchu" : "Itinerario de 7 días por Perú: Lima, Cusco y Machu Picchu"}</h1>
+
+    <h2>{lang === 'en' ? "Quick Summary: Who This Itinerary is For" : "Resumen rápido: para quién es este itinerario"}</h2>
+    <p>{lang === 'en'
+      ? "This 7-day itinerary is designed for travelers with limited time who want to see the essentials of Peru in one week. It covers Lima (gastronomy and city), Cusco (acclimatization and culture) and Machu Picchu (the star destination). Ideal for those seeking a first-time Peru experience without missing the must-sees."
+      : "Este itinerario de 7 días está diseñado para viajeros con tiempo limitado que quieren ver lo esencial de Perú en una semana. Cubre Lima (gastronomía y ciudad), Cusco (aclimatación y cultura) y Machu Picchu (el destino estrella). Es ideal para quien busca una primera experiencia en Perú sin sacrificar los imperdibles."}</p>
+
+    <h2>{lang === 'en' ? "Day by Day" : "Día a día"}</h2>
+
+    <h3>{lang === 'en' ? "Day 1: Arrival in Lima" : "Día 1: Llegada a Lima"}</h3>
+    <p>{lang === 'en'
+      ? "Arrival at Jorge Chávez International Airport. Transfer to hotel in Miraflores or San Isidro. Free afternoon to adjust to the time zone. Evening welcome dinner at a traditional Peruvian restaurant in Miraflores or Barranco."
+      : "Llegada al Aeropuerto Internacional Jorge Chávez. Traslado al hotel en Miraflores o San Isidro. Tarde libre para adaptarse al huso horario. Por la noche, cena de bienvenida en un restaurante de comida peruana tradicional en Miraflores o Barranco."}</p>
+
+    <h3>{lang === 'en' ? "Day 2: Lima — City Tour & Gastronomy" : "Día 2: Lima — City tour y gastronomía"}</h3>
+    <p>{lang === 'en'
+      ? "Morning: Historic Center tour (Plaza Mayor, Cathedral, San Francisco Catacombs). Lunch at Surquillo Market with exotic fruit tasting. Afternoon: Miraflores visit (Malecón, Parque del Amor, Larcomar) and Barranco (Puente de los Suspiros, street art murals)."
+      : "Mañana: recorrido por el Centro Histórico (Plaza Mayor, Catedral, Catacumbas de San Francisco). Almuerzo en el Mercado de Surquillo con degustación de frutas exóticas. Tarde: visita a Miraflores (Malecón, Parque del Amor, Larcomar) y Barranco (Puente de los Suspiros, murales de arte urbano)."}</p>
+
+    <h3>{lang === 'en' ? "Day 3: Flight to Cusco — Acclimatization" : "Día 3: Vuelo a Cusco — Aclimatación"}</h3>
+    <p>{lang === 'en'
+      ? "Early flight Lima to Cusco (1h 10min). Free morning for altitude acclimatization (11,200 ft / 3,400 m). Recommendation: coca tea, constant hydration, and light walk. Afternoon: Cusco city tour (Plaza de Armas, Cathedral, Qoricancha, Sacsayhuamán)."
+      : "Vuelo temprano de Lima a Cusco (1 hora 10 minutos). Mañana libre para aclimatación a la altura (3,400 msnm). Recomendación: mate de coca, hidratación constante y caminata ligera. Tarde: city tour por Cusco (Plaza de Armas, Catedral, Qoricancha, Sacsayhuamán)."}</p>
+
+    <h3>{lang === 'en' ? "Day 4: Sacred Valley" : "Día 4: Valle Sagrado"}</h3>
+    <p>{lang === 'en'
+      ? "Full-day excursion to the Sacred Valley of the Incas. Visit Pisac Market and its Inca ruins. Buffet lunch in Urubamba with valley views. Afternoon: Ollantaytambo fortress, Moray terraces, and Maras salt mines. Return to Cusco in the evening."
+      : "Excursión de día completo al Valle Sagrado de los Incas. Visita al Mercado de Pisac y sus ruinas incas. Almuerzo buffet en Urubamba con vista al valle. Tarde: fortaleza de Ollantaytambo, terrazas de Moray y salineras de Maras. Retorno a Cusco por la tarde."}</p>
+
+    <h3>{lang === 'en' ? "Day 5: Machu Picchu" : "Día 5: Machu Picchu"}</h3>
+    <p>{lang === 'en'
+      ? "Early departure to the train station in Ollantaytambo or Poroy. Train to Aguas Calientes (1.5-2 hours). Bus to Machu Picchu entrance. Guided 2-3 hour tour of the Inca citadel (Circuit 2 or 3). Time for photos. Return train to Cusco in the evening."
+      : "Salida muy temprano hacia la estación de tren en Ollantaytambo o Poroy. Tren a Aguas Calientes (1.5-2 horas). Bus hasta la entrada de Machu Picchu. Visita guiada de 2-3 horas por la ciudadela inca (Circuito 2 o 3). Tiempo para fotos y exploración. Tren de retorno a Cusco por la tarde."}</p>
+
+    <h3>{lang === 'en' ? "Day 6: Rainbow Mountain or Humantay Lagoon" : "Día 6: Montaña 7 Colores o Humantay"}</h3>
+    <p>{lang === 'en'
+      ? "Full-day excursion to Rainbow Mountain (Vinicunca, 17,000 ft / 5,200 m) or Humantay Lagoon (13,800 ft / 4,200 m). Both require good physical condition due to altitude. Includes transport, guide, breakfast/lunch. Return to Cusco at sunset."
+      : "Excursión de día completo a la Montaña de 7 Colores (Vinicunca, 5,200 msnm) o la Laguna Humantay (4,200 msnm). Ambas requieren buena condición física por la altitud. Incluye transporte, guía y desayuno/almuerzo. Retorno a Cusco al atardecer."}</p>
+
+    <h3>{lang === 'en' ? "Day 7: Return" : "Día 7: Retorno"}</h3>
+    <p>{lang === 'en'
+      ? "Free morning for crafts shopping at San Pedro Market or San Blas. Flight Cusco to Lima. Connection with international return flight."
+      : "Mañana libre para compras de artesanías en el Mercado de San Pedro o San Blas. Vuelo de Cusco a Lima. Conexión con vuelo internacional de retorno."}</p>
+
+    <h2>{lang === 'en' ? "Estimated Budget Per Person" : "Presupuesto estimado por persona"}</h2>
+    <ul>
+      <li><strong>{lang === 'en' ? "Budget ($700-900 USD):" : "Económico (700-900 USD):"}</strong> {lang === 'en' ? "hostels and basic hotels, market meals, shared tours, Expedition train." : "hostales y hoteles básicos, comidas en mercados, tours compartidos, tren Expedition."}</li>
+      <li><strong>{lang === 'en' ? "Standard ($1,200-1,600 USD):" : "Estándar (1,200-1,600 USD):"}</strong> {lang === 'en' ? "3-star hotels, mid-range restaurants, group tours, Vistadome train." : "hoteles 3 estrellas, restaurantes de gama media, tours grupales, tren Vistadome."}</li>
+      <li><strong>{lang === 'en' ? "Premium (from $2,200 USD):" : "Premium (desde 2,200 USD):"}</strong> {lang === 'en' ? "4-5 star hotels, fine dining, private tours, Hiram Bingham train." : "hoteles 4-5 estrellas, restaurantes de alta cocina, tours privados, tren Hiram Bingham."}</li>
+    </ul>
+
+    <h2>{lang === 'en' ? "Possible Variations" : "Variantes posibles"}</h2>
+    <p>{lang === 'en'
+      ? "If you have an extra day, you can replace Day 6 with a Rainbow Mountain visit with an extra night in Cusco, or shorten Lima to 1 day and add a night in Aguas Calientes. For travelers with good physical condition, the 1-day Inca Trail (short route from Km 104) can replace Day 4 Sacred Valley."
+      : "Si tienes un día adicional, puedes sustituir el Día 6 por una visita a la Montaña 7 Colores con noche extra en Cusco, o acortar Lima a 1 día y añadir una noche en Aguas Calientes. Para viajeros con buena condición física, el Camino Inca de 1 día (ruta corta desde Km 104) puede reemplazar el Día 4 de Valle Sagrado."}</p>
+
+    <h2>{lang === 'en' ? "Frequently Asked Questions About 7-Day Peru Itineraries" : "Preguntas frecuentes sobre itinerarios de 7 días en Perú"}</h2>
+
+    <h3>{lang === 'en' ? "Is one week enough to see Peru?" : "¿Es suficiente una semana para ver Perú?"}</h3>
+    <p>{lang === 'en'
+      ? "Yes, one week allows you to visit Lima, Cusco, and Machu Picchu. It's an intense pace but doable. For a more relaxed experience or to add Arequipa or Lake Titicaca, 10-14 days is recommended."
+      : "Sí, una semana permite conocer Lima, Cusco y Machu Picchu. Es un ritmo intenso pero factible. Para una experiencia más relajada o para añadir Arequipa o el Lago Titicaca, se recomiendan 10-14 días."}</p>
+
+    <h3>{lang === 'en' ? "Can I add the Amazon to a 7-day itinerary?" : "¿Puedo añadir Amazonía a un itinerario de 7 días?"}</h3>
+    <p>{lang === 'en'
+      ? "Not recommended. The Amazon requires at least 3 additional days (flights + lodge). Ideally dedicate a separate trip of at least 5 days for the rainforest."
+      : "No es recomendable. La Amazonía requiere al menos 3 días adicionales (vuelos + lodge). Lo ideal es dedicar un viaje aparte de al menos 5 días para la selva amazónica."}</p>
+
+    <h3>{lang === 'en' ? "How much does this 7-day Peru itinerary cost?" : "¿Cuánto cuesta este itinerario de 7 días por Perú?"}</h3>
+    <p>{lang === 'en'
+      ? "Total estimated cost per person (international flights not included): $700-900 budget, $1,200-1,600 standard, from $2,200 premium. Lima-Cusco-Lima flights cost approximately $80-150 extra."
+      : "El costo total estimado por persona (vuelos internacionales no incluidos) es de 700-900 USD en modalidad económica, 1,200-1,600 USD en estándar y desde 2,200 USD en premium. Los vuelos Lima-Cusco-Lima cuestan aproximadamente 80-150 USD adicionales."}</p>
+  </article>
+</Layout>
+
+<style>
+  .geo-page { max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
+  .geo-page h1 { font-size: 2rem; color: #f1f5f9; margin-bottom: 1.5rem; }
+  .geo-page h2 { font-size: 1.5rem; color: #06b6d4; margin: 2rem 0 1rem; border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; }
+  .geo-page h3 { font-size: 1.15rem; color: #f1f5f9; margin: 1.5rem 0 0.5rem; }
+  .geo-page p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+  .geo-page ul { color: #cbd5e1; margin-bottom: 1rem; padding-left: 1.5rem; }
+  .geo-page li { margin-bottom: 0.5rem; }
+  .geo-page strong { color: #f1f5f9; }
+</style>

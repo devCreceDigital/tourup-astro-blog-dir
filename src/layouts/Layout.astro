@@ -6,24 +6,125 @@ interface Props {
   title?: string;
   description?: string;
   currentPath?: string;
+  image?: string;
+  noindex?: boolean;
 }
 
 const {
   title = 'TourUp Content Hub',
-  description = 'AI-optimized directory for Peru tourism',
+  description = 'Directorio de operadores turísticos en Perú — encuentra agencias, tours y destinos verificados',
   currentPath = '/',
+  image = '/og-default.jpg',
+  noindex = false,
 } = Astro.props;
+
+const siteUrl = 'https://tourup.co';
+const canonicalUrl = `${siteUrl}${currentPath}`;
+
+const lang = currentPath.startsWith('/en/') ? 'en' : 'es';
+const ogLocale = lang === 'en' ? 'en_US' : 'es_PE';
+
+const ogType = currentPath.startsWith('/blog/') ? 'article' : 'website';
+
+function breadcrumbItems(path: string) {
+  const parts = path.replace(/\/$/, '').split('/').filter(Boolean);
+  const items = [{ name: 'Inicio', path: '/' }];
+  let acc = '';
+  for (const part of parts) {
+    acc += '/' + part;
+    const label = part.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+    items.push({ name: label, path: acc + '/' });
+  }
+  return items;
+}
+const crumbs = breadcrumbItems(currentPath);
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <meta name="google-site-verification" content="GOOGLE_VERIFICATION_CODE" />
+    <meta name="msvalidate.01" content="BING_VERIFICATION_CODE" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonicalUrl} />
     <title>{title}</title>
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={`${siteUrl}${image}`} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:locale" content={ogLocale} />
+    <meta property="og:site_name" content="TourUp Peru" />
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={`${siteUrl}${image}`} />
+
+    <!-- hreflang -->
+    <link rel="alternate" hrefLang="es" href={`${siteUrl}/`} />
+    <link rel="alternate" hrefLang="en" href={`${siteUrl}/en/`} />
+    <link rel="alternate" hrefLang="x-default" href={`${siteUrl}/`} />
+
+    <!-- Schema.org: @graph unificado -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://tourup.co/#organization",
+          "name": "TourUp Peru",
+          "url": "https://tourup.co",
+          "description": "Directorio de operadores turísticos verificados en Perú",
+          "foundingDate": "2024",
+          "areaServed": { "@type": "Country", "name": "PE" }
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://tourup.co/#website",
+          "url": "https://tourup.co",
+          "name": "TourUp Peru",
+          "description": "Directorio de operadores turísticos en Perú",
+          "publisher": { "@id": "https://tourup.co/#organization" },
+          "inLanguage": lang,
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": {
+              "@type": "EntryPoint",
+              "urlTemplate": "https://tourup.co/?q={search_term_string}"
+            },
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "WebPage",
+          "@id": canonicalUrl + "#webpage",
+          "url": canonicalUrl,
+          "name": title,
+          "description": description,
+          "isPartOf": { "@id": "https://tourup.co/#website" },
+          "about": { "@id": "https://tourup.co/#organization" }
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@id": canonicalUrl + "#breadcrumb",
+          "itemListElement": crumbs.map((crumb, i) => ({
+            "@type": "ListItem",
+            "position": i + 1,
+            "name": crumb.name,
+            "item": siteUrl + crumb.path
+          }))
+        }
+      ]
+    })} />
   </head>
   <body>
     <Header currentPath={currentPath} />

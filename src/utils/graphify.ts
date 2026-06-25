@@ -38,8 +38,9 @@ export interface CompanyResult {
   reviews_count?: number;
   b2b_profile?: string;
   trust_metrics?: Record<string, unknown>;
-  match_reasons: string[];   // human-readable explanation for the shortlist
+  match_reasons: string[];
   url: string;
+  tax_id?: string;
 }
 
 // ── Graph types (minimal subset we need from graphify-out/graph.json) ────────
@@ -75,6 +76,32 @@ function loadGraph(): GraphJson | null {
   }
 }
 
+// ── Dedup by tax_id — prefer entry whose destinos best match filter ─────────
+
+function dedupByTaxId(results: CompanyResult[], filterDestinos?: string[]): CompanyResult[] {
+  const seen = new Map<string, number>();
+  const out: CompanyResult[] = [];
+  for (const r of results) {
+    if (!r.tax_id) {
+      out.push(r);
+      continue;
+    }
+    const idx = seen.get(r.tax_id);
+    if (idx === undefined) {
+      seen.set(r.tax_id, out.length);
+      out.push(r);
+    } else {
+      const existing = out[idx];
+      const existingMatch = filterDestinos?.filter((d) => existing.destinos.includes(d)).length ?? 0;
+      const currentMatch = filterDestinos?.filter((d) => r.destinos.includes(d)).length ?? 0;
+      if (currentMatch > existingMatch) {
+        out[idx] = r;
+      }
+    }
+  }
+  return out;
+}
+
 // ── Graph-based filtering (primary path) ────────────────────────────────────
 
 function filterViaGraph(graph: GraphJson, filters: CompanyFilters): CompanyResult[] {
@@ -89,6 +116,7 @@ function filterViaGraph(graph: GraphJson, filters: CompanyFilters): CompanyResul
     const nodeCategorias = (props.categorias as string[] | undefined) ?? [];
     const nodeRating = props.rating as number | undefined;
     const nodeMetrics = props.trust_metrics as Record<string, unknown> | undefined;
+    const nodeReg = props.regulation as Record<string, unknown> | undefined;
     const nodeLanguages = (nodeMetrics?.languages as string[] | undefined) ?? [];
     const nodeClientTypes = (nodeMetrics?.b2b_client_types as string[] | undefined) ?? [];
 
@@ -145,10 +173,11 @@ function filterViaGraph(graph: GraphJson, filters: CompanyFilters): CompanyResul
       trust_metrics: nodeMetrics,
       match_reasons: reasons,
       url: `/empresas/${node.id.replace('company:', '')}/`,
+      tax_id: (nodeReg?.tax_id as string) ?? undefined,
     });
   }
 
-  return results;
+  return dedupByTaxId(results, filters.destinos);
 }
 
 // ── Content-collection fallback (used when graph.json is absent) ─────────────
@@ -213,10 +242,11 @@ async function filterViaCollection(filters: CompanyFilters): Promise<CompanyResu
       trust_metrics: d.trust_metrics as Record<string, unknown> | undefined,
       match_reasons: reasons.length ? reasons : ['match general'],
       url: `/empresas/${entry.id}/`,
+      tax_id: d.regulation?.tax_id ?? undefined,
     });
   }
 
-  return results;
+  return dedupByTaxId(results, filters.destinos);
 }
 
 // ── Public API ────────────────────────────────────────────────────────────────

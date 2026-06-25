@@ -16,6 +16,40 @@ interface Props {
 
 const { post } = Astro.props;
 const { Content } = await post.render();
+
+const siteUrl = 'https://tourup.co';
+const pageUrl = `${siteUrl}/blog/${post.slug}/`;
+
+const articleJsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Article',
+      '@id': pageUrl + '#article',
+      headline: post.data.title,
+      description: post.data.description,
+      url: pageUrl,
+      ...(post.data.heroImage ? { image: post.data.heroImage } : {}),
+      datePublished: post.data.pubDate,
+      ...(post.data.updatedDate ? { dateModified: post.data.updatedDate } : {}),
+      author: {
+        '@type': 'Organization',
+        '@id': 'https://tourup.co/#organization',
+      },
+      publisher: {
+        '@type': 'Organization',
+        '@id': 'https://tourup.co/#organization',
+      },
+      mainEntityOfPage: {
+        '@type': 'WebPage',
+        '@id': pageUrl,
+      },
+      ...(post.data.tags?.length
+        ? { keywords: post.data.tags.join(', ') }
+        : {}),
+    },
+  ],
+};
 ---
 
 <Layout
@@ -23,6 +57,8 @@ const { Content } = await post.render();
   description={post.data.description}
   currentPath={`/blog/${post.slug}/`}
 >
+  <script type="application/ld+json" set:html={JSON.stringify(articleJsonLd, null, 2)} />
+
   <article class="post-article">
     <header class="post-header">
       <h1>{post.data.title}</h1>

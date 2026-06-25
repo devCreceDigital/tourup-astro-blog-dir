@@ -1,5 +1,6 @@
 ---
 type: destino
+lang: es
 name: Paracas
 country: Peru
 region: Ica

@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  h1 {
+    @apply text-[28px] font-bold leading-tight;
+  }
+  h2 {
+    @apply text-[20px] font-semibold leading-snug border-l-[3px] border-primary pl-3;
+  }
+  h3 {
+    @apply text-[14px] font-semibold border-l-2 border-[#1d9e75] pl-2;
+  }
+  p {
+    @apply text-[14px] leading-[1.7] text-text-secondary;
+  }
+  ul, ol {
+    @apply text-[14px] leading-[1.7] text-text-secondary;
+  }
+  a {
+    @apply text-primary hover:text-accent transition-colors;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary text-white px-5 py-2.5 rounded-lg font-semibold text-[14px] hover:bg-primary-dark transition-colors inline-block;
+  }
+  .btn-outline {
+    @apply border-2 border-primary text-primary px-5 py-2 rounded-lg font-semibold text-[14px] hover:bg-primary hover:text-white transition-colors inline-block;
+  }
+  .card {
+    @apply border border-border-color rounded-[10px] p-4 bg-white;
+  }
+  .sidebar-card {
+    @apply border border-border-color rounded-[12px] p-5 bg-white sticky top-4;
+  }
+  .badge-group {
+    @apply inline-block px-2.5 py-0.5 rounded-full text-[12px] font-medium bg-blue-100 text-blue-700;
+  }
+  .badge-private {
+    @apply inline-block px-2.5 py-0.5 rounded-full text-[12px] font-medium bg-purple-100 text-purple-700;
+  }
+}

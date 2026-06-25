@@ -16,6 +16,68 @@ interface Props {
 
 const { company } = Astro.props;
 const { Content } = await company.render();
+const d = company.data;
+
+const siteUrl = 'https://tourup.co';
+const pageUrl = `${siteUrl}/companies/${company.id}/`;
+
+const napPhone = d.nap?.phone ?? d.contact?.phone;
+const napEmail = d.nap?.email ?? d.contact?.email;
+const napWebsite = d.nap?.website ?? d.contact?.website;
+const napCity = d.nap?.city ?? d.location?.city;
+const napAddress = d.nap?.address;
+const napCountry = d.nap?.country ?? d.location?.country ?? 'Peru';
+
+const jsonLd: Record<string, unknown> = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': ['TravelAgency', 'LocalBusiness'],
+      '@id': pageUrl,
+      name: d.title,
+      description: d.summary,
+      url: napWebsite ?? pageUrl,
+      ...(napPhone ? { telephone: napPhone } : {}),
+      ...(napEmail ? { email: napEmail } : {}),
+      address: {
+        '@type': 'PostalAddress',
+        ...(napAddress ? { streetAddress: napAddress } : {}),
+        addressLocality: napCity,
+        addressCountry: napCountry,
+      },
+      mainEntityOfPage: {
+        '@type': 'WebPage',
+        '@id': pageUrl,
+      },
+      ...(d.rating && d.reviews_count
+        ? {
+            aggregateRating: {
+              '@type': 'AggregateRating',
+              ratingValue: d.rating,
+              reviewCount: d.reviews_count,
+              bestRating: 5,
+              worstRating: 1,
+            },
+          }
+        : {}),
+    },
+    ...(d.faq?.length
+      ? [
+          {
+            '@type': 'FAQPage',
+            mainEntity: d.faq.map((item: any) => ({
+              '@type': 'Question',
+              name: item.question,
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: item.answer,
+              },
+            })),
+          },
+        ]
+      : []),
+  ],
+};
 ---
 
 <Layout
@@ -23,6 +85,8 @@ const { Content } = await company.render();
   description={company.data.summary}
   currentPath={`/companies/${company.id}/`}
 >
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd, null, 2)} />
+
   <article class="company-page">
     <header class="company-header">
       <div class="company-meta">

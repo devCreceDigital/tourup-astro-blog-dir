@@ -1,0 +1,120 @@
+---
+import Layout from '../../../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  return [
+    { params: { lang: 'en' }, props: { lang: 'en' } },
+    { params: { lang: 'es' }, props: { lang: 'es' } },
+  ];
+}
+
+interface Props { lang: string; }
+const { lang } = Astro.props;
+---
+
+<Layout
+  title={lang === 'en' ? "Best Machu Picchu Tours from Cusco (2026)" : "Mejores tours a Machu Picchu desde Cusco (2026)"}
+  description={lang === 'en'
+    ? "Compare the best Machu Picchu tours from Cusco in 2026. Full day, 2 days, Inca Trail, group and private. Prices, schedules and tips."
+    : "Compara los mejores tours a Machu Picchu desde Cusco en 2026. Full day, 2 días, Camino Inca, grupales y privados. Precios, horarios y consejos."}
+  currentPath={`/${lang}/peru/cusco/tours-machu-picchu/`}
+>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "ItemList",
+        "name": lang === 'en' ? "Best Machu Picchu Tours" : "Mejores tours a Machu Picchu",
+        "numberOfItems": 7,
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": lang === 'en' ? "Full Day Machu Picchu" : "Full Day Machu Picchu" },
+          { "@type": "ListItem", "position": 2, "name": lang === 'en' ? "Machu Picchu + Huayna Picchu" : "Machu Picchu + Huayna Picchu" },
+          { "@type": "ListItem", "position": 3, "name": lang === 'en' ? "Sacred Valley + Machu Picchu 2-Day" : "Valle Sagrado + Machu Picchu 2 Días" },
+          { "@type": "ListItem", "position": 4, "name": lang === 'en' ? "Inca Trail 4 Days" : "Camino Inca 4 Días" },
+          { "@type": "ListItem", "position": 5, "name": lang === 'en' ? "Salkantay Trek 5 Days" : "Salkantay Trek 5 Días" },
+          { "@type": "ListItem", "position": 6, "name": lang === 'en' ? "Inca Jungle 3 Days" : "Inca Jungle 3 Días" },
+          { "@type": "ListItem", "position": 7, "name": lang === 'en' ? "Private Machu Picchu Premium" : "Privado Machu Picchu Premium" }
+        ]
+      }
+    ]
+  })} />
+
+  <article class="geo-page">
+    <h1>{lang === 'en' ? "Best Machu Picchu Tours from Cusco (2026)" : "Mejores tours a Machu Picchu desde Cusco (2026)"}</h1>
+
+    <h2>{lang === 'en' ? "Quick Summary: Which Tour to Choose" : "Resumen rápido: qué tour elegir según tu tipo de viaje"}</h2>
+    <ul>
+      <li><strong>{lang === 'en' ? "Short Trip (1 day):" : "Viaje corto (1 día):"}</strong> {lang === 'en' ? "Full day Machu Picchu from Cusco. Ideal if you have limited time. Includes train, bus, guide and tickets." : "Full day Machu Picchu desde Cusco. Ideal si tienes poco tiempo. Incluye tren, bus, guía y entradas."}</li>
+      <li><strong>{lang === 'en' ? "Classic Trip (2 days):" : "Viaje clásico (2 días):"}</strong> {lang === 'en' ? "Machu Picchu + Sacred Valley. Combines Sacred Valley day 1 with Machu Picchu day 2. Includes overnight in Aguas Calientes." : "Machu Picchu + Valle Sagrado. Combina el Valle Sagrado el primer día con Machu Picchu el segundo. Incluye noche en Aguas Calientes."}</li>
+      <li><strong>{lang === 'en' ? "Premium / Experience (3-4 days):" : "Premium / Experiencia (3-4 días):"}</strong> {lang === 'en' ? "Inca Trail, Salkantay or Inca Jungle. For travelers seeking adventure and reaching Machu Picchu via alternative routes." : "Camino Inca, Salkantay o Inca Jungle. Para viajeros que buscan aventura y llegar a Machu Picchu por rutas alternativas."}</li>
+    </ul>
+
+    <h2>{lang === 'en' ? "Top Machu Picchu Tours Selected by Experts" : "Top tours a Machu Picchu seleccionados por expertos"}</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>{lang === 'en' ? "Tour" : "Tour"}</th>
+          <th>{lang === 'en' ? "Duration" : "Duración"}</th>
+          <th>{lang === 'en' ? "Type" : "Tipo"}</th>
+          <th>{lang === 'en' ? "Departure" : "Salida"}</th>
+          <th>{lang === 'en' ? "Includes" : "Incluye"}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>{lang === 'en' ? "Full Day Machu Picchu" : "Full Day Machu Picchu"}</td><td>1 {lang === 'en' ? "day" : "día"}</td><td>{lang === 'en' ? "Group / Private" : "Grupo / Privado"}</td><td>Cusco</td><td>{lang === 'en' ? "Train, bus, guide, tickets" : "Tren, bus, guía, entradas"}</td></tr>
+        <tr><td>{lang === 'en' ? "Machu Picchu + Huayna Picchu" : "Machu Picchu + Huayna Picchu"}</td><td>1 {lang === 'en' ? "day" : "día"}</td><td>{lang === 'en' ? "Group" : "Grupo"}</td><td>Cusco</td><td>{lang === 'en' ? "Train, bus, guide, ticket + Huayna Picchu" : "Tren, bus, guía, entrada + Huayna Picchu"}</td></tr>
+        <tr><td>{lang === 'en' ? "Sacred Valley + Machu Picchu" : "Valle Sagrado + Machu Picchu"}</td><td>2 {lang === 'en' ? "days" : "días"}</td><td>{lang === 'en' ? "Group / Private" : "Grupo / Privado"}</td><td>Cusco</td><td>{lang === 'en' ? "Transport, guide, tickets, 1 night, train" : "Transporte, guía, entradas, 1 noche, tren"}</td></tr>
+        <tr><td>{lang === 'en' ? "Inca Trail 4 Days" : "Camino Inca 4 Días"}</td><td>4 {lang === 'en' ? "days" : "días"}</td><td>{lang === 'en' ? "Guided group" : "Grupo guiado"}</td><td>Cusco</td><td>{lang === 'en' ? "Guide, porters, camping, tickets, return train" : "Guía, porteadores, camping, entradas, tren retorno"}</td></tr>
+        <tr><td>{lang === 'en' ? "Salkantay Trek 5 Days" : "Salkantay Trek 5 Días"}</td><td>5 {lang === 'en' ? "days" : "días"}</td><td>{lang === 'en' ? "Group / Private" : "Grupo / Privado"}</td><td>Cusco</td><td>{lang === 'en' ? "Guide, camping/lodge, meals, tickets" : "Guía, camping/lodge, comidas, entradas"}</td></tr>
+        <tr><td>{lang === 'en' ? "Inca Jungle 3 Days" : "Inca Jungle 3 Días"}</td><td>3 {lang === 'en' ? "days" : "días"}</td><td>{lang === 'en' ? "Group" : "Grupo"}</td><td>Cusco</td><td>{lang === 'en' ? "Bike, rafting, canopy, guide, tickets" : "Bicicleta, rafting, canopy, guía, entradas"}</td></tr>
+        <tr><td>{lang === 'en' ? "Private Machu Picchu Premium" : "Privado Machu Picchu Premium"}</td><td>1-2 {lang === 'en' ? "days" : "días"}</td><td>{lang === 'en' ? "Private" : "Privado"}</td><td>Cusco</td><td>{lang === 'en' ? "All inclusive, bilingual guide, Vistadome train" : "Todo incluido, guía bilingüe, tren Vistadome"}</td></tr>
+      </tbody>
+    </table>
+
+    <h2>{lang === 'en' ? "How Machu Picchu Entry Works in 2026" : "Cómo funciona la entrada a Machu Picchu en 2026"}</h2>
+    <p>{lang === 'en'
+      ? "Since 2024, entry to Machu Picchu is organized in 4 circuits, each with specific routes and assigned times. Maximum daily capacity is 4,044 visitors. Entry with an authorized guide is mandatory. Tickets are purchased exclusively on the Ministry of Culture's official platform and often sell out. Prices for foreigners are approximately 152 soles (general entry) and 200-250 soles for circuits including Huayna Picchu or Machu Picchu Mountain. Peruvian citizens and residents get reduced rates."
+      : "Desde 2024, el ingreso a Machu Picchu está organizado en 4 circuitos. El aforo máximo diario es de 4,044 visitantes. Es obligatorio ingresar con un guía autorizado. Las entradas se compran en la plataforma oficial del Ministerio de Cultura. Los precios para extranjeros son aproximadamente 152 soles (entrada general) y 200-250 soles para circuitos que incluyen Huayna Picchu o Montaña Machu Picchu."}</p>
+
+    <h2>{lang === 'en' ? "Tips for Choosing the Best Machu Picchu Tour" : "Consejos para elegir el mejor tour a Machu Picchu"}</h2>
+
+    <h3>{lang === 'en' ? "Group vs Private Tour" : "Diferencias entre tour grupal y privado"}</h3>
+    <p>{lang === 'en'
+      ? "Group tours are more economical ($80-150 per person full day) and operate with groups of 8-16 people. Include English/Spanish guide and follow a fixed itinerary. Private tours (from $200 per person) offer total schedule flexibility, exclusive guide, private vehicle, and personalized attention. Ideal for couples, families, or travelers with specific interests."
+      : "Los tours grupales son más económicos (80-150 USD por persona en full day) y operan con grupos de 8-16 personas. Los tours privados (desde 200 USD por persona) ofrecen flexibilidad total de horarios, guía exclusivo y atención personalizada."}</p>
+
+    <h3>{lang === 'en' ? "Transportation, Schedules & Combinations" : "Transporte, horarios y combinaciones"}</h3>
+    <p>{lang === 'en'
+      ? "The train is the main means of transport to Machu Picchu. Options: Expedition (economical, $65 one way), Vistadome (panoramic windows, $85 one way), and Hiram Bingham (luxury with meals, $500 one way). All depart from Ollantaytambo (1.5 hours from Cusco) or Poroy. Combine Machu Picchu with the Sacred Valley the day before or after to optimize travel time."
+      : "El tren es el principal medio de transporte. Opciones: Expedition (económico, 65 USD ida), Vistadome (ventanales panorámicos, 85 USD ida) y Hiram Bingham (lujo, 500 USD ida). Se recomienda combinar Machu Picchu con el Valle Sagrado el día anterior o posterior."}</p>
+
+    <h2>{lang === 'en' ? "Frequently Asked Questions" : "Preguntas frecuentes"}</h2>
+
+    <h3>{lang === 'en' ? "How long is a full day Machu Picchu tour from Cusco?" : "¿Cuánto dura un tour full day a Machu Picchu?"}</h3>
+    <p>{lang === 'en' ? "A full day takes approximately 16 hours: 4:00-5:00 am departure, 1.5-hour train, 30-minute bus to the citadel, 2-3 hour guided tour, return train, arrival in Cusco 8:00-9:00 pm." : "Un full day completo dura aproximadamente 16 horas desde Cusco."}</p>
+
+    <h3>{lang === 'en' ? "What's included in standard Machu Picchu tours?" : "¿Qué incluyen los tours estándar?"}</h3>
+    <p>{lang === 'en' ? "Standard tours include: hotel pickup, round-trip train, up/down bus in Aguas Calientes, general Machu Picchu entry, professional English/Spanish guide, and permanent assistance. Not included: meals, travel insurance, Huayna Picchu/Machu Picchu Mountain tickets, or tips." : "Los tours estándar incluyen recojo en hotel, tren ida y vuelta, bus subida y bajada, entrada general, guía profesional. No incluyen alimentación ni entradas adicionales."}</p>
+
+    <h3>{lang === 'en' ? "Can I reschedule if there's a strike?" : "¿Puedo cambiar la fecha si hay huelga?"}</h3>
+    <p>{lang === 'en' ? "Most operators allow date changes without penalty in case of strikes, official closures, or natural disasters. Machu Picchu tickets are non-refundable per official policy, but operators usually manage date changes for contingencies. Check cancellation policy before booking." : "La mayoría permite cambios de fecha sin penalización por huelgas o cierres. Las entradas no son reembolsables según política oficial, pero los operadores gestionan cambios de fecha."}</p>
+
+    <h3>{lang === 'en' ? "What if Machu Picchu tickets are sold out?" : "¿Qué pasa si los cupos están agotados?"}</h3>
+    <p>{lang === 'en' ? "If official tickets are sold out, some operators offer alternatives: Circuit 4 (less demand), the combined ticket, or changing your visit date. Another option is taking a trekking route (Salkantay, Inca Jungle) that includes Machu Picchu entry. Book 1-2 months in advance during high season." : "Si las entradas están agotadas, algunos operadores ofrecen alternativas como cambiar la fecha o tomar una ruta de trekking que incluye la entrada. Se recomienda reservar 1-2 meses antes en temporada alta."}</p>
+  </article>
+</Layout>
+
+<style>
+  .geo-page { max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
+  .geo-page h1 { font-size: 2rem; color: #f1f5f9; margin-bottom: 1.5rem; }
+  .geo-page h2 { font-size: 1.5rem; color: #06b6d4; margin: 2rem 0 1rem; border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; }
+  .geo-page h3 { font-size: 1.15rem; color: #f1f5f9; margin: 1.5rem 0 0.5rem; }
+  .geo-page p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
+  .geo-page ul { color: #cbd5e1; margin-bottom: 1rem; padding-left: 1.5rem; }
+  .geo-page li { margin-bottom: 0.5rem; }
+  .geo-page strong { color: #f1f5f9; }
+  .geo-page table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+  .geo-page th, .geo-page td { padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--color-border); color: #cbd5e1; }
+  .geo-page th { background: var(--color-dark-light); font-weight: 600; color: #f1f5f9; }
+</style>

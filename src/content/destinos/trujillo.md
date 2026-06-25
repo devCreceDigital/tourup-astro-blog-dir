@@ -1,5 +1,6 @@
 ---
 type: destino
+lang: es
 name: Trujillo
 country: Peru
 region: La Libertad
@@ -23,3 +24,4 @@ Trujillo es la capital de la marinera, puerta de entrada a Chan Chan, Huacas del
 ## Productos turísticos principales
 
 Los operadores receptivos en Trujillo ofrecen servicios para agencias emisoras y compradores B2B que buscan experiencias auténticas y operadores verificados en Perú.
+

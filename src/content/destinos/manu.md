@@ -1,5 +1,6 @@
 ---
 type: destino
+lang: es
 name: Manu
 country: Peru
 region: Madre de Dios / Cusco
