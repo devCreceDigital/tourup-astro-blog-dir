@@ -1,0 +1,264 @@
+---
+interface Column { key: string; label: string; }
+interface Row { [key: string]: unknown; slug?: string; }
+
+interface Props {
+  columns: Column[];
+  rows: Row[];
+  baseUrl?: string;
+}
+
+const { columns, rows, baseUrl = '' } = Astro.props;
+
+function formatCell(value: unknown): string {
+  if (value === null || value === undefined) return '\u2014';
+  if (Array.isArray(value)) return value.join(', ');
+  if (typeof value === 'object') return JSON.stringify(value);
+  return String(value);
+}
+---
+
+<div class="data-table-wrapper">
+  <div class="data-table-toolbar">
+    <div class="search-box">
+      <input id="table-search" type="text" class="search-input" placeholder="Search..." />
+    </div>
+    <div class="table-info">
+      <span id="row-count" class="row-count">{rows.length} entries</span>
+    </div>
+  </div>
+
+  <div class="table-scroll">
+    <table class="data-table">
+      <thead>
+        <tr>
+          {columns.map(col => (
+            <th data-key={col.key} class="sortable">
+              {col.label}
+              <span class="sort-arrow"></span>
+            </th>
+          ))}
+          {baseUrl && <th class="actions-col">Actions</th>}
+        </tr>
+      </thead>
+      <tbody id="table-body">
+        {rows.length === 0 && (
+          <tr><td colspan={columns.length + (baseUrl ? 1 : 0)} class="empty">No entries found</td></tr>
+        )}
+        {rows.map(row => (
+          <tr data-row={JSON.stringify(row)}>
+            {columns.map(col => (
+              <td>{formatCell(row[col.key])}</td>
+            ))}
+            {baseUrl && (
+              <td class="actions-col">
+                <div class="actions">
+                  <a href={`${baseUrl}/${row.slug}/edit`} class="action-btn edit">Edit</a>
+                  <button class="action-btn delete" data-slug={row.slug}>Delete</button>
+                </div>
+              </td>
+            )}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="data-table-footer">
+    <div class="pagination" id="pagination"></div>
+  </div>
+</div>
+
+<script>
+  const searchInput = document.getElementById('table-search') as HTMLInputElement;
+  const tableBody = document.getElementById('table-body')!;
+  const rowCount = document.getElementById('row-count')!;
+  const pagination = document.getElementById('pagination')!;
+  const rows = Array.from(tableBody.querySelectorAll('tr[data-row]'));
+  const PAGE_SIZE = 20;
+
+  let currentPage = 1;
+  let filteredRows = rows;
+
+  function getCellText(row: HTMLElement, colIdx: number): string {
+    return row.querySelectorAll('td')[colIdx]?.textContent?.toLowerCase() || '';
+  }
+
+  function filterRows(query: string) {
+    const lower = query.toLowerCase();
+    filteredRows = rows.filter(row => {
+      const cells = row.querySelectorAll('td');
+      return Array.from(cells).some(cell => cell.textContent?.toLowerCase().includes(lower));
+    });
+    currentPage = 1;
+    render();
+  }
+
+  function sortRows(colIndex: number, ascending: boolean) {
+    filteredRows.sort((a, b) => {
+      const aText = a.querySelectorAll('td')[colIndex]?.textContent || '';
+      const bText = b.querySelectorAll('td')[colIndex]?.textContent || '';
+      const aNum = parseFloat(aText);
+      const bNum = parseFloat(bText);
+      if (!isNaN(aNum) && !isNaN(bNum)) {
+        return ascending ? aNum - bNum : bNum - aNum;
+      }
+      return ascending ? aText.localeCompare(bText) : bText.localeCompare(aText);
+    });
+    render();
+  }
+
+  function render() {
+    const totalPages = Math.max(1, Math.ceil(filteredRows.length / PAGE_SIZE));
+    const start = (currentPage - 1) * PAGE_SIZE;
+    const end = Math.min(start + PAGE_SIZE, filteredRows.length);
+
+    tableBody.innerHTML = '';
+    if (filteredRows.length === 0) {
+      const colCount = rows[0]?.querySelectorAll('td').length || 1;
+      tableBody.innerHTML = `<tr><td colspan="${colCount}" class="empty">No entries found</td></tr>`;
+    } else {
+      for (let i = start; i < end; i++) {
+        tableBody.appendChild(filteredRows[i].cloneNode(true));
+      }
+      tableBody.querySelectorAll('.action-btn.delete').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const slug = btn.getAttribute('data-slug');
+          if (!slug || !confirm('Delete this entry?')) return;
+          const url = window.location.pathname.replace(/\/$/, '');
+          const res = await fetch(`${url}/${slug}`, { method: 'DELETE' });
+          if (res.ok) {
+            window.location.reload();
+          } else {
+            alert('Failed to delete');
+          }
+        });
+      });
+    }
+
+    rowCount.textContent = `${filteredRows.length} entries`;
+
+    pagination.innerHTML = '';
+    if (totalPages > 1) {
+      const prevBtn = document.createElement('button');
+      prevBtn.textContent = 'Prev';
+      prevBtn.className = 'page-btn';
+      prevBtn.disabled = currentPage <= 1;
+      prevBtn.addEventListener('click', () => { if (currentPage > 1) { currentPage--; render(); } });
+      pagination.appendChild(prevBtn);
+
+      for (let i = 1; i <= totalPages; i++) {
+        const pageBtn = document.createElement('button');
+        pageBtn.textContent = String(i);
+        pageBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+        pageBtn.addEventListener('click', () => { currentPage = i; render(); });
+        pagination.appendChild(pageBtn);
+      }
+
+      const nextBtn = document.createElement('button');
+      nextBtn.textContent = 'Next';
+      nextBtn.className = 'page-btn';
+      nextBtn.disabled = currentPage >= totalPages;
+      nextBtn.addEventListener('click', () => { if (currentPage < totalPages) { currentPage++; render(); } });
+      pagination.appendChild(nextBtn);
+    }
+  }
+
+  let sortState: { col: number; asc: boolean } | null = null;
+
+  document.querySelectorAll('.sortable').forEach((th, idx) => {
+    th.addEventListener('click', () => {
+      if (sortState && sortState.col === idx) {
+        sortState.asc = !sortState.asc;
+      } else {
+        sortState = { col: idx, asc: true };
+      }
+      document.querySelectorAll('.sortable').forEach(h => h.classList.remove('sorted-asc', 'sorted-desc'));
+      th.classList.add(sortState.asc ? 'sorted-asc' : 'sorted-desc');
+      sortRows(idx, sortState.asc);
+    });
+  });
+
+  searchInput.addEventListener('input', () => filterRows(searchInput.value));
+
+  render();
+</script>
+
+<style>
+  .data-table-wrapper {
+    background: #ffffff;
+    border: 1px solid #e5e5e5;
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .data-table-toolbar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 16px 20px; border-bottom: 1px solid #e5e5e5;
+    background: #f9f9f9;
+  }
+  .search-input {
+    padding: 8px 14px; border: 1px solid #e5e5e5; border-radius: 10px;
+    font-size: 13px; font-family: 'Geist', sans-serif; outline: none;
+    background: #ffffff; width: 260px;
+  }
+  .search-input:focus { border-color: #000000; }
+  .table-info { font-size: 12px; color: #737373; }
+  .table-scroll { overflow-x: auto; }
+  .data-table { width: 100%; border-collapse: collapse; }
+  .data-table th {
+    padding: 14px 20px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 600;
+    color: #737373;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #e5e5e5;
+    background: #f9f9f9;
+    cursor: pointer; user-select: none;
+    white-space: nowrap;
+  }
+  .sortable:hover { color: #000000; }
+  .sort-arrow { margin-left: 4px; font-size: 10px; }
+  .sorted-asc .sort-arrow::after { content: '\25B2'; }
+  .sorted-desc .sort-arrow::after { content: '\25BC'; }
+  .data-table td {
+    padding: 14px 20px;
+    font-size: 14px;
+    color: #1a1c1c;
+    border-bottom: 1px solid #e5e5e5;
+    max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: #f9f9f9; }
+  .empty { text-align: center; color: #737373; padding: 48px 20px; }
+  .actions-col { width: 120px; text-align: right; }
+  .actions { display: flex; gap: 8px; justify-content: flex-end; }
+  .action-btn {
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+    cursor: pointer;
+    text-decoration: none;
+    background: #ffffff;
+    color: #444748;
+  }
+  .action-btn:hover { background: #f2f2f2; }
+  .action-btn.edit:hover { color: #000000; border-color: #000000; }
+  .action-btn.delete:hover { color: #ba1a1a; border-color: #ba1a1a; }
+
+  .data-table-footer {
+    display: flex; justify-content: center; padding: 12px 20px;
+    border-top: 1px solid #e5e5e5; background: #f9f9f9;
+  }
+  .pagination { display: flex; gap: 4px; align-items: center; }
+  .page-btn {
+    padding: 4px 10px; border: 1px solid #e5e5e5; border-radius: 8px;
+    background: #ffffff; font-size: 12px; cursor: pointer; color: #444748;
+  }
+  .page-btn:hover { background: #f2f2f2; }
+  .page-btn.active { background: #000000; color: #ffffff; border-color: #000000; }
+  .page-btn:disabled { opacity: 0.4; cursor: default; }
+</style>

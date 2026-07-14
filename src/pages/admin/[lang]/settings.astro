@@ -1,0 +1,249 @@
+---
+export const prerender = false;
+import AdminLayout from '../../../components/admin/Layout.astro';
+
+const { lang } = Astro.params as { lang: string };
+const t = (es: string, en: string) => lang === 'en' ? en : es;
+---
+
+<AdminLayout title={t('Configuración', 'Settings')}>
+  <div class="page-header">
+    <div>
+      <h1>{t('Configuración', 'Settings')}</h1>
+      <p class="subtitle">{t('Administra la configuración del sitio', 'Manage site settings')}</p>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="seo">{t('SEO', 'SEO')}</button>
+    <button class="tab" data-tab="advanced">{t('Avanzado', 'Advanced')}</button>
+    <button class="tab" data-tab="integrations">{t('Integraciones', 'Integrations')}</button>
+  </div>
+
+  <form id="settings-form">
+    <div id="tab-seo" class="tab-content active">
+      <div class="form-card">
+        <div class="form-section">
+          <h2>{t('SEO General', 'General SEO')}</h2>
+          <div class="field">
+            <label>{t('Título del sitio', 'Site title')}</label>
+            <input name="seo.siteTitle" />
+          </div>
+          <div class="field">
+            <label>{t('Descripción', 'Description')}</label>
+            <textarea name="seo.description" rows="3"></textarea>
+          </div>
+          <div class="field">
+            <label>{t('URL canónica', 'Canonical URL')}</label>
+            <input name="seo.canonicalUrl" type="url" />
+          </div>
+          <div class="field">
+            <label>{t('Palabras clave (meta)', 'Meta keywords')}</label>
+            <input name="seo.metaKeywords" />
+          </div>
+          <div class="field">
+            <label>{t('URL de OG Image', 'OG Image URL')}</label>
+            <input name="seo.ogImage" type="url" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-advanced" class="tab-content">
+      <div class="form-card">
+        <div class="form-section">
+          <h2>{t('CSS y JS personalizados', 'Custom CSS & JS')}</h2>
+          <div class="field">
+            <label>{t('CSS personalizado', 'Custom CSS')}</label>
+            <textarea name="advanced.customCss" rows="6" class="code-input"></textarea>
+          </div>
+          <div class="field">
+            <label>{t('JS en &lt;head&gt;', 'JS in &lt;head&gt;')}</label>
+            <textarea name="advanced.customJsHead" rows="4" class="code-input"></textarea>
+          </div>
+          <div class="field">
+            <label>{t('JS antes de &lt;/body&gt;', 'JS before &lt;/body&gt;')}</label>
+            <textarea name="advanced.customJsBody" rows="4" class="code-input"></textarea>
+          </div>
+          <div class="field">
+            <label>{t('Estilos inline', 'Inline styles')}</label>
+            <textarea name="advanced.inlineStyles" rows="4" class="code-input"></textarea>
+          </div>
+        </div>
+        <div class="form-section">
+          <h2>robots.txt</h2>
+          <div class="field">
+            <label>robots.txt {t('contenido', 'content')}</label>
+            <textarea name="advanced.robotsTxt" rows="6" class="code-input"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-integrations" class="tab-content">
+      <div class="form-card">
+        <div class="form-section">
+          <h2>{t('Analytics', 'Analytics')}</h2>
+          <div class="field">
+            <label>Google Analytics ID</label>
+            <input name="integrations.googleAnalyticsId" placeholder="G-XXXXXXXXXX" />
+          </div>
+          <div class="field">
+            <label>Facebook Pixel ID</label>
+            <input name="integrations.facebookPixelId" placeholder="1234567890" />
+          </div>
+        </div>
+        <div class="form-section">
+          <h2>{t('CRM', 'CRM')}</h2>
+          <div class="field">
+            <label>CRM URL</label>
+            <input name="integrations.crmUrl" type="url" />
+          </div>
+          <div class="field">
+            <label>CRM API Key</label>
+            <input name="integrations.crmApiKey" type="password" />
+          </div>
+          <div class="field checkbox-field">
+            <label>
+              <input name="integrations.crmEnabled" type="checkbox" />
+              {t('Habilitar CRM', 'Enable CRM')}
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn-primary">{t('Guardar cambios', 'Save changes')}</button>
+      <span id="save-status" class="save-status"></span>
+    </div>
+  </form>
+</AdminLayout>
+
+<script>
+  const lang = window.location.pathname.split('/')[2];
+  const API = `/api/admin/${lang}/settings`;
+  const form = document.getElementById('settings-form') as HTMLFormElement;
+  const statusEl = document.getElementById('save-status')!;
+
+  async function loadSettings() {
+    try {
+      const res = await fetch(API);
+      const settings = await res.json();
+      applySettings(settings);
+    } catch {
+      statusEl.textContent = 'Failed to load settings';
+      statusEl.className = 'save-status error';
+    }
+  }
+
+  function applySettings(settings: any) {
+    const inputs = form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('[name]');
+    inputs.forEach(input => {
+      const path = input.name.split('.');
+      let val: any = settings;
+      for (const key of path) {
+        val = val?.[key];
+      }
+      if (input.type === 'checkbox') {
+        input.checked = val === true;
+      } else if (val !== undefined && val !== null) {
+        input.value = String(val);
+      }
+    });
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const fd = new FormData(form);
+    const payload: any = {};
+
+    for (const [name, value] of fd.entries()) {
+      const path = name.split('.');
+      let obj = payload;
+      for (let i = 0; i < path.length; i++) {
+        if (i === path.length - 1) {
+          const input = form.querySelector<HTMLInputElement>(`[name="${name}"]`);
+          if (input?.type === 'checkbox') {
+            obj[path[i]] = input.checked;
+          } else {
+            obj[path[i]] = value || undefined;
+          }
+        } else {
+          obj[path[i]] = obj[path[i]] || {};
+          obj = obj[path[i]];
+        }
+      }
+    }
+
+    try {
+      const res = await fetch(API, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (res.ok) {
+        statusEl.textContent = 'Saved!';
+        statusEl.className = 'save-status success';
+      } else {
+        statusEl.textContent = 'Save failed';
+        statusEl.className = 'save-status error';
+      }
+    } catch {
+      statusEl.textContent = 'Save failed';
+      statusEl.className = 'save-status error';
+    }
+    setTimeout(() => { statusEl.textContent = ''; }, 3000);
+  });
+
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      tab.classList.add('active');
+      const target = document.getElementById(`tab-${tab.getAttribute('data-tab')}`);
+      if (target) target.classList.add('active');
+    });
+  });
+
+  loadSettings();
+</script>
+
+<style>
+  .page-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }
+  .page-header h1 { font-size: 24px; font-weight: 700; color: #000000; margin-bottom: 4px; }
+  .subtitle { font-size: 14px; color: #737373; }
+  .btn-primary {
+    display: inline-flex; align-items: center; padding: 10px 20px;
+    background: #000000; color: #ffffff; border-radius: 10px;
+    font-size: 14px; font-weight: 600; text-decoration: none; border: none; cursor: pointer;
+  }
+  .btn-primary:hover { opacity: 0.85; }
+
+  .tabs { display: flex; gap: 4px; margin-bottom: 24px; background: #ffffff; border: 1px solid #e5e5e5; border-radius: 14px; padding: 4px; width: fit-content; }
+  .tab { padding: 8px 20px; border: none; background: transparent; border-radius: 10px; font-size: 13px; font-weight: 500; color: #444748; cursor: pointer; }
+  .tab.active { background: #000000; color: #ffffff; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  .form-card { background: #ffffff; border: 1px solid #e5e5e5; border-radius: 14px; padding: 32px; max-width: 800px; }
+  .form-section { margin-bottom: 28px; }
+  .form-section:last-child { margin-bottom: 0; }
+  .form-section h2 { font-size: 16px; font-weight: 600; color: #000000; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid #e5e5e5; }
+  .field { display: flex; flex-direction: column; gap: 4px; margin-bottom: 16px; }
+  .field label { font-size: 12px; font-weight: 600; color: #444748; text-transform: uppercase; letter-spacing: 0.3px; }
+  .field input, .field textarea {
+    padding: 10px 14px; border: 1px solid #e5e5e5; border-radius: 10px;
+    font-size: 14px; font-family: 'Geist', sans-serif; outline: none; background: #f9f9f9;
+  }
+  .field input:focus, .field textarea:focus { border-color: #000000; background: #ffffff; }
+  .field textarea { resize: vertical; min-height: 80px; }
+  .code-input { font-family: 'Geist Mono', monospace; font-size: 13px; }
+  .checkbox-field label { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+  .checkbox-field input[type="checkbox"] { width: 18px; height: 18px; }
+
+  .form-actions { display: flex; align-items: center; gap: 16px; margin-top: 24px; }
+  .save-status { font-size: 13px; font-weight: 500; }
+  .save-status.success { color: #00c853; }
+  .save-status.error { color: #ba1a1a; }
+</style>

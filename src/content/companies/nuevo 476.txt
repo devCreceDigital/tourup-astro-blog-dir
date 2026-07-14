@@ -1,0 +1,298 @@
+Actúa como un Senior Product Designer + Senior Frontend Engineer experto en SaaS marketplaces, directorios premium y UX para plataformas B2B/B2B2C.
+
+Quiero rediseñar una app llamada “TTDMI - Directorio Turístico Perú”, un directorio inteligente de operadores turísticos del Perú. La app actualmente tiene un estilo más cercano a dashboard administrativo y quiero transformarla en una experiencia mucho más aspiracional, premium y comercial, para que los operadores turísticos quieran registrarse y formar parte del directorio.
+
+OBJETIVO DE NEGOCIO
+El objetivo principal del rediseño es aumentar el deseo de registro de operadores turísticos. La plataforma no debe sentirse solo como una base de datos o un panel analítico; debe sentirse como una vitrina premium de reputación, visibilidad y posicionamiento digital para agencias y operadores turísticos.
+
+OBJETIVO DE DISEÑO
+Quiero que el producto combine:
+1. la credibilidad y estructura de un dashboard moderno,
+2. la estética aspiracional de un marketplace premium de turismo,
+3. la claridad comercial de una ficha de empresa que “vende” la marca del operador.
+
+INSTRUCCIONES GENERALES
+- Mantén la app como un producto web moderno, elegante y escalable.
+- Diseña con mentalidad de producto real listo para producción.
+- No hagas una UI genérica tipo template SaaS.
+- Evita el look “AI slop”: nada de gradientes morados/azules genéricos, íconos en círculos de colores, grids repetitivos sin personalidad ni cards planas estilo admin.
+- La app debe comunicar confianza, prestigio, descubrimiento, reputación y oportunidad comercial.
+- El sistema visual debe sentirse premium y distintivo para el contexto de turismo en Perú.
+- El lenguaje visual debe ser más cercano a un marketplace curado de alto valor que a una tabla de base de datos.
+
+DIRECCIÓN DE ARTE
+Quiero una propuesta visual inspirada en:
+- marketplace premium,
+- directorios curados,
+- fichas de marca / perfiles comerciales,
+- turismo de experiencia,
+- reputación y confianza.
+
+El tono debe ser:
+- elegante,
+- aspiracional,
+- confiable,
+- cálido pero sofisticado,
+- visualmente atractivo para operadores turísticos.
+
+PALETA Y ESTILO
+
+Evita una estética demasiado corporativa fría. Debe sentirse territorial, auténtica y premium.
+
+TIPOGRAFÍA
+Propón una combinación tipográfica premium:
+- sans moderna para UI y legibilidad,
+- opcionalmente una serif o display refinada para encabezados estratégicos.
+Debe verse editorial/comercial, no solo técnica.
+
+ESTRUCTURA DE LA APP A REDISEÑAR
+Necesito rediseñar especialmente estas 2 vistas:
+
+1. DIRECTORIO
+2. DETALLE DE EMPRESA / PERFIL DEL OPERADOR
+
+Además, quiero recomendaciones ligeras sobre cómo conectar esto con el flujo de registro para aumentar conversión.
+
+========================
+1. REDISEÑO DE LA VISTA “DIRECTORIO”
+========================
+
+PROBLEMA ACTUAL
+La sección Directorio hoy se siente muy tabular y administrativa. Quiero que tenga una vista en cards/cuadros mucho más vistosa y comercial.
+
+OBJETIVO DE LA NUEVA VISTA
+La vista Directorio debe parecer un catálogo premium de operadores turísticos. Debe invitar a explorar, comparar y descubrir empresas. Al mismo tiempo, debe hacer que un operador piense: “yo quiero que mi marca se vea así dentro del directorio”.
+
+REQUERIMIENTOS
+- Diseña la sección Directorio con un switch de vista:
+  - Vista Cards
+  - Vista Tabla
+- La vista por defecto debe ser Cards.
+- La tabla puede mantenerse para usuarios analíticos, pero la experiencia principal debe ser visual.
+
+DISEÑO DE LAS CARDS
+Cada card de operador debe incluir:
+- foto principal / cover image llamativa,
+- logo o avatar de marca superpuesto,
+- nombre comercial,
+- categoría o tipo de operador,
+- ubicación,
+- especialidades / nichos (chips),
+- idiomas,
+- señales de confianza,
+- nivel o score TTDMI,
+- reputación online (rating + número de reviews),
+- breve propuesta de valor en 1-2 líneas,
+- CTA claro para ver el perfil.
+
+Señales de confianza sugeridas:
+- Verificado
+- MINCETUR
+- Web activa
+- Redes activas
+- Respuesta rápida
+- Certificaciones
+
+PATRÓN DE CARD
+Quiero cards con:
+- imagen 16:9 o composición visual rica,
+- contenido editorial con buena jerarquía,
+- badges premium y elegantes,
+- hover states suaves,
+- elevación sutil,
+- muy buena respiración visual,
+- lectura rápida y escaneable.
+
+No quiero cards planas tipo admin panel.
+Sí quiero cards con look marketplace premium.
+
+LAYOUT DEL DIRECTORIO
+- Desktop: grid de 3 columnas.
+- Tablet: 2 columnas.
+- Mobile: 1 columna.
+- Incluir una card destacada o “featured” cada cierto número de resultados para operadores elite o patrocinados.
+- Considerar filtros bien diseñados arriba:
+  - departamento,
+  - clase MINCETUR,
+  - modalidad,
+  - nivel TTDMI,
+  - reputación,
+  - servicios destacados.
+- El área de filtros debe verse premium y usable, no como formulario pesado.
+
+MICROCOPY Y CONVERSIÓN
+Dentro del Directorio quiero CTAs y bloques que ayuden a captar operadores:
+- “Registra tu empresa”
+- “Haz que tu operador destaque”
+- “Mejora tu perfil y reputación digital”
+- “Reclama tu ficha”
+
+Incluye un bloque nativo entre resultados o en el header del directorio para captación de registros, sin que parezca banner invasivo.
+
+========================
+2. REDISEÑO DEL “DETALLE DE EMPRESA”
+========================
+
+PROBLEMA ACTUAL
+El detalle de empresa ya tiene bastante data útil, pero visualmente se siente más analítico que comercial. Quiero que combine branding, confianza, galería, información práctica y analítica TTDMI de forma más atractiva.
+
+La ficha de empresa debe sentirse como:
+OBJETIVO
+- mini landing page del operador,
+- perfil premium de marca,
+- dossier comercial,
+- ficha de reputación y madurez digital.
+
+ESTRUCTURA DESEADA
+
+A. HERO SUPERIOR
+Quiero un hero atractivo con:
+- cover image grande,
+- logo/avatar,
+- nombre de la empresa,
+- tagline o claim corto,
+- categoría,
+- ubicación,
+- idiomas,
+- CTA principal (Contactar / Solicitar cotización / Ver web),
+- CTA secundario (Compartir / Guardar / Reclamar perfil),
+- badge o bloque visual de score TTDMI.
+
+B. BANDA DE CONFIANZA
+Debajo del hero, incluir señales rápidas como:
+- Verificado por MINCETUR,
+- score TTDMI,
+- rating promedio,
+- número de reviews,
+- web activa,
+- redes activas,
+- certificaciones,
+- tiempo de respuesta.
+
+C. GALERÍA / EXPERIENCIAS
+Agregar una galería visual de fotos reales o mockups del operador:
+- tours,
+- experiencias,
+- instalaciones,
+- transporte,
+- equipo,
+- actividades destacadas.
+
+Esto debe subir la percepción de calidad y hacer la ficha más emocional y comercial.
+
+D. DESCRIPCIÓN COMERCIAL
+Una sección editorial con:
+- sobre la empresa,
+- qué la hace distinta,
+- tipos de experiencia que ofrece,
+- público ideal,
+- especialidades.
+
+E. BLOQUE ANALÍTICO TTDMI
+Mantener la fortaleza analítica del producto, pero presentarla mejor.
+Incluir:
+- score principal,
+- radar chart,
+- subscores,
+- fortalezas,
+- oportunidades de mejora,
+- insights accionables.
+
+No quiero solo números; quiero narrativa útil tipo:
+- “fortaleza en reputación y formalidad”
+- “oportunidad en SEO y conversión”
+- “alto potencial para subir de nivel”
+
+F. PANEL STICKY DE CONTACTO
+En desktop, quiero una columna lateral sticky con:
+- teléfono,
+- WhatsApp,
+- email,
+- web,
+- redes,
+- horarios,
+- idiomas,
+- ubicación,
+- CTA principal.
+
+Este panel debe ser claramente la zona de conversión.
+
+G. SECCIÓN PARA CAPTAR OPERADORES
+Dentro del perfil, si corresponde, agregar un bloque tipo:
+- “¿Eres el dueño de esta empresa?”
+- “Reclama este perfil”
+- “Mejora tu presencia y score digital”
+- “Actualiza fotos, canales y datos”
+
+========================
+3. EXPERIENCIA DE REGISTRO
+========================
+
+Quiero que conectes visualmente el nuevo Directorio y el nuevo Perfil con un flujo de registro más comercial.
+
+El registro actual se siente administrativo. Quiero que propongas un onboarding tipo wizard con enfoque aspiracional, donde el operador vea el valor de registrarse.
+
+Proponer flujo:
+1. Datos básicos
+2. Marca y propuesta de valor
+3. Fotos y experiencias
+4. Canales digitales
+5. Validación / confianza
+6. Vista previa del perfil
+7. Publicación
+
+La vista previa del perfil es muy importante porque quiero que el operador vea cómo se verá su marca dentro del directorio premium.
+
+========================
+4. LO QUE NECESITO DE TI
+========================
+
+Quiero que entregues:
+
+1. Una propuesta de rediseño visual completa para la vista Directorio.
+2. Una propuesta de rediseño visual completa para la vista Detalle de Empresa.
+3. Diseño de componentes clave:
+   - card de operador,
+   - card featured,
+   - banda de confianza,
+   - chips/badges,
+   - filtros,
+   - panel sticky de contacto,
+   - bloque “reclamar perfil”,
+   - bloque CTA para captar registros.
+4. Un sistema visual consistente: colores, tipografía, espaciado, radio, sombras, estados hover.
+5. Una estructura responsive clara.
+6. Un resultado listo para implementarse en React + Tailwind.
+7. Si es posible, entrega:
+   - wireframe textual,
+   - layout por secciones,
+   - naming de componentes,
+   - y luego UI final en código.
+
+========================
+5. REQUISITOS TÉCNICOS
+========================
+
+- Usa React + Tailwind.
+- Diseña componentes reutilizables.
+- Mantén buena accesibilidad.
+- Usa layout moderno, visualmente premium.
+- Considera desktop y mobile.
+- No uses una estética genérica de dashboard.
+- El producto debe sentirse listo para producción.
+
+========================
+6. OUTPUT ESPERADO
+========================
+
+Quiero que respondas en este orden:
+
+1. Concepto visual / art direction
+2. Sistema de diseño propuesto
+3. Estructura de la vista Directorio
+4. Estructura del Detalle de Empresa
+5. Lista de componentes
+6. Recomendaciones de conversión para captar registros
+7. Código React + Tailwind de una primera versión de estas pantallas
+
+Si necesitas asumir datos, invéntalos de forma realista para operadores turísticos de Perú.

@@ -1,0 +1,611 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../../layouts/Layout.astro';
+
+function stripMd(id: string) { return id.replace(/\.md$/i, ''); }
+
+export async function getStaticPaths() {
+  const companies = await getCollection('companies');
+  return companies.map((company) => ({
+    params: { lang: 'en', slug: company.id.replace(/\.md$/i, '') },
+    props: { company, lang: 'en' },
+  }));
+}
+
+interface Props {
+  company: Awaited<ReturnType<typeof getCollection<'companies'>>>[number];
+  lang: string;
+}
+
+const { company, lang } = Astro.props;
+const { Content } = await company.render();
+const d = company.data;
+
+const siteUrl = 'https://tourup.co';
+const pageUrl = `${siteUrl}/${lang}/companies/${stripMd(company.id)}/`;
+
+const napPhone = d.nap?.phone ?? d.contact?.phone;
+const napEmail = d.nap?.email ?? d.contact?.email;
+const napWebsite = d.nap?.website ?? d.contact?.website;
+const napCity = d.nap?.city ?? d.location?.city;
+const napAddress = d.nap?.address;
+const napCountry = d.nap?.country ?? d.location?.country ?? 'Peru';
+
+const jsonLd: Record<string, unknown> = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': ['TravelAgency', 'LocalBusiness'],
+      '@id': pageUrl,
+      name: d.title,
+      description: d.summary,
+      url: napWebsite ?? pageUrl,
+      ...(napPhone ? { telephone: napPhone } : {}),
+      ...(napEmail ? { email: napEmail } : {}),
+      address: {
+        '@type': 'PostalAddress',
+        ...(napAddress ? { streetAddress: napAddress } : {}),
+        addressLocality: napCity,
+        addressCountry: napCountry,
+      },
+      mainEntityOfPage: {
+        '@type': 'WebPage',
+        '@id': pageUrl,
+      },
+      ...(d.rating && d.reviews_count
+        ? {
+            aggregateRating: {
+              '@type': 'AggregateRating',
+              ratingValue: d.rating,
+              reviewCount: d.reviews_count,
+              bestRating: 5,
+              worstRating: 1,
+            },
+          }
+        : {}),
+    },
+    ...(d.faq?.length
+      ? [
+          {
+            '@type': 'FAQPage',
+            mainEntity: d.faq.map((item) => ({
+              '@type': 'Question',
+              name: item.question,
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: item.answer,
+              },
+            })),
+          },
+        ]
+      : []),
+  ],
+};
+
+function stars(rating: number): string {
+  const full = Math.floor(rating);
+  const half = rating % 1 >= 0.5;
+  return '★'.repeat(full) + (half ? '½' : '') + '☆'.repeat(5 - full - (half ? 1 : 0));
+}
+---
+
+<Layout
+  title={`${d.title} – B2B Trust Card | TourUp`}
+  description={d.summary}
+  currentPath={`/${lang}/companies/${stripMd(company.id)}/`}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd, null, 2)} />
+
+  <article class="trust-card" itemscope itemtype="https://schema.org/TravelAgency">
+
+    <header class="tc-header">
+      <div class="tc-badges">
+        <span class="badge role">{d.distribution_role.replace(/_/g, ' ')}</span>
+        {d.sales_channel && <span class="badge channel">{d.sales_channel}</span>}
+        {d.destinos?.map((dest) => (
+          <span class="badge destino">{dest}</span>
+        ))}
+      </div>
+
+      <h1 itemprop="name">{d.title}</h1>
+
+      <p class="bluf" itemprop="description">{d.summary}</p>
+
+      {d.rating && d.reviews_count && (
+        <div class="rating-row" itemprop="aggregateRating" itemscope itemtype="https://schema.org/AggregateRating">
+          <span class="stars">{stars(d.rating)}</span>
+          <strong itemprop="ratingValue">{d.rating}</strong>
+          <span class="reviews-count">/ 5 &ndash; <span itemprop="reviewCount">{d.reviews_count}</span> verified reviews</span>
+        </div>
+      )}
+    </header>
+
+    <div class="tc-grid">
+
+      <section class="tc-main">
+
+        {d.trust_metrics && (
+          <div class="trust-section">
+            <h2>B2B Performance</h2>
+            <div class="kpi-grid">
+              {d.trust_metrics.avg_response_time_hours !== undefined && (
+                <div class="kpi">
+                  <span class="kpi-value">{d.trust_metrics.avg_response_time_hours}h</span>
+                  <span class="kpi-label">Response time</span>
+                </div>
+              )}
+              {d.trust_metrics.incident_rate !== undefined && (
+                <div class="kpi">
+                  <span class="kpi-value">{(d.trust_metrics.incident_rate * 100).toFixed(1)}%</span>
+                  <span class="kpi-label">Incident rate</span>
+                </div>
+              )}
+              {d.trust_metrics.group_capacity_max !== undefined && (
+                <div class="kpi">
+                  <span class="kpi-value">{d.trust_metrics.group_capacity_max} pax</span>
+                  <span class="kpi-label">Max group capacity</span>
+                </div>
+              )}
+              {d.trust_metrics.languages?.length && (
+                <div class="kpi">
+                  <span class="kpi-value">{d.trust_metrics.languages.join(' · ').toUpperCase()}</span>
+                  <span class="kpi-label">Operating languages</span>
+                </div>
+              )}
+            </div>
+            {d.trust_metrics.b2b_client_types?.length && (
+              <div class="client-types">
+                <span class="label-sm">Regular B2B clients:</span>
+                {d.trust_metrics.b2b_client_types.map((t: string) => (
+                  <span class="tag">{t.replace(/_/g, ' ')}</span>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {d.b2b_profile && (
+          <div class="trust-section">
+            <h2>B2B Profile</h2>
+            <p class="b2b-profile">{d.b2b_profile}</p>
+          </div>
+        )}
+
+        {d.testimonials?.length && (
+          <div class="trust-section">
+            <h2>Verified Testimonials</h2>
+            <div class="testimonials">
+              {d.testimonials.slice(0, 3).map((t) => (
+                <blockquote class="testimonial">
+                  <p>"{t.text}"</p>
+                  <footer>
+                    <strong>{t.author}</strong>
+                    {t.source && <span class="source"> &ndash; {t.source}</span>}
+                    {t.date && <span class="date"> ({t.date})</span>}
+                  </footer>
+                </blockquote>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {d.faq?.length && (
+          <div class="trust-section faq-section">
+            <h2>Trust FAQs</h2>
+            <dl class="faq-list">
+              {d.faq.map((item) => (
+                <div class="faq-item">
+                  <dt>{item.question}</dt>
+                  <dd>{item.answer}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        )}
+
+        <div class="tc-body">
+          <Content />
+        </div>
+      </section>
+
+      <aside class="tc-sidebar">
+
+        {d.licenses?.length && (
+          <div class="sidebar-card">
+            <h3>Certifications & Registrations</h3>
+            {d.licenses.map((lic) => (
+              <div class="license-badge">
+                <span class="lic-type">{lic.type}</span>
+                <span class="lic-id">{lic.id}</span>
+                {lic.issuer && <span class="lic-issuer">{lic.issuer}</span>}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {!d.licenses?.length && d.regulation && (
+          <div class="sidebar-card">
+            <h3>Regulatory Information</h3>
+            {d.regulation.tax_id && <p><strong>Tax ID:</strong> {d.regulation.tax_id}</p>}
+            {d.regulation.license_number && <p><strong>License:</strong> {d.regulation.license_number}</p>}
+            {d.regulation.license_issue_date && <p><strong>Issued:</strong> {d.regulation.license_issue_date}</p>}
+          </div>
+        )}
+
+        <div class="sidebar-card" itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
+          <h3>Contact</h3>
+          {napAddress && <p itemprop="streetAddress">{napAddress}</p>}
+          {napCity && <p><span itemprop="addressLocality">{napCity}</span>, <span itemprop="addressCountry">{napCountry}</span></p>}
+          {napPhone && (
+            <p>
+              <strong>Tel:</strong>
+              <a href={`tel:${napPhone}`} itemprop="telephone">{napPhone}</a>
+            </p>
+          )}
+          {napEmail && (
+            <p>
+              <strong>Email:</strong>
+              <a href={`mailto:${napEmail}`} itemprop="email">{napEmail}</a>
+            </p>
+          )}
+          {napWebsite && (
+            <p>
+              <a href={napWebsite} target="_blank" rel="noopener noreferrer" itemprop="url">
+                Visit website →
+              </a>
+            </p>
+          )}
+        </div>
+
+        {(d.destinos?.length || d.categorias?.length) && (
+          <div class="sidebar-card">
+            <h3>Destinations & Categories</h3>
+            {d.destinos?.length && (
+              <div class="tag-group">
+                <span class="label-sm">Destinations</span>
+                <div class="tag-wrap">
+                  {d.destinos.map((dest) => (
+                    <span class="tag destino">{dest}</span>
+                  ))}
+                </div>
+              </div>
+            )}
+            {d.categorias?.length && (
+              <div class="tag-group">
+                <span class="label-sm">Categories</span>
+                <div class="tag-wrap">
+                  {d.categorias.map((cat) => (
+                    <span class="tag">{cat.replace(/-/g, ' ')}</span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        <div class="sidebar-card cta-card">
+          <h3>Looking for more suppliers?</h3>
+          <p>Use Partner Scout to find similar operators by destination, category and rating.</p>
+          <a href="/partner-scout/" class="btn-cta">Open Partner Scout</a>
+        </div>
+      </aside>
+    </div>
+
+    <nav class="tc-nav">
+      <a href={`/${lang}/companies/`} class="nav-link">← Company directory</a>
+      <a href="/en/ai-prompts/" class="nav-link">Prompt directory</a>
+    </nav>
+  </article>
+</Layout>
+
+<style>
+  .trust-card {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem 0 4rem;
+  }
+  .tc-header {
+    border-bottom: 1px solid #e4e2e4;
+    padding-bottom: 2rem;
+    margin-bottom: 2.5rem;
+  }
+  .tc-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  .badge {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-weight: 600;
+  }
+  .badge.role {
+    background: rgba(0, 101, 145, 0.1);
+    color: #006591;
+    border: 1px solid rgba(0, 101, 145, 0.2);
+  }
+  .badge.channel {
+    background: rgba(0, 101, 145, 0.06);
+    color: #004c6e;
+    border: 1px solid rgba(0, 101, 145, 0.12);
+  }
+  .badge.destino {
+    background: rgba(0, 101, 145, 0.08);
+    color: #004c6e;
+    border: 1px solid rgba(0, 101, 145, 0.15);
+  }
+  .tc-header h1 {
+    font-size: 2.25rem;
+    color: #1b1b1d;
+    margin-bottom: 0.75rem;
+  }
+  .bluf {
+    font-size: 1.1rem;
+    color: #3e4851;
+    line-height: 1.7;
+    max-width: 700px;
+    margin-bottom: 1.25rem;
+  }
+  .rating-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+  }
+  .stars {
+    font-size: 1.3rem;
+    color: #b8860b;
+    letter-spacing: 0.05em;
+  }
+  .rating-row strong {
+    font-size: 1.25rem;
+    color: #1b1b1d;
+  }
+  .reviews-count {
+    color: #6e7882;
+    font-size: 0.9rem;
+  }
+  .tc-grid {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 2rem;
+    align-items: start;
+  }
+  .trust-section {
+    margin-bottom: 2.5rem;
+    padding-bottom: 2.5rem;
+    border-bottom: 1px solid #e4e2e4;
+  }
+  .trust-section h2 {
+    font-size: 1.25rem;
+    color: #1b1b1d;
+    margin-bottom: 1.25rem;
+  }
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .kpi {
+    background: #f0edef;
+    border: 1px solid #e4e2e4;
+    border-radius: 0.75rem;
+    padding: 1rem;
+    text-align: center;
+  }
+  .kpi-value {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #006591;
+    margin-bottom: 0.25rem;
+  }
+  .kpi-label {
+    font-size: 0.8rem;
+    color: #6e7882;
+  }
+  .client-types,
+  .tag-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+  }
+  .tag-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .label-sm {
+    font-size: 0.8rem;
+    color: #6e7882;
+    white-space: nowrap;
+  }
+  .tag {
+    display: inline-block;
+    background: #f0edef;
+    color: #3e4851;
+    border: 1px solid #e4e2e4;
+    padding: 0.2rem 0.65rem;
+    border-radius: 9999px;
+    font-size: 0.78rem;
+    text-transform: capitalize;
+  }
+  .tag.destino {
+    background: rgba(0, 101, 145, 0.06);
+    color: #006591;
+    border-color: rgba(0, 101, 145, 0.15);
+  }
+  .b2b-profile {
+    color: #3e4851;
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+  .testimonials {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .testimonial {
+    background: #f0edef;
+    border-left: 3px solid #006591;
+    border-radius: 0 0.5rem 0.5rem 0;
+    padding: 1rem 1.25rem;
+    margin: 0;
+  }
+  .testimonial p {
+    color: #3e4851;
+    font-style: italic;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+  }
+  .testimonial footer {
+    font-size: 0.85rem;
+    color: #6e7882;
+  }
+  .testimonial footer strong {
+    color: #1b1b1d;
+  }
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  .faq-item dt {
+    font-weight: 600;
+    color: #1b1b1d;
+    margin-bottom: 0.4rem;
+    font-size: 0.95rem;
+  }
+  .faq-item dd {
+    color: #3e4851;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    margin: 0;
+    padding-left: 1rem;
+    border-left: 2px solid rgba(0, 101, 145, 0.2);
+  }
+  .tc-body {
+    color: #3e4851;
+    line-height: 1.8;
+    font-size: 0.95rem;
+  }
+  .tc-body :global(h2) {
+    font-size: 1.2rem;
+    color: #1b1b1d;
+    margin: 2rem 0 0.75rem;
+  }
+  .tc-body :global(strong) {
+    color: #1b1b1d;
+  }
+  .sidebar-card {
+    background: #ffffff;
+    border: 1px solid #e4e2e4;
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+  .sidebar-card h3 {
+    font-size: 0.9rem;
+    color: #006591;
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .sidebar-card p {
+    font-size: 0.85rem;
+    color: #3e4851;
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+  }
+  .sidebar-card a {
+    color: #006591;
+  }
+  .sidebar-card a:hover {
+    color: #004c6e;
+  }
+  .license-badge {
+    background: rgba(0, 101, 145, 0.04);
+    border: 1px solid rgba(0, 101, 145, 0.1);
+    border-radius: 0.5rem;
+    padding: 0.6rem 0.75rem;
+    margin-bottom: 0.6rem;
+  }
+  .lic-type {
+    display: block;
+    font-size: 0.75rem;
+    color: #006591;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.15rem;
+  }
+  .lic-id {
+    display: block;
+    font-size: 0.9rem;
+    color: #1b1b1d;
+    font-family: monospace;
+  }
+  .lic-issuer {
+    display: block;
+    font-size: 0.78rem;
+    color: #6e7882;
+    margin-top: 0.15rem;
+  }
+  .cta-card {
+    background: linear-gradient(135deg, rgba(0, 101, 145, 0.04), rgba(0, 180, 255, 0.04));
+    border-color: rgba(0, 101, 145, 0.15);
+  }
+  .btn-cta {
+    display: block;
+    margin-top: 0.75rem;
+    padding: 0.65rem 1rem;
+    background: #006591;
+    color: #ffffff !important;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-align: center;
+    transition: opacity 0.2s ease;
+  }
+  .btn-cta:hover {
+    opacity: 0.9;
+  }
+  .tc-nav {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e4e2e4;
+    display: flex;
+    gap: 2rem;
+  }
+  .nav-link {
+    color: #006591;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+  @media (max-width: 1024px) {
+    .tc-grid {
+      grid-template-columns: 1fr;
+    }
+    .tc-sidebar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+    }
+  }
+  @media (max-width: 768px) {
+    .tc-header h1 {
+      font-size: 1.75rem;
+    }
+    .kpi-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

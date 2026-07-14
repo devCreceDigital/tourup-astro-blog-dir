@@ -21,7 +21,7 @@ const searchIndex: SearchItem[] = [
     title: c.data.title || c.id,
     summary: (c.data.summary || '').slice(0, 200),
     type: 'company' as const,
-    url: `/empresas/${c.id}/`,
+    url: `/empresas/${c.id.replace(/\.md$/i, '')}/`,
     tags: [...(c.data.destinos || []), c.data.distribution_role || ''],
     location: c.data.location?.city,
   })),

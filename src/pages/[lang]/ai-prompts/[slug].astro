@@ -279,7 +279,7 @@ const faqItems = generateFAQs(prompt.data.destination_cluster || '', prompt.data
   }
 
   .prompt-header {
-    border-bottom: 1px solid var(--color-border);
+    border-bottom: 1px solid #e4e2e4;
     padding-bottom: 2rem;
     margin-bottom: 2rem;
   }
@@ -293,24 +293,26 @@ const faqItems = generateFAQs(prompt.data.destination_cluster || '', prompt.data
 
   .badge {
     display: inline-block;
-    background: rgba(59, 130, 246, 0.1);
-    color: #3b82f6;
+    background: #f0edef;
+    color: #006591;
     padding: 0.35rem 0.85rem;
     border-radius: 9999px;
     font-size: 0.8rem;
-    border: 1px solid rgba(59, 130, 246, 0.2);
+    border: 1px solid #e4e2e4;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    font-weight: 600;
   }
 
   .prompt-header h1 {
     font-size: 2.25rem;
+    font-weight: 700;
     margin-bottom: 1rem;
-    color: #f1f5f9;
+    color: #1b1b1d;
   }
 
   .search-term {
-    color: #cbd5e1;
+    color: #3e4851;
     margin: 1rem 0;
   }
 
@@ -320,21 +322,23 @@ const faqItems = generateFAQs(prompt.data.destination_cluster || '', prompt.data
     align-items: center;
     flex-wrap: wrap;
     margin-top: 1rem;
+    color: #3e4851;
   }
 
   .platform-badge {
     display: inline-block;
-    background: rgba(6, 182, 212, 0.1);
-    color: #06b6d4;
+    background: #f0edef;
+    color: #006591;
     padding: 0.25rem 0.75rem;
     border-radius: 0.35rem;
     font-size: 0.85rem;
-    border: 1px solid rgba(6, 182, 212, 0.2);
+    border: 1px solid #e4e2e4;
+    font-weight: 500;
   }
 
   .quick-answer {
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(6, 182, 212, 0.1) 100%);
-    border: 1px solid var(--color-border);
+    background: linear-gradient(135deg, rgba(0, 101, 145, 0.05) 0%, rgba(0, 180, 255, 0.05) 100%);
+    border: 1px solid #e4e2e4;
     border-radius: 0.75rem;
     padding: 2rem;
     margin-bottom: 2rem;
@@ -342,11 +346,11 @@ const faqItems = generateFAQs(prompt.data.destination_cluster || '', prompt.data
 
   .quick-answer h2 {
     margin-top: 0;
-    color: #06b6d4;
+    color: #006591;
   }
 
   .quick-answer p {
-    color: #cbd5e1;
+    color: #3e4851;
     line-height: 1.8;
     font-size: 1.05rem;
   }
@@ -361,17 +365,15 @@ const faqItems = generateFAQs(prompt.data.destination_cluster || '', prompt.data
   }
 
   .brand-card {
-    background: rgba(30, 41, 59, 0.5);
-    border: 1px solid var(--color-border);
+    background: #ffffff;
+    border: 1px solid #e4e2e4;
     border-radius: 0.75rem;
     padding: 1.5rem;
-    transition: all 0.3s ease;
+    transition: border-color 0.15s ease;
   }
 
   .brand-card:hover {
-    border-color: #06b6d4;
-    transform: translateY(-5px);
-    background: rgba(30, 41, 59, 0.8);
+    border-color: #006591;
   }
 
   .brand-card h3 {
@@ -380,11 +382,15 @@ const faqItems = generateFAQs(prompt.data.destination_cluster || '', prompt.data
   }
 
   .brand-card a {
-    color: #06b6d4;
+    color: #006591;
+  }
+
+  .brand-card a:hover {
+    color: #004c6e;
   }
 
   .brand-card p {
-    color: #cbd5e1;
+    color: #3e4851;
     font-size: 0.95rem;
     line-height: 1.6;
     margin-bottom: 1rem;
@@ -392,54 +398,56 @@ const faqItems = generateFAQs(prompt.data.destination_cluster || '', prompt.data
 
   .brand-link {
     display: inline-block;
-    color: #3b82f6;
+    color: #006591;
     font-weight: 600;
     font-size: 0.9rem;
-    transition: transform 0.2s ease;
+    text-decoration: none;
+    transition: color 0.1s ease;
   }
 
   .brand-link:hover {
-    transform: translateX(4px);
+    color: #004c6e;
   }
 
-  table {
+  .prompt-landing table {
     width: 100%;
     border-collapse: collapse;
     margin: 1.5rem 0;
-    background: rgba(30, 41, 59, 0.3);
-    border: 1px solid var(--color-border);
+    background: #ffffff;
+    border: 1px solid #e4e2e4;
     border-radius: 0.75rem;
     overflow: hidden;
   }
 
-  table th, table td {
+  .prompt-landing table th,
+  .prompt-landing table td {
     padding: 0.85rem 1rem;
     text-align: left;
-    border-bottom: 1px solid var(--color-border);
-    color: #cbd5e1;
+    border-bottom: 1px solid #e4e2e4;
+    color: #3e4851;
     font-size: 0.9rem;
   }
 
-  table th {
-    background: rgba(59, 130, 246, 0.1);
-    color: #06b6d4;
+  .prompt-landing table th {
+    background: #f0edef;
+    color: #1b1b1d;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.04em;
     font-size: 0.8rem;
   }
 
-  table tr:last-child td {
+  .prompt-landing table tr:last-child td {
     border-bottom: none;
   }
 
-  table tr:hover td {
-    background: rgba(59, 130, 246, 0.05);
+  .prompt-landing table tr:hover td {
+    background: #fcf8fb;
   }
 
   .faq-item {
-    background: rgba(30, 41, 59, 0.5);
-    border: 1px solid var(--color-border);
+    background: #ffffff;
+    border: 1px solid #e4e2e4;
     border-radius: 0.75rem;
     padding: 1.5rem;
     margin-bottom: 1rem;
@@ -447,12 +455,12 @@ const faqItems = generateFAQs(prompt.data.destination_cluster || '', prompt.data
 
   .faq-item h3 {
     font-size: 1.05rem;
-    color: #f1f5f9;
+    color: #1b1b1d;
     margin-bottom: 0.6rem;
   }
 
   .faq-item p {
-    color: #cbd5e1;
+    color: #3e4851;
     line-height: 1.7;
     font-size: 0.95rem;
   }
@@ -465,7 +473,7 @@ const faqItems = generateFAQs(prompt.data.destination_cluster || '', prompt.data
   section[aria-label^="How to choose"] li {
     padding: 0.5rem 0 0.5rem 1.5rem;
     position: relative;
-    color: #cbd5e1;
+    color: #3e4851;
     line-height: 1.6;
   }
 
@@ -473,7 +481,7 @@ const faqItems = generateFAQs(prompt.data.destination_cluster || '', prompt.data
     content: "→";
     position: absolute;
     left: 0;
-    color: #06b6d4;
+    color: #006591;
     font-weight: 600;
   }
 
@@ -482,11 +490,12 @@ const faqItems = generateFAQs(prompt.data.destination_cluster || '', prompt.data
   section[aria-label^="How to choose"] h2,
   section[aria-label="Frequently asked questions"] h2 {
     margin-bottom: 1.5rem;
+    color: #1b1b1d;
   }
 
   .unresolved-brands {
-    background: rgba(30, 41, 59, 0.5);
-    border: 1px solid var(--color-border);
+    background: #ffffff;
+    border: 1px solid #e4e2e4;
     border-radius: 0.75rem;
     padding: 1.5rem;
     margin: 2rem 0;
@@ -494,6 +503,7 @@ const faqItems = generateFAQs(prompt.data.destination_cluster || '', prompt.data
 
   .unresolved-brands h3 {
     margin-top: 0;
+    color: #1b1b1d;
   }
 
   .unresolved-brands ul {
@@ -503,8 +513,8 @@ const faqItems = generateFAQs(prompt.data.destination_cluster || '', prompt.data
 
   .unresolved-brands li {
     padding: 0.5rem 0;
-    border-bottom: 1px solid var(--color-border);
-    color: #cbd5e1;
+    border-bottom: 1px solid #e4e2e4;
+    color: #3e4851;
   }
 
   .unresolved-brands li:last-child {
@@ -515,13 +525,13 @@ const faqItems = generateFAQs(prompt.data.destination_cluster || '', prompt.data
     margin: 2rem 0;
     font-size: 1rem;
     line-height: 1.8;
-    color: #cbd5e1;
+    color: #3e4851;
   }
 
   .prompt-content :global(h2) {
     font-size: 1.5rem;
     margin: 1.5rem 0 1rem 0;
-    color: #f1f5f9;
+    color: #1b1b1d;
   }
 
   .prompt-content :global(p) {
@@ -529,27 +539,28 @@ const faqItems = generateFAQs(prompt.data.destination_cluster || '', prompt.data
   }
 
   .prompt-footer {
-    border-top: 1px solid var(--color-border);
+    border-top: 1px solid #e4e2e4;
     padding-top: 1.5rem;
     margin-top: 2rem;
-    color: #64748b;
+    color: #6e7882;
     font-size: 0.9rem;
   }
 
   .prompt-nav {
     margin-top: 2rem;
     padding-top: 1.5rem;
-    border-top: 1px solid var(--color-border);
+    border-top: 1px solid #e4e2e4;
   }
 
-  .nav-link {
-    color: #06b6d4;
+  .prompt-nav .nav-link {
+    color: #006591;
     font-weight: 600;
-    transition: transform 0.2s ease;
+    transition: padding-left 0.1s ease;
   }
 
-  .nav-link:hover {
-    transform: translateX(-4px);
+  .prompt-nav .nav-link:hover {
+    padding-left: 0;
+    color: #004c6e;
   }
 
   @media (max-width: 768px) {

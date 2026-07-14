@@ -8,12 +8,27 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "start": "node ./dist/server/entry.mjs",
     "astro": "astro",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "graphify": "python3 -m graphify extract src/content --backend gemini --max-concurrency 4",
-    "graph:bootstrap": "python3 scripts/generate_graph.py"
+    "graph:bootstrap": "python3 scripts/generate_graph.py",
+    "seed": "npx tsx scripts/seed-admin.ts",
+    "deploy": "npm run build && node ./dist/server/entry.mjs"
   },
   "dependencies": {
+    "@astrojs/node": "^9.0.0",
     "@astrojs/sitemap": "^3.7.3",
-    "astro": "^5.2.5"
+    "alpinejs": "^3.13.0",
+    "astro": "^5.2.5",
+    "cloudinary": "^2.10.0",
+    "gray-matter": "^4.0.3",
+    "sql.js": "^1.10.0",
+    "zod": "^3.22.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.0.0",
+    "vitest": "^4.1.9"
   }
 }

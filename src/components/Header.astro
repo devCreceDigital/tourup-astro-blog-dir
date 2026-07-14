@@ -25,10 +25,10 @@ const navItems: NavItem[] = [
   { label: 'Home', href: '/', children: [] },
   {
     label: 'Empresas',
-    href: '/empresas/',
+    href: '/es/empresas/',
     children: sortedDestinos.slice(0, 8).map(d => ({
       label: d.data.name,
-      href: `/en/peru/${d.id}/`
+      href: `/en/peru/${d.id.replace('.md', '')}/`
     }))
   },
   {
@@ -36,7 +36,7 @@ const navItems: NavItem[] = [
     href: '/en/peru/cusco/',
     children: sortedDestinos.map(d => ({
       label: d.data.name,
-      href: `/en/peru/${d.id}/`
+      href: `/en/peru/${d.id.replace('.md', '')}/`
     }))
   },
   { label: 'AI Prompts', href: '/en/ai-prompts/', children: [] },
@@ -123,9 +123,9 @@ function isActive(href: string): boolean {
     position: sticky;
     top: 0;
     z-index: 100;
-    background: rgba(15, 23, 42, 0.95);
+    background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(71, 85, 105, 0.2);
+    border-bottom: 1px solid #e4e2e4;
   }
 
   .header-container {
@@ -145,13 +145,13 @@ function isActive(href: string): boolean {
     text-decoration: none;
     font-weight: 700;
     font-size: 1.25rem;
-    color: #fff;
+    color: #1b1b1d;
     transition: opacity 0.2s ease;
     flex-shrink: 0;
   }
 
   .logo:hover {
-    opacity: 0.8;
+    opacity: 0.7;
   }
 
   .logo-icon {
@@ -159,7 +159,7 @@ function isActive(href: string): boolean {
   }
 
   .logo-text {
-    background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+    background: linear-gradient(135deg, #006591 0%, #00b4ff 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -181,7 +181,7 @@ function isActive(href: string): boolean {
     display: block;
     width: 24px;
     height: 2px;
-    background: #cbd5e1;
+    background: #3e4851;
     border-radius: 2px;
     transition: all 0.3s ease;
   }
@@ -205,20 +205,20 @@ function isActive(href: string): boolean {
     padding: 0.5rem 0.75rem;
     font-size: 0.9rem;
     font-weight: 500;
-    color: #cbd5e1;
+    color: #3e4851;
     text-decoration: none;
-    transition: color 0.2s ease;
+    transition: all 0.1s ease;
     border-radius: 0.375rem;
     white-space: nowrap;
   }
 
   .nav-link:hover {
-    color: #f1f5f9;
-    background: rgba(71, 85, 105, 0.2);
+    color: #1b1b1d;
+    background: #f0edef;
   }
 
   .nav-link.active {
-    color: #06b6d4;
+    color: #006591;
   }
 
   .chevron {
@@ -234,8 +234,8 @@ function isActive(href: string): boolean {
     top: 100%;
     left: 0;
     min-width: 200px;
-    background: rgba(30, 41, 59, 0.98);
-    border: 1px solid rgba(71, 85, 105, 0.3);
+    background: rgba(255, 255, 255, 0.98);
+    border: 1px solid #e4e2e4;
     border-radius: 0.5rem;
     padding: 0.5rem;
     opacity: 0;
@@ -243,7 +243,7 @@ function isActive(href: string): boolean {
     transform: translateY(-4px);
     transition: all 0.2s ease;
     z-index: 200;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
     backdrop-filter: blur(10px);
   }
 
@@ -257,20 +257,20 @@ function isActive(href: string): boolean {
     display: block;
     padding: 0.5rem 0.75rem;
     font-size: 0.875rem;
-    color: #cbd5e1;
+    color: #3e4851;
     text-decoration: none;
     border-radius: 0.375rem;
-    transition: all 0.2s ease;
+    transition: all 0.1s ease;
   }
 
   .dropdown-link:hover {
-    background: rgba(59, 130, 246, 0.15);
-    color: #06b6d4;
+    background: #f0edef;
+    color: #1b1b1d;
   }
 
   .dropdown-link.active {
-    color: #06b6d4;
-    background: rgba(6, 182, 212, 0.1);
+    color: #006591;
+    background: #f0edef;
   }
 
   .header-actions {
@@ -282,19 +282,18 @@ function isActive(href: string): boolean {
 
   .btn-ingresar {
     padding: 0.5rem 1.5rem;
-    background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
-    color: white;
+    background: #006591;
+    color: #ffffff;
     text-decoration: none;
     border-radius: 0.5rem;
     font-weight: 600;
     font-size: 0.875rem;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: background 0.1s ease;
     white-space: nowrap;
   }
 
   .btn-ingresar:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 16px rgba(6, 182, 212, 0.3);
+    background: #004c6e;
   }
 
   @media (max-width: 1024px) {
@@ -315,7 +314,7 @@ function isActive(href: string): boolean {
       flex-direction: column;
       gap: 0;
       padding: 0.5rem 0;
-      border-top: 1px solid rgba(71, 85, 105, 0.2);
+      border-top: 1px solid #e4e2e4;
       margin-top: 0.75rem;
     }
 

@@ -1,0 +1,53 @@
+---
+export const prerender = false;
+import AdminLayout from '../../../components/admin/Layout.astro';
+import DataTable from '../../../components/admin/DataTable.astro';
+import { listEntries, readEntry } from '../../../utils/content';
+
+const { lang } = Astro.params as { lang: string };
+const t = (es: string, en: string) => lang === 'en' ? en : es;
+
+const slugs = await listEntries('categorias_destino');
+const entries = (
+  await Promise.all(
+    slugs.map(async (slug) => {
+      try {
+        const entry = await readEntry('categorias_destino', slug);
+        return { slug, ...entry.data } as Record<string, unknown>;
+      } catch {
+        return null;
+      }
+    })
+  )
+).filter(Boolean) as Record<string, unknown>[];
+
+const columns = [
+  { key: 'name', label: t('Nombre', 'Name') },
+  { key: 'destino_slug', label: t('Destino', 'Destino') },
+  { key: 'categoria', label: t('Categoría', 'Category') },
+  { key: 'summary', label: t('Resumen', 'Summary') },
+];
+---
+
+<AdminLayout title={t('Categorías', 'Categories')}>
+  <div class="page-header">
+    <div>
+      <h1>{t('Categorías', 'Categories')}</h1>
+      <p class="subtitle">{t('Gestiona las categorías por destino', 'Manage categories by destino')}</p>
+    </div>
+    <a href={'/admin/' + lang + '/categorias/new'} class="btn-primary">{t('Nueva categoría', 'New category')}</a>
+  </div>
+  <DataTable columns={columns} rows={entries} baseUrl={'/admin/' + lang + '/categorias'} />
+</AdminLayout>
+
+<style>
+  .page-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }
+  .page-header h1 { font-size: 24px; font-weight: 700; color: #000000; margin-bottom: 4px; }
+  .subtitle { font-size: 14px; color: #737373; }
+  .btn-primary {
+    display: inline-flex; align-items: center; padding: 10px 20px;
+    background: #000000; color: #ffffff; border-radius: 10px;
+    font-size: 14px; font-weight: 600; text-decoration: none; border: none; cursor: pointer;
+  }
+  .btn-primary:hover { opacity: 0.85; }
+</style>

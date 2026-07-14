@@ -1,6 +1,8 @@
 ---
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { getSettings } from '../lib/settings';
+import '../styles/theme.css';
 
 interface Props {
   title?: string;
@@ -10,15 +12,27 @@ interface Props {
   noindex?: boolean;
 }
 
+let settingsSeo, settingsAdvanced, settingsIntegrations;
+try {
+  const s = await getSettings();
+  settingsSeo = s.seo;
+  settingsAdvanced = s.advanced;
+  settingsIntegrations = s.integrations;
+} catch {
+  settingsSeo = {};
+  settingsAdvanced = {};
+  settingsIntegrations = {};
+}
+
 const {
-  title = 'TourUp Content Hub',
-  description = 'Directorio de operadores turísticos en Perú — encuentra agencias, tours y destinos verificados',
+  title = settingsSeo?.siteTitle || 'TourUp Content Hub',
+  description = settingsSeo?.description || 'Directorio de operadores turísticos en Perú — encuentra agencias, tours y destinos verificados',
   currentPath = '/',
-  image = '/og-default.jpg',
+  image = settingsSeo?.ogImage || '/og-default.jpg',
   noindex = false,
 } = Astro.props;
 
-const siteUrl = 'https://tourup.co';
+const siteUrl = settingsSeo?.canonicalUrl || 'https://tourup.co';
 const canonicalUrl = `${siteUrl}${currentPath}`;
 
 const lang = currentPath.startsWith('/en/') ? 'en' : 'es';
@@ -48,8 +62,8 @@ const crumbs = breadcrumbItems(currentPath);
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
-    <meta name="google-site-verification" content="GOOGLE_VERIFICATION_CODE" />
-    <meta name="msvalidate.01" content="BING_VERIFICATION_CODE" />
+    <meta name="google-site-verification" content={import.meta.env.GOOGLE_VERIFICATION_CODE || ''} />
+    <meta name="msvalidate.01" content={import.meta.env.BING_VERIFICATION_CODE || ''} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonicalUrl} />
     <title>{title}</title>
@@ -69,10 +83,50 @@ const crumbs = breadcrumbItems(currentPath);
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={`${siteUrl}${image}`} />
 
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
     <!-- hreflang -->
     <link rel="alternate" hrefLang="es" href={`${siteUrl}/`} />
     <link rel="alternate" hrefLang="en" href={`${siteUrl}/en/`} />
     <link rel="alternate" hrefLang="x-default" href={`${siteUrl}/`} />
+
+    {settingsSeo?.metaKeywords && <meta name="keywords" content={settingsSeo.metaKeywords} />}
+
+    <link rel="sitemap" type="application/xml" href={`${siteUrl}/sitemap.xml`} />
+
+    {settingsAdvanced?.customCss && <style>{settingsAdvanced.customCss}</style>}
+    {settingsAdvanced?.inlineStyles && <style>{settingsAdvanced.inlineStyles}</style>}
+    {settingsAdvanced?.customJsHead && <script set:html={settingsAdvanced.customJsHead}></script>}
+
+    {settingsIntegrations?.googleAnalyticsId && (
+      <script async src={`https://www.googletagmanager.com/gtag/js?id=${settingsIntegrations.googleAnalyticsId}`}></script>
+    )}
+    {settingsIntegrations?.googleAnalyticsId && (
+      <script set:html={`
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '${settingsIntegrations.googleAnalyticsId}');
+      `}></script>
+    )}
+
+    {settingsIntegrations?.facebookPixelId && (
+      <script set:html={`
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '${settingsIntegrations.facebookPixelId}');
+        fbq('track', 'PageView');
+      `}></script>
+    )}
 
     <!-- Schema.org: @graph unificado -->
     <script type="application/ld+json" set:html={JSON.stringify({
@@ -132,6 +186,7 @@ const crumbs = breadcrumbItems(currentPath);
       <slot />
     </main>
     <Footer />
+    {settingsAdvanced?.customJsBody && <script set:html={settingsAdvanced.customJsBody}></script>}
   </body>
 </html>
 
@@ -142,27 +197,15 @@ const crumbs = breadcrumbItems(currentPath);
     box-sizing: border-box;
   }
 
-  :root {
-    --color-primary: #3b82f6;
-    --color-secondary: #06b6d4;
-    --color-dark: #0f172a;
-    --color-dark-light: #1e293b;
-    --color-text: #f1f5f9;
-    --color-text-muted: #cbd5e1;
-    --color-border: rgba(71, 85, 105, 0.2);
-    --gradient-main: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
-  }
-
   html {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
-      Arial, 'Noto Sans', sans-serif;
-    background: var(--color-dark);
-    color: var(--color-text);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--color-surface);
+    color: var(--color-on-surface);
     line-height: 1.6;
   }
 
   body {
-    background: var(--color-dark);
+    background: var(--color-surface);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -184,6 +227,7 @@ const crumbs = breadcrumbItems(currentPath);
   h6 {
     font-weight: 700;
     line-height: 1.2;
+    color: var(--color-on-surface);
     margin-bottom: 1rem;
   }
 
@@ -205,47 +249,47 @@ const crumbs = breadcrumbItems(currentPath);
 
   p {
     margin-bottom: 1rem;
-    color: var(--color-text-muted);
+    color: var(--color-on-surface-variant);
   }
 
   a {
-    color: var(--color-secondary);
+    color: var(--color-primary);
     text-decoration: none;
-    transition: color 0.2s ease;
+    transition: color 0.1s ease;
   }
 
   a:hover {
-    color: var(--color-primary);
+    color: var(--color-primary-hover);
   }
 
   button,
   .btn {
     padding: 0.75rem 1.5rem;
-    background: var(--gradient-main);
-    color: white;
+    background: var(--color-primary);
+    color: var(--color-on-primary);
     border: none;
     border-radius: 0.5rem;
     font-weight: 600;
     cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: background 0.1s ease;
   }
 
   button:hover,
   .btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 16px rgba(6, 182, 212, 0.3);
+    background: var(--color-primary-hover);
   }
 
   code {
-    background: var(--color-dark-light);
+    background: var(--color-surface-container);
     padding: 0.25rem 0.5rem;
     border-radius: 0.25rem;
     font-family: 'Courier New', monospace;
     font-size: 0.9rem;
+    color: var(--color-on-surface);
   }
 
   pre {
-    background: var(--color-dark-light);
+    background: var(--color-surface-container);
     padding: 1rem;
     border-radius: 0.5rem;
     overflow-x: auto;
@@ -268,16 +312,18 @@ const crumbs = breadcrumbItems(currentPath);
   td {
     padding: 0.75rem;
     text-align: left;
-    border-bottom: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-outline-variant);
+    color: var(--color-on-surface-variant);
   }
 
   th {
-    background: var(--color-dark-light);
+    background: var(--color-surface-container);
     font-weight: 600;
+    color: var(--color-on-surface);
   }
 
   tr:hover {
-    background: var(--color-dark-light);
+    background: var(--color-surface);
   }
 
   img {

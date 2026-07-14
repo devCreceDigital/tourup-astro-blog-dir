@@ -1,5 +1,9 @@
 ---
-import Layout from '../../../layouts/Layout.astro';
+import NavCmstourup from '../../../components/NavCmstourup.astro';
+import FooterCmstourup from '../../../components/FooterCmstourup.astro';
+import SettingsHead from '../../../components/SettingsHead.astro';
+import SettingsBodyEnd from '../../../components/SettingsBodyEnd.astro';
+import '../../../styles/theme.css';
 
 export async function getStaticPaths() {
   return [
@@ -10,112 +14,407 @@ export async function getStaticPaths() {
 
 interface Props { lang: string; }
 const { lang } = Astro.props;
+
+const t = (es: string, en: string) => lang === 'en' ? en : es;
+const siteUrl = 'https://tourup.co';
+const currentPath = `/${lang}/peru/itinerario-7-dias/`;
+const canonicalUrl = `${siteUrl}${currentPath}`;
+
+const pageTitle = t(
+  "Itinerario de 7 días por Perú: Lima, Cusco y Machu Picchu",
+  "7-Day Peru Itinerary: Lima, Cusco & Machu Picchu"
+);
+
+const pageDesc = t(
+  "Planifica 7 días en Perú con este itinerario optimizado: Lima, Cusco, Valle Sagrado y Machu Picchu. Incluye días, presupuesto y variantes.",
+  "Plan 7 days in Peru with this optimized itinerary: Lima, Cusco, Sacred Valley & Machu Picchu. Includes day-by-day, budget, and variations."
+);
 ---
 
-<Layout
-  title={lang === 'en' ? "7-Day Peru Itinerary: Lima, Cusco & Machu Picchu" : "Itinerario de 7 días por Perú: Lima, Cusco y Machu Picchu"}
-  description={lang === 'en'
-    ? "Plan 7 days in Peru with this optimized itinerary: Lima, Cusco, Sacred Valley & Machu Picchu. Includes day-by-day, budget, and variations."
-    : "Planifica 7 días en Perú con este itinerario optimizado: Lima, Cusco, Valle Sagrado y Machu Picchu. Incluye días, presupuesto y variantes."}
-  currentPath={`/${lang}/peru/itinerario-7-dias/`}
->
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "Trip",
-    "name": lang === 'en' ? "7-Day Peru Itinerary" : "Itinerario de 7 días por Perú",
-    "description": lang === 'en'
-      ? "Lima, Cusco, Sacred Valley & Machu Picchu in 7 days"
-      : "Lima, Cusco, Valle Sagrado y Machu Picchu en 7 días",
-    "itinerary": [
-      { "@type": "City", "name": "Lima" },
-      { "@type": "City", "name": "Cusco" },
-      { "@type": "TouristAttraction", "name": "Machu Picchu" }
-    ]
-  })} />
+<!doctype html>
+<html class="light" lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <SettingsHead
+      title={pageTitle}
+      description={pageDesc}
+      currentPath={currentPath}
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <meta name="robots" content="index, follow" />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { background: var(--color-surface); color: var(--color-on-surface); font-family: 'Plus Jakarta Sans', sans-serif; min-height: 100vh; }
+      .main-grid { max-width: 1200px; margin: 0 auto; padding: 48px 16px; display: grid; grid-template-columns: 1fr; gap: 32px; align-items: start; }
+      @media (min-width: 1024px) { .main-grid { grid-template-columns: 8fr 4fr; gap: 32px; } }
+      .breadcrumbs { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #3e4851; }
+      .breadcrumb-chevron { font-size: 14px !important; line-height: 1; }
+      .breadcrumb-current { font-weight: 600; color: #1b1b1d; }
+      .breadcrumb-path { color: #a6aab0; font-size: 12px; }
+      .hero-section { display: flex; flex-direction: column; gap: 16px; }
+      .hero-title { font-size: 28px; font-weight: 700; letter-spacing: normal; line-height: 36px; color: #1b1b1d; max-width: 768px; }
+      @media (min-width: 768px) { .hero-title { font-size: 48px; font-weight: 800; letter-spacing: -0.02em; line-height: 56px; } }
+      .tags-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+      .tag { border: 1px solid #e4e2e4; background: #fcf8fb; border-radius: 9999px; padding: 4px 12px; font-size: 12px; font-weight: 500; color: #3e4851; }
+      .tag-fill { background: #f0edef; }
+      .hero-summary { font-size: 14px; line-height: 1.43; color: #3e4851; max-width: 576px; margin-top: 16px; }
+      .hero-actions { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 16px; }
+      .hero-image { width: 100%; margin-top: 24px; border-radius: 12px; border: 1px solid #e4e2e4; overflow: hidden; aspect-ratio: 16/9; background: #dcd9dc; }
+      .hero-image img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1); opacity: 0.9; }
+      .btn-primary { display: inline-block; background: #006591; color: #ffffff; border-radius: 8px; padding: 12px 24px; font-size: 14px; font-weight: 600; text-decoration: none; transition: background 0.1s; border: none; cursor: pointer; text-align: center; }
+      .btn-primary:hover { background: #004c6e; }
+      .btn-ghost { display: inline-block; background: transparent; color: #1b1b1d; border-radius: 8px; padding: 12px 24px; font-size: 14px; font-weight: 600; text-decoration: none; border: 1px solid #e4e2e4; transition: background 0.1s; }
+      .btn-ghost:hover { background: #f0edef; }
+      .btn-full { width: 100%; }
+      .cards-stack { display: flex; flex-direction: column; gap: 24px; }
+      .card { background: #ffffff; border: 1px solid #e4e2e4; border-radius: 12px; padding: 24px; position: relative; overflow: hidden; }
+      .card-accent { position: absolute; left: 0; top: 24px; bottom: 24px; width: 4px; background: #006591; border-radius: 0 2px 2px 0; }
+      .card-title { font-size: 24px; font-weight: 700; line-height: 32px; color: #1b1b1d; margin-bottom: 24px; padding-left: 16px; letter-spacing: normal; }
+      .card-body { padding-left: 16px; }
+      .it-day { padding: 16px 0; }
+      .it-day + .it-day { border-top: 1px solid #e4e2e4; }
+      .it-day-label { display: inline-block; font-size: 10px; font-weight: 600; color: #006591; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px; }
+      .it-day h3 { font-size: 16px; font-weight: 600; color: #1b1b1d; margin-bottom: 8px; }
+      .it-day p { font-size: 14px; color: #3e4851; line-height: 1.6; }
+      .budget-list { list-style: none; padding: 0; }
+      .budget-list li { font-size: 14px; color: #3e4851; margin-bottom: 12px; line-height: 1.5; padding-left: 0; }
+      .budget-list li::before { content: "•"; color: #006591; font-weight: bold; display: inline-block; width: 16px; margin-left: -16px; }
+      .budget-list strong { color: #1b1b1d; font-weight: 600; }
+      .faq-item { padding: 20px 0; }
+      .faq-item-bordered { border-top: 1px solid #e4e2e4; }
+      .faq-q { font-size: 14px; font-weight: 500; color: #1b1b1d; margin-bottom: 8px; }
+      .faq-a { font-size: 14px; color: #3e4851; line-height: 1.5; }
+      .prose p { font-size: 14px; color: #3e4851; line-height: 1.6; margin-bottom: 12px; }
+      .prose ul { margin-bottom: 12px; padding-left: 20px; }
+      .prose li { font-size: 14px; color: #3e4851; margin-bottom: 6px; line-height: 1.5; }
+      .prose strong { color: #1b1b1d; font-weight: 600; }
+      .col-sidebar { display: flex; flex-direction: column; gap: 24px; }
+      @media (min-width: 1024px) { .col-sidebar { position: sticky; top: 88px; } }
+      .sidebar-card { background: #ffffff; border: 1px solid #e4e2e4; border-radius: 12px; padding: 24px; }
+      .sidebar-card-alt { background: #fcf8fb; }
+      .sidebar-label { display: block; font-size: 10px; font-weight: 500; color: #3e4851; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
+      .price-row { display: flex; align-items: baseline; gap: 8px; margin-bottom: 24px; }
+      .price-value { font-size: 32px; font-weight: 700; letter-spacing: -0.02em; color: #1b1b1d; }
+      .price-unit { font-size: 14px; color: #3e4851; }
+      .price-footnote { text-align: center; font-size: 10px; color: #3e4851; margin-top: 8px; margin-bottom: 24px; }
+      .meta-list { display: flex; flex-direction: column; gap: 12px; font-size: 14px; }
+      .meta-row { display: flex; justify-content: space-between; border-bottom: 1px solid #e4e2e4; padding-bottom: 8px; }
+      .meta-label { color: #3e4851; }
+      .meta-value { color: #1b1b1d; font-weight: 500; }
+      .schema-tags { display: flex; flex-wrap: wrap; gap: 8px; font-size: 14px; }
+      .schema-tag { background: #e4e2e4; color: #1b1b1d; padding: 4px 8px; border-radius: 4px; font-size: 12px; }
+      .var-list { display: flex; flex-direction: column; gap: 8px; font-size: 14px; }
+      .var-key { color: #1b1b1d; font-weight: 500; }
+      .var-val { color: #3e4851; }
+      .var-url { word-break: break-all; }
+      .internal-links { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+      .internal-link { display: flex; justify-content: space-between; align-items: center; text-decoration: none; color: #1b1b1d; font-size: 12px; border-bottom: 1px solid #e4e2e4; padding-bottom: 8px; transition: color 0.1s; }
+      .internal-link:hover { color: #3e4851; }
+      .internal-link .material-symbols-outlined { font-size: 14px; color: #a6aab0; }
+      .related-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+      .related-item { display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px; }
+      .related-item-bordered { border-bottom: 1px solid #e4e2e4; }
+      .related-link { color: #1b1b1d; font-size: 14px; font-weight: 500; text-decoration: none; transition: color 0.1s; }
+      .related-link:hover { color: #3e4851; }
+      .related-path { font-size: 12px; color: #3e4851; }
 
-  <article class="geo-page">
-    <h1>{lang === 'en' ? "7-Day Peru Itinerary: Lima, Cusco & Machu Picchu" : "Itinerario de 7 días por Perú: Lima, Cusco y Machu Picchu"}</h1>
+    </style>
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Trip",
+      "name": t("Itinerario de 7 días por Perú", "7-Day Peru Itinerary"),
+      "description": t("Lima, Cusco, Valle Sagrado y Machu Picchu en 7 días", "Lima, Cusco, Sacred Valley & Machu Picchu in 7 days"),
+      "itinerary": [
+        { "@type": "City", "name": "Lima" },
+        { "@type": "City", "name": "Cusco" },
+        { "@type": "TouristAttraction", "name": "Machu Picchu" }
+      ]
+    })} />
+  </head>
 
-    <h2>{lang === 'en' ? "Quick Summary: Who This Itinerary is For" : "Resumen rápido: para quién es este itinerario"}</h2>
-    <p>{lang === 'en'
-      ? "This 7-day itinerary is designed for travelers with limited time who want to see the essentials of Peru in one week. It covers Lima (gastronomy and city), Cusco (acclimatization and culture) and Machu Picchu (the star destination). Ideal for those seeking a first-time Peru experience without missing the must-sees."
-      : "Este itinerario de 7 días está diseñado para viajeros con tiempo limitado que quieren ver lo esencial de Perú en una semana. Cubre Lima (gastronomía y ciudad), Cusco (aclimatación y cultura) y Machu Picchu (el destino estrella). Es ideal para quien busca una primera experiencia en Perú sin sacrificar los imperdibles."}</p>
+  <body>
 
-    <h2>{lang === 'en' ? "Day by Day" : "Día a día"}</h2>
+    <NavCmstourup lang={lang} />
 
-    <h3>{lang === 'en' ? "Day 1: Arrival in Lima" : "Día 1: Llegada a Lima"}</h3>
-    <p>{lang === 'en'
-      ? "Arrival at Jorge Chávez International Airport. Transfer to hotel in Miraflores or San Isidro. Free afternoon to adjust to the time zone. Evening welcome dinner at a traditional Peruvian restaurant in Miraflores or Barranco."
-      : "Llegada al Aeropuerto Internacional Jorge Chávez. Traslado al hotel en Miraflores o San Isidro. Tarde libre para adaptarse al huso horario. Por la noche, cena de bienvenida en un restaurante de comida peruana tradicional en Miraflores o Barranco."}</p>
+    <main class="main-grid">
 
-    <h3>{lang === 'en' ? "Day 2: Lima — City Tour & Gastronomy" : "Día 2: Lima — City tour y gastronomía"}</h3>
-    <p>{lang === 'en'
-      ? "Morning: Historic Center tour (Plaza Mayor, Cathedral, San Francisco Catacombs). Lunch at Surquillo Market with exotic fruit tasting. Afternoon: Miraflores visit (Malecón, Parque del Amor, Larcomar) and Barranco (Puente de los Suspiros, street art murals)."
-      : "Mañana: recorrido por el Centro Histórico (Plaza Mayor, Catedral, Catacumbas de San Francisco). Almuerzo en el Mercado de Surquillo con degustación de frutas exóticas. Tarde: visita a Miraflores (Malecón, Parque del Amor, Larcomar) y Barranco (Puente de los Suspiros, murales de arte urbano)."}</p>
+      <div class="col-main">
 
-    <h3>{lang === 'en' ? "Day 3: Flight to Cusco — Acclimatization" : "Día 3: Vuelo a Cusco — Aclimatación"}</h3>
-    <p>{lang === 'en'
-      ? "Early flight Lima to Cusco (1h 10min). Free morning for altitude acclimatization (11,200 ft / 3,400 m). Recommendation: coca tea, constant hydration, and light walk. Afternoon: Cusco city tour (Plaza de Armas, Cathedral, Qoricancha, Sacsayhuamán)."
-      : "Vuelo temprano de Lima a Cusco (1 hora 10 minutos). Mañana libre para aclimatación a la altura (3,400 msnm). Recomendación: mate de coca, hidratación constante y caminata ligera. Tarde: city tour por Cusco (Plaza de Armas, Catedral, Qoricancha, Sacsayhuamán)."}</p>
+        <section class="hero-section">
+          <div class="breadcrumbs">
+            <span>{t('Perú', 'Peru')}</span>
+            <span class="material-symbols-outlined breadcrumb-chevron">chevron_right</span>
+            <span class="breadcrumb-current">{t('Itinerario 7 días', '7-Day Itinerary')}</span>
+            <span class="material-symbols-outlined breadcrumb-chevron">chevron_right</span>
+            <span class="breadcrumb-path">/peru/itinerario-7-dias/</span>
+          </div>
 
-    <h3>{lang === 'en' ? "Day 4: Sacred Valley" : "Día 4: Valle Sagrado"}</h3>
-    <p>{lang === 'en'
-      ? "Full-day excursion to the Sacred Valley of the Incas. Visit Pisac Market and its Inca ruins. Buffet lunch in Urubamba with valley views. Afternoon: Ollantaytambo fortress, Moray terraces, and Maras salt mines. Return to Cusco in the evening."
-      : "Excursión de día completo al Valle Sagrado de los Incas. Visita al Mercado de Pisac y sus ruinas incas. Almuerzo buffet en Urubamba con vista al valle. Tarde: fortaleza de Ollantaytambo, terrazas de Moray y salineras de Maras. Retorno a Cusco por la tarde."}</p>
+          <h1 class="hero-title">{pageTitle}</h1>
 
-    <h3>{lang === 'en' ? "Day 5: Machu Picchu" : "Día 5: Machu Picchu"}</h3>
-    <p>{lang === 'en'
-      ? "Early departure to the train station in Ollantaytambo or Poroy. Train to Aguas Calientes (1.5-2 hours). Bus to Machu Picchu entrance. Guided 2-3 hour tour of the Inca citadel (Circuit 2 or 3). Time for photos. Return train to Cusco in the evening."
-      : "Salida muy temprano hacia la estación de tren en Ollantaytambo o Poroy. Tren a Aguas Calientes (1.5-2 horas). Bus hasta la entrada de Machu Picchu. Visita guiada de 2-3 horas por la ciudadela inca (Circuito 2 o 3). Tiempo para fotos y exploración. Tren de retorno a Cusco por la tarde."}</p>
+          <div class="tags-row">
+            <span class="tag tag-fill">{t('Itinerario', 'Itinerary')}</span>
+            <span class="tag">{t('Actualizada 2026', 'Updated 2026')}</span>
+            <span class="tag">{t('Incluye FAQs', 'Includes FAQs')}</span>
+          </div>
 
-    <h3>{lang === 'en' ? "Day 6: Rainbow Mountain or Humantay Lagoon" : "Día 6: Montaña 7 Colores o Humantay"}</h3>
-    <p>{lang === 'en'
-      ? "Full-day excursion to Rainbow Mountain (Vinicunca, 17,000 ft / 5,200 m) or Humantay Lagoon (13,800 ft / 4,200 m). Both require good physical condition due to altitude. Includes transport, guide, breakfast/lunch. Return to Cusco at sunset."
-      : "Excursión de día completo a la Montaña de 7 Colores (Vinicunca, 5,200 msnm) o la Laguna Humantay (4,200 msnm). Ambas requieren buena condición física por la altitud. Incluye transporte, guía y desayuno/almuerzo. Retorno a Cusco al atardecer."}</p>
+          <p class="hero-summary">{pageDesc}</p>
 
-    <h3>{lang === 'en' ? "Day 7: Return" : "Día 7: Retorno"}</h3>
-    <p>{lang === 'en'
-      ? "Free morning for crafts shopping at San Pedro Market or San Blas. Flight Cusco to Lima. Connection with international return flight."
-      : "Mañana libre para compras de artesanías en el Mercado de San Pedro o San Blas. Vuelo de Cusco a Lima. Conexión con vuelo internacional de retorno."}</p>
+          <div class="hero-actions">
+            <a href={`/${lang}/peru/cusco/tours/`} class="btn-primary">
+              {t('Ver tours en Cusco', 'See tours in Cusco')}
+            </a>
+            <a href={`/${lang}/peru/itinerario-10-dias/`} class="btn-ghost">
+              {t('Itinerario 10 días', '10-day itinerary')}
+            </a>
+          </div>
 
-    <h2>{lang === 'en' ? "Estimated Budget Per Person" : "Presupuesto estimado por persona"}</h2>
-    <ul>
-      <li><strong>{lang === 'en' ? "Budget ($700-900 USD):" : "Económico (700-900 USD):"}</strong> {lang === 'en' ? "hostels and basic hotels, market meals, shared tours, Expedition train." : "hostales y hoteles básicos, comidas en mercados, tours compartidos, tren Expedition."}</li>
-      <li><strong>{lang === 'en' ? "Standard ($1,200-1,600 USD):" : "Estándar (1,200-1,600 USD):"}</strong> {lang === 'en' ? "3-star hotels, mid-range restaurants, group tours, Vistadome train." : "hoteles 3 estrellas, restaurantes de gama media, tours grupales, tren Vistadome."}</li>
-      <li><strong>{lang === 'en' ? "Premium (from $2,200 USD):" : "Premium (desde 2,200 USD):"}</strong> {lang === 'en' ? "4-5 star hotels, fine dining, private tours, Hiram Bingham train." : "hoteles 4-5 estrellas, restaurantes de alta cocina, tours privados, tren Hiram Bingham."}</li>
-    </ul>
+          <div class="hero-image">
+            <img src="https://images.pexels.com/photos/3250613/pexels-photo-3250613.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Cusco, Perú" loading="eager" />
+          </div>
+        </section>
 
-    <h2>{lang === 'en' ? "Possible Variations" : "Variantes posibles"}</h2>
-    <p>{lang === 'en'
-      ? "If you have an extra day, you can replace Day 6 with a Rainbow Mountain visit with an extra night in Cusco, or shorten Lima to 1 day and add a night in Aguas Calientes. For travelers with good physical condition, the 1-day Inca Trail (short route from Km 104) can replace Day 4 Sacred Valley."
-      : "Si tienes un día adicional, puedes sustituir el Día 6 por una visita a la Montaña 7 Colores con noche extra en Cusco, o acortar Lima a 1 día y añadir una noche en Aguas Calientes. Para viajeros con buena condición física, el Camino Inca de 1 día (ruta corta desde Km 104) puede reemplazar el Día 4 de Valle Sagrado."}</p>
+        <div class="cards-stack">
 
-    <h2>{lang === 'en' ? "Frequently Asked Questions About 7-Day Peru Itineraries" : "Preguntas frecuentes sobre itinerarios de 7 días en Perú"}</h2>
+          <article class="card">
+            <div class="card-accent"></div>
+            <h2 class="card-title">
+              {t('Resumen rápido: para quién es este itinerario', 'Quick summary: who this itinerary is for')}
+            </h2>
+            <div class="card-body prose">
+              <p>{t(
+                'Este itinerario de 7 días está diseñado para viajeros con tiempo limitado que quieren ver lo esencial de Perú en una semana. Cubre Lima (gastronomía y ciudad), Cusco (aclimatación y cultura) y Machu Picchu (el destino estrella). Es ideal para quien busca una primera experiencia en Perú sin sacrificar los imperdibles.',
+                'This 7-day itinerary is designed for travelers with limited time who want to see the essentials of Peru in one week. It covers Lima (gastronomy and city), Cusco (acclimatization and culture) and Machu Picchu (the star destination). Ideal for those seeking a first-time Peru experience without missing the must-sees.'
+              )}</p>
+            </div>
+          </article>
 
-    <h3>{lang === 'en' ? "Is one week enough to see Peru?" : "¿Es suficiente una semana para ver Perú?"}</h3>
-    <p>{lang === 'en'
-      ? "Yes, one week allows you to visit Lima, Cusco, and Machu Picchu. It's an intense pace but doable. For a more relaxed experience or to add Arequipa or Lake Titicaca, 10-14 days is recommended."
-      : "Sí, una semana permite conocer Lima, Cusco y Machu Picchu. Es un ritmo intenso pero factible. Para una experiencia más relajada o para añadir Arequipa o el Lago Titicaca, se recomiendan 10-14 días."}</p>
+          <article class="card">
+            <div class="card-accent"></div>
+            <h2 class="card-title">
+              {t('Día a día', 'Day by Day')}
+            </h2>
+            <div class="card-body itinerary-list">
 
-    <h3>{lang === 'en' ? "Can I add the Amazon to a 7-day itinerary?" : "¿Puedo añadir Amazonía a un itinerario de 7 días?"}</h3>
-    <p>{lang === 'en'
-      ? "Not recommended. The Amazon requires at least 3 additional days (flights + lodge). Ideally dedicate a separate trip of at least 5 days for the rainforest."
-      : "No es recomendable. La Amazonía requiere al menos 3 días adicionales (vuelos + lodge). Lo ideal es dedicar un viaje aparte de al menos 5 días para la selva amazónica."}</p>
+              <div class="it-day">
+                <span class="it-day-label">{t('Día 1', 'Day 1')}</span>
+                <h3>{t('Llegada a Lima', 'Arrival in Lima')}</h3>
+                <p>{t(
+                  'Llegada al Aeropuerto Internacional Jorge Chávez. Traslado al hotel en Miraflores o San Isidro. Tarde libre para adaptarse al huso horario. Por la noche, cena de bienvenida en un restaurante de comida peruana tradicional en Miraflores o Barranco.',
+                  'Arrival at Jorge Chávez International Airport. Transfer to hotel in Miraflores or San Isidro. Free afternoon to adjust to the time zone. Evening welcome dinner at a traditional Peruvian restaurant in Miraflores or Barranco.'
+                )}</p>
+              </div>
 
-    <h3>{lang === 'en' ? "How much does this 7-day Peru itinerary cost?" : "¿Cuánto cuesta este itinerario de 7 días por Perú?"}</h3>
-    <p>{lang === 'en'
-      ? "Total estimated cost per person (international flights not included): $700-900 budget, $1,200-1,600 standard, from $2,200 premium. Lima-Cusco-Lima flights cost approximately $80-150 extra."
-      : "El costo total estimado por persona (vuelos internacionales no incluidos) es de 700-900 USD en modalidad económica, 1,200-1,600 USD en estándar y desde 2,200 USD en premium. Los vuelos Lima-Cusco-Lima cuestan aproximadamente 80-150 USD adicionales."}</p>
-  </article>
-</Layout>
+              <div class="it-day">
+                <span class="it-day-label">{t('Día 2', 'Day 2')}</span>
+                <h3>{t('Lima — City tour y gastronomía', 'Lima — City Tour & Gastronomy')}</h3>
+                <p>{t(
+                  'Mañana: recorrido por el Centro Histórico (Plaza Mayor, Catedral, Catacumbas de San Francisco). Almuerzo en el Mercado de Surquillo con degustación de frutas exóticas. Tarde: visita a Miraflores (Malecón, Parque del Amor, Larcomar) y Barranco (Puente de los Suspiros, murales de arte urbano).',
+                  'Morning: Historic Center tour (Plaza Mayor, Cathedral, San Francisco Catacombs). Lunch at Surquillo Market with exotic fruit tasting. Afternoon: Miraflores visit (Malecón, Parque del Amor, Larcomar) and Barranco (Puente de los Suspiros, street art murals).'
+                )}</p>
+              </div>
 
-<style>
-  .geo-page { max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
-  .geo-page h1 { font-size: 2rem; color: #f1f5f9; margin-bottom: 1.5rem; }
-  .geo-page h2 { font-size: 1.5rem; color: #06b6d4; margin: 2rem 0 1rem; border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; }
-  .geo-page h3 { font-size: 1.15rem; color: #f1f5f9; margin: 1.5rem 0 0.5rem; }
-  .geo-page p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
-  .geo-page ul { color: #cbd5e1; margin-bottom: 1rem; padding-left: 1.5rem; }
-  .geo-page li { margin-bottom: 0.5rem; }
-  .geo-page strong { color: #f1f5f9; }
-</style>
+              <div class="it-day">
+                <span class="it-day-label">{t('Día 3', 'Day 3')}</span>
+                <h3>{t('Vuelo a Cusco — Aclimatación', 'Flight to Cusco — Acclimatization')}</h3>
+                <p>{t(
+                  'Vuelo temprano de Lima a Cusco (1 hora 10 minutos). Mañana libre para aclimatación a la altura (3,400 msnm). Recomendación: mate de coca, hidratación constante y caminata ligera. Tarde: city tour por Cusco (Plaza de Armas, Catedral, Qoricancha, Sacsayhuamán).',
+                  'Early flight Lima to Cusco (1h 10min). Free morning for altitude acclimatization (11,200 ft / 3,400 m). Recommendation: coca tea, constant hydration, and light walk. Afternoon: Cusco city tour (Plaza de Armas, Cathedral, Qoricancha, Sacsayhuamán).'
+                )}</p>
+              </div>
+
+              <div class="it-day">
+                <span class="it-day-label">{t('Día 4', 'Day 4')}</span>
+                <h3>{t('Valle Sagrado', 'Sacred Valley')}</h3>
+                <p>{t(
+                  'Excursión de día completo al Valle Sagrado de los Incas. Visita al Mercado de Pisac y sus ruinas incas. Almuerzo buffet en Urubamba con vista al valle. Tarde: fortaleza de Ollantaytambo, terrazas de Moray y salineras de Maras. Retorno a Cusco por la tarde.',
+                  'Full-day excursion to the Sacred Valley of the Incas. Visit Pisac Market and its Inca ruins. Buffet lunch in Urubamba with valley views. Afternoon: Ollantaytambo fortress, Moray terraces, and Maras salt mines. Return to Cusco in the evening.'
+                )}</p>
+              </div>
+
+              <div class="it-day">
+                <span class="it-day-label">{t('Día 5', 'Day 5')}</span>
+                <h3>{t('Machu Picchu', 'Machu Picchu')}</h3>
+                <p>{t(
+                  'Salida muy temprano hacia la estación de tren en Ollantaytambo o Poroy. Tren a Aguas Calientes (1.5-2 horas). Bus hasta la entrada de Machu Picchu. Visita guiada de 2-3 horas por la ciudadela inca (Circuito 2 o 3). Tiempo para fotos y exploración. Tren de retorno a Cusco por la tarde.',
+                  'Early departure to the train station in Ollantaytambo or Poroy. Train to Aguas Calientes (1.5-2 hours). Bus to Machu Picchu entrance. Guided 2-3 hour tour of the Inca citadel (Circuit 2 or 3). Time for photos. Return train to Cusco in the evening.'
+                )}</p>
+              </div>
+
+              <div class="it-day">
+                <span class="it-day-label">{t('Día 6', 'Day 6')}</span>
+                <h3>{t('Montaña 7 Colores o Humantay', 'Rainbow Mountain or Humantay Lagoon')}</h3>
+                <p>{t(
+                  'Excursión de día completo a la Montaña de 7 Colores (Vinicunca, 5,200 msnm) o la Laguna Humantay (4,200 msnm). Ambas requieren buena condición física por la altitud. Incluye transporte, guía y desayuno/almuerzo. Retorno a Cusco al atardecer.',
+                  'Full-day excursion to Rainbow Mountain (Vinicunca, 17,000 ft / 5,200 m) or Humantay Lagoon (13,800 ft / 4,200 m). Both require good physical condition due to altitude. Includes transport, guide, breakfast/lunch. Return to Cusco at sunset.'
+                )}</p>
+              </div>
+
+              <div class="it-day">
+                <span class="it-day-label">{t('Día 7', 'Day 7')}</span>
+                <h3>{t('Retorno', 'Return')}</h3>
+                <p>{t(
+                  'Mañana libre para compras de artesanías en el Mercado de San Pedro o San Blas. Vuelo de Cusco a Lima. Conexión con vuelo internacional de retorno.',
+                  'Free morning for crafts shopping at San Pedro Market or San Blas. Flight Cusco to Lima. Connection with international return flight.'
+                )}</p>
+              </div>
+
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-accent"></div>
+            <h2 class="card-title">
+              {t('Presupuesto estimado por persona', 'Estimated Budget Per Person')}
+            </h2>
+            <div class="card-body">
+              <ul class="budget-list">
+                <li><strong>{t('Económico (700-900 USD):', 'Budget ($700-900 USD):')}</strong> {t('hostales y hoteles básicos, comidas en mercados, tours compartidos, tren Expedition.', 'hostels and basic hotels, market meals, shared tours, Expedition train.')}</li>
+                <li><strong>{t('Estándar (1,200-1,600 USD):', 'Standard ($1,200-1,600 USD):')}</strong> {t('hoteles 3 estrellas, restaurantes de gama media, tours grupales, tren Vistadome.', '3-star hotels, mid-range restaurants, group tours, Vistadome train.')}</li>
+                <li><strong>{t('Premium (desde 2,200 USD):', 'Premium (from $2,200 USD):')}</strong> {t('hoteles 4-5 estrellas, restaurantes de alta cocina, tours privados, tren Hiram Bingham.', '4-5 star hotels, fine dining, private tours, Hiram Bingham train.')}</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-accent"></div>
+            <h2 class="card-title">
+              {t('Variantes posibles', 'Possible Variations')}
+            </h2>
+            <div class="card-body prose">
+              <p>{t(
+                'Si tienes un día adicional, puedes sustituir el Día 6 por una visita a la Montaña 7 Colores con noche extra en Cusco, o acortar Lima a 1 día y añadir una noche en Aguas Calientes. Para viajeros con buena condición física, el Camino Inca de 1 día (ruta corta desde Km 104) puede reemplazar el Día 4 de Valle Sagrado.',
+                'If you have an extra day, you can replace Day 6 with a Rainbow Mountain visit with an extra night in Cusco, or shorten Lima to 1 day and add a night in Aguas Calientes. For travelers with good physical condition, the 1-day Inca Trail (short route from Km 104) can replace Day 4 Sacred Valley.'
+              )}</p>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-accent"></div>
+            <h2 class="card-title">
+              {t('Preguntas frecuentes sobre itinerarios de 7 días en Perú', 'Frequently Asked Questions About 7-Day Peru Itineraries')}
+            </h2>
+            <div class="card-body faq-list">
+              <div class="faq-item">
+                <h3 class="faq-q">{t('¿Es suficiente una semana para ver Perú?', 'Is one week enough to see Peru?')}</h3>
+                <p class="faq-a">{t(
+                  'Sí, una semana permite conocer Lima, Cusco y Machu Picchu. Es un ritmo intenso pero factible. Para una experiencia más relajada o para añadir Arequipa o el Lago Titicaca, se recomiendan 10-14 días.',
+                  'Yes, one week allows you to visit Lima, Cusco, and Machu Picchu. It\'s an intense pace but doable. For a more relaxed experience or to add Arequipa or Lake Titicaca, 10-14 days is recommended.'
+                )}</p>
+              </div>
+              <div class="faq-item faq-item-bordered">
+                <h3 class="faq-q">{t('¿Puedo añadir Amazonía a un itinerario de 7 días?', 'Can I add the Amazon to a 7-day itinerary?')}</h3>
+                <p class="faq-a">{t(
+                  'No es recomendable. La Amazonía requiere al menos 3 días adicionales (vuelos + lodge). Lo ideal es dedicar un viaje aparte de al menos 5 días para la selva amazónica.',
+                  'Not recommended. The Amazon requires at least 3 additional days (flights + lodge). Ideally dedicate a separate trip of at least 5 days for the rainforest.'
+                )}</p>
+              </div>
+              <div class="faq-item faq-item-bordered">
+                <h3 class="faq-q">{t('¿Cuánto cuesta este itinerario de 7 días por Perú?', 'How much does this 7-day Peru itinerary cost?')}</h3>
+                <p class="faq-a">{t(
+                  'El costo total estimado por persona (vuelos internacionales no incluidos) es de 700-900 USD en modalidad económica, 1,200-1,600 USD en estándar y desde 2,200 USD en premium. Los vuelos Lima-Cusco-Lima cuestan aproximadamente 80-150 USD adicionales.',
+                  'Total estimated cost per person (international flights not included): $700-900 budget, $1,200-1,600 standard, from $2,200 premium. Lima-Cusco-Lima flights cost approximately $80-150 extra.'
+                )}</p>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+
+      <aside class="col-sidebar">
+
+        <div class="sidebar-card">
+          <span class="sidebar-label">{t('Tours Desde', 'Tours From')}</span>
+          <div class="price-row">
+            <span class="price-value">USD 89</span>
+            <span class="price-unit">{t('/ persona', '/ person')}</span>
+          </div>
+          <a href={`/${lang}/peru/cusco/tours/`} class="btn-primary btn-full">
+            {t('Comparar tours', 'Compare tours')}
+          </a>
+          <p class="price-footnote">{t('Sin cargos ocultos · Cancelación flexible', 'No hidden fees · Flexible cancellation')}</p>
+          <div class="meta-list">
+            <div class="meta-row">
+              <span class="meta-label">{t('Duración', 'Duration')}</span>
+              <span class="meta-value">7 {t('días', 'days')}</span>
+            </div>
+            <div class="meta-row">
+              <span class="meta-label">{t('Ciudades', 'Cities')}</span>
+              <span class="meta-value">3</span>
+            </div>
+            <div class="meta-row">
+              <span class="meta-label">{t('Dificultad', 'Difficulty')}</span>
+              <span class="meta-value">{t('Media', 'Moderate')}</span>
+            </div>
+            <div class="meta-row">
+              <span class="meta-label">{t('Mejor época', 'Best season')}</span>
+              <span class="meta-value">{t('May – Oct', 'May – Oct')}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-card sidebar-card-alt">
+          <span class="sidebar-label">SCHEMA.ORG EN &lt;HEAD&gt;</span>
+          <div class="schema-tags">
+            <span class="schema-tag">Trip</span>
+            <span class="schema-tag">Itinerary</span>
+            <span class="schema-tag">BreadcrumbList</span>
+            <span class="schema-tag">TouristTrip</span>
+          </div>
+        </div>
+
+        <div class="sidebar-card sidebar-card-alt">
+          <span class="sidebar-label">{t('VARIABLES ASTRO (AGENTE)', 'ASTRO VARIABLES (AGENT)')}</span>
+          <div class="var-list">
+            <div><span class="var-key">tipo_pagina:</span> <span class="var-val">"itinerario"</span></div>
+            <div><span class="var-key">itinerario:</span> <span class="var-val">"7 días"</span></div>
+            <div class="var-url"><span class="var-key">url:</span> <span class="var-val">"/peru/itinerario-7-dias/"</span></div>
+            <div><span class="var-key">anio:</span> <span class="var-val">"2026"</span></div>
+          </div>
+        </div>
+
+        <div class="sidebar-card">
+          <span class="sidebar-label">{t('Links Internos', 'Internal Links')}</span>
+          <ul class="internal-links">
+            <li><a href={`/${lang}/peru/itinerario-10-dias/`} class="internal-link">/{lang}/peru/itinerario-10-dias/<span class="material-symbols-outlined">arrow_forward</span></a></li>
+            <li><a href={`/${lang}/peru/itinerario-14-dias/`} class="internal-link">/{lang}/peru/itinerario-14-dias/<span class="material-symbols-outlined">arrow_forward</span></a></li>
+            <li><a href={`/${lang}/peru/cusco/`} class="internal-link">/{lang}/peru/cusco/<span class="material-symbols-outlined">arrow_forward</span></a></li>
+            <li><a href={`/${lang}/peru/machu_picchu/`} class="internal-link">/{lang}/peru/machu_picchu/<span class="material-symbols-outlined">arrow_forward</span></a></li>
+          </ul>
+        </div>
+
+        <div class="sidebar-card">
+          <span class="sidebar-label">{t('Destinos Relacionados', 'Related Destinations')}</span>
+          <ul class="related-list">
+            <li class="related-item related-item-bordered">
+              <a href={`/${lang}/peru/cusco/`} class="related-link">Cusco</a>
+              <span class="related-path">/peru/cusco/</span>
+            </li>
+            <li class="related-item related-item-bordered">
+              <a href={`/${lang}/peru/lima/`} class="related-link">Lima</a>
+              <span class="related-path">/peru/lima/</span>
+            </li>
+            <li class="related-item related-item-bordered">
+              <a href={`/${lang}/peru/machu_picchu/`} class="related-link">Machu Picchu</a>
+              <span class="related-path">/peru/machu_picchu/</span>
+            </li>
+            <li class="related-item">
+              <a href={`/${lang}/peru/arequipa/`} class="related-link">Arequipa</a>
+              <span class="related-path">/peru/arequipa/</span>
+            </li>
+          </ul>
+        </div>
+
+      </aside>
+    </main>
+
+    <FooterCmstourup lang={lang} />
+    <SettingsBodyEnd />
+
+  </body>
+</html>
+
+

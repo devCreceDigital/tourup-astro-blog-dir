@@ -1,0 +1,291 @@
+---
+export const prerender = false;
+import AdminLayout from '../../../../../components/admin/Layout.astro';
+import { readEntry } from '../../../../../utils/content';
+
+const { lang, slug } = Astro.params as { lang: string; slug: string };
+const t = (es: string, en: string) => lang === 'en' ? en : es;
+
+let entry: Record<string, unknown> = {};
+try {
+  const parsed = await readEntry('posts', slug);
+  entry = { slug, ...parsed.data, body: parsed.content };
+} catch {
+  return Astro.redirect('/admin/' + lang + '/posts');
+}
+
+const tags = (entry.tags as string[]) ?? [];
+const pubDate = entry.pubDate ? String(entry.pubDate).slice(0, 16) : '';
+const updatedDate = entry.updatedDate ? String(entry.updatedDate).slice(0, 16) : '';
+---
+
+<AdminLayout title={t('Editar post', 'Edit post')}>
+  <div class="page-header">
+    <div>
+      <h1>{t('Editar post', 'Edit post')}</h1>
+      <p class="subtitle">{entry.title as string}</p>
+    </div>
+    <a href={'/admin/' + lang + '/posts'} class="btn-secondary">{t('Volver', 'Back')}</a>
+  </div>
+
+  <form id="post-form" class="form-card">
+    <div class="form-section">
+      <h2>{t('Información básica', 'Basic information')}</h2>
+      <div class="form-grid">
+        <div class="field">
+          <label>{t('Título', 'Title')} *</label>
+          <input name="title" value={entry.title as string} required />
+        </div>
+        <div class="field">
+          <label>{t('Idioma', 'Language')}</label>
+          <select name="lang">
+            <option value="es" selected={(entry.lang as string) === 'es'}>Espa&ntilde;ol</option>
+            <option value="en" selected={(entry.lang as string) === 'en'}>English</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>{t('Fecha de publicación', 'Publish date')} *</label>
+          <input name="pubDate" type="datetime-local" value={pubDate} required />
+        </div>
+        <div class="field">
+          <label>{t('Fecha de actualización', 'Updated date')}</label>
+          <input name="updatedDate" type="datetime-local" value={updatedDate} />
+        </div>
+        <div class="field">
+          <label>{t('URL de imagen destacada', 'Hero image URL')}</label>
+          <input name="heroImage" type="url" value={(entry.heroImage as string) ?? ''} placeholder="https://..." />
+        </div>
+        <div class="field">
+          <label>{t('Tags (separados por coma)', 'Tags (comma-separated)')}</label>
+          <input name="tags" value={tags.join(', ')} />
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h2>{t('Descripción', 'Description')}</h2>
+      <div class="field">
+        <textarea name="description" rows="2" minlength="20" maxlength="300" required>{(entry.description as string) ?? ''}</textarea>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h2>{t('Contenido del artículo', 'Article content')}</h2>
+      <div class="editor-toolbar">
+        <button type="button" data-cmd="bold" title="Bold"><strong>B</strong></button>
+        <button type="button" data-cmd="italic" title="Italic"><em>I</em></button>
+        <button type="button" data-cmd="heading" title="Heading">H2</button>
+        <button type="button" data-cmd="link" title="Link">Link</button>
+        <button type="button" data-cmd="image" title="Image">Img</button>
+        <button type="button" data-cmd="ul" title="Bullet list">UL</button>
+        <button type="button" data-cmd="ol" title="Numbered list">OL</button>
+        <button type="button" data-cmd="blockquote" title="Blockquote">Quote</button>
+        <button type="button" data-cmd="code" title="Code">Code</button>
+        <span class="toolbar-sep"></span>
+        <button type="button" id="preview-toggle" class="preview-btn">{t('Vista previa', 'Preview')}</button>
+      </div>
+      <div class="field">
+        <textarea id="post-body" name="body" rows="16" placeholder={t('Escribe el contenido en Markdown...', 'Write the content in Markdown...')}>{(entry.body as string) ?? ''}</textarea>
+      </div>
+      <div id="preview-panel" class="preview-panel" style="display:none"></div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn-primary">{t('Guardar cambios', 'Save changes')}</button>
+    </div>
+  </form>
+</AdminLayout>
+
+<script>
+  const textarea = document.getElementById('post-body');
+  const previewPanel = document.getElementById('preview-panel');
+  const previewToggle = document.getElementById('preview-toggle');
+
+  let previewVisible = false;
+
+  document.querySelectorAll('[data-cmd]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const cmd = btn.getAttribute('data-cmd');
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const selected = textarea.value.substring(start, end);
+      const before = textarea.value.substring(0, start);
+      const after = textarea.value.substring(end);
+
+      let insertion = '';
+      let cursorOffset = 0;
+
+      switch (cmd) {
+        case 'bold':
+          insertion = '**' + selected + '**';
+          cursorOffset = selected ? 0 : -2;
+          break;
+        case 'italic':
+          insertion = '*' + selected + '*';
+          cursorOffset = selected ? 0 : -1;
+          break;
+        case 'heading':
+          insertion = '\n## ' + (selected || 'Heading');
+          cursorOffset = selected ? 0 : -8;
+          break;
+        case 'link':
+          insertion = '[' + (selected || 'text') + '](url)';
+          cursorOffset = selected ? -6 : -6;
+          break;
+        case 'image':
+          insertion = '![' + (selected || 'alt') + '](url)';
+          cursorOffset = selected ? -6 : -6;
+          break;
+        case 'ul':
+          insertion = '\n- ' + (selected || 'item');
+          break;
+        case 'ol':
+          insertion = '\n1. ' + (selected || 'item');
+          break;
+        case 'blockquote':
+          insertion = '\n> ' + (selected || 'quote');
+          break;
+        case 'code':
+          insertion = '`' + selected + '`';
+          cursorOffset = selected ? 0 : -1;
+          break;
+      }
+
+      textarea.value = before + insertion + after;
+      const newPos = start + insertion.length + (cursorOffset || 0);
+      textarea.setSelectionRange(newPos, newPos);
+      textarea.focus();
+    });
+  });
+
+  previewToggle.addEventListener('click', () => {
+    previewVisible = !previewVisible;
+    if (previewVisible) {
+      textarea.style.display = 'none';
+      previewPanel.style.display = 'block';
+
+      const md = textarea.value;
+      const html = md
+        .replace(/### (.+)/g, '<h3>$1</h3>')
+        .replace(/## (.+)/g, '<h2>$1</h2>')
+        .replace(/# (.+)/g, '<h1>$1</h1>')
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.+?)\*/g, '<em>$1</em>')
+        .replace(/!\[(.+?)\]\((.+?)\)/g, '<img src="$2" alt="$1" style="max-width:100%">')
+        .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" target="_blank">$1</a>')
+        .replace(/> (.+)/g, '<blockquote>$1</blockquote>')
+        .replace(/`(.+?)`/g, '<code>$1</code>')
+        .replace(/^- (.+)/gm, '<li>$1</li>')
+        .replace(/^(\d+)\. (.+)/gm, '<li>$2</li>')
+        .replace(/\n\n/g, '</p><p>')
+        .replace(/\n/g, '<br>');
+
+      previewPanel.innerHTML = '<div class="preview-content">' + '<p>' + html + '</p>' + '</div>';
+      previewToggle.textContent = 'Edit';
+    } else {
+      textarea.style.display = '';
+      previewPanel.style.display = 'none';
+      previewToggle.textContent = 'Preview';
+    }
+  });
+
+  document.getElementById('post-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const fd = new FormData(form);
+
+    const tags = (fd.get('tags') || '').split(',').map(s => s.trim()).filter(Boolean);
+
+    const body = {
+      title: fd.get('title'),
+      lang: fd.get('lang') || 'es',
+      description: fd.get('description'),
+      pubDate: new Date(fd.get('pubDate')).toISOString(),
+      updatedDate: fd.get('updatedDate') ? new Date(fd.get('updatedDate')).toISOString() : undefined,
+      heroImage: fd.get('heroImage') || undefined,
+      tags,
+      body: fd.get('body') || '',
+    };
+
+    const parts = window.location.pathname.split('/');
+    const lang = parts[2];
+    const slug = parts[4];
+
+    const res = await fetch('/api/admin/' + lang + '/posts/' + slug + '/', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+
+    if (res.ok) {
+      window.location.href = '/admin/' + lang + '/posts';
+    } else {
+      const data = await res.json();
+      if (data.errors) {
+        alert(data.errors.map((e) => e.field + ': ' + e.message).join('\n'));
+      } else {
+        alert(data.error || 'Error');
+      }
+    }
+  });
+</script>
+
+<style>
+  .page-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }
+  .page-header h1 { font-size: 24px; font-weight: 700; color: #000000; margin-bottom: 4px; }
+  .subtitle { font-size: 14px; color: #737373; }
+  .btn-primary {
+    display: inline-flex; align-items: center; padding: 10px 20px;
+    background: #000000; color: #ffffff; border-radius: 10px;
+    font-size: 14px; font-weight: 600; text-decoration: none; border: none; cursor: pointer;
+  }
+  .btn-primary:hover { opacity: 0.85; }
+  .btn-secondary {
+    display: inline-flex; align-items: center; padding: 10px 20px;
+    background: #ffffff; color: #444748; border: 1px solid #e5e5e5; border-radius: 10px;
+    font-size: 14px; font-weight: 500; text-decoration: none; cursor: pointer;
+  }
+  .btn-secondary:hover { background: #f2f2f2; }
+  .form-card {
+    background: #ffffff; border: 1px solid #e5e5e5; border-radius: 14px;
+    padding: 32px; max-width: 800px;
+  }
+  .form-section { margin-bottom: 32px; }
+  .form-section h2 { font-size: 16px; font-weight: 600; color: #000000; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid #e5e5e5; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .field { display: flex; flex-direction: column; gap: 4px; }
+  .field label { font-size: 12px; font-weight: 600; color: #444748; text-transform: uppercase; letter-spacing: 0.3px; }
+  .field input, .field select, .field textarea {
+    padding: 10px 14px; border: 1px solid #e5e5e5; border-radius: 10px;
+    font-size: 14px; font-family: 'Geist', sans-serif; outline: none; background: #f9f9f9;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus { border-color: #000000; background: #ffffff; }
+  .field textarea { resize: vertical; min-height: 80px; }
+  .editor-toolbar {
+    display: flex; gap: 4px; align-items: center; flex-wrap: wrap;
+    padding: 8px 12px; border: 1px solid #e5e5e5; border-bottom: none;
+    border-radius: 10px 10px 0 0; background: #f9f9f9;
+  }
+  .editor-toolbar button {
+    padding: 4px 10px; font-size: 13px; font-weight: 500;
+    border: 1px solid transparent; border-radius: 6px;
+    background: transparent; color: #444748; cursor: pointer; font-family: 'Geist', sans-serif;
+  }
+  .editor-toolbar button:hover { background: #ffffff; border-color: #e5e5e5; }
+  .toolbar-sep { width: 1px; height: 20px; background: #e5e5e5; margin: 0 4px; }
+  .preview-btn { margin-left: auto; }
+  .preview-panel {
+    padding: 14px; border: 1px solid #e5e5e5; border-radius: 0 0 10px 10px;
+    background: #ffffff; min-height: 200px; font-size: 14px; line-height: 1.6;
+  }
+  .preview-content h1, .preview-content h2, .preview-content h3 { margin: 16px 0 8px; }
+  .preview-content p { margin-bottom: 12px; }
+  .preview-content blockquote {
+    border-left: 3px solid #000000; padding-left: 12px; color: #737373; margin: 12px 0;
+  }
+  .preview-content code {
+    background: #f2f2f2; padding: 2px 6px; border-radius: 4px; font-family: 'Geist Mono', monospace; font-size: 13px;
+  }
+  .preview-content img { border-radius: 10px; margin: 12px 0; }
+  .form-actions { margin-top: 24px; }
+</style>

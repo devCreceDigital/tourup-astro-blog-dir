@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Tourup - Media Library</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "outline": "#747878",
+                      "inverse-on-surface": "#f0f1f1",
+                      "on-tertiary-container": "#868381",
+                      "primary-fixed-dim": "#c9c6c5",
+                      "smoke": "#b9b9b9",
+                      "error": "#ba1a1a",
+                      "tertiary-container": "#1d1b1a",
+                      "on-primary-container": "#858383",
+                      "surface-variant": "#e2e2e2",
+                      "secondary-container": "#e3e2e2",
+                      "pure-black": "#000000",
+                      "inverse-primary": "#c9c6c5",
+                      "on-tertiary-fixed-variant": "#484645",
+                      "on-tertiary-fixed": "#1d1b1a",
+                      "surface-dim": "#dadada",
+                      "secondary": "#5e5e5e",
+                      "chalk": "#ffffff",
+                      "surface-bright": "#f9f9f9",
+                      "on-primary-fixed-variant": "#474646",
+                      "tertiary": "#000000",
+                      "on-secondary-container": "#646464",
+                      "on-background": "#1a1c1c",
+                      "secondary-fixed": "#e3e2e2",
+                      "outline-variant": "#c4c7c7",
+                      "surface-container-lowest": "#ffffff",
+                      "surface": "#f9f9f9",
+                      "error-container": "#ffdad6",
+                      "carbon": "#171717",
+                      "surface-container-low": "#f3f3f4",
+                      "on-primary": "#ffffff",
+                      "surface-tint": "#5f5e5e",
+                      "tertiary-fixed": "#e6e1df",
+                      "primary": "#000000",
+                      "on-error": "#ffffff",
+                      "ash": "#a1a1a1",
+                      "inverse-surface": "#2f3131",
+                      "on-secondary": "#ffffff",
+                      "primary-container": "#1c1b1b",
+                      "surface-container-high": "#e8e8e8",
+                      "surface-container": "#eeeeee",
+                      "mist": "#f2f2f2",
+                      "on-primary-fixed": "#1c1b1b",
+                      "secondary-fixed-dim": "#c7c6c6",
+                      "on-secondary-fixed-variant": "#464747",
+                      "background": "#f9f9f9",
+                      "surface-container-highest": "#e2e2e2",
+                      "on-surface": "#1a1c1c",
+                      "primary-fixed": "#e5e2e1",
+                      "on-secondary-fixed": "#1b1c1c",
+                      "hairline": "#e5e5e5",
+                      "on-error-container": "#93000a",
+                      "on-tertiary": "#ffffff",
+                      "on-surface-variant": "#444748",
+                      "tertiary-fixed-dim": "#cac6c3"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px",
+                      "btn": "10px",
+                      "card": "14px"
+              },
+              "spacing": {
+                      "padding-card": "16px",
+                      "gap-element": "8px",
+                      "gap-nav": "10px",
+                      "max-width": "1200px",
+                      "nav-height": "64px",
+                      "base": "4px",
+                      "gap-section": "48px"
+              },
+              "fontFamily": {
+                      "body-md": ["Geist"],
+                      "caption": ["Geist"],
+                      "code": ["Geist Mono"],
+                      "label-md": ["Geist"],
+                      "display-xl-mobile": ["Geist"],
+                      "display-xl": ["Geist"],
+                      "headline-sm": ["Geist"]
+              },
+              "fontSize": {
+                      "body-md": ["14px", { "lineHeight": "1.43", "letterSpacing": "-0.025em", "fontWeight": "400" }],
+                      "caption": ["12px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "500" }],
+                      "code": ["14px", { "lineHeight": "1.43", "letterSpacing": "0", "fontWeight": "400" }],
+                      "label-md": ["14px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "500" }],
+                      "display-xl-mobile": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.04em", "fontWeight": "600" }],
+                      "display-xl": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.05em", "fontWeight": "600" }],
+                      "headline-sm": ["18px", { "lineHeight": "1.5", "letterSpacing": "-0.45px", "fontWeight": "600" }]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        body { font-family: 'Geist', sans-serif; }
+        .font-code { font-family: 'Geist Mono', monospace; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .material-symbols-outlined.filled { font-variation-settings: 'FILL' 1; }
+    </style>
+</head>
+<body class="bg-background text-on-background antialiased flex w-full min-h-screen">
+<!-- SideNavBar -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-chalk border-r border-hairline flex flex-col p-gap-nav gap-base z-20 hidden md:flex">
+<!-- Header -->
+<div class="px-3 py-4 flex flex-col gap-1 border-b border-hairline mb-4">
+<h1 class="font-headline-sm text-headline-sm font-black text-primary">Tourup Hub</h1>
+<span class="font-caption text-caption text-secondary">v1.0.4</span>
+</div>
+<!-- Create New CTA -->
+<button class="bg-pure-black text-chalk rounded-btn px-4 py-2 font-label-md text-label-md w-full mb-4 flex items-center justify-center gap-2 hover:bg-carbon transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+            Create New
+        </button>
+<!-- Navigation Tabs -->
+<nav class="flex-1 flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded font-label-md text-label-md uppercase tracking-tight text-secondary hover:bg-mist active:opacity-80 transition-all duration-75" href="#">
+<span class="material-symbols-outlined">dashboard</span> Dashboard
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded font-label-md text-label-md uppercase tracking-tight text-secondary hover:bg-mist active:opacity-80 transition-all duration-75" href="#">
+<span class="material-symbols-outlined">folder_open</span> Content
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded font-label-md text-label-md uppercase tracking-tight text-secondary hover:bg-mist active:opacity-80 transition-all duration-75" href="#">
+<span class="material-symbols-outlined">insights</span> Analytics
+            </a>
+<!-- Active Tab -->
+<a class="flex items-center gap-3 px-3 py-2 rounded font-label-md text-label-md uppercase tracking-tight bg-primary text-on-primary font-bold active:opacity-80 transition-all duration-75" href="#">
+<span class="material-symbols-outlined filled">perm_media</span> Media
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded font-label-md text-label-md uppercase tracking-tight text-secondary hover:bg-mist active:opacity-80 transition-all duration-75" href="#">
+<span class="material-symbols-outlined">group</span> Team
+            </a>
+</nav>
+<!-- Footer Tabs -->
+<div class="mt-auto border-t border-hairline pt-4 flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded font-label-md text-label-md uppercase tracking-tight text-secondary hover:bg-mist active:opacity-80 transition-all duration-75" href="#">
+<span class="material-symbols-outlined">help</span> Support
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded font-label-md text-label-md uppercase tracking-tight text-secondary hover:bg-mist active:opacity-80 transition-all duration-75" href="#">
+<span class="material-symbols-outlined">logout</span> Logout
+            </a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-64 flex flex-col w-full">
+<!-- TopNavBar -->
+<header class="h-nav-height w-full bg-chalk border-b border-hairline flex justify-between items-center px-padding-card z-10 sticky top-0">
+<!-- Left: Brand / Search -->
+<div class="flex items-center gap-4 flex-1">
+<span class="font-headline-sm text-headline-sm font-bold tracking-tighter text-primary md:hidden">Tourup</span>
+<div class="relative max-w-sm w-full hidden md:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary text-[20px]">search</span>
+<input class="w-full h-10 pl-10 pr-4 bg-surface-container-lowest border border-hairline rounded-[10px] font-code text-code text-primary focus:outline-none focus:border-pure-black focus:ring-1 focus:ring-pure-black placeholder:text-smoke transition-all" placeholder="Search media..." type="text"/>
+</div>
+</div>
+<!-- Right: Actions -->
+<div class="flex items-center gap-gap-nav">
+<button class="p-2 text-secondary hover:bg-mist rounded transition-colors duration-100 ease-linear">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-secondary hover:bg-mist rounded transition-colors duration-100 ease-linear">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-variant border border-hairline ml-2 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A highly detailed close up portrait of a young professional in a sleek, minimalist modern office. Brutalist concrete walls and high contrast bright white lighting define the architectural space." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBpueOVV9yHDtuM6XH8yl0Y_c6rbD1t--SCqB8d0a988MYzTdasnMYKe2PL1SlDbXJofSAJyWdlf3BcV_ZI0TAo_ZWT2eTI3ARK1M76demKLeVbuzonJknlkZQMHYP-CHDw5rk352ndVFyg8gwI2b3aJbgT2DsJ9sYA18ET-mV9aY60HSsV0vF5BcS8KXt00sxc002uj3IKnffNAzBz34gDuXaX3730bkS_0ZMR2RsCQxFJLfbEc-3jG-TID4xa_mktubXHRH001i1E"/>
+</div>
+</div>
+</header>
+<!-- Canvas / Media Grid -->
+<div class="p-gap-section max-w-max-width mx-auto w-full flex-1 flex flex-col gap-8">
+<!-- Section Header -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+<div>
+<h2 class="font-display-xl-mobile sm:font-display-xl text-display-xl-mobile sm:text-display-xl text-primary m-0">Library</h2>
+<p class="font-body-md text-body-md text-secondary mt-1">Manage and organize your digital assets.</p>
+</div>
+<div class="flex items-center gap-3">
+<button class="bg-transparent border border-hairline text-primary rounded-btn px-4 py-2 font-label-md text-label-md hover:bg-mist transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">filter_list</span>
+                        Filter
+                    </button>
+<button class="bg-pure-black text-chalk rounded-btn px-4 py-2 font-label-md text-label-md hover:bg-carbon transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">upload</span>
+                        Upload
+                    </button>
+</div>
+</div>
+<!-- Mobile Search (Visible only on small screens) -->
+<div class="relative w-full md:hidden">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary text-[20px]">search</span>
+<input class="w-full h-12 pl-10 pr-4 bg-surface-container-lowest border border-hairline rounded-[10px] font-code text-code text-primary focus:outline-none focus:border-pure-black focus:ring-1 focus:ring-pure-black placeholder:text-smoke transition-all" placeholder="Search media..." type="text"/>
+</div>
+<!-- Media Grid -->
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-gap-element">
+<!-- Selected Card -->
+<div class="bg-chalk rounded-card overflow-hidden flex flex-col ring-2 ring-pure-black ring-inset group cursor-pointer relative">
+<!-- Checkmark Badge for Selected State -->
+<div class="absolute top-2 left-2 w-6 h-6 bg-pure-black rounded-full flex items-center justify-center z-10 border-2 border-chalk">
+<span class="material-symbols-outlined text-chalk text-[14px] filled">check</span>
+</div>
+<div class="aspect-square w-full border-b border-hairline relative bg-surface-variant overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="A wide architectural shot of a modern brutalist museum exterior featuring stark concrete geometry, clean minimal lines, and sharp contrasting shadows under a bright white overcast sky." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtKTnTIeSi9XsS3w7YEz2i8rIkpP5Sb1GyxMsuGM3a8mjV3ZAsIho3yfpKg6nl-gvVajgNIck4wbWwbls3IW6W7KiVdkfjLzz1ZDTEZ1r_m0ze0mKpTDPsl8nN4_YmNz5cxGpYcnNIwpllGF9D_dAxuQVvH_SgaEJGrmXuq_yJR9msMFW1Q_9qK1pqeLaA6aYn50VxoJ6QvcI3fN_udm3TE9xV3ZWdsJjvFDsZitalIH0yTprugrSrOllZBXblS5Byf1kTx4TrODPa"/>
+</div>
+<div class="p-3 flex justify-between items-center bg-mist">
+<span class="font-code text-code text-primary truncate flex-1 mr-2">museum_ext_01.jpg</span>
+<span class="font-caption text-caption text-secondary shrink-0">4.2 MB</span>
+</div>
+</div>
+<!-- Unselected Card 1 -->
+<div class="bg-chalk rounded-card border border-hairline overflow-hidden flex flex-col hover:border-smoke transition-colors group cursor-pointer relative">
+<div class="aspect-square w-full border-b border-hairline relative bg-surface-variant overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="An abstract macro shot of folded white paper creating sharp geometric ridges and valleys. High key lighting emphasizes pure white tones and crisp 1px hairline shadows in a sterile studio environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDh-IQJGrZJ81t2XnVt5nm7A7ShtuvoQavGHM3WOnzPXrQSKuGBDQqt0skie2omaARgPXlN1YeN2d3wi6RXwPR-ReqOkrennwGwSdpVGiJmllq1rIYAkWVXLS2aPf9FJltHEkBaNUxac0HnID7p1W8Z689G5Swwl3ZTaV36vkzoNAFXMTEZrb7dOPgF_dYy3yIcA43ViJuIKn2xbK2BmfAcivRnGOaAi0yXHJaxb8TaWS_29ULtwE7-ErP2StZgC2Bx-xMTiZEsImjc"/>
+</div>
+<div class="p-3 flex justify-between items-center">
+<span class="font-code text-code text-primary truncate flex-1 mr-2">texture_paper.png</span>
+<span class="font-caption text-caption text-secondary shrink-0">1.1 MB</span>
+</div>
+</div>
+<!-- Unselected Card 2 -->
+<div class="bg-chalk rounded-card border border-hairline overflow-hidden flex flex-col hover:border-smoke transition-colors group cursor-pointer relative">
+<div class="aspect-square w-full border-b border-hairline relative bg-surface-variant overflow-hidden flex items-center justify-center">
+<!-- Simulated non-image file -->
+<span class="material-symbols-outlined text-[48px] text-smoke">description</span>
+</div>
+<div class="p-3 flex justify-between items-center">
+<span class="font-code text-code text-primary truncate flex-1 mr-2">brand_guidelines.pdf</span>
+<span class="font-caption text-caption text-secondary shrink-0">8.4 MB</span>
+</div>
+</div>
+<!-- Unselected Card 3 -->
+<div class="bg-chalk rounded-card border border-hairline overflow-hidden flex flex-col hover:border-smoke transition-colors group cursor-pointer relative">
+<div class="aspect-square w-full border-b border-hairline relative bg-surface-variant overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="A minimalist architectural interior featuring a single structural column of raw concrete against a pure white wall. Natural light creates dramatic, highly contrasted graphical shadows typical of Swiss Brutalist design." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBT90XOzlA0d8qXt2BssSiusqawocQP_nXNO_Gf1B4orBZCroyNZ3_JxPffy0yh1SCEIQlZJnnUghyaPUhkicroYfp3RCtCl94UQ6AROi5Oy75Xel5jrbN5IN8WXiqOiz_4rgk7IL4_qlh3AfzhV_j-W3DuwDv5adLwiIJX5XFAtbD_dSEZFCNTQRl-A0I9cZSwe8ZO7ok9Eo_32qHThrGiP7q2Ak_UBAUPM6BdcV31Mz9GP4_HigpC2fQYSYWUFsjdSND4SUS9OYzV"/>
+</div>
+<div class="p-3 flex justify-between items-center">
+<span class="font-code text-code text-primary truncate flex-1 mr-2">interior_column.jpg</span>
+<span class="font-caption text-caption text-secondary shrink-0">3.7 MB</span>
+</div>
+</div>
+<!-- Unselected Card 4 -->
+<div class="bg-chalk rounded-card border border-hairline overflow-hidden flex flex-col hover:border-smoke transition-colors group cursor-pointer relative">
+<div class="aspect-square w-full border-b border-hairline relative bg-surface-variant overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="A sleek black modular shelving unit set against a stark white background. Empty structural frames demonstrate functional objectivity and grid-like precision in a high-density information environment context." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhpGKIqCNWFUmnR-SKm0dg1lnezlWhNFg9Yqz-k1sdlADdfCRyRcTQZxHEbXKdqnGOCSjet-4dS6yICkkLfcsujeT0ltPpp2l2bsD7i5yOceaLY8oADZnhJgO5BXn6KQofA5eYvvgw-6hs03dXbtxT88eGmV-S4504N2BlX4qtbHvDosexhF6QS8hq_64QXh2b7cRjzAX2TcmR-MgEReVMNX0SDUxTqOWIu-lr9F6iQNP1Z8gtwj2mQ6VUjY4D5ql9PTHHPJEP2UrF"/>
+</div>
+<div class="p-3 flex justify-between items-center">
+<span class="font-code text-code text-primary truncate flex-1 mr-2">shelving_grid.webp</span>
+<span class="font-caption text-caption text-secondary shrink-0">890 KB</span>
+</div>
+</div>
+<!-- Unselected Card 5 -->
+<div class="bg-chalk rounded-card border border-hairline overflow-hidden flex flex-col hover:border-smoke transition-colors group cursor-pointer relative">
+<div class="aspect-square w-full border-b border-hairline relative bg-surface-variant overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="A close up of a monochrome mechanical keyboard on a pristine drafting table. High contrast monochromatic lighting emphasizes the precise, utilitarian layout of the keys in a minimalist tech workspace." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjiHsQuXQ9ckcLgLSZfdWjwo9h_3tTUo9X146j8zzwQDp4iz_VguJlUb3el-X7H9qmYY8y9Ggtg9G7UuFTEwWOqtWOBDFhhRjaWzC2Anq5186EXu67aKLx6QUnh1_1OijajubiAwd2p8PpQnBAwhnH4m40_yaIpPECHqmH0brrSm0cWI3Cxmb1agR9gAKvULoRdb4u6Fcy5iSWK3pRKyHR2jxb3GXYfTIz9C-lbiRdCiKlxJB-XTm3sBhUWNpGTNI17g0pAPEGAv6J"/>
+</div>
+<div class="p-3 flex justify-between items-center">
+<span class="font-code text-code text-primary truncate flex-1 mr-2">mech_keyboard.jpg</span>
+<span class="font-caption text-caption text-secondary shrink-0">2.2 MB</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

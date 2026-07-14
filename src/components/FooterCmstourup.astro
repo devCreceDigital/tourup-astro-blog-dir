@@ -1,0 +1,154 @@
+---
+interface Props {
+  lang: string;
+  variant?: 'simple' | 'rich';
+  destinos?: { name: string; slug: string }[];
+}
+
+const { lang, variant = 'simple', destinos = [] } = Astro.props;
+
+const t = (es: string, en: string) => lang === 'en' ? en : es;
+const currentYear = new Date().getFullYear();
+const sortedDestinos = [...destinos].sort((a, b) => a.name.localeCompare(b.name));
+---
+
+{
+  variant === 'rich' ? (
+    <footer class="cms-footer site-footer">
+      <div class="cms-footer-inner rich">
+        <div class="cms-footer-grid">
+          <div class="cms-footer-col">
+            <h4>{t("Directorio", "Directory")}</h4>
+            <ul>
+              {sortedDestinos.slice(0, 4).map(d => (
+                <li><a href={`/${lang}/peru/${d.slug}/`}>/peru/{d.slug}/</a></li>
+              ))}
+            </ul>
+          </div>
+          <div class="cms-footer-col">
+            <h4>{t("Categorías", "Categories")}</h4>
+            <ul>
+              <li><a href={`/${lang}/ai-prompts/`}>{t("Prompts IA", "AI Prompts")}</a></li>
+              <li><a href={`/${lang}/empresas/`}>{t("Empresas", "Companies")}</a></li>
+              <li><a href={`/${lang}/blog/`}>{t("Blog", "Blog")}</a></li>
+              <li><a href={`/${lang}/peru/preguntas-frecuentes/`}>{t("FAQ", "FAQ")}</a></li>
+            </ul>
+          </div>
+          <div class="cms-footer-col">
+            <h4>{t("Estructuras", "Structures")}</h4>
+            <ul>
+              <li><a href={`/${lang}/peru/itinerario-7-dias/`}>7 {t("días", "days")}</a></li>
+              <li><a href={`/${lang}/peru/itinerario-10-dias/`}>10 {t("días", "days")}</a></li>
+              <li><a href={`/${lang}/peru/itinerario-14-dias/`}>14 {t("días", "days")}</a></li>
+            </ul>
+          </div>
+          <div class="cms-footer-col">
+            <h4>{t("Sistema", "System")}</h4>
+            <ul>
+              <li><a href={`/${lang}/ai-prompts/`}>{t("Documentación", "Documentation")}</a></li>
+              <li><a href="https://tourup.co">{t("Contacto", "Contact")}</a></li>
+              <li><a href="/blog/">{t("Prensa", "Press")}</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="cms-footer-bottom">
+          <div>
+            <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" style="display:inline;vertical-align:middle;margin-right:8px">
+              <path d="M2 12h20M12 2v20"></path><path d="m4.93 4.93 14.14 14.14M19.07 4.93 4.93 19.07"></path>
+            </svg>
+            <span>&copy; {currentYear} TourUp Content Hub.</span>
+          </div>
+          <div class="cms-footer-bottom-links">
+            <a href="#">{t("Términos", "Terms")}</a>
+            <a href="#">{t("Privacidad", "Privacy")}</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  ) : (
+    <footer class="cms-footer site-footer">
+      <div class="cms-footer-inner">
+        <span>&copy; {currentYear} Tourup &middot; {t('Turismo responsable en Perú', 'Responsible tourism in Peru')}</span>
+        <div class="cms-footer-links">
+          <a href="/">{t('Inicio', 'Home')}</a>
+          <a href={`/${lang === 'en' ? 'companies' : 'empresas'}/`}>{t('Empresas', 'Companies')}</a>
+          <a href="/partner-scout/">Partner Scout</a>
+          <a href={`/${lang}/ai-prompts/`}>{t('Guías IA', 'AI Guides')}</a>
+        </div>
+      </div>
+    </footer>
+  )
+}
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--footer-border, #e5e5e5);
+    background: var(--footer-bg, #ffffff);
+  }
+  .cms-footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    font-size: 12px;
+    color: var(--footer-text-muted, #737373);
+  }
+  @media (min-width: 768px) {
+    .cms-footer-inner:not(.rich) { flex-direction: row; }
+  }
+  .cms-footer-links {
+    display: flex;
+    gap: 16px;
+  }
+  .cms-footer-links a {
+    color: var(--footer-text-muted, #737373);
+    text-decoration: none;
+    transition: color 0.1s;
+  }
+  .cms-footer-links a:hover { color: var(--footer-hover, #0a0a0a); }
+
+  /* Rich footer variant */
+  .cms-footer-inner.rich { padding: 80px 24px 32px; }
+  .cms-footer-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+    margin-bottom: 80px;
+    width: 100%;
+  }
+  @media (min-width: 640px) { .cms-footer-grid { grid-template-columns: repeat(4, 1fr); } }
+  .cms-footer-col h4 {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    margin-bottom: 16px;
+    color: var(--footer-text, #0a0a0a);
+  }
+  .cms-footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .cms-footer-col a {
+    font-size: 14px;
+    color: var(--footer-text-muted, #737373);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  .cms-footer-col a:hover { color: var(--footer-hover, #0a0a0a); }
+  .cms-footer-bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding-top: 32px;
+    border-top: 1px solid var(--footer-border, #e5e5e5);
+    font-size: 13px;
+    color: var(--footer-text-muted, #737373);
+    width: 100%;
+  }
+  @media (min-width: 640px) { .cms-footer-bottom { flex-direction: row; justify-content: space-between; } }
+  .cms-footer-bottom-links { display: flex; gap: 24px; }
+  .cms-footer-bottom-links a { color: var(--footer-text-muted, #737373); text-decoration: none; transition: color 0.15s; }
+  .cms-footer-bottom-links a:hover { color: var(--footer-hover, #0a0a0a); }
+</style>

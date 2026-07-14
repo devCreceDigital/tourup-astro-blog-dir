@@ -1,0 +1,13 @@
+---
+import { getSettings } from '../lib/settings';
+
+let settingsAdvanced: Record<string, string>;
+try {
+  const s = await getSettings();
+  settingsAdvanced = s.advanced as any;
+} catch {
+  settingsAdvanced = {};
+}
+---
+
+{settingsAdvanced?.customJsBody && <script set:html={settingsAdvanced.customJsBody}></script>}

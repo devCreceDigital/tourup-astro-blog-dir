@@ -1,0 +1,57 @@
+---
+export const prerender = false;
+import AdminLayout from '../../../components/admin/Layout.astro';
+import MetricCard from '../../../components/admin/MetricCard.astro';
+import { listEntries } from '../../../utils/content';
+
+const { lang } = Astro.params as { lang: string };
+const t = (es: string, en: string) => lang === 'en' ? en : es;
+
+const [companies, destinos, prompts, posts, categorias, brands] = await Promise.all([
+  listEntries('companies').catch(() => []),
+  listEntries(lang === 'en' ? 'destinos_en' : 'destinos').catch(() => []),
+  listEntries(lang === 'en' ? 'prompts' : 'prompts_es').catch(() => []),
+  listEntries('posts').catch(() => []),
+  listEntries('categorias_destino').catch(() => []),
+  listEntries('external_brands').catch(() => []),
+]);
+---
+
+<AdminLayout title={t('Panel', 'Dashboard')}>
+  <div class="dashboard-header">
+    <h1>{t('Panel de control', 'Dashboard')}</h1>
+    <p class="subtitle">{t('Resumen de contenido', 'Content overview')}</p>
+  </div>
+
+  <div class="metrics-grid">
+    <MetricCard label={t('Empresas', 'Companies')} value={companies.length} />
+    <MetricCard label={t('Destinos', 'Destinos')} value={destinos.length} />
+    <MetricCard label={t('Prompts', 'Prompts')} value={prompts.length} />
+    <MetricCard label={t('Posts', 'Posts')} value={posts.length} />
+    <MetricCard label={t('Categorías', 'Categories')} value={categorias.length} />
+    <MetricCard label={t('Marcas', 'Brands')} value={brands.length} />
+  </div>
+
+  <div class="dashboard-links">
+    <a href={`/admin/${lang}/companies`} class="card-link">{t('Gestionar empresas', 'Manage companies')}</a>
+    <a href={`/admin/${lang}/destinos`} class="card-link">{t('Gestionar destinos', 'Manage destinos')}</a>
+    <a href={`/admin/${lang}/prompts`} class="card-link">{t('Gestionar prompts', 'Manage prompts')}</a>
+    <a href={`/admin/${lang}/posts`} class="card-link">{t('Gestionar posts', 'Manage posts')}</a>
+    <a href={'/admin/' + lang + '/categorias'} class="card-link">{t('Gestionar categorías', 'Manage categories')}</a>
+    <a href={'/admin/' + lang + '/external-brands'} class="card-link">{t('Gestionar marcas', 'Manage brands')}</a>
+  </div>
+</AdminLayout>
+
+<style>
+  .dashboard-header { margin-bottom: 32px; }
+  .dashboard-header h1 { font-size: 24px; font-weight: 700; color: #000000; margin-bottom: 4px; }
+  .subtitle { font-size: 14px; color: #737373; }
+  .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 32px; }
+  .dashboard-links { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .card-link {
+    display: block; padding: 20px 24px;
+    background: #ffffff; border: 1px solid #e5e5e5; border-radius: 14px;
+    font-size: 14px; font-weight: 600; color: #000000; text-decoration: none;
+  }
+  .card-link:hover { background: #f9f9f9; }
+</style>

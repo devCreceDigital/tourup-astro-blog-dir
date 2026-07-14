@@ -1,0 +1,54 @@
+---
+export const prerender = false;
+import AdminLayout from '../../../components/admin/Layout.astro';
+import DataTable from '../../../components/admin/DataTable.astro';
+import { listEntries, readEntry } from '../../../utils/content';
+
+const { lang } = Astro.params as { lang: string };
+const t = (es: string, en: string) => lang === 'en' ? en : es;
+
+const slugs = await listEntries('companies');
+const entries = (
+  await Promise.all(
+    slugs.map(async (slug) => {
+      try {
+        const entry = await readEntry('companies', slug);
+        return { slug, ...entry.data } as Record<string, unknown>;
+      } catch {
+        return null;
+      }
+    })
+  )
+).filter(Boolean) as Record<string, unknown>[];
+
+const columns = [
+  { key: 'title', label: t('Título', 'Title') },
+  { key: 'distribution_role', label: t('Rol', 'Role') },
+  { key: 'sales_channel', label: t('Canal', 'Channel') },
+  { key: 'rating', label: t('Rating', 'Rating') },
+  { key: 'destinos', label: t('Destinos', 'Destinos') },
+];
+---
+
+<AdminLayout title={t('Empresas', 'Companies')}>
+  <div class="page-header">
+    <div>
+      <h1>{t('Empresas', 'Companies')}</h1>
+      <p class="subtitle">{t('Gestiona las empresas turísticas', 'Manage tourism companies')}</p>
+    </div>
+    <a href={`/admin/${lang}/companies/new`} class="btn-primary">{t('Nueva empresa', 'New company')}</a>
+  </div>
+  <DataTable columns={columns} rows={entries} baseUrl={`/admin/${lang}/companies`} />
+</AdminLayout>
+
+<style>
+  .page-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }
+  .page-header h1 { font-size: 24px; font-weight: 700; color: #000000; margin-bottom: 4px; }
+  .subtitle { font-size: 14px; color: #737373; }
+  .btn-primary {
+    display: inline-flex; align-items: center; padding: 10px 20px;
+    background: #000000; color: #ffffff; border-radius: 10px;
+    font-size: 14px; font-weight: 600; text-decoration: none; border: none; cursor: pointer;
+  }
+  .btn-primary:hover { opacity: 0.85; }
+</style>

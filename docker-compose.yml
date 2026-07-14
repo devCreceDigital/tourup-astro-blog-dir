@@ -1,0 +1,68 @@
+services:
+  # ─── TourUp Astro CMS ───────────────────────────────────────
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tourup-astro-blog
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8080
+      - NODE_ENV=production
+    volumes:
+      - tourup-data:/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:8080/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+  # ─── Hermes Agent (Nous Research) ──────────────────────────
+  hermes:
+    image: nousresearch/hermes-agent:latest
+    container_name: hermes-agent
+    command: gateway run
+    ports:
+      - "8642:8642"    # Gateway API
+      - "9119:9119"    # Dashboard (HERMES_DASHBOARD=1)
+    env_file:
+      - .env.hermes
+    environment:
+      - HERMES_DASHBOARD=1
+      - API_SERVER_ENABLED=true
+      - API_SERVER_HOST=0.0.0.0
+      - API_SERVER_KEY=sk-hermes-tourup-dev-local
+    volumes:
+      # Persistencia de Hermes (config, .env, skills, memoria, sesiones)
+      - hermes-data:/opt/data
+
+      # Skills de TourUp montados para que Hermes los reconozca
+      - ./docs/skills:/opt/data/profiles/default/skills/tourup:ro
+
+      # Acceso directo a scripts Python del pipeline
+      - ./scripts:/workspace/scripts
+
+      # Acceso directo a contenido (para el pipeline actual)
+      - ./src/content:/workspace/src/content
+      - ./CSV:/workspace/CSV
+      - ./graphify-out:/workspace/graphify-out
+      - ./public/ai:/workspace/public/ai
+    depends_on:
+      app:
+        condition: service_started
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+          cpus: "2.0"
+
+volumes:
+  tourup-data:
+  hermes-data:

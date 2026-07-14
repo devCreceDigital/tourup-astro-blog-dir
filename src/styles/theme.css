@@ -1,0 +1,42 @@
+:root {
+  /* ── Surface / Background ── */
+  --color-surface: #fcf8fb;
+  --color-surface-dim: #dcd9dc;
+  --color-surface-container: #f0edef;
+  --color-surface-container-lowest: #ffffff;
+
+  /* ── Text ── */
+  --color-on-surface: #1b1b1d;
+  --color-on-surface-variant: #3e4851;
+
+  /* ── Primary (blue) ── */
+  --color-primary: #006591;
+  --color-primary-hover: #004c6e;
+  --color-on-primary: #ffffff;
+
+  /* ── Borders / Outlines ── */
+  --color-outline: #6e7882;
+  --color-outline-variant: #e4e2e4;
+
+  /* ── Misc ── */
+  --color-tertiary-container: #a6aab0;
+
+  /* ── Navigation aliases ── */
+  --nav-border: var(--color-outline-variant);
+  --nav-bg: var(--color-surface-container-lowest);
+  --nav-text: var(--color-on-surface);
+  --nav-text-muted: var(--color-on-surface-variant);
+  --nav-hover-bg: var(--color-surface-container);
+
+  /* ── Footer aliases ── */
+  --footer-border: var(--color-outline-variant);
+  --footer-bg: var(--color-surface-container-lowest);
+  --footer-text: var(--color-on-surface);
+  --footer-text-muted: var(--color-on-surface-variant);
+  --footer-hover: var(--color-on-surface);
+
+  /* ── Page-level aliases (was undefined) ── */
+  --color-border: var(--color-outline-variant);
+  --gradient-main: linear-gradient(135deg, var(--color-primary) 0%, #00b4ff 100%);
+  --color-dark-light: var(--color-surface-container);
+}

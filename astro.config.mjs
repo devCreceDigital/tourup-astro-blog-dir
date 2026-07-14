@@ -1,16 +1,17 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import node from '@astrojs/node';
 import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://tourup.co',
 	output: 'static',
+	adapter: node({ mode: 'standalone' }),
 	trailingSlash: 'always',
 	integrations: [
 		sitemap({
 			serialize: (entry) => {
-				// Lower priority for paginated/deep pages
 				if (entry.url.includes('/partner-scout/')) {
 					entry.priority = 0.3;
 				} else if (entry.url.match(/\/(?:en|es)\/peru\/[^/]+\/tours\/[^/]+\/?$/)) {

@@ -1,6 +1,10 @@
 ---
 import { getCollection } from 'astro:content';
-import Layout from '../../../../layouts/Layout.astro';
+import NavCmstourup from '../../../../components/NavCmstourup.astro';
+import FooterCmstourup from '../../../../components/FooterCmstourup.astro';
+import SettingsHead from '../../../../components/SettingsHead.astro';
+import SettingsBodyEnd from '../../../../components/SettingsBodyEnd.astro';
+import '../../../../styles/theme.css';
 
 export async function getStaticPaths() {
   const destinos = await getCollection('destinos');
@@ -59,99 +63,262 @@ const pageDesc = lang === 'en'
   ? `Browse tour categories and operators in ${d.name}, Peru. ${totalCompanies} companies across ${categoriasDestino.length} categories.`
   : `Explora categorías de tours y operadores en ${d.name}, Perú. ${totalCompanies} empresas en ${categoriasDestino.length} categorías.`;
 
-const catListItems = categoriasDestino.map((cd, i) => ({
-  "@type": "ListItem",
-  position: i + 1,
-  url: `${siteUrl}/${lang}/peru/${slug}/tours/${cd.data.categoria}/`,
-  name: cd.data.name
-}));
+const t = (es: string, en: string) => lang === 'en' ? en : es;
 ---
 
-<Layout
-  title={pageTitle}
-  description={pageDesc}
-  currentPath={`/${lang}/peru/${slug}/tours/`}
->
-  {catListItems.length > 0 && (
-    <script type="application/ld+json" set:html={JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "ItemList",
-      "name": lang === 'en' ? `Tours in ${d.name}` : `Tours en ${d.name}`,
-      "description": pageDesc,
-      "numberOfItems": catListItems.length,
-      "itemListElement": catListItems
-    })} />
-  )}
+<!doctype html>
+<html class="light" lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <SettingsHead
+      title={pageTitle}
+      description={pageDesc}
+      currentPath={`/${lang}/peru/${slug}/tours/`}
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <meta name="robots" content="index, follow" />
+  </head>
 
-  <article class="tours-page">
-    <header class="tours-header">
-      <nav class="breadcrumbs">
-        <a href="/">{lang === 'en' ? 'Home' : 'Inicio'}</a>
-        <span>/</span>
-        <a href={`/${lang}/ai-prompts/`}>Peru</a>
-        <span>/</span>
-        <a href={`/${lang}/peru/${slug}/`}>{d.name}</a>
-        <span>/</span>
-        <span>{lang === 'en' ? 'Tours' : 'Tours'}</span>
-      </nav>
-      <h1>{lang === 'en' ? 'Tours in' : 'Tours en'} {d.name}</h1>
-      <p class="tours-summary">
+  <body>
+
+    <NavCmstourup lang={lang} toursSlug={slug} />
+
+    <main class="main-content">
+
+      <!-- Breadcrumbs -->
+      <div class="breadcrumbs">
+        <a href="/" class="bc-link">{t('Inicio', 'Home')}</a>
+        <span class="material-symbols-outlined bc-chevron">chevron_right</span>
+        <a href={`/${lang}/peru/`} class="bc-link">{t('Perú', 'Peru')}</a>
+        <span class="material-symbols-outlined bc-chevron">chevron_right</span>
+        <a href={`/${lang}/peru/${slug}/`} class="bc-link">{d.name}</a>
+        <span class="material-symbols-outlined bc-chevron">chevron_right</span>
+        <span class="bc-current">{t('Tours', 'Tours')}</span>
+      </div>
+
+      <!-- Title -->
+      <h1 class="page-title">
+        {t('Tours en', 'Tours in')} {d.name}
+      </h1>
+
+      <!-- Summary -->
+      <p class="page-summary">
         {lang === 'en'
           ? `Browse ${totalCompanies} tour operator${totalCompanies !== 1 ? 's' : ''} across ${categoriasDestino.length} categor${categoriasDestino.length !== 1 ? 'ies' : 'y'} in ${d.name}, Peru.`
           : `Explora ${totalCompanies} operadore${totalCompanies !== 1 ? 's' : ''} turístico${totalCompanies !== 1 ? 's' : ''} en ${categoriasDestino.length} categoría${categoriasDestino.length !== 1 ? 's' : ''} en ${d.name}, Perú.`}
       </p>
-    </header>
 
-    <section class="categories-section">
-      {categoriasDestino.length === 0 && (
-        <p class="empty">{lang === 'en' ? 'No categories defined for this destination yet.' : 'Aún no hay categorías definidas para este destino.'}</p>
+      <!-- Categories grid -->
+      {categoriasDestino.length === 0 ? (
+        <p class="empty-msg">{lang === 'en' ? 'No categories defined for this destination yet.' : 'Aún no hay categorías definidas para este destino.'}</p>
+      ) : (
+        <div class="category-grid">
+          {categoriasDestino.map((cd) => {
+            const count = companiesByCategory[cd.data.categoria]?.length || 0;
+            return (
+              <a href={`/${lang}/peru/${slug}/tours/${cd.data.categoria}/`}
+                class="category-card">
+                <h3 class="category-name">{cd.data.name}</h3>
+                <p class="category-desc">{cd.data.summary}</p>
+                <div class="category-footer">
+                  <span class="category-count">{count} {t(`empresa${count !== 1 ? 's' : ''}`, `compan${count !== 1 ? 'ies' : 'y'}`)}</span>
+                  <span class="material-symbols-outlined category-arrow">arrow_forward</span>
+                </div>
+              </a>
+            );
+          })}
+        </div>
       )}
-      <div class="categories-list">
-        {categoriasDestino.map((cd) => {
-          const count = companiesByCategory[cd.data.categoria]?.length || 0;
-          return (
-            <a
-              href={`/${lang}/peru/${slug}/tours/${cd.data.categoria}/`}
-              class="category-row"
-            >
-              <div class="category-info">
-                <h3>{cd.data.name}</h3>
-                <p>{cd.data.summary}</p>
-              </div>
-              <div class="category-stats">
-                <span class="count">{count} {lang === 'en' ? `compan${count !== 1 ? 'ies' : 'y'}` : `empresa${count !== 1 ? 's' : ''}`}</span>
-                {count > 0 && <span class="arrow">→</span>}
-              </div>
-            </a>
-          );
-        })}
-      </div>
-    </section>
-  </article>
-</Layout>
 
-<style>
-  .tours-page { max-width: 900px; margin: 0 auto; padding: 2rem 0; }
-  .tours-header { border-bottom: 1px solid var(--color-border); padding-bottom: 2rem; margin-bottom: 2rem; }
-  .breadcrumbs { display: flex; gap: 0.5rem; align-items: center; margin-bottom: 1.5rem; font-size: 0.85rem; color: #64748b; }
-  .breadcrumbs a { color: #06b6d4; }
-  .breadcrumbs span { color: #64748b; }
-  .tours-header h1 { font-size: 2.25rem; margin-bottom: 1rem; color: #f1f5f9; }
-  .tours-summary { font-size: 1.1rem; color: #cbd5e1; line-height: 1.8; }
-  .categories-list { display: flex; flex-direction: column; gap: 1px; }
-  .category-row { display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 0; border-bottom: 1px solid var(--color-border); text-decoration: none; transition: padding-left 0.2s ease; gap: 2rem; }
-  .category-row:hover { padding-left: 0.75rem; }
-  .category-row:hover h3 { color: #06b6d4; }
-  .category-info { flex: 1; min-width: 0; }
-  .category-info h3 { font-size: 1.1rem; font-weight: 600; color: #f1f5f9; margin-bottom: 0.5rem; transition: color 0.2s ease; }
-  .category-info p { font-size: 0.9rem; color: #94a3b8; line-height: 1.6; margin: 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-  .category-stats { display: flex; align-items: center; gap: 0.75rem; flex-shrink: 0; }
-  .count { font-size: 0.9rem; color: #3b82f6; font-weight: 600; white-space: nowrap; }
-  .arrow { font-size: 1.25rem; color: #64748b; }
-  .empty { color: #64748b; padding: 2rem 0; font-style: italic; }
-  @media (max-width: 768px) {
-    .tours-header h1 { font-size: 1.5rem; }
-    .category-info h3 { font-size: 1rem; }
-    .category-row { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+      <!-- Back link -->
+      <div class="back-link-wrap">
+        <a href={`/${lang}/peru/${slug}/`} class="back-link">
+          <span class="material-symbols-outlined back-link-icon">arrow_back</span>
+          {t(`Volver a la guía de ${d.name}`, `Back to ${d.name} guide`)}
+        </a>
+      </div>
+
+    </main>
+
+    <FooterCmstourup lang={lang} />
+    <SettingsBodyEnd />
+  </body>
+</html>
+
+<style is:global>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: var(--color-on-surface);
+    background: var(--color-surface);
+    min-height: 100vh;
   }
+
+  .main-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 48px 16px;
+  }
+
+  .breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.75rem;
+    color: #3e4851;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+  }
+
+  .bc-link {
+    color: #3e4851;
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+
+  .bc-link:hover { color: #1b1b1d; }
+
+  .bc-chevron {
+    font-size: 14px !important;
+    line-height: 1;
+  }
+
+  .bc-current {
+    font-weight: 600;
+    color: #1b1b1d;
+  }
+
+  .page-title {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: normal;
+    color: #1b1b1d;
+    line-height: 36px;
+    max-width: 48rem;
+    margin-bottom: 16px;
+  }
+
+  @media (min-width: 768px) {
+    .page-title {
+      font-size: 48px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 56px;
+    }
+  }
+
+  .page-summary {
+    font-size: 0.875rem;
+    color: #3e4851;
+    max-width: 40rem;
+    margin-bottom: 40px;
+    line-height: 1.625;
+  }
+
+  .category-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  @media (min-width: 640px) {
+    .category-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (min-width: 1024px) {
+    .category-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  .category-card {
+    background: #ffffff;
+    border: 1px solid #e4e2e4;
+    border-radius: 0.75rem;
+    padding: 24px;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: border-color 0.15s, background 0.15s;
+  }
+
+  .category-card:hover {
+    border-color: #006591;
+    background: #fcf8fb;
+  }
+
+  .category-name {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #1b1b1d;
+  }
+
+  .category-card:hover .category-name {
+    text-decoration: underline;
+  }
+
+  .category-desc {
+    font-size: 0.75rem;
+    color: #6e7882;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.625;
+  }
+
+  .category-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+    padding-top: 12px;
+  }
+
+  .category-count {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #3e4851;
+  }
+
+  .category-arrow {
+    color: #a6aab0;
+    font-size: 16px !important;
+    transition: color 0.15s;
+  }
+
+  .category-card:hover .category-arrow {
+    color: #1b1b1d;
+  }
+
+  .empty-msg {
+    font-size: 0.875rem;
+    color: #6e7882;
+    font-style: italic;
+  }
+
+  .back-link-wrap {
+    margin-top: 48px;
+  }
+
+  .back-link {
+    font-size: 0.875rem;
+    color: #3e4851;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: color 0.15s;
+  }
+
+  .back-link:hover { color: #1b1b1d; }
+
+  .back-link-icon {
+    font-size: 14px !important;
+  }
+
+
 </style>

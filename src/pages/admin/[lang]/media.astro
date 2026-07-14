@@ -1,0 +1,224 @@
+---
+export const prerender = false;
+import AdminLayout from '../../../components/admin/Layout.astro';
+
+const { lang } = Astro.params as { lang: string };
+const t = (es: string, en: string) => lang === 'en' ? en : es;
+---
+
+<AdminLayout title={t('Media', 'Media')}>
+  <div class="page-header">
+    <div>
+      <h1>{t('Biblioteca de medios', 'Media library')}</h1>
+      <p class="subtitle">{t('Gestiona imágenes y archivos', 'Manage images and files')}</p>
+    </div>
+  </div>
+
+  <div id="drop-zone" class="drop-zone">
+    <div class="drop-content">
+      <span class="drop-icon">+</span>
+      <p>{t('Arrastra archivos aquí o haz clic para subir', 'Drag files here or click to upload')}</p>
+      <p class="drop-hint">{t('PNG, JPG, WebP, GIF, SVG, PDF', 'PNG, JPG, WebP, GIF, SVG, PDF')}</p>
+      <input id="file-input" type="file" multiple accept="image/*,.pdf" hidden />
+      <button id="upload-btn" class="btn-primary">{t('Seleccionar archivos', 'Select files')}</button>
+    </div>
+  </div>
+
+  <div id="upload-progress" class="upload-progress" hidden>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+    <p id="progress-text" class="progress-text">{t('Subiendo...', 'Uploading...')}</p>
+  </div>
+
+  <div id="gallery" class="gallery">
+    <p class="loading">{t('Cargando...', 'Loading...')}</p>
+  </div>
+</AdminLayout>
+
+<script>
+  const lang = window.location.pathname.split('/')[2];
+  const API = `/api/admin/${lang}/media`;
+  const gallery = document.getElementById('gallery')!;
+  const dropZone = document.getElementById('drop-zone')!;
+  const fileInput = document.getElementById('file-input') as HTMLInputElement;
+  const uploadBtn = document.getElementById('upload-btn')!;
+  const progressBar = document.getElementById('upload-progress')!;
+  const progressFill = document.getElementById('progress-fill')!;
+  const progressText = document.getElementById('progress-text')!;
+
+  let isUploading = false;
+
+  async function loadGallery() {
+    gallery.innerHTML = '<p class="loading">Loading...</p>';
+    try {
+      const res = await fetch(API);
+      const json = await res.json();
+      const files = json.data || [];
+      if (files.length === 0) {
+        gallery.innerHTML = '<p class="empty">No media yet. Upload your first file above.</p>';
+        return;
+      }
+      gallery.innerHTML = files.map((f: any) => `
+        <div class="gallery-item" data-public-id="${f.publicId}">
+          <img src="${f.secureUrl}" alt="${f.originalFilename || f.publicId}" loading="lazy" />
+          <div class="gallery-item-overlay">
+            <span class="file-name">${f.originalFilename || f.publicId}</span>
+            <span class="file-size">${(f.bytes / 1024).toFixed(1)} KB</span>
+            <button class="delete-btn" data-public-id="${f.publicId}">Delete</button>
+          </div>
+        </div>
+      `).join('');
+
+      gallery.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          e.stopPropagation();
+          const publicId = btn.getAttribute('data-public-id');
+          if (!publicId || !confirm('Delete this file?')) return;
+          const res = await fetch(`${API}/${encodeURIComponent(publicId)}`, { method: 'DELETE' });
+          if (res.ok) {
+            const item = gallery.querySelector(`[data-public-id="${publicId}"]`);
+            if (item) item.remove();
+          } else {
+            alert('Delete failed');
+          }
+        });
+      });
+
+      gallery.querySelectorAll('.gallery-item').forEach(item => {
+        item.addEventListener('click', () => {
+          const img = item.querySelector('img');
+          if (img) {
+            navigator.clipboard?.writeText(img.src);
+            const overlay = item.querySelector('.gallery-item-overlay');
+            if (overlay) {
+              overlay.innerHTML = '<span style="color:#00c853">URL copied!</span>';
+              setTimeout(() => {
+                const publicId = item.getAttribute('data-public-id');
+                const file = files.find((f: any) => f.publicId === publicId);
+                if (file) {
+                  overlay.innerHTML = `
+                    <span class="file-name">${file.originalFilename || file.publicId}</span>
+                    <span class="file-size">${(file.bytes / 1024).toFixed(1)} KB</span>
+                    <button class="delete-btn" data-public-id="${file.publicId}">Delete</button>
+                  `;
+                }
+              }, 1500);
+            }
+          }
+        });
+      });
+    } catch {
+      gallery.innerHTML = '<p class="error">Failed to load media</p>';
+    }
+  }
+
+  async function uploadFiles(files: FileList | File[]) {
+    if (isUploading) return;
+    isUploading = true;
+    progressBar.hidden = false;
+
+    const formData = new FormData();
+    for (const file of files) {
+      formData.append('files', file);
+    }
+
+    try {
+      const xhr = new XMLHttpRequest();
+      xhr.upload.addEventListener('progress', (e) => {
+        if (e.lengthComputable) {
+          const pct = Math.round((e.loaded / e.total) * 100);
+          progressFill.style.width = pct + '%';
+          progressText.textContent = `${pct}%`;
+        }
+      });
+      xhr.addEventListener('load', () => {
+        progressBar.hidden = true;
+        isUploading = false;
+        loadGallery();
+      });
+      xhr.addEventListener('error', () => {
+        alert('Upload failed');
+        progressBar.hidden = true;
+        isUploading = false;
+      });
+      xhr.open('POST', API);
+      xhr.send(formData);
+    } catch {
+      alert('Upload failed');
+      progressBar.hidden = true;
+      isUploading = false;
+    }
+  }
+
+  uploadBtn.addEventListener('click', () => fileInput.click());
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files?.length) uploadFiles(fileInput.files);
+  });
+
+  dropZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropZone.classList.add('dragover');
+  });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+  dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('dragover');
+    if (e.dataTransfer?.files.length) uploadFiles(e.dataTransfer.files);
+  });
+  dropZone.addEventListener('click', () => fileInput.click());
+
+  loadGallery();
+</script>
+
+<style>
+  .page-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }
+  .page-header h1 { font-size: 24px; font-weight: 700; color: #000000; margin-bottom: 4px; }
+  .subtitle { font-size: 14px; color: #737373; }
+  .btn-primary {
+    display: inline-flex; align-items: center; padding: 10px 20px;
+    background: #000000; color: #ffffff; border-radius: 10px;
+    font-size: 14px; font-weight: 600; text-decoration: none; border: none; cursor: pointer;
+  }
+  .btn-primary:hover { opacity: 0.85; }
+
+  .drop-zone {
+    border: 2px dashed #d0d0d0; border-radius: 14px; padding: 48px 24px;
+    text-align: center; cursor: pointer; transition: all 0.2s;
+    background: #ffffff; margin-bottom: 24px;
+  }
+  .drop-zone:hover, .drop-zone.dragover { border-color: #000000; background: #f5f5f5; }
+  .drop-icon { font-size: 48px; color: #a0a0a0; display: block; margin-bottom: 8px; }
+  .drop-content p { font-size: 14px; color: #444748; margin-bottom: 4px; }
+  .drop-hint { font-size: 12px; color: #a0a0a0; }
+  .drop-content .btn-primary { margin-top: 16px; }
+
+  .upload-progress { margin-bottom: 24px; }
+  .progress-bar { height: 6px; background: #e5e5e5; border-radius: 3px; overflow: hidden; margin-bottom: 8px; }
+  .progress-fill { height: 100%; background: #000000; width: 0%; transition: width 0.3s; }
+  .progress-text { font-size: 12px; color: #737373; text-align: center; }
+
+  .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+  .gallery-item {
+    position: relative; border-radius: 12px; overflow: hidden;
+    background: #ffffff; border: 1px solid #e5e5e5;
+    aspect-ratio: 1; cursor: pointer;
+  }
+  .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .gallery-item-overlay {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: linear-gradient(transparent, rgba(0,0,0,0.7));
+    padding: 32px 12px 10px; color: #ffffff;
+    font-size: 11px; opacity: 0; transition: opacity 0.2s;
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  .gallery-item:hover .gallery-item-overlay { opacity: 1; }
+  .file-name { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .file-size { opacity: 0.8; }
+  .delete-btn {
+    margin-top: 4px; padding: 3px 8px; font-size: 11px; border: none;
+    border-radius: 6px; background: rgba(255,255,255,0.2); color: #ffffff;
+    cursor: pointer; width: fit-content;
+  }
+  .delete-btn:hover { background: #ba1a1a; }
+  .loading, .empty, .error { text-align: center; padding: 48px; color: #737373; font-size: 14px; }
+  .error { color: #ba1a1a; }
+</style>

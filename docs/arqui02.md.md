@@ -1,4 +1,4 @@
-# Skill: TourUp AI Search Prompt Ingestion
+# Skill: TourUp AI Search Prompt Ingestion  
 
 ## PropÃ³sito
 

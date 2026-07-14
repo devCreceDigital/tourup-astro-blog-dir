@@ -1,0 +1,47 @@
+---
+const { lang } = Astro.props as { lang: string };
+---
+
+<header class="topbar">
+  <div class="topbar-search">
+    <input type="search" placeholder="Search..." class="search-input" />
+  </div>
+  <div class="topbar-actions">
+    <a href={`/admin/${lang === 'en' ? 'es' : 'en'}/dashboard`} class="lang-toggle">{lang === 'en' ? 'ES' : 'EN'}</a>
+  </div>
+</header>
+
+<style>
+  .topbar {
+    height: 64px;
+    border-bottom: 1px solid #e5e5e5;
+    background: #ffffff;
+    display: flex; align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+  }
+  .search-input {
+    padding: 8px 14px;
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: 'Geist', sans-serif;
+    width: 300px;
+    background: #f9f9f9;
+    outline: none;
+  }
+  .search-input:focus {
+    border-color: #000000;
+    background: #ffffff;
+  }
+  .topbar-actions { display: flex; align-items: center; gap: 12px; }
+  .lang-toggle {
+    padding: 6px 12px;
+    border: 1px solid #e5e5e5;
+    border-radius: 26px;
+    font-size: 12px; font-weight: 600;
+    color: #444748; text-decoration: none;
+    background: #ffffff;
+  }
+  .lang-toggle:hover { background: #f2f2f2; }
+</style>

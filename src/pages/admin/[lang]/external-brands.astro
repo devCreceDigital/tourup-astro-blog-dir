@@ -1,0 +1,53 @@
+---
+export const prerender = false;
+import AdminLayout from '../../../components/admin/Layout.astro';
+import DataTable from '../../../components/admin/DataTable.astro';
+import { listEntries, readEntry } from '../../../utils/content';
+
+const { lang } = Astro.params as { lang: string };
+const t = (es: string, en: string) => lang === 'en' ? en : es;
+
+const slugs = await listEntries('external_brands');
+const entries = (
+  await Promise.all(
+    slugs.map(async (slug) => {
+      try {
+        const entry = await readEntry('external_brands', slug);
+        return { slug, ...entry.data } as Record<string, unknown>;
+      } catch {
+        return null;
+      }
+    })
+  )
+).filter(Boolean) as Record<string, unknown>[];
+
+const columns = [
+  { key: 'name', label: t('Nombre', 'Name') },
+  { key: 'brand_role', label: t('Rol', 'Role') },
+  { key: 'country', label: t('País', 'Country') },
+  { key: 'official_url', label: 'URL' },
+];
+---
+
+<AdminLayout title={t('Marcas externas', 'External brands')}>
+  <div class="page-header">
+    <div>
+      <h1>{t('Marcas externas', 'External brands')}</h1>
+      <p class="subtitle">{t('Gestiona marcas externas mencionadas en prompts', 'Manage external brands referenced in prompts')}</p>
+    </div>
+    <a href={'/admin/' + lang + '/external-brands/new'} class="btn-primary">{t('Nueva marca', 'New brand')}</a>
+  </div>
+  <DataTable columns={columns} rows={entries} baseUrl={'/admin/' + lang + '/external-brands'} />
+</AdminLayout>
+
+<style>
+  .page-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }
+  .page-header h1 { font-size: 24px; font-weight: 700; color: #000000; margin-bottom: 4px; }
+  .subtitle { font-size: 14px; color: #737373; }
+  .btn-primary {
+    display: inline-flex; align-items: center; padding: 10px 20px;
+    background: #000000; color: #ffffff; border-radius: 10px;
+    font-size: 14px; font-weight: 600; text-decoration: none; border: none; cursor: pointer;
+  }
+  .btn-primary:hover { opacity: 0.85; }
+</style>

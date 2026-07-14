@@ -1,0 +1,101 @@
+---
+export const prerender = false;
+const { lang } = Astro.params as { lang: string };
+const title = lang === 'en' ? 'Sign in' : 'Iniciar sesión';
+---
+
+<!doctype html>
+<html lang={lang}>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title} - TourUp CMS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <main class="login">
+    <form id="login-form" class="login-form">
+      <h1>TourUp CMS</h1>
+      <p class="subtitle">{lang === 'en' ? 'Sign in to your account' : 'Inicia sesión'}</p>
+      <div class="field">
+        <label for="username">{lang === 'en' ? 'Username' : 'Usuario'}</label>
+        <input type="text" id="username" name="username" required autocomplete="username" />
+      </div>
+      <div class="field">
+        <label for="password">{lang === 'en' ? 'Password' : 'Contraseña'}</label>
+        <input type="password" id="password" name="password" required autocomplete="current-password" />
+      </div>
+      <p id="error" class="error" hidden></p>
+      <button type="submit">{lang === 'en' ? 'Sign in' : 'Iniciar sesión'}</button>
+    </form>
+  </main>
+</body>
+</html>
+
+<script>
+  const form = document.getElementById('login-form');
+  const errorEl = document.getElementById('error');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData(form);
+
+    const res = await fetch('/api/admin/auth/login/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        username: formData.get('username'),
+        password: formData.get('password'),
+      }),
+    });
+
+    if (res.ok) {
+      const lang = window.location.pathname.match(/\/admin\/([^/]+)/)?.[1] || 'es';
+      window.location.href = `/admin/${lang}/dashboard`;
+    } else {
+      const data = await res.json();
+      errorEl.textContent = data.error || 'Login failed';
+      errorEl.hidden = false;
+    }
+  });
+</script>
+
+<style is:global>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { font-family: 'Geist', sans-serif; background: #f9f9f9; color: #1a1c1c; }
+  body { min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+</style>
+
+<style>
+  .login { display: flex; align-items: center; justify-content: center; width: 100%; padding: 24px; }
+  .login-form {
+    background: #ffffff;
+    border: 1px solid #e5e5e5;
+    border-radius: 14px;
+    padding: 48px;
+    width: 100%;
+    max-width: 400px;
+  }
+  h1 { font-size: 24px; font-weight: 700; margin-bottom: 4px; color: #000000; }
+  .subtitle { font-size: 14px; color: #737373; margin-bottom: 32px; }
+  .field { margin-bottom: 16px; }
+  label { display: block; font-size: 14px; font-weight: 500; margin-bottom: 6px; color: #444748; }
+  input {
+    width: 100%; padding: 10px 14px;
+    border: 1px solid #e5e5e5; border-radius: 10px;
+    font-size: 14px; font-family: 'Geist Mono', monospace;
+    background: #ffffff; color: #1a1c1c; outline: none;
+  }
+  input:focus { border-color: #000000; box-shadow: 0 0 0 2px #000000; }
+  .error { color: #ba1a1a; font-size: 13px; margin-bottom: 12px; }
+  button {
+    width: 100%; padding: 12px;
+    background: #000000; color: #ffffff;
+    border: none; border-radius: 10px;
+    font-size: 14px; font-weight: 600; cursor: pointer;
+    margin-top: 8px;
+  }
+  button:hover { background: #333333; }
+</style>
