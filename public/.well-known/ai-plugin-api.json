@@ -1,0 +1,93 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "TourUp Peru Travel Data API",
+    "description": "API para consultar datos de tour operators verificados en Peru",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://guia.tourup.co"
+    }
+  ],
+  "paths": {
+    "/en/companies/{slug}/": {
+      "get": {
+        "operationId": "getCompany",
+        "summary": "Obtener detalles de un tour operator",
+        "description": "Retorna la informacion completa de un tour operator verificado en Peru",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Slug del tour operator (ej: alpaca-expeditions-cusco)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalles del tour operator",
+            "content": {
+              "text/html": {}
+            }
+          }
+        }
+      }
+    },
+    "/en/peru/{destino}/": {
+      "get": {
+        "operationId": "getDestination",
+        "summary": "Obtener informacion de un destino turistico",
+        "description": "Retorna guia completa de un destino en Peru con operadores disponibles",
+        "parameters": [
+          {
+            "name": "destino",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Slug del destino (ej: cusco, lima, arequipa)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Informacion del destino",
+            "content": {
+              "text/html": {}
+            }
+          }
+        }
+      }
+    },
+    "/en/ai-prompts/{slug}/": {
+      "get": {
+        "operationId": "getAiPrompt",
+        "summary": "Obtener respuesta estructurada para una consulta de IA",
+        "description": "Retorna contenido optimizado para AI overviews sobre tours en Peru",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Slug del prompt (ej: best-peru-tour-companies-for-families)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Respuesta estructurada para IA",
+            "content": {
+              "text/html": {}
+            }
+          }
+        }
+      }
+    }
+  }
+}

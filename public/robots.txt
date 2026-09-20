@@ -1,37 +1,79 @@
-User-agent: *
-Disallow: /admin/
-Disallow: /api/private/
-Disallow: /private/
-Disallow: /.env
-Disallow: /graphify-out/
-Allow: /
+# robots.txt — TourUp Guía (https://guia.tourup.co)
+# Fuente única y mantenida a mano. Ya no la genera aeo.js.
+#
+# Un solo grupo con todos los user-agents: un crawler que tiene su propio grupo
+# ignora el grupo "*", así que las reglas Disallow deben ir en el MISMO grupo.
 
-# Explicitly allow AI crawlers
-User-agent: GPTBot
-Allow: /
-
-User-agent: OAI-SearchBot
-Allow: /
-
-User-agent: ClaudeBot
-Allow: /
-
-User-agent: Google-Extended
-Allow: /
-
+# Buscadores tradicionales
+User-agent: Googlebot
+User-agent: Bingbot
 User-agent: Applebot
-Allow: /
+User-agent: Yandex
+User-agent: Baiduspider
+User-agent: Sogou
+User-agent: Exabot
+User-agent: BraveBot
 
-User-agent: PerplexityBot
-Allow: /
-
+# IA: entrenamiento y respuestas (ChatGPT, Claude, Gemini, Perplexity, Grok, Meta, DeepSeek, etc.)
+User-agent: GPTBot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: ClaudeBot
+User-agent: Claude-Web
+User-agent: Claude-User
+User-agent: Claude-SearchBot
 User-agent: anthropic-ai
-Allow: /
-
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: Google-Extended
+User-agent: GoogleOther
+User-agent: GeminiBot
+User-agent: Gemini-Deep-Research
+User-agent: Applebot-Extended
+User-agent: FacebookBot
+User-agent: meta-externalagent
 User-agent: Amazonbot
-Allow: /
+User-agent: DeepSeekBot
+User-agent: Bytespider
+User-agent: cohere-ai
+User-agent: MistralAI-User
+User-agent: CCBot
+User-agent: DiffBot
+User-agent: YouBot
+User-agent: FirecrawlAgent
+User-agent: Crawl4AI
 
-Sitemap: https://tourup.co/sitemap-index.xml
-Sitemap: https://tourup.co/sitemap-companies.xml
-Sitemap: https://tourup.co/sitemap-destinos.xml
-Sitemap: https://tourup.co/sitemap-prompts.xml
+# Herramientas SEO
+User-agent: SemrushBot
+User-agent: AhrefsBot
+User-agent: MJ12bot
+User-agent: DotBot
+User-agent: DataForSeoBot
+User-agent: Screaming Frog SEO Spider
+User-agent: SEOkicks
+User-agent: BLEXBot
+
+# Vista previa al compartir enlaces
+User-agent: facebookexternalhit
+User-agent: LinkedInBot
+User-agent: WhatsApp
+User-agent: Slackbot
+User-agent: TwitterBot
+User-agent: TelegramBot
+User-agent: Discordbot
+User-agent: PinterestBot
+User-agent: redditbot
+
+# Resto de bots
+User-agent: *
+
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+Sitemap: https://guia.tourup.co/sitemap-index.xml
+
+# AEO (Answer Engine Optimization): archivos para LLMs
+# https://guia.tourup.co/llms.txt
+# https://guia.tourup.co/llms-full.txt
+# https://guia.tourup.co/ai-index.json

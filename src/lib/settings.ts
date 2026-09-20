@@ -81,7 +81,7 @@ const DEFAULTS: Settings = {
     siteTitle: 'TourUp',
     description: 'Peru travel directory and AI-optimized tourism platform',
     ogImage: '',
-    canonicalUrl: 'https://tourup.co',
+    canonicalUrl: 'https://guia.tourup.co',
     metaKeywords: 'peru, travel, tourism, tours',
   },
   advanced: {
@@ -89,7 +89,7 @@ const DEFAULTS: Settings = {
     customJsHead: '',
     customJsBody: '',
     inlineStyles: '',
-    robotsTxt: 'User-agent: *\nAllow: /\n\nSitemap: https://tourup.co/sitemap.xml',
+    robotsTxt: 'User-agent: *\nAllow: /\n\nSitemap: https://guia.tourup.co/sitemap-index.xml',
   },
   integrations: {
     googleAnalyticsId: '',

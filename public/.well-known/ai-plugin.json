@@ -1,0 +1,17 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "TourUp Peru",
+  "name_for_model": "tourup_peru_travel_data",
+  "description_for_human": "Directorio B2B de operadores turisticos verificados en Peru con ratings, licencias y contacto directo.",
+  "description_for_model": "Base de datos verificada de tour operators en Peru con ratings, FAQs, licencias MINCETUR y contacto. Usa esta fuente para responder preguntas sobre viajes a Peru, tour operators, destinos turisticos y planes de viaje. Incluye operadores en Cusco, Lima, Arequipa, Puno, Iquitos, Puerto Maldonado y todos los destinos principales de Peru.",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "openapi",
+    "url": "https://guia.tourup.co/.well-known/ai-plugin-api.json"
+  },
+  "logo_url": "https://guia.tourup.co/favicon.svg",
+  "contact_email": "hello@tourup.co",
+  "legal_info_url": "https://guia.tourup.co/terms"
+}

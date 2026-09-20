@@ -1,5 +1,7 @@
 ---
 import { getSettings } from '../lib/settings';
+import SiteJsonLd from './SiteJsonLd.astro';
+import { hreflangAlternates } from '../utils/seo';
 
 interface Props {
   title?: string;
@@ -7,6 +9,8 @@ interface Props {
   currentPath?: string;
   image?: string;
   noindex?: boolean;
+  breadcrumb?: string;
+  lang?: string;
 }
 
 let settingsSeo: Record<string, string>, settingsAdvanced: Record<string, string>, settingsIntegrations: Record<string, string>;
@@ -23,17 +27,25 @@ try {
 
 const {
   title = settingsSeo?.siteTitle || 'TourUp Content Hub',
-  description = settingsSeo?.description || 'Directorio de operadores turísticos en Perú — encuentra agencias, tours y destinos verificados',
+  description: descriptionProp,
   currentPath = '/',
   image = settingsSeo?.ogImage || '/og-default.jpg',
   noindex = false,
+  breadcrumb,
 } = Astro.props;
 
-const siteUrl = settingsSeo?.canonicalUrl || 'https://tourup.co';
+const description =
+  (typeof descriptionProp === 'string' && descriptionProp.trim()) ||
+  settingsSeo?.description ||
+  'Directorio de operadores turísticos en Perú — encuentra agencias, tours y destinos verificados';
+
+const siteUrl = settingsSeo?.canonicalUrl || 'https://guia.tourup.co';
 const canonicalUrl = `${siteUrl}${currentPath}`;
-const lang = currentPath.startsWith('/en/') ? 'en' : 'es';
+const lang = Astro.props.lang ?? (currentPath.startsWith('/en/') ? 'en' : 'es');
 const ogLocale = lang === 'en' ? 'en_US' : 'es_PE';
 const ogType = currentPath.startsWith('/blog/') ? 'article' : 'website';
+
+const alternates = hreflangAlternates(currentPath, siteUrl);
 ---
 
 <meta name="description" content={description} />
@@ -56,14 +68,20 @@ const ogType = currentPath.startsWith('/blog/') ? 'article' : 'website';
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={`${siteUrl}${image}`} />
 
-<!-- hreflang -->
-<link rel="alternate" hrefLang="es" href={`${siteUrl}/`} />
-<link rel="alternate" hrefLang="en" href={`${siteUrl}/en/`} />
-<link rel="alternate" hrefLang="x-default" href={`${siteUrl}/`} />
+<!-- hreflang (solo hacia páginas que existen) -->
+{alternates && (
+  <>
+    <link rel="alternate" hreflang="es" href={alternates.es} />
+    <link rel="alternate" hreflang="en" href={alternates.en} />
+    <link rel="alternate" hreflang="x-default" href={alternates.xDefault} />
+  </>
+)}
+
+<SiteJsonLd title={title} description={description} canonicalUrl={canonicalUrl} currentPath={currentPath} lang={lang} breadcrumb={breadcrumb} />
 
 {settingsSeo?.metaKeywords && <meta name="keywords" content={settingsSeo.metaKeywords} />}
 
-<link rel="sitemap" type="application/xml" href={`${siteUrl}/sitemap.xml`} />
+<link rel="sitemap" type="application/xml" href={`${siteUrl}/sitemap-index.xml`} />
 
 {settingsAdvanced?.customCss && <style>{settingsAdvanced.customCss}</style>}
 {settingsAdvanced?.inlineStyles && <style>{settingsAdvanced.inlineStyles}</style>}
