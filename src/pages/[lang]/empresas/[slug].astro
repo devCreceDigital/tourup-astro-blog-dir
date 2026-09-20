@@ -1,6 +1,8 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../../../layouts/Layout.astro';
+import { getLocalizedString, type Locale } from '../../../utils/i18n';
+import { companyDescription } from '../../../utils/seo';
 
 function stripMd(id: string) { return id.replace(/\.md$/i, ''); }
 
@@ -20,15 +22,21 @@ interface Props {
 const { company, lang } = Astro.props;
 const { Content } = await company.render();
 const d = company.data;
+const locale = lang as Locale;
+const title = getLocalizedString(d.title, locale);
+const description = companyDescription(d, locale);
+const loc = (v: any) => getLocalizedString(v, locale);
 
-const siteUrl = 'https://tourup.co';
+const siteUrl = 'https://guia.tourup.co';
 const pageUrl = `${siteUrl}/${lang}/empresas/${stripMd(company.id)}/`;
+const canonicalSlug = stripMd(company.id);
+const canonicalEn = `${siteUrl}/en/companies/${canonicalSlug}/`;
 
-const napPhone = d.nap?.phone ?? d.contact?.phone;
-const napEmail = d.nap?.email ?? d.contact?.email;
-const napWebsite = d.nap?.website ?? d.contact?.website;
-const napCity = d.nap?.city ?? d.location?.city;
-const napAddress = d.nap?.address;
+const napPhone = loc(d.nap?.phone ?? d.contact?.phone);
+const napEmail = loc(d.nap?.email ?? d.contact?.email);
+const napWebsite = loc(d.nap?.website ?? d.contact?.website);
+const napCity = loc(d.nap?.city ?? d.location?.city);
+const napAddress = loc(d.nap?.address);
 const napCountry = d.nap?.country ?? d.location?.country ?? 'Peru';
 
 const jsonLd: Record<string, unknown> = {
@@ -36,10 +44,10 @@ const jsonLd: Record<string, unknown> = {
   '@graph': [
     {
       '@type': ['TravelAgency', 'LocalBusiness'],
-      '@id': pageUrl,
-      name: d.title,
-      description: d.summary,
-      url: napWebsite ?? pageUrl,
+      '@id': `${pageUrl}#company`,
+      name: title,
+      description,
+      url: napWebsite || pageUrl,
       ...(napPhone ? { telephone: napPhone } : {}),
       ...(napEmail ? { email: napEmail } : {}),
       address: {
@@ -48,10 +56,7 @@ const jsonLd: Record<string, unknown> = {
         addressLocality: napCity,
         addressCountry: napCountry,
       },
-      mainEntityOfPage: {
-        '@type': 'WebPage',
-        '@id': pageUrl,
-      },
+      mainEntityOfPage: { '@id': `${pageUrl}#webpage` },
       ...(d.rating && d.reviews_count
         ? {
             aggregateRating: {
@@ -68,12 +73,14 @@ const jsonLd: Record<string, unknown> = {
       ? [
           {
             '@type': 'FAQPage',
+            '@id': `${pageUrl}#faq`,
+            mainEntityOfPage: { '@id': `${pageUrl}#webpage` },
             mainEntity: d.faq.map((item) => ({
               '@type': 'Question',
-              name: item.question,
+              name: loc(item.question),
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: item.answer,
+                text: loc(item.answer),
               },
             })),
           },
@@ -90,13 +97,21 @@ function stars(rating: number): string {
 ---
 
 <Layout
-  title={`${d.title} – Ficha de Confianza B2B | TourUp`}
-  description={d.summary}
+  title={`${title} – Ficha de Confianza B2B | TourUp`}
+  description={description}
   currentPath={`/${lang}/empresas/${stripMd(company.id)}/`}
+  canonicalUrl={pageUrl}
+  breadcrumb={title}
+  hreflangOverrides={{
+    es: pageUrl,
+    en: canonicalEn,
+    'x-default': canonicalEn,
+  }}
+  lang={lang}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd, null, 2)} />
 
-  <article class="trust-card" itemscope itemtype="https://schema.org/TravelAgency">
+  <article class="trust-card">
 
     <header class="tc-header">
       <div class="tc-badges">
@@ -107,15 +122,15 @@ function stars(rating: number): string {
         ))}
       </div>
 
-      <h1 itemprop="name">{d.title}</h1>
+      <h1>{title}</h1>
 
-      <p class="bluf" itemprop="description">{d.summary}</p>
+      <p class="bluf">{description}</p>
 
       {d.rating && d.reviews_count && (
-        <div class="rating-row" itemprop="aggregateRating" itemscope itemtype="https://schema.org/AggregateRating">
+        <div class="rating-row">
           <span class="stars">{stars(d.rating)}</span>
-          <strong itemprop="ratingValue">{d.rating}</strong>
-          <span class="reviews-count">/ 5 &ndash; <span itemprop="reviewCount">{d.reviews_count}</span> reseñas verificadas</span>
+          <strong>{d.rating}</strong>
+          <span class="reviews-count">/ 5 &ndash; <span>{d.reviews_count}</span> reseñas verificadas</span>
         </div>
       )}
     </header>
@@ -232,25 +247,25 @@ function stars(rating: number): string {
           </div>
         )}
 
-        <div class="sidebar-card" itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
+        <div class="sidebar-card">
           <h3>Contacto</h3>
-          {napAddress && <p itemprop="streetAddress">{napAddress}</p>}
-          {napCity && <p><span itemprop="addressLocality">{napCity}</span>, <span itemprop="addressCountry">{napCountry}</span></p>}
+          {napAddress && <p>{napAddress}</p>}
+          {napCity && <p><span>{napCity}</span>, <span>{napCountry}</span></p>}
           {napPhone && (
             <p>
               <strong>Tel:</strong>
-              <a href={`tel:${napPhone}`} itemprop="telephone">{napPhone}</a>
+              <a href={`tel:${napPhone}`}>{napPhone}</a>
             </p>
           )}
           {napEmail && (
             <p>
               <strong>Email:</strong>
-              <a href={`mailto:${napEmail}`} itemprop="email">{napEmail}</a>
+              <a href={`mailto:${napEmail}`}>{napEmail}</a>
             </p>
           )}
           {napWebsite && (
             <p>
-              <a href={napWebsite} target="_blank" rel="noopener noreferrer" itemprop="url">
+              <a href={napWebsite} target="_blank" rel="noopener noreferrer">
                 Visitar sitio web →
               </a>
             </p>
@@ -283,12 +298,7 @@ function stars(rating: number): string {
           </div>
         )}
 
-        <div class="sidebar-card cta-card">
-          <h3>¿Buscas más proveedores?</h3>
-          <p>Usa Partner Scout para encontrar operadores similares por destino, categoría y rating.</p>
-          <a href="/partner-scout/" class="btn-cta">Abrir Partner Scout</a>
-        </div>
-      </aside>
+        </aside>
     </div>
 
     <nav class="tc-nav">
@@ -326,17 +336,17 @@ function stars(rating: number): string {
   }
   .badge.role {
     background: rgba(0, 101, 145, 0.1);
-    color: #006591;
+    color: var(--color-primary);
     border: 1px solid rgba(0, 101, 145, 0.2);
   }
   .badge.channel {
     background: rgba(0, 101, 145, 0.06);
-    color: #004c6e;
+    color: var(--color-primary-hover);
     border: 1px solid rgba(0, 101, 145, 0.12);
   }
   .badge.destino {
     background: rgba(0, 101, 145, 0.08);
-    color: #004c6e;
+    color: var(--color-primary-hover);
     border: 1px solid rgba(0, 101, 145, 0.15);
   }
   .tc-header h1 {
@@ -403,7 +413,7 @@ function stars(rating: number): string {
     display: block;
     font-size: 1.5rem;
     font-weight: 700;
-    color: #006591;
+    color: var(--color-primary);
     margin-bottom: 0.25rem;
   }
   .kpi-label {
@@ -440,7 +450,7 @@ function stars(rating: number): string {
   }
   .tag.destino {
     background: rgba(0, 101, 145, 0.06);
-    color: #006591;
+    color: var(--color-primary);
     border-color: rgba(0, 101, 145, 0.15);
   }
   .b2b-profile {
@@ -455,7 +465,7 @@ function stars(rating: number): string {
   }
   .testimonial {
     background: #f0edef;
-    border-left: 3px solid #006591;
+    border-left: 3px solid var(--color-primary);
     border-radius: 0 0.5rem 0.5rem 0;
     padding: 1rem 1.25rem;
     margin: 0;
@@ -514,7 +524,7 @@ function stars(rating: number): string {
   }
   .sidebar-card h3 {
     font-size: 0.9rem;
-    color: #006591;
+    color: var(--color-primary);
     margin-bottom: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -526,10 +536,10 @@ function stars(rating: number): string {
     line-height: 1.6;
   }
   .sidebar-card a {
-    color: #006591;
+    color: var(--color-primary);
   }
   .sidebar-card a:hover {
-    color: #004c6e;
+    color: var(--color-primary-hover);
   }
   .license-badge {
     background: rgba(0, 101, 145, 0.04);
@@ -541,7 +551,7 @@ function stars(rating: number): string {
   .lic-type {
     display: block;
     font-size: 0.75rem;
-    color: #006591;
+    color: var(--color-primary);
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -567,7 +577,7 @@ function stars(rating: number): string {
     display: block;
     margin-top: 0.75rem;
     padding: 0.65rem 1rem;
-    background: #006591;
+    background: var(--color-primary);
     color: #ffffff !important;
     border-radius: 0.5rem;
     font-size: 0.9rem;
@@ -586,7 +596,7 @@ function stars(rating: number): string {
     gap: 2rem;
   }
   .nav-link {
-    color: #006591;
+    color: var(--color-primary);
     font-size: 0.9rem;
     font-weight: 600;
   }

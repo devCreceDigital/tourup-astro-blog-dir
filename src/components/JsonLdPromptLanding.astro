@@ -1,8 +1,23 @@
 ---
-interface BrandMention {
+/**
+ * JSON-LD específico de una landing de prompt de IA: FAQPage + ItemList de marcas.
+ * WebPage, BreadcrumbList, Organization y WebSite los emite Layout (SiteJsonLd); aquí solo
+ * se enlazan por @id, sin duplicarlos.
+ *
+ * Se eliminaron SpecialAnnouncement (es para avisos de emergencia, no para esto) y HowTo
+ * con pasos inventados ("Consider X for your Peru travel needs"): ambos son marcado
+ * engañoso que los buscadores y los motores de IA penalizan.
+ */
+import { SITE_URL } from '../utils/seo';
+import { getLocalizedString, type Locale } from '../utils/i18n';
+
+interface Brand {
   name: string;
   entity_type: 'company' | 'external_brand' | 'unknown';
   entity_slug?: string;
+  /** La ficha existe en el sitio (company) o en la colección (external_brand). */
+  found?: boolean;
+  entity?: { data: Record<string, any> };
 }
 
 interface FAQItem {
@@ -12,61 +27,55 @@ interface FAQItem {
 
 interface Props {
   title: string;
-  description: string;
-  searchTerm: string;
-  brands: BrandMention[];
+  brands: Brand[];
   faqItems?: FAQItem[];
-  url?: string;
+  lang: Locale;
+  /** Ruta canónica de la página, p. ej. /en/ai-prompts/slug/ */
+  currentPath: string;
 }
 
-const { title, description, searchTerm, brands, faqItems = [], url } = Astro.props;
+const { title, brands, faqItems = [], lang, currentPath } = Astro.props;
+const pageUrl = `${SITE_URL}${currentPath}`;
+const stripMd = (id: string) => id.replace(/\.md$/i, '');
 
-const siteUrl = 'https://tourup.co';
-const pageUrl = url || Astro.url.href;
+/** Un ListItem por marca; con URL solo si la página/fuente existe realmente. */
+const items = brands.map((brand, i) => {
+  const base = { '@type': 'ListItem', position: i + 1 };
+  if (brand.entity_type === 'company' && brand.found && brand.entity_slug) {
+    const url = `${SITE_URL}/${lang}/${lang === 'es' ? 'empresas' : 'companies'}/${stripMd(brand.entity_slug)}/`;
+    return { ...base, item: { '@type': 'TravelAgency', '@id': url, name: brand.name, url } };
+  }
+  const official = brand.entity_type === 'external_brand' ? brand.entity?.data?.official_url : undefined;
+  return { ...base, item: { '@type': 'Organization', name: brand.name, ...(official ? { url: official } : {}) } };
+});
 
-const brandItems = brands.map((brand, index) => ({
-  '@type': 'ListItem',
-  position: index + 1,
-  name: brand.name,
-  url: brand.entity_slug ? `${siteUrl}/companies/${brand.entity_slug}/` : undefined,
-})).filter((item) => item.url);
+const graph: Record<string, unknown>[] = [];
 
-const graph: Record<string, unknown>[] = [
-  {
-    '@type': 'WebPage',
-    '@id': pageUrl + '#webpage',
-    url: pageUrl,
-    name: title,
-    description: description,
-    isPartOf: { '@id': `${siteUrl}/#website` },
-  },
-];
-
-if (brandItems.length > 0) {
+if (items.length > 0) {
   graph.push({
     '@type': 'ItemList',
-    itemListElement: brandItems,
+    '@id': `${pageUrl}#brands`,
+    name: title,
+    numberOfItems: items.length,
+    itemListElement: items,
+    mainEntityOfPage: { '@id': `${pageUrl}#webpage` },
   });
 }
 
 if (faqItems.length > 0) {
   graph.push({
     '@type': 'FAQPage',
-    mainEntity: faqItems.map((item) => ({
+    '@id': `${pageUrl}#faq`,
+    mainEntity: faqItems.map((f) => ({
       '@type': 'Question',
-      name: item.question,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: item.answer,
-      },
+      name: getLocalizedString(f.question as any, lang),
+      acceptedAnswer: { '@type': 'Answer', text: getLocalizedString(f.answer as any, lang) },
     })),
+    mainEntityOfPage: { '@id': `${pageUrl}#webpage` },
   });
 }
-
-const unifiedSchema = {
-  '@context': 'https://schema.org',
-  '@graph': graph,
-};
 ---
 
-<script type="application/ld+json" set:html={JSON.stringify(unifiedSchema)} />
+{graph.length > 0 && (
+  <script type="application/ld+json" set:html={JSON.stringify({ '@context': 'https://schema.org', '@graph': graph })} />
+)}

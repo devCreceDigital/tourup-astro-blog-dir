@@ -55,7 +55,7 @@ for (const company of companies) {
 }
 
 const totalCompanies = companies.length;
-const siteUrl = 'https://tourup.co';
+const siteUrl = 'https://guia.tourup.co';
 const pageTitle = lang === 'en'
   ? `Tours in ${d.name} – TourUp Peru`
   : `Tours en ${d.name} – TourUp Peru`;
@@ -75,6 +75,7 @@ const t = (es: string, en: string) => lang === 'en' ? en : es;
       title={pageTitle}
       description={pageDesc}
       currentPath={`/${lang}/peru/${slug}/tours/`}
+      lang={lang}
     />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
@@ -246,7 +247,7 @@ const t = (es: string, en: string) => lang === 'en' ? en : es;
   }
 
   .category-card:hover {
-    border-color: #006591;
+    border-color: var(--color-primary);
     background: #fcf8fb;
   }
 

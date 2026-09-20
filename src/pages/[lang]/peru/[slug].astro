@@ -4,6 +4,7 @@ import NavCmstourup from '../../../components/NavCmstourup.astro';
 import FooterCmstourup from '../../../components/FooterCmstourup.astro';
 import SettingsHead from '../../../components/SettingsHead.astro';
 import SettingsBodyEnd from '../../../components/SettingsBodyEnd.astro';
+import { getLocalizedString } from '../../../utils/i18n';
 import '../../../styles/theme.css';
 
 export async function getStaticPaths() {
@@ -34,11 +35,12 @@ interface Props {
 const { entry, lang } = Astro.props;
 const { Content } = await entry.render();
 const d = entry.data;
+const loc = (field: any) => getLocalizedString(field, lang);
 
-const siteUrl = 'https://tourup.co';
+const siteUrl = 'https://guia.tourup.co';
 const slug = stripMd(entry.id);
 const isCountry = slug === 'peru';
-const schemaType = isCountry ? 'Country' : 'TouristAttraction';
+const schemaType = isCountry ? 'Country' : 'TouristDestination';
 
 const allCompanies = await getCollection('companies');
 const allCatDest = await getCollection('categorias_destino');
@@ -73,7 +75,7 @@ for (const company of deduped) {
 }
 
 const destFaq = d.faq || [];
-const catNames = tourCategories.map((cd) => cd.data.name);
+const catNames = tourCategories.map((cd) => loc(cd.data.name));
 
 const relatedPool = lang === 'en' ? allDestinosEn : allDestinos;
 const relatedDestinos = relatedPool
@@ -95,9 +97,11 @@ const jsonLd = {
   '@graph': [
     {
       '@type': schemaType,
-      name: d.name,
-      description: d.summary,
+      '@id': `${siteUrl}/${lang}/peru/${slug}/#place`,
+      name: loc(d.name),
+      description: loc(d.summary),
       url: `${siteUrl}/${lang}/peru/${slug}/`,
+      mainEntityOfPage: { '@id': `${siteUrl}/${lang}/peru/${slug}/#webpage` },
       ...(isCountry
         ? { containsPlace: catNames.map((c) => ({ '@type': 'Place', name: c })) }
         : { containedInPlace: { '@type': 'Country', name: 'PE' }, touristType: catNames }),
@@ -105,10 +109,12 @@ const jsonLd = {
     ...(destFaq.length > 0
       ? [{
           '@type': 'FAQPage',
+          '@id': `${siteUrl}/${lang}/peru/${slug}/#faq`,
+          mainEntityOfPage: { '@id': `${siteUrl}/${lang}/peru/${slug}/#webpage` },
           mainEntity: destFaq.map((item: any) => ({
             '@type': 'Question',
-            name: item.question,
-            acceptedAnswer: { '@type': 'Answer', text: item.answer },
+            name: loc(item.question),
+            acceptedAnswer: { '@type': 'Answer', text: loc(item.answer) },
           })),
         }]
       : []),
@@ -125,9 +131,11 @@ const heroImgUrl = `https://images.pexels.com/photos/${heroImg}/pexels-photo-${h
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <SettingsHead
-      title={d.seo_title || `${d.name} – TourUp Peru`}
-      description={d.summary}
+      title={loc(d.seo_title) || `${loc(d.name)} – TourUp Peru`}
+      description={loc(d.summary)}
+      breadcrumb={loc(d.name)}
       currentPath={`/${lang}/peru/${slug}/`}
+      lang={lang}
     />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
@@ -391,8 +399,8 @@ const heroImgUrl = `https://images.pexels.com/photos/${heroImg}/pexels-photo-${h
                   {deduped.slice(0, 6).map((c: any) => (
                     <a href={`/${lang === 'en' ? 'companies' : 'empresas'}/${stripMd(c.id)}/`} class="zone-card zone-card-company">
                       <div class="zone-card-body">
-                        <h3 class="zone-card-title">{c.data.title}</h3>
-                        <p class="zone-card-desc">{c.data.summary}</p>
+                        <h3 class="zone-card-title">{loc(c.data.title)}</h3>
+                        <p class="zone-card-desc">{loc(c.data.summary)}</p>
                         <div class="zone-card-tags">
                           {c.data.categorias?.slice(0, 3).map((cat: string) => (
                             <span style="font-size:10px;background:#f2f2f2;color:#171717;border:1px solid #e5e5e5;padding:2px 8px;border-radius:9999px;">{categoryLabels[cat] || cat}</span>

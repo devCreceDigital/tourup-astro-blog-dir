@@ -18,6 +18,7 @@ const { lang } = Astro.props;
     ? "Compare the best Machu Picchu tours from Cusco in 2026. Full day, 2 days, Inca Trail, group and private. Prices, schedules and tips."
     : "Compara los mejores tours a Machu Picchu desde Cusco en 2026. Full day, 2 días, Camino Inca, grupales y privados. Precios, horarios y consejos."}
   currentPath={`/${lang}/peru/cusco/tours-machu-picchu/`}
+  lang={lang}
 >
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
@@ -108,7 +109,7 @@ const { lang } = Astro.props;
 <style>
   .geo-page { max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
   .geo-page h1 { font-size: 2rem; color: #f1f5f9; margin-bottom: 1.5rem; }
-  .geo-page h2 { font-size: 1.5rem; color: #06b6d4; margin: 2rem 0 1rem; border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; }
+  .geo-page h2 { font-size: 1.5rem; color: var(--color-primary); margin: 2rem 0 1rem; border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; }
   .geo-page h3 { font-size: 1.15rem; color: #f1f5f9; margin: 1.5rem 0 0.5rem; }
   .geo-page p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
   .geo-page ul { color: #cbd5e1; margin-bottom: 1rem; padding-left: 1.5rem; }

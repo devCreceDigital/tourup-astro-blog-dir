@@ -29,6 +29,7 @@ const { lang, prompts } = Astro.props;
   title="AI Prompts for Peru Tour Companies – TourUp"
   description="Browse AI-optimized prompt landing pages for Peru tourism searches on ChatGPT, Gemini, Claude, and more."
   currentPath={`/${lang}/ai-prompts/`}
+  lang={lang}
 >
   <div class="prompts-header">
     <h1>AI Prompts for Peru tour companies</h1>
@@ -42,7 +43,7 @@ const { lang, prompts } = Astro.props;
   <ul class="prompts-list">
     {prompts.map((prompt) => (
       <li class="prompt-item">
-        <a href={`/${lang}/ai-prompts/${prompt.id}/`} class="prompt-link">
+        <a href={`/${lang}/ai-prompts/${prompt.id.replace(/[.]md$/i, "")}/`} class="prompt-link">
           <div class="prompt-title">{prompt.data.title}</div>
           <div class="prompt-meta">
             {prompt.data.ai_platforms.map((p: string) => (
@@ -121,7 +122,7 @@ const { lang, prompts } = Astro.props;
   }
 
   .prompt-link:hover .prompt-title {
-    color: #006591;
+    color: var(--color-primary);
   }
 
   .prompt-title {
@@ -142,7 +143,7 @@ const { lang, prompts } = Astro.props;
   .platform {
     display: inline-block;
     background: #f0edef;
-    color: #006591;
+    color: var(--color-primary);
     border: 1px solid #e4e2e4;
     padding: 0.15rem 0.6rem;
     border-radius: 9999px;

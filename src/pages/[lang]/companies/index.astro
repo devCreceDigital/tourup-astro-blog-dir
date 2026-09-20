@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../../../layouts/Layout.astro';
+import { getLocalizedString } from '../../../utils/i18n';
 
 export async function getStaticPaths() {
   return [{ params: { lang: 'en' }, props: { lang: 'en' } }];
@@ -8,11 +9,13 @@ export async function getStaticPaths() {
 
 interface Props { lang: string; }
 const { lang } = Astro.props;
+const loc = (field: any) => getLocalizedString(field, lang);
 
 const companies = await getCollection('companies');
 
 const grouped = companies.reduce<Record<string, typeof companies>>((acc, c) => {
-  const first = (c.data.title || c.id).charAt(0).toUpperCase();
+  const titleStr = typeof c.data.title === 'string' ? c.data.title : (c.data.title?.en || c.data.title?.es || c.id);
+  const first = titleStr.charAt(0).toUpperCase();
   if (!/[A-Za-z0-9]/.test(first)) {
     acc['#'] = acc['#'] || [];
     acc['#'].push(c);
@@ -37,6 +40,7 @@ const currentPath = `/${lang}/companies/`;
   title="Directory of Tourism Companies in Peru – TourUp"
   description={`Complete directory of ${companies.length} tourism service providers in Peru. Find verified operators, agencies and DMCs.`}
   currentPath={currentPath}
+  lang={lang}
 >
   <div class="page-header">
     <h1>Tourism Company <span class="highlight">Directory</span></h1>
@@ -59,13 +63,13 @@ const currentPath = `/${lang}/companies/`;
         <div class="company-grid">
           {grouped[l].map(c => (
             <a href={`/${lang}/companies/${c.id.replace(/\.md$/i, '')}/`} class="company-card">
-              <h3 class="company-name">{c.data.title || c.id}</h3>
+              <h3 class="company-name">{loc(c.data.title) || c.id}</h3>
               {c.data.summary && (
-                <p class="company-summary">{c.data.summary}</p>
+                <p class="company-summary">{loc(c.data.summary)}</p>
               )}
               <div class="company-meta">
                 {c.data.location?.city && (
-                  <span class="tag location">{c.data.location.city}</span>
+                  <span class="tag location">{loc(c.data.location.city)}</span>
                 )}
                 {c.data.distribution_role && (
                   <span class="tag role">{c.data.distribution_role.replace(/_/g, ' ')}</span>
@@ -95,7 +99,7 @@ const currentPath = `/${lang}/companies/`;
     color: #1b1b1d;
   }
   .page-header .highlight {
-    background: linear-gradient(135deg, #006591 0%, #00b4ff 100%);
+    background: var(--gradient-main);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -132,7 +136,7 @@ const currentPath = `/${lang}/companies/`;
   }
   .letter-jump:hover {
     background: rgba(0, 101, 145, 0.1);
-    color: #006591;
+    color: var(--color-primary);
   }
   .letter-section {
     margin-bottom: 2rem;
@@ -165,7 +169,7 @@ const currentPath = `/${lang}/companies/`;
     transition: all 0.25s ease;
   }
   .company-card:hover {
-    border-color: #006591;
+    border-color: var(--color-primary);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     transform: translateY(-2px);
   }
@@ -198,11 +202,11 @@ const currentPath = `/${lang}/companies/`;
   }
   .tag.location {
     background: rgba(0, 101, 145, 0.1);
-    color: #006591;
+    color: var(--color-primary);
   }
   .tag.role {
     background: rgba(0, 101, 145, 0.08);
-    color: #004c6e;
+    color: var(--color-primary-hover);
     text-transform: capitalize;
   }
   .tag.rating {
@@ -218,7 +222,7 @@ const currentPath = `/${lang}/companies/`;
     transition: color 0.2s ease;
   }
   .back-top:hover {
-    color: #006591;
+    color: var(--color-primary);
   }
   @media (max-width: 768px) {
     .page-header h1 {

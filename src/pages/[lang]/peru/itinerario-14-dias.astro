@@ -16,7 +16,7 @@ interface Props { lang: string; }
 const { lang } = Astro.props;
 
 const t = (es: string, en: string) => lang === 'en' ? en : es;
-const siteUrl = 'https://tourup.co';
+const siteUrl = 'https://guia.tourup.co';
 const currentPath = `/${lang}/peru/itinerario-14-dias/`;
 const canonicalUrl = `${siteUrl}${currentPath}`;
 
@@ -40,6 +40,7 @@ const pageDesc = t(
       title={pageTitle}
       description={pageDesc}
       currentPath={currentPath}
+      lang={lang}
     />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
@@ -64,24 +65,24 @@ const pageDesc = t(
       .hero-actions { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 16px; }
       .hero-image { width: 100%; margin-top: 24px; border-radius: 12px; border: 1px solid #e4e2e4; overflow: hidden; aspect-ratio: 16/9; background: #dcd9dc; }
       .hero-image img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1); opacity: 0.9; }
-      .btn-primary { display: inline-block; background: #006591; color: #ffffff; border-radius: 8px; padding: 12px 24px; font-size: 14px; font-weight: 600; text-decoration: none; transition: background 0.1s; border: none; cursor: pointer; text-align: center; }
-      .btn-primary:hover { background: #004c6e; }
+      .btn-primary { display: inline-block; background: var(--color-primary); color: #ffffff; border-radius: 8px; padding: 12px 24px; font-size: 14px; font-weight: 600; text-decoration: none; transition: background 0.1s; border: none; cursor: pointer; text-align: center; }
+      .btn-primary:hover { background: var(--color-primary-hover); }
       .btn-ghost { display: inline-block; background: transparent; color: #1b1b1d; border-radius: 8px; padding: 12px 24px; font-size: 14px; font-weight: 600; text-decoration: none; border: 1px solid #e4e2e4; transition: background 0.1s; }
       .btn-ghost:hover { background: #f0edef; }
       .btn-full { width: 100%; }
       .cards-stack { display: flex; flex-direction: column; gap: 24px; }
       .card { background: #ffffff; border: 1px solid #e4e2e4; border-radius: 12px; padding: 24px; position: relative; overflow: hidden; }
-      .card-accent { position: absolute; left: 0; top: 24px; bottom: 24px; width: 4px; background: #006591; border-radius: 0 2px 2px 0; }
+      .card-accent { position: absolute; left: 0; top: 24px; bottom: 24px; width: 4px; background: var(--color-primary); border-radius: 0 2px 2px 0; }
       .card-title { font-size: 24px; font-weight: 700; line-height: 32px; color: #1b1b1d; margin-bottom: 24px; padding-left: 16px; letter-spacing: normal; }
       .card-body { padding-left: 16px; }
       .it-day { padding: 16px 0; }
       .it-day + .it-day { border-top: 1px solid #e4e2e4; }
-      .it-day-label { display: inline-block; font-size: 10px; font-weight: 600; color: #006591; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px; }
+      .it-day-label { display: inline-block; font-size: 10px; font-weight: 600; color: var(--color-primary); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px; }
       .it-day h3 { font-size: 16px; font-weight: 600; color: #1b1b1d; margin-bottom: 8px; }
       .it-day p { font-size: 14px; color: #3e4851; line-height: 1.6; }
       .budget-list { list-style: none; padding: 0; }
       .budget-list li { font-size: 14px; color: #3e4851; margin-bottom: 12px; line-height: 1.5; padding-left: 0; }
-      .budget-list li::before { content: "•"; color: #006591; font-weight: bold; display: inline-block; width: 16px; margin-left: -16px; }
+      .budget-list li::before { content: "•"; color: var(--color-primary); font-weight: bold; display: inline-block; width: 16px; margin-left: -16px; }
       .budget-list strong { color: #1b1b1d; font-weight: 600; }
       .faq-item { padding: 20px 0; }
       .faq-item-bordered { border-top: 1px solid #e4e2e4; }

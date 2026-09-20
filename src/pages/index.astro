@@ -1,11 +1,15 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
+import { getLocalizedString } from '../utils/i18n';
 
 const companies = await getCollection('companies');
 const prompts = await getCollection('prompts');
 const destinos = await getCollection('destinos');
 const posts = await getCollection('posts');
+
+// Helper para obtener string localizado (fallback a ES si no hay EN)
+const loc = (field: any) => getLocalizedString(field, 'es');
 
 interface SearchItem {
   title: string;
@@ -18,37 +22,37 @@ interface SearchItem {
 
 const searchIndex: SearchItem[] = [
   ...companies.map(c => ({
-    title: c.data.title || c.id,
-    summary: (c.data.summary || '').slice(0, 200),
+    title: loc(c.data.title) || c.id,
+    summary: (loc(c.data.summary) || '').slice(0, 200),
     type: 'company' as const,
     url: `/empresas/${c.id.replace(/\.md$/i, '')}/`,
     tags: [...(c.data.destinos || []), c.data.distribution_role || ''],
-    location: c.data.location?.city,
+    location: loc(c.data.location?.city),
   })),
   ...prompts.map(p => ({
-    title: p.data.title,
-    summary: (p.data.summary || '').slice(0, 200),
+    title: loc(p.data.title),
+    summary: (loc(p.data.summary) || '').slice(0, 200),
     type: 'prompt' as const,
-    url: `/en/ai-prompts/${p.id}/`,
+    url: `/en/ai-prompts/${p.id.replace(/[.]md$/i, "")}/`,
     tags: p.data.ai_platforms || [],
   })),
   ...destinos.map(d => ({
-    title: d.data.name,
-    summary: (d.data.summary || '').slice(0, 200),
+    title: loc(d.data.name),
+    summary: (loc(d.data.summary) || '').slice(0, 200),
     type: 'destino' as const,
-    url: `/en/peru/${d.id}/`,
+    url: `/en/peru/${d.id.replace(/[.]md$/i, "")}/`,
     tags: [d.data.region || ''],
   })),
   ...posts.map(p => ({
-    title: p.data.title,
-    summary: (p.data.description || '').slice(0, 200),
+    title: loc(p.data.title),
+    summary: (loc(p.data.description) || '').slice(0, 200),
     type: 'post' as const,
-    url: `/blog/${p.id}/`,
+    url: `/blog/${p.id.replace(/[.]md$/i, "")}/`,
     tags: p.data.tags || [],
   })),
 ];
 
-const siteUrl = 'https://tourup.co';
+const siteUrl = 'https://guia.tourup.co';
 const homepageJsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
@@ -96,8 +100,8 @@ const homepageJsonLd = {
       <svg class="hero-icon" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
-            <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:1" />
+            <stop offset="0%" style="stop-color:var(--color-primary);stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#38bdf8;stop-opacity:1" />
           </linearGradient>
         </defs>
         <circle cx="100" cy="100" r="95" fill="none" stroke="url(#grad1)" stroke-width="2" opacity="0.3"/>
@@ -281,7 +285,7 @@ const homepageJsonLd = {
     font-weight: 800;
     line-height: 1.1;
     margin-bottom: 1.5rem;
-    color: #f1f5f9;
+    color: var(--color-on-surface);
   }
 
   .hero-title .highlight {
@@ -317,22 +321,22 @@ const homepageJsonLd = {
   .btn-primary {
     background: var(--gradient-main);
     color: white;
-    box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
+    box-shadow: 0 4px 15px rgba(var(--color-primary-rgb), 0.3);
   }
 
   .btn-primary:hover {
     transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(6, 182, 212, 0.4);
+    box-shadow: 0 8px 25px rgba(var(--color-primary-rgb), 0.4);
   }
 
   .btn-secondary {
     background: transparent;
-    color: #06b6d4;
-    border: 2px solid #06b6d4;
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
   }
 
   .btn-secondary:hover {
-    background: rgba(6, 182, 212, 0.1);
+    background: rgba(var(--color-primary-rgb), 0.1);
     transform: translateY(-3px);
   }
 
@@ -370,8 +374,8 @@ const homepageJsonLd = {
   }
 
   .search-section.focused {
-    border-color: rgba(6, 182, 212, 0.3);
-    box-shadow: 0 0 30px rgba(6, 182, 212, 0.05);
+    border-color: rgba(var(--color-primary-rgb), 0.3);
+    box-shadow: 0 0 30px rgba(var(--color-primary-rgb), 0.05);
   }
 
   .search-container {
@@ -404,8 +408,8 @@ const homepageJsonLd = {
   }
 
   .search-box:focus-within {
-    border-color: #06b6d4;
-    box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.15);
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.15);
   }
 
   .search-icon {
@@ -468,7 +472,7 @@ const homepageJsonLd = {
   }
 
   .result-card:hover {
-    border-color: #06b6d4;
+    border-color: var(--color-primary);
     background: rgba(30, 41, 59, 0.8);
     transform: translateY(-2px);
   }
@@ -484,7 +488,7 @@ const homepageJsonLd = {
     border-radius: 0.25rem;
   }
 
-  .type-company { background: rgba(6, 182, 212, 0.15); color: #22d3ee; }
+  .type-company { background: rgba(var(--color-primary-rgb), 0.15); color: #22d3ee; }
   .type-prompt { background: rgba(168, 85, 247, 0.15); color: #c084fc; }
   .type-destino { background: rgba(34, 197, 94, 0.15); color: #4ade80; }
   .type-post { background: rgba(251, 191, 36, 0.15); color: #fbbf24; }
@@ -519,8 +523,8 @@ const homepageJsonLd = {
 
   .card-location {
     font-size: 0.75rem;
-    color: #60a5fa;
-    background: rgba(59, 130, 246, 0.12);
+    color: var(--color-primary);
+    background: rgba(var(--color-primary-rgb), 0.12);
     padding: 0.15rem 0.5rem;
     border-radius: 0.25rem;
   }
@@ -576,7 +580,7 @@ const homepageJsonLd = {
 
   .feature-card:hover {
     background: rgba(30, 41, 59, 0.8);
-    border-color: #06b6d4;
+    border-color: var(--color-primary);
     transform: translateY(-5px);
   }
 
@@ -588,17 +592,17 @@ const homepageJsonLd = {
   .feature-card h3 {
     font-size: 1.25rem;
     margin-bottom: 0.75rem;
-    color: #06b6d4;
+    color: var(--color-primary);
   }
 
   .feature-card p {
-    color: #cbd5e1;
+    color: var(--color-on-surface-variant);
     font-size: 0.95rem;
     line-height: 1.7;
   }
 
   .cta-section {
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(6, 182, 212, 0.1) 100%);
+    background: linear-gradient(135deg, rgba(var(--color-primary-rgb), 0.1) 0%, rgba(var(--color-primary-rgb), 0.1) 100%);
     border: 1px solid var(--color-border);
     border-radius: 1rem;
     padding: 4rem 2rem;
@@ -614,7 +618,7 @@ const homepageJsonLd = {
   .cta-content p {
     font-size: 1.1rem;
     margin-bottom: 2rem;
-    color: #cbd5e1;
+    color: var(--color-on-surface-variant);
   }
 
   @media (max-width: 1024px) {

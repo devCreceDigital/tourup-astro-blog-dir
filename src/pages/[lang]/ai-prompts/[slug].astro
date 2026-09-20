@@ -2,17 +2,18 @@
 import { getCollection } from 'astro:content';
 import Layout from '../../../layouts/Layout.astro';
 import JsonLdPromptLanding from '../../../components/JsonLdPromptLanding.astro';
+import { getLocalizedString } from '../../../utils/i18n';
 
 export async function getStaticPaths() {
   const prompts = await getCollection('prompts');
   const promptsEs = await getCollection('prompts_es');
   return [
     ...prompts.map((prompt) => ({
-      params: { lang: 'en', slug: prompt.id },
+      params: { lang: 'en', slug: prompt.id.replace(/[.]md$/i, "") },
       props: { prompt, lang: 'en' },
     })),
     ...promptsEs.map((prompt) => ({
-      params: { lang: 'es', slug: prompt.id },
+      params: { lang: 'es', slug: prompt.id.replace(/[.]md$/i, "") },
       props: { prompt, lang: 'es' },
     })),
   ];
@@ -109,21 +110,34 @@ function generateFAQs(dest: string, cat: string): FAQItem[] {
   return faqs;
 }
 
-const faqItems = generateFAQs(prompt.data.destination_cluster || '', prompt.data.category_cluster || '');
+const faqItems = prompt.data.faq?.length
+  ? (prompt.data.faq as FAQItem[])
+  : generateFAQs(prompt.data.destination_cluster || '', prompt.data.category_cluster || '');
+const pageTitle = getLocalizedString(prompt.data.title, lang);
+const brandNames = resolvedBrands.map((b: any) => b.name).filter(Boolean);
+// Sin quick_answer/summary la landing heredaba la meta description genérica del sitio (idéntica en ~400 páginas).
+const pageDescription =
+  getLocalizedString(prompt.data.quick_answer, lang) ||
+  getLocalizedString(prompt.data.summary, lang) ||
+  (lang === 'es'
+    ? `${pageTitle} — ${brandNames.length ? `empresas de Perú que citan los buscadores de IA: ${brandNames.slice(0, 3).join(', ')}.` : 'consulta frecuente de viajeros y operadores de Perú que responden los buscadores de IA.'}`
+    : `${pageTitle} — ${brandNames.length ? `Peru travel companies cited by AI search engines: ${brandNames.slice(0, 3).join(', ')}.` : 'a frequent traveler question about Peru, answered with the operators AI search engines cite.'}`);
+const pagePath = `/${lang}/ai-prompts/${prompt.id.replace(/[.]md$/i, "")}/`;
 ---
 
 <Layout
-  title={prompt.data.title}
-  description={prompt.data.summary}
-  currentPath={`/${lang}/ai-prompts/${prompt.id}/`}
+  title={pageTitle}
+  description={pageDescription}
+  currentPath={pagePath}
+  lang={lang}
+  date={prompt.data.last_ai_check_date}
 >
   <JsonLdPromptLanding
-    title={prompt.data.title}
-    description={prompt.data.summary}
-    searchTerm={prompt.data.search_term || prompt.data.title}
-    brands={prompt.data.brands_ai_mentions}
+    title={pageTitle}
+    brands={resolvedBrands}
     faqItems={faqItems}
-    url={Astro.url.href}
+    lang={lang}
+    currentPath={pagePath}
   />
 
   <article class="prompt-landing">
@@ -152,7 +166,7 @@ const faqItems = generateFAQs(prompt.data.destination_cluster || '', prompt.data
 
     <section class="quick-answer">
       <h2>Quick Answer</h2>
-      <p>{prompt.data.summary}</p>
+      <p>{prompt.data.quick_answer || prompt.data.summary}</p>
     </section>
 
     {resolvedBrands.some((b: any) => b.found) && (
@@ -294,7 +308,7 @@ const faqItems = generateFAQs(prompt.data.destination_cluster || '', prompt.data
   .badge {
     display: inline-block;
     background: #f0edef;
-    color: #006591;
+    color: var(--color-primary);
     padding: 0.35rem 0.85rem;
     border-radius: 9999px;
     font-size: 0.8rem;
@@ -328,7 +342,7 @@ const faqItems = generateFAQs(prompt.data.destination_cluster || '', prompt.data
   .platform-badge {
     display: inline-block;
     background: #f0edef;
-    color: #006591;
+    color: var(--color-primary);
     padding: 0.25rem 0.75rem;
     border-radius: 0.35rem;
     font-size: 0.85rem;
@@ -346,7 +360,7 @@ const faqItems = generateFAQs(prompt.data.destination_cluster || '', prompt.data
 
   .quick-answer h2 {
     margin-top: 0;
-    color: #006591;
+    color: var(--color-primary);
   }
 
   .quick-answer p {
@@ -373,7 +387,7 @@ const faqItems = generateFAQs(prompt.data.destination_cluster || '', prompt.data
   }
 
   .brand-card:hover {
-    border-color: #006591;
+    border-color: var(--color-primary);
   }
 
   .brand-card h3 {
@@ -382,11 +396,11 @@ const faqItems = generateFAQs(prompt.data.destination_cluster || '', prompt.data
   }
 
   .brand-card a {
-    color: #006591;
+    color: var(--color-primary);
   }
 
   .brand-card a:hover {
-    color: #004c6e;
+    color: var(--color-primary-hover);
   }
 
   .brand-card p {
@@ -398,7 +412,7 @@ const faqItems = generateFAQs(prompt.data.destination_cluster || '', prompt.data
 
   .brand-link {
     display: inline-block;
-    color: #006591;
+    color: var(--color-primary);
     font-weight: 600;
     font-size: 0.9rem;
     text-decoration: none;
@@ -406,7 +420,7 @@ const faqItems = generateFAQs(prompt.data.destination_cluster || '', prompt.data
   }
 
   .brand-link:hover {
-    color: #004c6e;
+    color: var(--color-primary-hover);
   }
 
   .prompt-landing table {
@@ -481,7 +495,7 @@ const faqItems = generateFAQs(prompt.data.destination_cluster || '', prompt.data
     content: "→";
     position: absolute;
     left: 0;
-    color: #006591;
+    color: var(--color-primary);
     font-weight: 600;
   }
 
@@ -553,14 +567,14 @@ const faqItems = generateFAQs(prompt.data.destination_cluster || '', prompt.data
   }
 
   .prompt-nav .nav-link {
-    color: #006591;
+    color: var(--color-primary);
     font-weight: 600;
     transition: padding-left 0.1s ease;
   }
 
   .prompt-nav .nav-link:hover {
     padding-left: 0;
-    color: #004c6e;
+    color: var(--color-primary-hover);
   }
 
   @media (max-width: 768px) {
