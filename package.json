@@ -21,24 +21,17 @@
   },
   "dependencies": {
     "@astrojs/node": "^9.0.0",
-    "@astrojs/react": "5.0.7",
     "@astrojs/sitemap": "^3.7.3",
-    "@keystatic/astro": "^6.0.0",
-    "@keystatic/core": "^0.6.8",
     "aeo.js": "^0.0.16",
     "alpinejs": "^3.13.0",
     "astro": "^5.2.5",
     "cloudinary": "^2.10.0",
     "gray-matter": "^4.0.3",
-    "react": "18.3.1",
-    "react-dom": "18.3.1",
     "sql.js": "^1.10.0",
     "zod": "^3.22.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
-    "@types/react": "18.3.18",
-    "@types/react-dom": "18.3.5",
     "tsx": "^4.0.0",
     "typescript": "^5.9.3",
     "vitest": "^4.1.9"

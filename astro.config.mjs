@@ -1,16 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import node from '@astrojs/node';
-import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
-
-const isDev = process.env.NODE_ENV !== 'production';
-
-let keystaticIntegration;
-if (isDev) {
-	const { default: keystatic } = await import('@keystatic/astro');
-	keystaticIntegration = keystatic();
-}
 
 // https://astro.build/config
 export default defineConfig({
@@ -19,8 +10,6 @@ export default defineConfig({
 	adapter: node({ mode: 'standalone' }),
 	trailingSlash: 'always',
 	integrations: [
-		react(),
-		...(keystaticIntegration ? [keystaticIntegration] : []),
 		// @astrojs/sitemap es la ÚNICA fuente del sitemap (sitemap-index.xml + sitemap-N.xml).
 		// robots.txt, llms.txt y llms-full.txt los genera scripts/generate-llms-txt.mjs / public/robots.txt.
 		// aeo.js se retiró: generaba sitemap/llms con rutas de archivos (backslashes, /categorias_destino/x)

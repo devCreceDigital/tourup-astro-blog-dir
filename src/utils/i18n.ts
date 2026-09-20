@@ -1,7 +1,7 @@
 /**
- * Utilidades para consumir contenido bilingüe de Keystatic
+ * Utilidades para consumir contenido bilingüe
  * 
- * Keystatic guarda los campos bilingües como:
+ * Los campos bilingües pueden venir como:
  *   title: { es: "Título ES", en: "Title EN" }
  *   summary: { es: "Resumen ES", en: "Summary EN" }
  * 
