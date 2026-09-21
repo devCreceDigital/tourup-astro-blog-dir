@@ -2,6 +2,22 @@
 import { defineConfig } from 'astro/config';
 import node from '@astrojs/node';
 import sitemap from '@astrojs/sitemap';
+import { namelessCompanySlugs } from './scripts/lib/content-dedupe.mjs';
+
+// Fichas sin nombre real en el dato de origen (título "-"): se publican con noindex, no van al sitemap.
+const nameless = namelessCompanySlugs('src/content/companies');
+
+// El cuerpo Markdown de fichas y prompts trae su propio `# Título`, que duplicaba el <h1> de la página.
+// Se degrada a <h2> para que cada página tenga un único <h1>.
+function rehypeDemoteH1() {
+	return (tree) => {
+		const walk = (node) => {
+			if (node.type === 'element' && node.tagName === 'h1') node.tagName = 'h2';
+			node.children?.forEach(walk);
+		};
+		walk(tree);
+	};
+}
 
 // https://astro.build/config
 export default defineConfig({
@@ -9,13 +25,18 @@ export default defineConfig({
 	output: 'static',
 	adapter: node({ mode: 'standalone' }),
 	trailingSlash: 'always',
+	markdown: { rehypePlugins: [rehypeDemoteH1] },
 	integrations: [
 		// @astrojs/sitemap es la ÚNICA fuente del sitemap (sitemap-index.xml + sitemap-N.xml).
 		// robots.txt, llms.txt y llms-full.txt los genera scripts/generate-llms-txt.mjs / public/robots.txt.
 		// aeo.js se retiró: generaba sitemap/llms con rutas de archivos (backslashes, /categorias_destino/x)
 		// que no existen como páginas.
 		sitemap({
-			filter: (page) => !/\/(admin|api)\//.test(page),
+			filter: (page) => {
+				if (/\/(admin|api)\//.test(page)) return false;
+				const m = page.match(/\/(?:companies|empresas)\/([^/]+)\/$/);
+				return !(m && nameless.has(decodeURIComponent(m[1])));
+			},
 			serialize: (entry) => {
 				if (entry.url.match(/\/(?:en|es)\/peru\/[^/]+\/tours\/[^/]+\/?$/)) {
 					entry.priority = 0.5;

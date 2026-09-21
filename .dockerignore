@@ -9,3 +9,11 @@ dist
 .vscode
 .bolt
 .codesandbox
+
+# Secretos, bases de datos y basura local: nunca deben entrar en la imagen
+.env.*
+!.env.example
+*.db
+*.log
+.npm-cache
+tourup-cms.db

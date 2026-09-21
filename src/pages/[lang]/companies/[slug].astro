@@ -2,7 +2,7 @@
 import { getCollection } from 'astro:content';
 import Layout from '../../../layouts/Layout.astro';
 import { getLocalizedString, type Locale } from '../../../utils/i18n';
-import { companyDescription } from '../../../utils/seo';
+import { companyDescription, companyDisplayName, hasCompanyName } from '../../../utils/seo';
 
 function stripMd(id: string) { return id.replace(/\.md$/i, ''); }
 
@@ -23,7 +23,8 @@ const { company, lang } = Astro.props;
 const { Content } = await company.render();
 const d = company.data;
 const locale = lang as Locale;
-const title = getLocalizedString(d.title, locale);
+const title = companyDisplayName(d, locale);
+const nameless = !hasCompanyName(getLocalizedString(d.title, locale));
 const description = companyDescription(d, locale);
 const loc = (v: any) => getLocalizedString(v, locale);
 
@@ -102,6 +103,7 @@ function stars(rating: number): string {
   currentPath={`/${lang}/companies/${stripMd(company.id)}/`}
   canonicalUrl={pageUrl}
   breadcrumb={title}
+  noindex={nameless}
   hreflangOverrides={{
     es: canonicalEs,
     en: pageUrl,

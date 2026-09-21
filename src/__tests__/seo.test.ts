@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import fs from 'node:fs';
 import path from 'node:path';
-import { hreflangAlternates, breadcrumbTrail, companyDescription, shortTitle, SITE_URL } from '../utils/seo';
+import { hreflangAlternates, breadcrumbTrail, companyDescription, companyDisplayName, hasCompanyName, shortTitle, SITE_URL } from '../utils/seo';
 
 const read = (rel: string) => fs.readFileSync(path.resolve(rel), 'utf-8');
 
@@ -75,9 +75,25 @@ describe('shortTitle', () => {
 });
 
 describe('companyDescription', () => {
-  it('usa el summary cuando existe (y lo localiza si es bilingüe)', () => {
-    expect(companyDescription({ title: 'X', summary: 'Hola' }, 'es')).toBe('Hola');
-    expect(companyDescription({ title: 'X', summary: { es: 'Hola', en: 'Hi' } }, 'en')).toBe('Hi');
+  it('antepone el nombre al summary genérico para que cada descripción sea única', () => {
+    expect(companyDescription({ title: 'X', summary: 'Hola' }, 'es')).toBe('X — Hola');
+    expect(companyDescription({ title: 'X', summary: { es: 'Hola', en: 'Hi' } }, 'en')).toBe('X — Hi');
+    const a = companyDescription({ title: 'A1 Travel', summary: 'Travel Company based in CUSCO, CUSCO, Peru.' }, 'en');
+    const b = companyDescription({ title: 'Inka Tours', summary: 'Travel Company based in CUSCO, CUSCO, Peru.' }, 'en');
+    expect(a).not.toBe(b);
+  });
+
+  it('en español no reutiliza el summary en inglés de origen', () => {
+    const d = { title: 'A1 Travel', summary: 'Retail Travel Agency based in LIMA, LIMA, Peru.', distribution_role: 'retail_travel_agency', location: { city: 'LIMA' } };
+    const es = companyDescription(d, 'es');
+    expect(es).not.toMatch(/based in/i);
+    expect(es).toContain('A1 Travel');
+    expect(es).toContain('LIMA');
+    expect(companyDescription(d, 'en')).toBe('A1 Travel — Retail Travel Agency based in LIMA, LIMA, Peru.');
+  });
+
+  it('no repite el nombre si el summary ya lo contiene', () => {
+    expect(companyDescription({ title: 'Alpaca', summary: 'Alpaca es un DMC en Cusco.' }, 'es')).toBe('Alpaca es un DMC en Cusco.');
   });
 
   it("genera una descripción cuando summary es '' (caso de las 985 empresas)", () => {
@@ -92,6 +108,27 @@ describe('companyDescription', () => {
   it('no afirma verificación, licencias ni reseñas que quizá no existan', () => {
     const d = companyDescription({ title: 'A', summary: '' }, 'es');
     expect(d).not.toMatch(/verificad|licenci|reseñ|rating/i);
+  });
+});
+
+describe('companyDisplayName / hasCompanyName', () => {
+  it('detecta títulos sin nombre real', () => {
+    expect(hasCompanyName('-')).toBe(false);
+    expect(hasCompanyName('  ')).toBe(false);
+    expect(hasCompanyName('A1 Travel')).toBe(true);
+    expect(hasCompanyName('Ñandú Tours')).toBe(true);
+  });
+
+  it('usa una etiqueta descriptiva (no un nombre inventado) cuando el título es "-"', () => {
+    const d = { title: '-', distribution_role: 'retail_travel_agency', location: { city: 'ATE' } };
+    expect(companyDisplayName(d, 'es')).toBe('Agencia de viajes minorista en ATE');
+    expect(companyDisplayName(d, 'en')).toBe('Retail travel agency in ATE');
+    expect(companyDisplayName({ title: 'Alpaca' }, 'es')).toBe('Alpaca');
+  });
+
+  it('la descripción de una ficha sin nombre no antepone la etiqueta al summary', () => {
+    const d = { title: '-', summary: 'Retail Travel Agency based in ATE, LIMA, Peru.', location: { city: 'ATE' } };
+    expect(companyDescription(d, 'en')).toBe('Retail Travel Agency based in ATE, LIMA, Peru.');
   });
 });
 

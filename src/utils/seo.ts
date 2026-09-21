@@ -94,17 +94,42 @@ const ROLES: Record<string, Record<Locale, string>> = {
   mixed_agency: { es: 'Agencia mixta', en: 'Mixed travel agency' },
 };
 
+/** Hay fichas cuyo nombre es "-" o está vacío (dato de origen): no tienen ninguna letra ni número. */
+export function hasCompanyName(name: string): boolean {
+  return /[\p{L}\p{N}]/u.test(name);
+}
+
 /**
- * Meta description de una ficha de empresa. Hoy las 985 fichas tienen `summary: ''`,
- * lo que dejaba la meta description vacía; se genera una descripción veraz con datos reales.
+ * Nombre visible de la ficha. Si el dato de origen no trae nombre real, se usa una etiqueta
+ * descriptiva (rol + ciudad) en lugar de inventar un nombre comercial.
+ */
+export function companyDisplayName(d: any, lang: Locale): string {
+  const title = getLocalizedString(d.title, lang).trim();
+  if (hasCompanyName(title)) return title;
+  const city = getLocalizedString(d.nap?.city ?? d.location?.city, lang).trim();
+  const role = ROLES[d.distribution_role]?.[lang] ?? ROLES.tour_operator[lang];
+  return lang === 'en' ? `${role} in ${city || 'Peru'}` : `${role} en ${city || 'Perú'}`;
+}
+
+/**
+ * Meta description de una ficha de empresa. El `summary` de origen es genérico
+ * ("Travel Company based in CUSCO, CUSCO, Peru.") y lo comparten cientos de fichas, así que
+ * se antepone el nombre para que cada descripción sea única. Sin summary se genera una
+ * descripción veraz con datos reales, sin afirmar verificación, licencias ni reseñas.
  */
 export function companyDescription(d: any, lang: Locale): string {
   const summary = getLocalizedString(d.summary, lang).trim();
-  if (summary) return summary;
-  const title = getLocalizedString(d.title, lang);
+  const name = companyDisplayName(d, lang);
+  const named = hasCompanyName(getLocalizedString(d.title, lang).trim());
+  // El summary de origen es texto en inglés ('... based in CITY, ...'): en /es/ se usa la descripción generada en español.
+  const englishBoilerplate = lang === 'es' && /based in/i.test(summary);
+  if (summary && !englishBoilerplate) {
+    if (!named || summary.toLowerCase().includes(name.toLowerCase())) return summary;
+    return `${name} — ${summary}`;
+  }
   const city = getLocalizedString(d.nap?.city ?? d.location?.city, lang).trim();
   const role = ROLES[d.distribution_role]?.[lang] ?? ROLES.tour_operator[lang];
   return lang === 'en'
-    ? `${title} — ${role.toLowerCase()} in ${city || 'Peru'}. B2B profile in the TourUp directory of Peru travel operators.`
-    : `${title} — ${role.toLowerCase()} en ${city || 'Perú'}. Ficha B2B en el directorio de operadores turísticos de TourUp.`;
+    ? `${name} — ${role.toLowerCase()} in ${city || 'Peru'}. B2B profile in the TourUp directory of Peru travel operators.`
+    : `${name} — ${role.toLowerCase()} en ${city || 'Perú'}. Ficha B2B en el directorio de operadores turísticos de TourUp.`;
 }

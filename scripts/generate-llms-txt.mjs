@@ -14,7 +14,7 @@
 import { readdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { join, basename } from 'node:path';
 import matter from 'gray-matter';
-import { isOrphanDuplicate } from './lib/content-dedupe.mjs';
+import { isOrphanDuplicate, isNamelessTitle } from './lib/content-dedupe.mjs';
 
 export const SITE = (process.env.SITE_URL || 'https://guia.tourup.co').replace(/\/$/, '');
 const CONTENT = 'src/content';
@@ -50,7 +50,7 @@ function readCollection(name) {
       const { data, content } = matter(readFileSync(join(dir, file), 'utf-8'));
       return { slug: basename(file, '.md'), data, body: content.trim() };
     })
-    .filter((e) => !(name === 'companies' && isOrphanDuplicate(e.data.slug, e.slug)));
+    .filter((e) => !(name === 'companies' && (isOrphanDuplicate(e.data.slug, e.slug) || isNamelessTitle(String(e.data.title ?? '')))));
 }
 
 const link = (label, url, note) => `- [${label}](${url})${note ? `: ${note}` : ''}`;

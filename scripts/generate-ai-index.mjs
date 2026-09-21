@@ -12,7 +12,7 @@
 import { readdirSync, readFileSync, writeFileSync, existsSync, statSync } from 'fs';
 import { join, relative, basename } from 'path';
 import { createHash } from 'crypto';
-import { isOrphanDuplicate } from './lib/content-dedupe.mjs';
+import { isOrphanDuplicate, isNamelessTitle } from './lib/content-dedupe.mjs';
 
 const SITE = 'https://guia.tourup.co';
 const SRC_CONTENT = 'src/content';
@@ -210,7 +210,7 @@ function walkDir(dir, base = dir, entries) {
         const { frontmatter, body } = parseFrontmatter(raw);
 
         const dirSegment = rel.split('/')[0] || '';
-        if (dirSegment === 'companies' && isOrphanDuplicate(frontmatter.slug, basename(full, '.md'))) continue;
+        if (dirSegment === 'companies' && (isOrphanDuplicate(frontmatter.slug, basename(full, '.md')) || isNamelessTitle(String(frontmatter.title ?? '')))) continue;
         const lang = langFromDir(dirSegment);
         const type = detectType(dirSegment, frontmatter);
         const url = contentPathToUrl(rel, lang, frontmatter);

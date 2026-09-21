@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import Layout from '../../../layouts/Layout.astro';
 import { getLocalizedString } from '../../../utils/i18n';
+import { companyDisplayName } from '../../../utils/seo';
 
 export async function getStaticPaths() {
   return [{ params: { lang: 'es' }, props: { lang: 'es' } }];
@@ -63,7 +64,7 @@ const currentPath = `/${lang}/empresas/`;
         <div class="company-grid">
           {grouped[l].map(c => (
             <a href={`/${lang}/empresas/${c.id.replace(/\.md$/i, '')}/`} class="company-card">
-              <h3 class="company-name">{loc(c.data.title) || c.id}</h3>
+              <h3 class="company-name">{companyDisplayName(c.data, lang as 'es' | 'en') || c.id}</h3>
               {c.data.summary && (
                 <p class="company-summary">{loc(c.data.summary)}</p>
               )}
