@@ -14,7 +14,7 @@
 import { readdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { join, basename } from 'node:path';
 import matter from 'gray-matter';
-import { isOrphanDuplicate, isNamelessTitle } from './lib/content-dedupe.mjs';
+import { isOrphanDuplicate, isNamelessTitle, untranslatedEsPromptSlugs } from './lib/content-dedupe.mjs';
 
 export const SITE = (process.env.SITE_URL || 'https://guia.tourup.co').replace(/\/$/, '');
 const CONTENT = 'src/content';
@@ -68,7 +68,12 @@ export const urls = {
 const destinos = { es: readCollection('destinos'), en: readCollection('destinos_en') };
 const categorias = readCollection('categorias_destino');
 const companies = readCollection('companies');
-const prompts = { en: readCollection('prompts'), es: readCollection('prompts_es') };
+// Los prompts /es/ sin traducir son noindex: no se anuncian a los LLM.
+const untranslatedEs = untranslatedEsPromptSlugs(join(CONTENT, 'prompts_es'), join(CONTENT, 'prompts'));
+const prompts = {
+  en: readCollection('prompts'),
+  es: readCollection('prompts_es').filter((p) => !untranslatedEs.has(p.slug)),
+};
 
 // ── llms.txt (curado, corto) ────────────────────────────────────
 function buildLlmsTxt() {

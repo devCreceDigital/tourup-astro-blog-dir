@@ -14,6 +14,8 @@ interface Props {
   hreflangOverrides?: { es?: string; en?: string; 'x-default'?: string };
   image?: string;
   noindex?: boolean;
+  /** false = sin hreflang (p. ej. prompts cuya versión /es/ aún no está traducida). */
+  hreflang?: boolean;
   breadcrumb?: string;
   lang?: string;
   date?: string;
@@ -39,6 +41,7 @@ const {
   hreflangOverrides,
   image = settingsSeo?.ogImage || '/og-default.jpg',
   noindex = false,
+  hreflang = true,
   breadcrumb,
   date = '',
 } = Astro.props;
@@ -68,7 +71,7 @@ const alternates = hreflangAlternates(currentPath, siteUrl);
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
-    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    {noindex && <meta name="robots" content="noindex, follow" />}
     {import.meta.env.GOOGLE_VERIFICATION_CODE && <meta name="google-site-verification" content={import.meta.env.GOOGLE_VERIFICATION_CODE} />}
     {import.meta.env.BING_VERIFICATION_CODE && <meta name="msvalidate.01" content={import.meta.env.BING_VERIFICATION_CODE} />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -96,7 +99,7 @@ const alternates = hreflangAlternates(currentPath, siteUrl);
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
     <!-- hreflang -->
-    {(hreflangOverrides || alternates) && (
+    {hreflang && (hreflangOverrides || alternates) && (
       <>
         <link rel="alternate" hreflang="es" href={hreflangOverrides?.es ?? alternates?.es} />
         <link rel="alternate" hreflang="en" href={hreflangOverrides?.en ?? alternates?.en} />

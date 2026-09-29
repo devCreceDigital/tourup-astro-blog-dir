@@ -2,7 +2,18 @@
 import { getCollection } from 'astro:content';
 import Layout from '../../../layouts/Layout.astro';
 import JsonLdPromptLanding from '../../../components/JsonLdPromptLanding.astro';
-import { getLocalizedString } from '../../../utils/i18n';
+import { getLocalizedString, type Locale } from '../../../utils/i18n';
+import { cityLabel, companyRole } from '../../../utils/seo';
+import {
+  directoryStats,
+  indexCompanies,
+  isTranslated,
+  mentionSignature,
+  mentionSummary,
+  placeholderSignatures,
+  quickAnswer,
+  resolveMentions,
+} from '../../../utils/prompts';
 
 export async function getStaticPaths() {
   const prompts = await getCollection('prompts');
@@ -29,25 +40,53 @@ interface FAQItem {
   answer: string;
 }
 
-const { prompt, lang } = Astro.props;
+const { prompt, lang: langProp } = Astro.props;
+const lang = langProp as Locale;
+const es = lang === 'es';
+const t = (esText: string, enText: string) => (es ? esText : enText);
 const { Content } = await prompt.render();
 
-const companies = await getCollection('companies');
-const externalBrands = await getCollection('external_brands');
+const [companies, externalBrands, promptsEn, promptsEs] = await Promise.all([
+  getCollection('companies'),
+  getCollection('external_brands'),
+  getCollection('prompts'),
+  getCollection('prompts_es'),
+]);
 
-const resolvedBrands = prompt.data.brands_ai_mentions.map((mention: any) => {
-  const mentionObj = typeof mention === 'string' ? { name: mention, entity_type: 'unknown' } : mention;
-  if (mentionObj.entity_type === 'company') {
-    const company = companies.find((c) => c.id === mentionObj.entity_slug);
-    return { ...mentionObj, found: !!company, entity: company };
-  } else if (mentionObj.entity_type === 'external_brand') {
-    const brand = externalBrands.find((b) => b.id === mentionObj.entity_slug);
-    return { ...mentionObj, found: !!brand, entity: brand };
-  }
-  return { ...mentionObj, found: false };
-});
+const resolvedBrands = resolveMentions(prompt.data.brands_ai_mentions, indexCompanies(companies), externalBrands, lang);
+const foundBrands = resolvedBrands.filter((b) => b.found);
+// La lista por defecto que comparten casi todos los prompts no es una mención real de la IA.
+const placeholders = placeholderSignatures(
+  (lang === 'es' ? promptsEs : promptsEn).map((p: any) => p.data.brands_ai_mentions ?? []),
+);
+const realMentions = !placeholders.has(mentionSignature(prompt.data.brands_ai_mentions));
 
-const destName = prompt.data.destination_cluster || 'Peru tour';
+const pageTitle = getLocalizedString(prompt.data.title, lang);
+const slug = prompt.id.replace(/[.]md$/i, "");
+const pagePath = `/${lang}/ai-prompts/${slug}/`;
+
+// Las páginas /es/ son copias sin traducir del prompt en inglés: no se indexan ni se anuncian
+// con hreflang hasta que tengan título propio en español.
+const enTwin = promptsEn.find((p: any) => p.id === prompt.id);
+const translated = !es || isTranslated(pageTitle, enTwin ? getLocalizedString(enTwin.data.title, 'en') : undefined);
+const hasTwin = es ? !!enTwin : promptsEs.some((p: any) => p.id === prompt.id && isTranslated(getLocalizedString(p.data.title, 'es'), pageTitle));
+
+// Un quick_answer escrito a mano manda; el texto de relleno "Landing page answering…" no cuenta.
+const manualAnswer = getLocalizedString(prompt.data.quick_answer, lang).trim();
+const answer = manualAnswer && !/^Landing page answering/i.test(manualAnswer)
+  ? manualAnswer
+  : quickAnswer({
+      question: pageTitle,
+      lang,
+      mentions: resolvedBrands,
+      realMentions,
+      platforms: prompt.data.ai_platforms ?? [],
+      stats: directoryStats(companies, lang),
+    });
+
+const destName = prompt.data.destination_cluster && !/^peru(_national)?$/i.test(prompt.data.destination_cluster)
+  ? prompt.data.destination_cluster
+  : t('Perú', 'Peru');
 
 function generateFAQs(dest: string, cat: string): FAQItem[] {
   const dc = dest.toLowerCase();
@@ -55,55 +94,33 @@ function generateFAQs(dest: string, cat: string): FAQItem[] {
 
   if (dc.includes('machu picchu') || dc.includes('cusco') || dc.includes('inca')) {
     faqs.push({
-      question: `How far in advance should I book a ${dest} tour?`,
-      answer: 'For high season dates (June–August) and Inca Trail permits, booking 4–6 months in advance is recommended. For shoulder season, 2–3 months is often enough.'
+      question: t(`¿Con cuánta antelación conviene reservar un tour en ${dest}?`, `How far in advance should I book a ${dest} tour?`),
+      answer: t('Para temporada alta (junio–agosto) y permisos del Camino Inca se recomienda reservar con 4–6 meses de antelación. En temporada media suelen bastar 2–3 meses.', 'For high season dates (June–August) and Inca Trail permits, booking 4–6 months in advance is recommended. For shoulder season, 2–3 months is often enough.'),
     });
     faqs.push({
-      question: 'Is it better to book with a US-based company or a local Peruvian operator?',
-      answer: 'US-based brands can offer familiar customer service and payment options, while local operators may provide more flexible itineraries and better on-the-ground expertise. Many travelers compare both and choose based on reviews, inclusions, and overall value.'
-    });
-    faqs.push({
-      question: `Are ${dest} tours suitable for first-time international travelers?`,
-      answer: 'Yes, as long as you choose an operator with clear pre-departure guidance, acclimatization days in Cusco, and 24/7 support during the trip.'
+      question: t('¿Es mejor reservar con una empresa extranjera o con un operador peruano?', 'Is it better to book with a US-based company or a local Peruvian operator?'),
+      answer: t('Las marcas extranjeras ofrecen atención y medios de pago conocidos; los operadores locales suelen dar itinerarios más flexibles y más conocimiento del terreno. Compara reseñas, servicios incluidos y precio total.', 'US-based brands can offer familiar customer service and payment options, while local operators may provide more flexible itineraries and better on-the-ground expertise. Many travelers compare both and choose based on reviews, inclusions, and overall value.'),
     });
   } else if (dc.includes('amazon')) {
     faqs.push({
-      question: `What is the best time to visit the ${dest}?`,
-      answer: 'The dry season (May–October) offers better wildlife spotting and fewer mosquitoes, while the wet season (November–April) has higher water levels for boat-based exploration.'
-    });
-    faqs.push({
-      question: `What should I pack for a ${dest} expedition?`,
-      answer: 'Lightweight long-sleeve clothing, insect repellent, waterproof gear, binoculars, and sturdy hiking boots are recommended.'
-    });
-    faqs.push({
-      question: 'Are these tours suitable for families?',
-      answer: 'Many operators offer family-friendly itineraries with shorter excursions and comfortable lodge accommodations.'
+      question: t(`¿Cuál es la mejor época para visitar ${dest}?`, `What is the best time to visit the ${dest}?`),
+      answer: t('La estación seca (mayo–octubre) facilita ver fauna y tiene menos mosquitos; la húmeda (noviembre–abril) sube el nivel de los ríos para recorridos en bote.', 'The dry season (May–October) offers better wildlife spotting and fewer mosquitoes, while the wet season (November–April) has higher water levels for boat-based exploration.'),
     });
   } else {
     faqs.push({
-      question: `How far in advance should I book a ${dest} tour?`,
-      answer: 'For popular destinations and peak season (June–August), booking 3–4 months in advance is recommended. For shoulder season, 1–2 months is often sufficient.'
+      question: t(`¿Con cuánta antelación conviene reservar un tour en ${dest}?`, `How far in advance should I book a ${dest} tour?`),
+      answer: t('Para destinos populares en temporada alta (junio–agosto) se recomienda reservar con 3–4 meses de antelación. En temporada media suele bastar 1–2 meses.', 'For popular destinations and peak season (June–August), booking 3–4 months in advance is recommended. For shoulder season, 1–2 months is often sufficient.'),
     });
     faqs.push({
-      question: `What should I look for when choosing a ${dest} tour company?`,
-      answer: 'Focus on safety records, guide quality, group size, inclusions (permits, meals, accommodation), and clear cancellation policies. Read recent reviews from travelers with similar profiles to yours.'
-    });
-    faqs.push({
-      question: `Are ${dest} tours suitable for first-time travelers to Peru?`,
-      answer: 'Yes, most operators design itineraries that cater to different experience levels. Look for companies that provide pre-departure briefings, airport transfers, and 24/7 support.'
+      question: t(`¿Qué debo revisar al elegir una empresa de turismo en ${dest}?`, `What should I look for when choosing a ${dest} tour company?`),
+      answer: t('Revisa que esté registrada (RUC y registro en MINCETUR), qué incluye el precio (entradas, comidas, alojamiento), el tamaño del grupo y la política de cancelación. Lee reseñas recientes de viajeros con un perfil parecido al tuyo.', 'Check that it is registered (RUC tax ID and MINCETUR record), what the price includes (permits, meals, accommodation), group size and the cancellation policy. Read recent reviews from travelers with a similar profile to yours.'),
     });
   }
 
   if (cat.includes('trekking') || cat.includes('hiking')) {
     faqs.push({
-      question: 'What fitness level is required for trekking tours?',
-      answer: 'Most trekking tours require moderate to high fitness levels. Some acclimatization days in high-altitude locations are typically included in itineraries.'
-    });
-  }
-  if (cat.includes('luxury')) {
-    faqs.push({
-      question: 'What level of accommodation can I expect on a luxury tour?',
-      answer: 'Luxury tours typically include boutique hotels, upscale lodges, and in some cases, premium train services like the Hiram Bingham or Belmond Andean Explorer.'
+      question: t('¿Qué condición física exigen los tours de trekking?', 'What fitness level is required for trekking tours?'),
+      answer: t('La mayoría exige una condición física moderada o alta, y los itinerarios en altura suelen incluir días de aclimatación.', 'Most trekking tours require moderate to high fitness levels. Some acclimatization days in high-altitude locations are typically included in itineraries.'),
     });
   }
 
@@ -112,28 +129,38 @@ function generateFAQs(dest: string, cat: string): FAQItem[] {
 
 const faqItems = prompt.data.faq?.length
   ? (prompt.data.faq as FAQItem[])
-  : generateFAQs(prompt.data.destination_cluster || '', prompt.data.category_cluster || '');
-const pageTitle = getLocalizedString(prompt.data.title, lang);
-const brandNames = resolvedBrands.map((b: any) => b.name).filter(Boolean);
-// Sin quick_answer/summary la landing heredaba la meta description genérica del sitio (idéntica en ~400 páginas).
-const pageDescription =
-  getLocalizedString(prompt.data.quick_answer, lang) ||
-  getLocalizedString(prompt.data.summary, lang) ||
-  (lang === 'es'
-    ? `${pageTitle} — ${brandNames.length ? `empresas de Perú que citan los buscadores de IA: ${brandNames.slice(0, 3).join(', ')}.` : 'consulta frecuente de viajeros y operadores de Perú que responden los buscadores de IA.'}`
-    : `${pageTitle} — ${brandNames.length ? `Peru travel companies cited by AI search engines: ${brandNames.slice(0, 3).join(', ')}.` : 'a frequent traveler question about Peru, answered with the operators AI search engines cite.'}`);
-const pagePath = `/${lang}/ai-prompts/${prompt.id.replace(/[.]md$/i, "")}/`;
+  : generateFAQs(destName, prompt.data.category_cluster || '');
+
+const listHeading = realMentions
+  ? t('Empresas mencionadas en las respuestas de IA', 'Companies mentioned in AI answers')
+  : t('Algunas empresas del directorio TourUp', 'Some companies in the TourUp directory');
+const unresolved = resolvedBrands.filter((b) => !b.found);
+// El cuerpo Markdown generado por el pipeline afirma que las empresas "son recomendadas por los
+// modelos de IA" y "han sido evaluadas", sin dato que lo respalde, y repite la lista. De ese
+// cuerpo solo se conservan los consejos de "Key Considerations", que sí cambian según el tema.
+const rawBody = String(prompt.body ?? '').replace(/\r/g, '');
+const generatedBody = /optimized for AI answer engines/i.test(rawBody);
+const considerations = generatedBody
+  ? (rawBody.match(/## Key Considerations\n([\s\S]*?)(?:\n\*Content generated|\n## |$)/)?.[1] ?? '')
+      .split('\n')
+      .map((l) => l.replace(/^\s*-\s*/, '').trim())
+      .filter(Boolean)
+  : [];
+const checkedDate = prompt.data.last_ai_check_date ? new Date(prompt.data.last_ai_check_date) : null;
+const validDate = checkedDate && !Number.isNaN(checkedDate.getTime()) ? checkedDate : null;
 ---
 
 <Layout
   title={pageTitle}
-  description={pageDescription}
+  description={answer}
   currentPath={pagePath}
   lang={lang}
   date={prompt.data.last_ai_check_date}
+  noindex={!translated}
+  hreflang={translated && hasTwin}
 >
   <JsonLdPromptLanding
-    title={pageTitle}
+    title={realMentions ? pageTitle : listHeading}
     brands={resolvedBrands}
     faqItems={faqItems}
     lang={lang}
@@ -142,21 +169,10 @@ const pagePath = `/${lang}/ai-prompts/${prompt.id.replace(/[.]md$/i, "")}/`;
 
   <article class="prompt-landing">
     <header class="prompt-header">
-      <div class="prompt-meta">
-        {prompt.data.destination_cluster && (
-          <span class="badge">{prompt.data.destination_cluster}</span>
-        )}
-        {prompt.data.category_cluster && (
-          <span class="badge">{prompt.data.category_cluster}</span>
-        )}
-      </div>
-      <h1>{prompt.data.title}</h1>
-      <p class="search-term">
-        <strong>Search Term:</strong> {prompt.data.search_term || prompt.data.title}
-      </p>
-      {prompt.data.ai_platforms && prompt.data.ai_platforms.length > 0 && (
+      <h1>{pageTitle}</h1>
+      {realMentions && prompt.data.ai_platforms?.length > 0 && (
         <div class="platforms">
-          <strong>AI Platforms:</strong>
+          <strong>{t('Consultado en:', 'Checked on:')}</strong>
           {prompt.data.ai_platforms.map((platform: string) => (
             <span class="platform-badge">{platform}</span>
           ))}
@@ -165,123 +181,126 @@ const pagePath = `/${lang}/ai-prompts/${prompt.id.replace(/[.]md$/i, "")}/`;
     </header>
 
     <section class="quick-answer">
-      <h2>Quick Answer</h2>
-      <p>{prompt.data.quick_answer || prompt.data.summary}</p>
+      <h2>{t('Respuesta rápida', 'Quick answer')}</h2>
+      <p>{answer}</p>
     </section>
 
-    {resolvedBrands.some((b: any) => b.found) && (
+    {foundBrands.length > 0 && (
       <section aria-label="Featured tour companies">
-        <h2>Featured Companies</h2>
+        <h2>{listHeading}</h2>
         <ol class="brands-grid">
-          {resolvedBrands
-            .filter((b: any) => b.found)
-            .map((mention: any) => (
-              <li class="brand-card">
-                <h3>
-                  {mention.entity_type === 'company' ? (
-                    <a href={`/${lang}/companies/${mention.entity_slug}/`}>
-                      {mention.entity.data.title}
-                    </a>
-                  ) : (
-                    <a href={mention.entity.data.official_url} target="_blank" rel="noopener noreferrer">
-                      {mention.entity.data.name}
-                    </a>
-                  )}
-                </h3>
-                <p>{mention.entity.data.summary}</p>
-                {mention.entity_type === 'company' && mention.entity.data.contact?.website && (
-                  <a href={mention.entity.data.contact.website} target="_blank" rel="noopener noreferrer" class="brand-link">
-                    Visit Website →
-                  </a>
+          {foundBrands.map((m) => (
+            <li class="brand-card">
+              <h3>
+                {m.external ? (
+                  <a href={m.url} target="_blank" rel="noopener noreferrer">{m.entity!.data.name ?? m.name}</a>
+                ) : (
+                  <a href={m.url}>{m.name}</a>
                 )}
-              </li>
-            ))}
+              </h3>
+              <p>{mentionSummary(m, lang)}</p>
+            </li>
+          ))}
         </ol>
       </section>
     )}
 
-    {resolvedBrands.some((b: any) => b.found) && (
+    {foundBrands.some((m) => !m.external) && (
       <section aria-label="Comparison table">
-        <h2>Compare {destName} Companies</h2>
+        <h2>{t('Datos de las empresas', 'Company facts')}</h2>
         <table>
           <thead>
             <tr>
-              <th>Company</th>
-              <th>Base</th>
-              <th>Trip style</th>
-              <th>Good for</th>
+              <th>{t('Empresa', 'Company')}</th>
+              <th>{t('Ciudad', 'City')}</th>
+              <th>{t('Tipo', 'Type')}</th>
+              <th>{t('Web', 'Website')}</th>
             </tr>
           </thead>
           <tbody>
-            {resolvedBrands.filter((b: any) => b.found).map((brand: any) => (
-              <tr>
-                <td><strong>{brand.entity.data.title || brand.name}</strong></td>
-                <td>{brand.entity_type === 'company' ? (brand.entity.data.location?.city || brand.entity.data.location?.region || '—') : (brand.entity.data.country || '—')}</td>
-                <td>{brand.entity_type === 'company' ? ((brand.entity.data.categorias || []).join(', ') || '—') : (brand.entity.data.brand_role || '—')}</td>
-                <td>{brand.entity.data.summary || '—'}</td>
-              </tr>
-            ))}
+            {foundBrands.filter((m) => !m.external).map((m) => {
+              const d = m.entity!.data;
+              const web = d.contact?.website;
+              return (
+                <tr>
+                  <td><a href={m.url}><strong>{m.name}</strong></a></td>
+                  <td>{cityLabel(d.location?.city ?? d.nap?.city) || '—'}</td>
+                  <td>{companyRole(d, lang)}</td>
+                  <td>{web ? <a href={web} target="_blank" rel="noopener noreferrer nofollow">{web.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')}</a> : '—'}</td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </section>
     )}
 
-    {resolvedBrands.some((b: any) => !b.found) && (
+    {unresolved.length > 0 && (
       <section class="unresolved-brands">
-        <h3>Other Mentioned Companies</h3>
+        <h3>{t('Otras marcas citadas (sin ficha en el directorio)', 'Other brands cited (not in the directory)')}</h3>
         <ul>
-          {resolvedBrands
-            .filter((b: any) => !b.found)
-            .map((mention: any) => (
-              <li>{mention.name}</li>
-            ))}
+          {unresolved.map((m) => (
+            <li>{m.name}</li>
+          ))}
         </ul>
       </section>
     )}
 
-    <section aria-label={`How to choose a ${destName} tour company`}>
-      <h2>How to choose a {destName} tour company</h2>
+    <section aria-label={t('Cómo elegir una empresa de turismo', 'How to choose a tour company')}>
+      <h2>{t(`Cómo elegir una empresa de turismo en ${destName}`, `How to choose a ${destName} tour company`)}</h2>
       <p>
-        When comparing operators, focus on safety records, guide quality, group size,
-        and how clearly they communicate what's included (permits, trains, porters,
-        hotels, and meals). Look for recent reviews from travelers with a similar profile to yours.
+        {t(
+          'Al comparar operadores, fíjate en su seguridad, la calidad de los guías, el tamaño del grupo y lo claro que explican qué incluye el precio (entradas, trenes, porteadores, hoteles y comidas).',
+          "When comparing operators, focus on safety records, guide quality, group size, and how clearly they communicate what's included (permits, trains, porters, hotels, and meals).",
+        )}
       </p>
       <ul>
-        <li>Check that permits and tickets for key attractions are included in the price.</li>
-        <li>Look for English-speaking guides with strong local knowledge.</li>
-        <li>Review cancellation and rescheduling policies in detail.</li>
-        <li>Compare group size and accommodation standards across operators.</li>
-        <li>Verify licensing and regulatory compliance (MINCETUR, tax ID).</li>
+        <li>{t('Comprueba que su RUC y su registro en MINCETUR estén vigentes: aparecen en cada ficha del directorio.', 'Check that its RUC tax ID and MINCETUR registration are valid: both are shown on each directory profile.')}</li>
+        <li>{t('Confirma que las entradas y permisos de los atractivos principales estén incluidos.', 'Confirm that permits and tickets for key attractions are included in the price.')}</li>
+        <li>{t('Revisa en detalle la política de cancelación y cambios.', 'Review cancellation and rescheduling policies in detail.')}</li>
+        <li>{t('Compara el tamaño del grupo y el tipo de alojamiento entre operadores.', 'Compare group size and accommodation standards across operators.')}</li>
       </ul>
     </section>
 
     {faqItems.length > 0 && (
       <section aria-label="Frequently asked questions">
-        <h2>Frequently asked questions</h2>
+        <h2>{t('Preguntas frecuentes', 'Frequently asked questions')}</h2>
         {faqItems.map((item: FAQItem) => (
           <article class="faq-item">
-            <h3>{item.question}</h3>
-            <p>{item.answer}</p>
+            <h3>{getLocalizedString(item.question as any, lang)}</h3>
+            <p>{getLocalizedString(item.answer as any, lang)}</p>
           </article>
         ))}
       </section>
     )}
 
-    <section class="prompt-content">
-      <Content />
-    </section>
+    {considerations.length > 0 && (
+      <section class="prompt-content" aria-label={t('Qué tener en cuenta', 'Key considerations')}>
+        <h2>{t('Qué tener en cuenta', 'Key considerations')}</h2>
+        <ul>
+          {considerations.map((c) => <li>{c}</li>)}
+        </ul>
+      </section>
+    )}
 
-    {prompt.data.last_ai_check_date && (
+    {!generatedBody && (
+      <section class="prompt-content">
+        <Content />
+      </section>
+    )}
+
+    {validDate && (
       <footer class="prompt-footer">
         <p>
-          <strong>Last Verified:</strong> {new Date(prompt.data.last_ai_check_date).toLocaleDateString('es-PE')}
+          <strong>{t('Última revisión:', 'Last checked:')}</strong>{' '}
+          <time datetime={validDate.toISOString().slice(0, 10)}>{validDate.toLocaleDateString(es ? 'es-PE' : 'en-US')}</time>
         </p>
       </footer>
     )}
   </article>
 
   <nav class="prompt-nav">
-    <a href={`/${lang}/ai-prompts/`} class="nav-link">← Back to Prompts</a>
+    <a href={`/${lang}/ai-prompts/`} class="nav-link">{t('← Volver a los prompts', '← Back to prompts')}</a>
   </nav>
 </Layout>
 

@@ -133,3 +133,23 @@ export function companyDescription(d: any, lang: Locale): string {
     ? `${name} — ${role.toLowerCase()} in ${city || 'Peru'}. B2B profile in the TourUp directory of Peru travel operators.`
     : `${name} — ${role.toLowerCase()} en ${city || 'Perú'}. Ficha B2B en el directorio de operadores turísticos de TourUp.`;
 }
+
+/**
+ * Ruta de la ficha en el idioma de la página. Única fuente de esta URL: antes cada página la
+ * construía a su manera y varias generaban `/empresas/x/` sin idioma, que redirigía a /en/.
+ */
+export function companyPath(lang: Locale, id: string): string {
+  const slug = id.replace(/\.md$/i, '');
+  return lang === 'es' ? `/es/empresas/${slug}/` : `/en/companies/${slug}/`;
+}
+
+export function companyRole(d: any, lang: Locale): string {
+  return ROLES[d?.distribution_role]?.[lang] ?? ROLES.tour_operator[lang];
+}
+
+/** "WANCHAQ" → "Wanchaq", "SAN JERÓNIMO" → "San Jerónimo". El dato de origen viene en mayúsculas. */
+export function cityLabel(raw: unknown): string {
+  const s = String(raw ?? '').trim();
+  if (!s) return '';
+  return s.toLocaleLowerCase('es').replace(/(^|[\s-])(\p{L})/gu, (_, sep, ch) => sep + ch.toLocaleUpperCase('es'));
+}

@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import { getLocalizedString } from '../utils/i18n';
+import { companyPath } from '../utils/seo';
 
 const companies = await getCollection('companies');
 const prompts = await getCollection('prompts');
@@ -25,7 +26,7 @@ const searchIndex: SearchItem[] = [
     title: loc(c.data.title) || c.id,
     summary: (loc(c.data.summary) || '').slice(0, 200),
     type: 'company' as const,
-    url: `/empresas/${c.id.replace(/\.md$/i, '')}/`,
+    url: companyPath('es', c.id),
     tags: [...(c.data.destinos || []), c.data.distribution_role || ''],
     location: loc(c.data.location?.city),
   })),

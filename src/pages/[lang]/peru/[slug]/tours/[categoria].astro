@@ -5,6 +5,7 @@ import FooterCmstourup from '../../../../../components/FooterCmstourup.astro';
 import SettingsHead from '../../../../../components/SettingsHead.astro';
 import SettingsBodyEnd from '../../../../../components/SettingsBodyEnd.astro';
 import '../../../../../styles/theme.css';
+import { companyDescription, companyDisplayName, companyPath } from '../../../../../utils/seo';
 
 export async function getStaticPaths() {
   const allCatDest = await getCollection('categorias_destino');
@@ -162,12 +163,11 @@ const t = (es: string, en: string) => lang === 'en' ? en : es;
             <p class="empty-msg">{t('No se encontraron empresas para esta categoría en este destino.', 'No companies found for this category in this destination.')}</p>
           ) : (
             deduped.map((company) => {
-              const companySlug = company.slug.replace(/^\/company\//, '');
               return (
-                <a href={`/${lang === 'en' ? 'companies' : 'empresas'}/${companySlug}/`}
+                <a href={companyPath(lang === 'en' ? 'en' : 'es', company.id)}
                   class="company-card">
-                  <span class="company-name">{company.data.title}</span>
-                  <span class="company-desc">{company.data.summary}</span>
+                  <span class="company-name">{companyDisplayName(company.data, lang === 'en' ? 'en' : 'es')}</span>
+                  <span class="company-desc">{companyDescription(company.data, lang === 'en' ? 'en' : 'es')}</span>
                   <div class="company-tags">
                     {company.data.distribution_role && (
                       <span class="company-tag">{company.data.distribution_role}</span>

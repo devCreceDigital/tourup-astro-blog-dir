@@ -71,7 +71,7 @@ const sortedDestinos = [...destinos].sort((a, b) => a.name.localeCompare(b.name)
         <span>&copy; {currentYear} Tourup &middot; {t('Turismo responsable en Perú', 'Responsible tourism in Peru')}</span>
         <div class="cms-footer-links">
           <a href="/">{t('Inicio', 'Home')}</a>
-          <a href={`/${lang === 'en' ? 'companies' : 'empresas'}/`}>{t('Empresas', 'Companies')}</a>
+          <a href={`/${lang}/${lang === 'en' ? 'companies' : 'empresas'}/`}>{t('Empresas', 'Companies')}</a>
           <a href="/partner-scout/">Partner Scout</a>
           <a href={`/${lang}/ai-prompts/`}>{t('Guías IA', 'AI Guides')}</a>
         </div>

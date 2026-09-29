@@ -2,10 +2,12 @@
 import { defineConfig } from 'astro/config';
 import node from '@astrojs/node';
 import sitemap from '@astrojs/sitemap';
-import { namelessCompanySlugs } from './scripts/lib/content-dedupe.mjs';
+import { namelessCompanySlugs, untranslatedEsPromptSlugs } from './scripts/lib/content-dedupe.mjs';
 
 // Fichas sin nombre real en el dato de origen (título "-"): se publican con noindex, no van al sitemap.
 const nameless = namelessCompanySlugs('src/content/companies');
+// Prompts /es/ que son copia sin traducir del inglés: noindex, fuera del sitemap.
+const untranslatedEs = untranslatedEsPromptSlugs('src/content/prompts_es', 'src/content/prompts');
 
 // El cuerpo Markdown de fichas y prompts trae su propio `# Título`, que duplicaba el <h1> de la página.
 // Se degrada a <h2> para que cada página tenga un único <h1>.
@@ -35,7 +37,9 @@ export default defineConfig({
 			filter: (page) => {
 				if (/\/(admin|api)\//.test(page)) return false;
 				const m = page.match(/\/(?:companies|empresas)\/([^/]+)\/$/);
-				return !(m && nameless.has(decodeURIComponent(m[1])));
+				if (m && nameless.has(decodeURIComponent(m[1]))) return false;
+				const p = page.match(/\/es\/ai-prompts\/([^/]+)\/$/);
+				return !(p && untranslatedEs.has(decodeURIComponent(p[1])));
 			},
 			serialize: (entry) => {
 				if (entry.url.match(/\/(?:en|es)\/peru\/[^/]+\/tours\/[^/]+\/?$/)) {

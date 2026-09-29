@@ -18,6 +18,8 @@ interface Brand {
   /** La ficha existe en el sitio (company) o en la colección (external_brand). */
   found?: boolean;
   entity?: { data: Record<string, any> };
+  /** Ruta interna de la ficha (company) o web oficial (external_brand). */
+  url?: string;
 }
 
 interface FAQItem {
@@ -36,13 +38,13 @@ interface Props {
 
 const { title, brands, faqItems = [], lang, currentPath } = Astro.props;
 const pageUrl = `${SITE_URL}${currentPath}`;
-const stripMd = (id: string) => id.replace(/\.md$/i, '');
 
 /** Un ListItem por marca; con URL solo si la página/fuente existe realmente. */
 const items = brands.map((brand, i) => {
   const base = { '@type': 'ListItem', position: i + 1 };
-  if (brand.entity_type === 'company' && brand.found && brand.entity_slug) {
-    const url = `${SITE_URL}/${lang}/${lang === 'es' ? 'empresas' : 'companies'}/${stripMd(brand.entity_slug)}/`;
+  if (brand.entity_type === 'company' && brand.found && brand.url) {
+    // brand.url ya es la ruta real de la ficha (resuelta por utils/prompts.ts, tildes incluidas).
+    const url = `${SITE_URL}${brand.url}`;
     return { ...base, item: { '@type': 'TravelAgency', '@id': url, name: brand.name, url } };
   }
   const official = brand.entity_type === 'external_brand' ? brand.entity?.data?.official_url : undefined;
