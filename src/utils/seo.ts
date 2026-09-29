@@ -1,6 +1,6 @@
 import { getLocalizedString, type Locale } from './i18n';
 
-export const SITE_URL = 'https://guia.tourup.co';
+export const SITE_URL = 'https://guide.tourup.co';
 
 /**
  * Perfiles oficiales de la marca (LinkedIn, Google Business, Wikidata, Instagram…).

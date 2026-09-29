@@ -68,7 +68,7 @@ const year = new Date().getFullYear();
         <li><a href={directoryPath(lang)}>{es ? 'Directorio de operadores' : 'Operator directory'}</a></li>
         <li><a href="/llms.txt">llms.txt</a></li>
         <li><a href="/sitemap-index.xml">Sitemap</a></li>
-        <li><a href="/photo-credits/">{es ? 'Créditos de fotos' : 'Photo credits'}</a></li>
+        <li><a href={es ? '/es/creditos-de-fotos/' : '/photo-credits/'}>{es ? 'Créditos de fotos' : 'Photo credits'}</a></li>
       </ul>
     </nav>
   </div>
@@ -78,7 +78,7 @@ const year = new Date().getFullYear();
       {es
         ? 'Fotos de colaboradores de Wikimedia Commons (licencias Creative Commons) y de TourUp: el autor y la licencia de cada una están en '
         : 'Photos by Wikimedia Commons contributors (Creative Commons licences) and by TourUp: the author and licence of each one are listed on '}
-      <a href="/photo-credits/">{es ? 'Créditos de fotos' : 'Photo credits'}</a>.
+      <a href={es ? '/es/creditos-de-fotos/' : '/photo-credits/'}>{es ? 'Créditos de fotos' : 'Photo credits'}</a>.
     </p>
   </div>
 </footer>

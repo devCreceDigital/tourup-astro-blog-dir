@@ -8,6 +8,7 @@
     "dev": "astro dev",
     "prebuild": "node scripts/generate-llms-txt.mjs && node scripts/generate-ai-index.mjs",
     "build": "astro build",
+    "postbuild": "node scripts/sitemap-guide.mjs",
     "preview": "astro preview",
     "start": "node ./dist/server/entry.mjs",
     "astro": "astro",

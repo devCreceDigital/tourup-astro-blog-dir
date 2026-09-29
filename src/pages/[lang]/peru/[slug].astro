@@ -124,7 +124,7 @@ const jsonLd = {
 
       {faq.length > 0 && (
         <section class="d-faq" aria-labelledby="faq-title">
-          <h2 id="faq-title">{t(`Preguntas frecuentes sobre ${name}`, `${name}: frequently asked questions`)}</h2>
+          <h2 id="faq-title"><span class="h-band">{t(`Preguntas frecuentes sobre ${name}`, `${name}: frequently asked questions`)}</span></h2>
           {faq.map((item) => (
             <div class="d-faq-item">
               <h3>{loc(item.question)}</h3>
@@ -289,7 +289,10 @@ const jsonLd = {
     right: var(--gutter);
     bottom: 0.5rem;
     margin: 0;
-    text-shadow: 0 1px 2px rgb(0 0 0 / 0.8);
+    /* Pestaña de tinta: el crédito se lee sobre cualquier foto (piedra clara, cielo). */
+    background: var(--ink);
+    color: var(--on-ink-2);
+    padding: 0.25rem 0.55rem;
   }
 
   .d-layout {
@@ -312,6 +315,21 @@ const jsonLd = {
   .d-article :global(h2:nth-of-type(4n + 2)) { color: var(--orange); }
   .d-article :global(h2:nth-of-type(4n + 3)) { color: var(--green); }
   .d-article :global(h2:nth-of-type(4n + 4)) { color: var(--yellow); }
+
+  /* Con <span class="h-band"> (títulos del Markdown) la banda se pinta línea a línea, ajustada al texto. */
+  .d-article :global(h2:has(.h-band)) {
+    display: block;
+    background: none;
+    padding: 0;
+    line-height: 1.22;
+  }
+
+  .d-article :global(.h-band) {
+    background: var(--ink);
+    padding: 0.12em 0.3em 0.02em;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
 
   .d-article :global(h2 + p),
   .d-article :global(h3 + p) {

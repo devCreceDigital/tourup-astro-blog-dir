@@ -12,7 +12,7 @@ interface Props { lang: string; }
 const { lang } = Astro.props;
 
 const t = (es: string, en: string) => lang === 'en' ? en : es;
-const siteUrl = 'https://guia.tourup.co';
+const siteUrl = 'https://guide.tourup.co';
 const currentPath = `/${lang}/peru/itinerario-10-dias/`;
 const canonicalUrl = `${siteUrl}${currentPath}`;
 

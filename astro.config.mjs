@@ -21,15 +21,30 @@ function rehypeDemoteH1() {
 	};
 }
 
+// Los <h2> del Markdown se pintan como rótulos de cartel (banda negra). El texto va en un
+// <span class="h-band"> para que la banda se pinte línea a línea y no ocupe toda la columna.
+function rehypeBandH2() {
+	return (tree) => {
+		const walk = (node) => {
+			if (node.type === 'element' && node.tagName === 'h2') {
+				node.children = [{ type: 'element', tagName: 'span', properties: { className: ['h-band'] }, children: node.children }];
+				return;
+			}
+			node.children?.forEach(walk);
+		};
+		walk(tree);
+	};
+}
+
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://guia.tourup.co',
+	site: 'https://guide.tourup.co',
 	output: 'static',
 	adapter: node({ mode: 'standalone' }),
 	trailingSlash: 'always',
 	// El inglés es el idioma principal: su portada es `/`.
 	redirects: { '/en/': '/' },
-	markdown: { rehypePlugins: [rehypeDemoteH1] },
+	markdown: { rehypePlugins: [rehypeDemoteH1, rehypeBandH2] },
 	integrations: [
 		// @astrojs/sitemap es la ÚNICA fuente del sitemap (sitemap-index.xml + sitemap-N.xml).
 		// robots.txt, llms.txt y llms-full.txt los genera scripts/generate-llms-txt.mjs / public/robots.txt.
@@ -50,7 +65,7 @@ export default defineConfig({
 					entry.priority = 0.7;
 				} else if (entry.url.match(/\/blog\/[^/]+\/?$/)) {
 					entry.priority = 0.6;
-				} else if (entry.url === 'https://guia.tourup.co/') {
+				} else if (entry.url === 'https://guide.tourup.co/') {
 					entry.priority = 1.0;
 				} else if (entry.url.match(/\/(?:en|es)\/peru\/[^/]+\/?$/)) {
 					entry.priority = 0.8;

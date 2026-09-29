@@ -9,9 +9,9 @@
   },
   "api": {
     "type": "openapi",
-    "url": "https://guia.tourup.co/.well-known/ai-plugin-api.json"
+    "url": "https://guide.tourup.co/.well-known/ai-plugin-api.json"
   },
-  "logo_url": "https://guia.tourup.co/favicon.svg",
+  "logo_url": "https://guide.tourup.co/favicon.svg",
   "contact_email": "hello@tourup.co",
-  "legal_info_url": "https://guia.tourup.co/terms"
+  "legal_info_url": "https://guide.tourup.co/terms"
 }

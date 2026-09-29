@@ -1,4 +1,4 @@
-# robots.txt — TourUp Guía (https://guia.tourup.co)
+# robots.txt — TourUp Guía (https://guide.tourup.co)
 # Fuente única y mantenida a mano. Ya no la genera aeo.js.
 #
 # Un solo grupo con todos los user-agents: un crawler que tiene su propio grupo
@@ -71,9 +71,10 @@ Allow: /
 Disallow: /admin/
 Disallow: /api/
 
-Sitemap: https://guia.tourup.co/sitemap-index.xml
+Sitemap: https://guide.tourup.co/sitemap-guide.xml
+Sitemap: https://guide.tourup.co/sitemap-index.xml
 
 # AEO (Answer Engine Optimization): archivos para LLMs
-# https://guia.tourup.co/llms.txt
-# https://guia.tourup.co/llms-full.txt
-# https://guia.tourup.co/ai-index.json
+# https://guide.tourup.co/llms.txt
+# https://guide.tourup.co/llms-full.txt
+# https://guide.tourup.co/ai-index.json

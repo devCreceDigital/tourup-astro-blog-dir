@@ -5,7 +5,7 @@ import { execFileSync } from 'node:child_process';
 import path from 'node:path';
 
 const PUBLIC_DIR = path.resolve('public');
-const SITE = 'https://guia.tourup.co';
+const SITE = 'https://guide.tourup.co';
 
 async function readPublicFile(filename: string): Promise<string> {
   return fs.readFile(path.join(PUBLIC_DIR, filename), 'utf-8');
@@ -60,7 +60,7 @@ function expectRealRoutes(content: string) {
   const destinos = { es: slugsOf('destinos'), en: slugsOf('destinos_en') };
   const companies = slugsOf('companies');
   for (const raw of urls) {
-    expect(raw, raw).toMatch(/^https:\/\/guia\.tourup\.co\//);
+    expect(raw, raw).toMatch(/^https:\/\/guide.tourup\.co\//);
     const p = raw.replace(SITE, '');
     expect(p, raw).not.toMatch(/\\|\/\/|\.md\/?$/);
     expect(ROUTES.some((r) => r.test(p)), `ruta inexistente: ${raw}`).toBe(true);
@@ -131,7 +131,7 @@ describe('AI Indexability', () => {
       }
     });
 
-    it('declares the real sitemap on guia.tourup.co', async () => {
+    it('declares the real sitemap on guide.tourup.co', async () => {
       const content = await readPublicFile('robots.txt');
       expect(content).toContain(`Sitemap: ${SITE}/sitemap-index.xml`);
       expect(content).not.toMatch(/\/sitemap\.xml/);
@@ -154,9 +154,9 @@ describe('AI Indexability', () => {
       }
     });
 
-    it('astro.config.mjs targets guia.tourup.co and excludes admin/api', async () => {
+    it('astro.config.mjs targets guide.tourup.co and excludes admin/api', async () => {
       const cfg = await fs.readFile(path.resolve('astro.config.mjs'), 'utf-8');
-      expect(cfg).toContain("site: 'https://guia.tourup.co'");
+      expect(cfg).toContain("site: 'https://guide.tourup.co'");
       expect(cfg).toMatch(/sitemap\(\{/);
       expect(cfg).toMatch(/admin\|api/);
       expect(cfg).not.toMatch(/aeoAstroIntegration/);
@@ -167,10 +167,10 @@ describe('AI Indexability', () => {
     it('exists and follows the llmstxt.org shape (H1, blockquote, H2 link lists)', async () => {
       const content = await readPublicFile('llms.txt');
       expect(content.startsWith('# TourUp')).toBe(true);
-      expect(content).toContain('B2B Peru Travel Marketplace');
+      expect(content).toContain('Peru travel guide and tour operator directory');
       expect(content).toMatch(/^> .+/m);
       expect(content).toMatch(/^## /m);
-      expect(content).toMatch(/^- \[[^\]]+\]\(https:\/\/guia\.tourup\.co\/[^)]*\)/m);
+      expect(content).toMatch(/^- \[[^\]]+\]\(https:\/\/guide.tourup\.co\/[^)]*\)/m);
     });
 
     it('is curated: small enough to be read whole by an LLM', async () => {
@@ -230,7 +230,7 @@ describe('AI Indexability', () => {
       index = JSON.parse(content);
       expect(index.site).toBeDefined();
       expect(index.site.title).toContain('TourUp');
-      expect(index.site.url).toBe('https://guia.tourup.co');
+      expect(index.site.url).toBe('https://guide.tourup.co');
     });
 
     it('has entries array', async () => {
@@ -394,11 +394,11 @@ describe('AI Indexability', () => {
       expect(api.info.title).toContain('TourUp');
     });
 
-    it('has server URL pointing to guia.tourup.co', async () => {
+    it('has server URL pointing to guide.tourup.co', async () => {
       const content = await readPublicFile('.well-known/ai-plugin-api.json');
       api = JSON.parse(content);
       expect(api.servers).toBeDefined();
-      expect(api.servers[0].url).toBe('https://guia.tourup.co');
+      expect(api.servers[0].url).toBe('https://guide.tourup.co');
     });
 
     it('defines company endpoint', async () => {

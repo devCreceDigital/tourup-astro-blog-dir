@@ -14,7 +14,7 @@ import { join, relative, basename } from 'path';
 import { createHash } from 'crypto';
 import { isOrphanDuplicate, isNamelessTitle, untranslatedEsPromptSlugs } from './lib/content-dedupe.mjs';
 
-const SITE = 'https://guia.tourup.co';
+const SITE = 'https://guide.tourup.co';
 const SRC_CONTENT = 'src/content';
 // Prompts /es/ que son copia sin traducir del inglés: noindex, no se incluyen en el índice.
 const untranslatedEs = untranslatedEsPromptSlugs(join(SRC_CONTENT, 'prompts_es'), join(SRC_CONTENT, 'prompts'));

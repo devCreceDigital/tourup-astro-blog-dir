@@ -5,7 +5,7 @@ primary_target: "src/pages/index.astro"
 related_targets: ["src/pages/[lang]/index.astro","src/pages/[lang]/peru/[slug].astro","src/layouts/Layout.astro"]
 ---
 
-# Surface brief: home + destinations (guia.tourup.co)
+# Surface brief: home + destinations (guide.tourup.co)
 
 Scope: `/` (English home), `/es/` (Spanish home), `/{lang}/peru/` (destinations hub, list layout), `/{lang}/peru/{slug}/` (destination page), plus the shared masthead, nav and footer that every page inherits.
 Mode: Read. Visitors are European and US travelers arriving from search or an AI answer; agencies reach the B2B operator directory from the nav.

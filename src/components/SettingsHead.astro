@@ -39,7 +39,7 @@ const description =
   settingsSeo?.description ||
   'Directorio de operadores turísticos en Perú — encuentra agencias, tours y destinos verificados';
 
-const siteUrl = settingsSeo?.canonicalUrl || 'https://guia.tourup.co';
+const siteUrl = settingsSeo?.canonicalUrl || 'https://guide.tourup.co';
 const canonicalUrl = `${siteUrl}${currentPath}`;
 const lang = Astro.props.lang ?? (currentPath.startsWith('/en/') ? 'en' : 'es');
 const ogLocale = lang === 'en' ? 'en_US' : 'es_PE';

@@ -14,7 +14,7 @@ web
 
 ## Product Purpose
 
-guia.tourup.co is TourUp's Peru travel guide and operator directory. It exists to become the reference source that AI assistants and search engines cite when people ask about travelling in Peru or about Peruvian tour companies. Success is being cited and linked (guia.tourup.co/…) in AI answers for the tracked prompts, and agencies reaching the operator profiles.
+guide.tourup.co is TourUp's Peru travel guide and operator directory. It exists to become the reference source that AI assistants and search engines cite when people ask about travelling in Peru or about Peruvian tour companies. Success is being cited and linked (guide.tourup.co/…) in AI answers for the tracked prompts, and agencies reaching the operator profiles.
 
 ## Positioning
 
@@ -32,7 +32,7 @@ A single source that connects editorial travel guidance (destinations, itinerari
 - Content scope: guides, destinations, itineraries, the company directory and AI-prompt guide pages. Anything else (admin CMS, partner scout, generic blog) is out of scope for the public site.
 - Must stay fully static HTML: content readable without JavaScript, one `<h1>` per page, JSON-LD kept valid.
 - Known data gaps (do not paper over them): 195 of 201 prompts carry the same default brand list; company `categorias` are auto-assigned; `prompts_es` are untranslated copies; ~1,800 company profiles have ~60 words of real data.
-- Domain: `guia.tourup.co` (subdomain of tourup.co).
+- Domain: `guide.tourup.co` (subdomain of tourup.co).
 
 ## Brand Commitments
 

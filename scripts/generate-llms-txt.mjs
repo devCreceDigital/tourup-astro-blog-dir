@@ -16,13 +16,13 @@ import { join, basename } from 'node:path';
 import matter from 'gray-matter';
 import { isOrphanDuplicate, isNamelessTitle, untranslatedEsPromptSlugs } from './lib/content-dedupe.mjs';
 
-export const SITE = (process.env.SITE_URL || 'https://guia.tourup.co').replace(/\/$/, '');
+export const SITE = (process.env.SITE_URL || 'https://guide.tourup.co').replace(/\/$/, '');
 const CONTENT = 'src/content';
 const PUBLIC_DIR = 'public';
 
-const TITLE = 'TourUp Guía — B2B Peru Travel Marketplace';
+const TITLE = 'TourUp Guide — Peru travel guide and tour operator directory';
 const SUMMARY =
-  'Directorio bilingüe (ES/EN) de operadores turísticos en Perú: agencias, DMC y mayoristas, destinos, categorías de tours y respuestas a las consultas más frecuentes de los viajeros en buscadores de IA.';
+  'Peru travel guide for European and US travellers (destination guides, 7 to 14-day itineraries, sustainable travel, answers to frequent questions) and a B2B directory of registered Peruvian tour operators, agencies and DMCs with their tax ID (RUC) and contact details.';
 
 // ── Helpers ─────────────────────────────────────────────────────
 /** Campo string o bilingüe { es, en } → string para el idioma pedido. */
