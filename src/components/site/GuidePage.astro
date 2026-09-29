@@ -56,7 +56,7 @@ const p = photo ? (photos as any)[photo] : null;
       {dek && <p class="g-dek">{dek}</p>}
       {p && (
         <p class="photo-credit g-credit">
-          {lang === 'es' ? 'Foto' : 'Photo'}: <a href={p.source} rel="noopener">{p.credit}</a>, {p.license}
+          {lang === 'es' ? 'Foto' : 'Photo'}: {p.source ? <a href={p.source} rel="noopener">{p.credit}</a> : p.credit}, {p.license}
         </p>
       )}
     </div>
@@ -141,10 +141,19 @@ const p = photo ? (photos as any)[photo] : null;
     grid-template-columns: minmax(0, 1fr) 19rem;
   }
 
+  /* Rótulos de cartel: banda negra, una tinta que rota entre títulos. */
   .g-article :global(h2) {
-    font-size: clamp(1.9rem, 3.4vw, 2.6rem);
+    font-size: clamp(1.8rem, 3.2vw, 2.45rem);
     margin-top: var(--space-5);
+    display: table;
+    background: var(--ink);
+    color: var(--magenta);
+    padding: 0.14em 0.3em 0.04em;
   }
+
+  .g-article :global(h2:nth-of-type(4n + 2)) { color: var(--orange); }
+  .g-article :global(h2:nth-of-type(4n + 3)) { color: var(--green); }
+  .g-article :global(h2:nth-of-type(4n + 4)) { color: var(--yellow); }
 
   .g-article :global(h2:first-child) {
     margin-top: 0;

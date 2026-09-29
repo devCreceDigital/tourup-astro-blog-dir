@@ -113,7 +113,7 @@ const jsonLd = {
       </div>
     </div>
     <p class="d-credit photo-credit">
-      {t('Foto', 'Photo')}: <a href={photo.source} rel="noopener">{photo.credit}</a>, {photo.license}
+      {t('Foto', 'Photo')}: {photo.source ? <a href={photo.source} rel="noopener">{photo.credit}</a> : photo.credit}, {photo.license}
     </p>
   </header>
   <div class="poster-strip" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
@@ -270,7 +270,6 @@ const jsonLd = {
     background: var(--ink);
     padding: var(--space-3) var(--space-4) var(--space-3);
     max-width: 48rem;
-    box-shadow: 0 30px 60px -24px rgb(0 0 0 / 0.6);
   }
 
   .d-title {
@@ -301,9 +300,18 @@ const jsonLd = {
     align-items: start;
   }
 
+  /* Los títulos del artículo son rótulos de cartel: banda negra, una tinta que rota. */
   .d-article :global(h2) {
-    font-size: clamp(2rem, 3.6vw, 2.75rem);
+    font-size: clamp(1.85rem, 3.4vw, 2.6rem);
+    display: table;
+    background: var(--ink);
+    color: var(--magenta);
+    padding: 0.14em 0.3em 0.04em;
   }
+
+  .d-article :global(h2:nth-of-type(4n + 2)) { color: var(--orange); }
+  .d-article :global(h2:nth-of-type(4n + 3)) { color: var(--green); }
+  .d-article :global(h2:nth-of-type(4n + 4)) { color: var(--yellow); }
 
   .d-article :global(h2 + p),
   .d-article :global(h3 + p) {
@@ -470,7 +478,6 @@ const jsonLd = {
 
   .d-related {
     padding-top: var(--space-5);
-    background: var(--paper-2);
   }
 
   .d-related-head {

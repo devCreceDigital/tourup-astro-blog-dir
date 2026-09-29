@@ -22,7 +22,7 @@ const ratio = p.height / p.width;
 <img
   class={className}
   src={`${p.file}-960.webp`}
-  srcset={`${p.file}-960.webp 960w, ${p.file}-1920.webp 1920w`}
+  srcset={`${p.file}-960.webp 960w, ${p.file}-1920.webp ${Math.min(1920, p.width)}w`}
   sizes={sizes}
   width="1920"
   height={Math.round(1920 * ratio)}
@@ -33,6 +33,6 @@ const ratio = p.height / p.width;
 />
 {credit && (
   <p class="photo-credit">
-    Photo: <a href={p.source} rel="noopener">{p.credit}</a>, {p.license}
+    Photo: {p.source ? <a href={p.source} rel="noopener">{p.credit}</a> : p.credit}, {p.license}
   </p>
 )}

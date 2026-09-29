@@ -154,12 +154,14 @@ const rolesText = stats.roles
     </form>
   </div>
   <p class="hero-credit photo-credit">
-    {t('Foto', 'Photo')}: <a href={hero.source} rel="noopener">{hero.credit}</a>, {hero.license}
+    {t('Foto', 'Photo')}: {hero.source ? <a href={hero.source} rel="noopener">{hero.credit}</a> : hero.credit}, {hero.license}
   </p>
   <a class="hero-cue" href="#popular" aria-label={t('Ir a lo más popular', 'Go to most popular')}>
     <svg viewBox="0 0 40 24" width="40" height="24" aria-hidden="true"><path d="M3 4l17 16L37 4" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="square" /></svg>
   </a>
 </section>
+
+<div class="poster-strip" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
 
 <section id="popular" class="popular wrap" aria-labelledby="popular-title">
   <h2 id="popular-title" class="popular-title">
@@ -199,6 +201,8 @@ const rolesText = stats.roles
   </div>
 </section>
 
+<div class="poster-strip" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+
 <section id="itineraries" class="itineraries" aria-labelledby="itin-title">
   <div class="wrap">
     <h2 id="itin-title" class="poster-lines itin-title">
@@ -221,12 +225,17 @@ const rolesText = stats.roles
   </div>
 </section>
 
+<div class="poster-strip" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+
 <section class="questions wrap" aria-labelledby="q-title">
-  <h2 id="q-title">{t('Lo que preguntan los viajeros', 'What travellers ask')}</h2>
+  <h2 id="q-title" class="poster-lines q-title">
+    <span class="ink-black">{t('Lo que preguntan', 'What travellers')}</span>
+    <span class="ink-magenta">{t('los viajeros', 'ask')}</span>
+  </h2>
   <p class="questions-lede">
     {t(
-      'Preguntas reales que los viajeros hacen a ChatGPT y otros asistentes, respondidas con datos del directorio. En inglés.',
-      'Real questions travellers put to ChatGPT and other assistants, answered with directory data.',
+      'Preguntas que los viajeros hacen a los asistentes de IA, respondidas con datos del directorio. En inglés.',
+      'Questions travellers ask AI assistants, answered with directory data.',
     )}
   </p>
   <ul class="question-list">
@@ -242,11 +251,13 @@ const rolesText = stats.roles
   <a class="btn-poster" href={guidesPath('en')}>{t('Todas las preguntas', 'All questions')}</a>
 </section>
 
+<div class="poster-strip" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+
 <section class="directory" aria-labelledby="dir-title">
   <div class="wrap directory-inner">
     <h2 id="dir-title" class="poster-lines dir-title">
       <span class="ink-black">{t('Para agencias', 'For agencies')}</span>
-      <span class="ink-black">{t('y DMC', '& DMCs')}</span>
+      <span class="dir-title-block">{t('y DMC', '& DMCs')}</span>
     </h2>
     <div class="directory-text">
       <p>
@@ -306,7 +317,6 @@ const rolesText = stats.roles
     background: var(--ink);
     padding: clamp(1.25rem, 3vw, 2.25rem) clamp(1.5rem, 4vw, 3rem) clamp(1.25rem, 3vw, 2rem);
     max-width: 44rem;
-    box-shadow: 0 30px 60px -20px rgb(0 0 0 / 0.55);
   }
 
   .hero-title {
@@ -485,8 +495,7 @@ const rolesText = stats.roles
 
   /* ── Destinos ────────────────────────────────────────────────── */
   .destinations {
-    padding-block: var(--space-5);
-    background: var(--paper-2);
+    padding-block: var(--space-6) var(--space-5);
   }
 
   .destinations-head {
@@ -647,6 +656,19 @@ const rolesText = stats.roles
   .dir-title {
     font-size: clamp(3rem, 7vw, 5.5rem);
     margin: 0;
+  }
+
+  /* Segunda línea como bloque invertido de cartel: sobre amarillo, tinta negra con letras amarillas. */
+  .dir-title-block {
+    background: var(--ink);
+    color: var(--yellow);
+    padding: 0.06em 0.14em 0;
+    margin-top: 0.08em;
+  }
+
+  .q-title {
+    font-size: clamp(2.75rem, 6vw, 4.5rem);
+    margin-bottom: var(--space-2);
   }
 
   .directory-text p {

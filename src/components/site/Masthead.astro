@@ -155,14 +155,21 @@ const otherHref = altUrl ?? homePath(other);
   }
 
   @media (max-width: 720px) {
+    /* En móvil el menú pasa a dos filas: todas las secciones visibles, ninguna cortada. */
     .masthead-nav ul {
-      justify-content: flex-start;
-      padding-inline: 0.25rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      overflow: visible;
+      padding-block: 0.25rem;
+    }
+
+    .masthead-nav li + li {
+      border-left: 0;
     }
 
     .masthead-nav a {
       font-size: 1rem;
-      padding: 0.75rem 0.9rem 0.65rem;
+      padding: 0.5rem 0.7rem 0.42rem;
     }
 
     .logotype-mark {
