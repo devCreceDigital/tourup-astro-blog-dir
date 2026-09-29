@@ -170,18 +170,26 @@ describe('JSON-LD: sin marcado engañoso ni duplicado', () => {
 });
 
 describe('fichas de empresa', () => {
-  for (const f of ['src/pages/[lang]/companies/[slug].astro', 'src/pages/[lang]/empresas/[slug].astro']) {
-    const src = read(f);
-    it(`${f}: canonical propio (nunca el de otro idioma)`, () => {
-      expect(src).toContain('canonicalUrl={pageUrl}');
-      expect(src).not.toMatch(/canonicalUrl=\{canonical(En|Es)\}/);
-    });
-    it(`${f}: el nodo de empresa no comparte @id con el WebPage`, () => {
-      expect(src).toContain('#company');
-      expect(src).not.toMatch(/'@id':\s*pageUrl,/);
-    });
-    it(`${f}: sin microdata duplicado del JSON-LD`, () => {
-      expect(src).not.toMatch(/itemscope|itemprop=|itemtype=/);
-    });
-  }
+  const f = 'src/components/site/CompanyProfile.astro';
+  const src = read(f);
+  it('las dos rutas usan la misma plantilla', () => {
+    for (const r of ['src/pages/[lang]/companies/[slug].astro', 'src/pages/[lang]/empresas/[slug].astro']) {
+      expect(read(r)).toContain('<CompanyProfile');
+    }
+  });
+  it('canonical propio: la página de cada idioma se declara a sí misma (nunca la del otro idioma)', () => {
+    expect(src).toMatch(/const path = es \? `\/es\/empresas\/\$\{id\}\/` : `\/en\/companies\/\$\{id\}\/`/);
+    expect(src).toContain('currentPath={path}');
+    expect(src).not.toMatch(/canonicalUrl=/);
+  });
+  it('el nodo de empresa no comparte @id con el WebPage', () => {
+    expect(src).toContain('#company');
+    expect(src).not.toMatch(/'@id':\s*pageUrl,/);
+  });
+  it('sin microdata duplicado del JSON-LD', () => {
+    expect(src).not.toMatch(/itemscope|itemprop=|itemtype=/);
+  });
+  it('no muestra el representante legal (dato personal)', () => {
+    expect(src).not.toContain('legal_representative');
+  });
 });

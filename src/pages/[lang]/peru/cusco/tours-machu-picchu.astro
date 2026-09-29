@@ -1,5 +1,5 @@
 ---
-import Layout from '../../../../layouts/Layout.astro';
+import GuidePage from '../../../../components/site/GuidePage.astro';
 
 export async function getStaticPaths() {
   return [
@@ -12,20 +12,24 @@ interface Props { lang: string; }
 const { lang } = Astro.props;
 ---
 
-<Layout
+<GuidePage
   title={lang === 'en' ? "Best Machu Picchu Tours from Cusco (2026)" : "Mejores tours a Machu Picchu desde Cusco (2026)"}
   description={lang === 'en'
     ? "Compare the best Machu Picchu tours from Cusco in 2026. Full day, 2 days, Inca Trail, group and private. Prices, schedules and tips."
     : "Compara los mejores tours a Machu Picchu desde Cusco en 2026. Full day, 2 días, Camino Inca, grupales y privados. Precios, horarios y consejos."}
   currentPath={`/${lang}/peru/cusco/tours-machu-picchu/`}
   lang={lang}
+  heading={lang === 'en' ? 'Machu Picchu tours from Cusco' : 'Tours a Machu Picchu desde Cusco'}
+  dek={lang === 'en' ? 'Full day, two days or on foot by the Inca Trail: the main ways to reach the citadel from Cusco, how entry works and how to choose.' : 'Full day, dos días o a pie por el Camino Inca: las formas de llegar a la ciudadela desde Cusco, cómo funciona la entrada y cómo elegir.'}
+  photo="machu_picchu"
+  wide
 >
-  <script type="application/ld+json" set:html={JSON.stringify({
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
     "@graph": [
       {
         "@type": "ItemList",
-        "name": lang === 'en' ? "Best Machu Picchu Tours" : "Mejores tours a Machu Picchu",
+        "name": lang === 'en' ? "Machu Picchu tour types from Cusco" : "Tipos de tour a Machu Picchu desde Cusco",
         "numberOfItems": 7,
         "itemListElement": [
           { "@type": "ListItem", "position": 1, "name": lang === 'en' ? "Full Day Machu Picchu" : "Full Day Machu Picchu" },
@@ -40,8 +44,6 @@ const { lang } = Astro.props;
     ]
   })} />
 
-  <article class="geo-page">
-    <h1>{lang === 'en' ? "Best Machu Picchu Tours from Cusco (2026)" : "Mejores tours a Machu Picchu desde Cusco (2026)"}</h1>
 
     <h2>{lang === 'en' ? "Quick Summary: Which Tour to Choose" : "Resumen rápido: qué tour elegir según tu tipo de viaje"}</h2>
     <ul>
@@ -50,7 +52,7 @@ const { lang } = Astro.props;
       <li><strong>{lang === 'en' ? "Premium / Experience (3-4 days):" : "Premium / Experiencia (3-4 días):"}</strong> {lang === 'en' ? "Inca Trail, Salkantay or Inca Jungle. For travelers seeking adventure and reaching Machu Picchu via alternative routes." : "Camino Inca, Salkantay o Inca Jungle. Para viajeros que buscan aventura y llegar a Machu Picchu por rutas alternativas."}</li>
     </ul>
 
-    <h2>{lang === 'en' ? "Top Machu Picchu Tours Selected by Experts" : "Top tours a Machu Picchu seleccionados por expertos"}</h2>
+    <h2>{lang === 'en' ? "The main Machu Picchu tour types" : "Los principales tipos de tour a Machu Picchu"}</h2>
 
     <table>
       <thead>
@@ -103,19 +105,5 @@ const { lang } = Astro.props;
 
     <h3>{lang === 'en' ? "What if Machu Picchu tickets are sold out?" : "¿Qué pasa si los cupos están agotados?"}</h3>
     <p>{lang === 'en' ? "If official tickets are sold out, some operators offer alternatives: Circuit 4 (less demand), the combined ticket, or changing your visit date. Another option is taking a trekking route (Salkantay, Inca Jungle) that includes Machu Picchu entry. Book 1-2 months in advance during high season." : "Si las entradas están agotadas, algunos operadores ofrecen alternativas como cambiar la fecha o tomar una ruta de trekking que incluye la entrada. Se recomienda reservar 1-2 meses antes en temporada alta."}</p>
-  </article>
-</Layout>
+</GuidePage>
 
-<style>
-  .geo-page { max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
-  .geo-page h1 { font-size: 2rem; color: #f1f5f9; margin-bottom: 1.5rem; }
-  .geo-page h2 { font-size: 1.5rem; color: var(--color-primary); margin: 2rem 0 1rem; border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; }
-  .geo-page h3 { font-size: 1.15rem; color: #f1f5f9; margin: 1.5rem 0 0.5rem; }
-  .geo-page p { color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem; }
-  .geo-page ul { color: #cbd5e1; margin-bottom: 1rem; padding-left: 1.5rem; }
-  .geo-page li { margin-bottom: 0.5rem; }
-  .geo-page strong { color: #f1f5f9; }
-  .geo-page table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
-  .geo-page th, .geo-page td { padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--color-border); color: #cbd5e1; }
-  .geo-page th { background: var(--color-dark-light); font-weight: 600; color: #f1f5f9; }
-</style>

@@ -82,11 +82,17 @@ const companies = defineCollection({
 			region: z.string().optional(),
 			country: z.string().default('Peru'),
 			ubigeo_code: z.string().optional(),
+			street_type: z.string().optional().nullable(),
+			street_name: z.string().optional().nullable(),
+			street_number: z.string().optional().nullable(),
+			unit: z.string().optional().nullable(),
 		}).optional().nullable(),
 		regulation: z.object({
 			tax_id: z.string().optional(),
 			license_number: z.string().optional(),
 			license_issue_date: z.string().optional(),
+			// Fecha (AAAAMMDD) del registro oficial del que salen los datos de la ficha.
+			snapshot_date: z.string().optional().nullable(),
 		}).optional().nullable(),
 		legal_representative: z.string().optional(),
 		mentioned_in_prompts: z.array(z.string()).optional(),

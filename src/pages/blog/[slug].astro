@@ -1,14 +1,12 @@
 ---
 import { getCollection } from 'astro:content';
-import Layout from '../../layouts/Layout.astro';
+import GuidePage from '../../components/site/GuidePage.astro';
 import { getLocalizedString } from '../../utils/i18n';
+import { SITE_URL } from '../../utils/seo';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts');
-  return posts.map((post) => ({
-    params: { slug: post.slug },
-    props: { post },
-  }));
+  return posts.map((post) => ({ params: { slug: post.slug }, props: { post } }));
 }
 
 interface Props {
@@ -18,236 +16,55 @@ interface Props {
 const { post } = Astro.props;
 const { Content } = await post.render();
 
-const siteUrl = 'https://guia.tourup.co';
-const pageUrl = `${siteUrl}/blog/${post.slug}/`;
-const postTitle = getLocalizedString(post.data.title, 'es');
-const postDescription = getLocalizedString(post.data.description, 'es');
+// Los artículos del blog están escritos en inglés.
+const lang = 'en' as const;
+const pageUrl = `${SITE_URL}/blog/${post.slug}/`;
+const postTitle = getLocalizedString(post.data.title, lang);
+const postDescription = getLocalizedString(post.data.description, lang);
+const updated = post.data.updatedDate ?? post.data.pubDate;
 
 const articleJsonLd = {
   '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'Article',
-      '@id': pageUrl + '#article',
-      headline: postTitle,
-      description: postDescription,
-      url: pageUrl,
-      ...(post.data.heroImage ? { image: post.data.heroImage } : {}),
-      datePublished: post.data.pubDate,
-      ...(post.data.updatedDate ? { dateModified: post.data.updatedDate } : {}),
-      author: {
-        '@type': 'Organization',
-        '@id': 'https://guia.tourup.co/#organization',
-      },
-      publisher: {
-        '@type': 'Organization',
-        '@id': 'https://guia.tourup.co/#organization',
-      },
-      mainEntityOfPage: { '@id': `${pageUrl}#webpage` },
-      inLanguage: 'es',
-      ...(post.data.tags?.length
-        ? { keywords: post.data.tags.join(', ') }
-        : {}),
-    },
-  ],
+  '@type': 'Article',
+  '@id': `${pageUrl}#article`,
+  headline: postTitle,
+  description: postDescription,
+  url: pageUrl,
+  datePublished: post.data.pubDate,
+  ...(post.data.updatedDate ? { dateModified: post.data.updatedDate } : {}),
+  author: { '@type': 'Organization', '@id': `${SITE_URL}/#organization` },
+  publisher: { '@type': 'Organization', '@id': `${SITE_URL}/#organization` },
+  mainEntityOfPage: { '@id': `${pageUrl}#webpage` },
+  inLanguage: lang,
+  ...(post.data.tags?.length ? { keywords: post.data.tags.join(', ') } : {}),
 };
 ---
 
-<Layout
-  title={postTitle}
+<GuidePage
+  title={`${postTitle} | TourUp Guide`}
+  heading={postTitle}
+  dek={postDescription}
   description={postDescription}
-  date={(post.data.updatedDate ?? post.data.pubDate)?.toISOString?.()}
   currentPath={`/blog/${post.slug}/`}
+  lang={lang}
+  breadcrumb={postTitle}
+  date={updated?.toISOString?.()}
+  photo="peru"
 >
-  <script type="application/ld+json" set:html={JSON.stringify(articleJsonLd, null, 2)} />
-
-  <article class="post-article">
-    <header class="post-header">
-      <h1>{postTitle}</h1>
-      <p class="post-meta">
-        <time>{new Date(post.data.pubDate).toLocaleDateString('es-PE', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-        })}</time>
-        {post.data.updatedDate && (
-          <span class="updated">
-            Actualizado: {new Date(post.data.updatedDate).toLocaleDateString('es-PE', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            })}
-          </span>
-        )}
-      </p>
-      {post.data.heroImage && (
-        <img src={post.data.heroImage} alt={postTitle} class="hero-image" />
-      )}
-    </header>
-
-    <div class="post-body">
-      <Content />
-    </div>
-
-    {post.data.tags && post.data.tags.length > 0 && (
-      <footer class="post-footer">
-        <div class="post-tags">
-          {post.data.tags.map((tag: string) => (
-            <span class="tag">{tag}</span>
-          ))}
-        </div>
-      </footer>
-    )}
-  </article>
-
-  <nav class="post-nav">
-    <a href="/blog/" class="nav-link">← Volver al Blog</a>
-  </nav>
-</Layout>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(articleJsonLd)} />
+  <p class="post-meta">
+    Updated <time datetime={updated?.toISOString?.().slice(0, 10)}>{updated?.toLocaleDateString?.('en-GB', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
+  </p>
+  <Content />
+  <p><a class="btn-poster" href="/blog/">All guides</a></p>
+</GuidePage>
 
 <style>
-  .post-article {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 2rem 0;
-  }
-
-  .post-header {
-    border-bottom: 1px solid var(--color-border);
-    padding-bottom: 2rem;
-    margin-bottom: 2rem;
-  }
-
-  .post-header h1 {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-    color: #f1f5f9;
-  }
-
   .post-meta {
-    display: flex;
-    gap: 1rem;
-    font-size: 0.95rem;
-    color: #64748b;
-    flex-wrap: wrap;
-  }
-
-  .updated {
-    padding-left: 1rem;
-    border-left: 1px solid var(--color-border);
-  }
-
-  .hero-image {
-    width: 100%;
-    height: auto;
-    max-height: 400px;
-    object-fit: cover;
-    border-radius: 0.75rem;
-    margin-top: 1.5rem;
-  }
-
-  .post-body {
-    font-size: 1.05rem;
-    line-height: 1.8;
-    color: #cbd5e1;
-  }
-
-  .post-body :global(p) {
-    margin-bottom: 1.5rem;
-  }
-
-  .post-body :global(h2) {
-    font-size: 1.75rem;
-    margin: 2rem 0 1rem 0;
-    color: #f1f5f9;
-  }
-
-  .post-body :global(h3) {
-    font-size: 1.35rem;
-    margin: 1.5rem 0 0.75rem 0;
-    color: #f1f5f9;
-  }
-
-  .post-body :global(ul),
-  .post-body :global(ol) {
-    margin-left: 1.5rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .post-body :global(li) {
-    margin-bottom: 0.5rem;
-  }
-
-  .post-body :global(blockquote) {
-    border-left: 4px solid var(--color-primary);
-    padding-left: 1rem;
-    margin: 1.5rem 0;
-    color: #94a3b8;
-    font-style: italic;
-  }
-
-  .post-body :global(code) {
-    background: var(--color-dark-light);
-    padding: 0.2rem 0.5rem;
-    border-radius: 0.25rem;
-    font-family: 'Courier New', monospace;
-    font-size: 0.9rem;
-  }
-
-  .post-body :global(pre) {
-    background: var(--color-dark-light);
-    padding: 1rem;
-    border-radius: 0.5rem;
-    overflow-x: auto;
-    margin-bottom: 1.5rem;
-    border: 1px solid var(--color-border);
-  }
-
-  .post-footer {
-    border-top: 1px solid var(--color-border);
-    padding-top: 2rem;
-    margin-top: 3rem;
-  }
-
-  .post-tags {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-  }
-
-  .tag {
-    display: inline-block;
-    background: rgba(var(--color-primary-rgb), 0.1);
-    color: var(--color-primary);
-    padding: 0.35rem 0.85rem;
-    border-radius: 9999px;
-    font-size: 0.85rem;
-    border: 1px solid rgba(var(--color-primary-rgb), 0.2);
-  }
-
-  .post-nav {
-    margin-top: 3rem;
-    padding-top: 2rem;
-    border-top: 1px solid var(--color-border);
-  }
-
-  .nav-link {
-    color: var(--color-primary);
-    font-weight: 600;
-    transition: transform 0.2s ease;
-  }
-
-  .nav-link:hover {
-    transform: translateX(-4px);
-  }
-
-  @media (max-width: 768px) {
-    .post-header h1 {
-      font-size: 1.75rem;
-    }
-
-    .post-body {
-      font-size: 1rem;
-    }
+    font-family: var(--font-poster);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-2);
   }
 </style>

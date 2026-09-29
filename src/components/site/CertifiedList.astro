@@ -1,0 +1,120 @@
+---
+/**
+ * Lista de empresas con certificación de sostenibilidad: sello, certificadora, estado
+ * calculado hoy, vigencia y enlace al registro oficial (y a la ficha si existe).
+ */
+import type { Locale } from '../../utils/i18n';
+import { companyPath } from '../../utils/seo';
+import {
+  certStatus,
+  certificationLabel,
+  statusLabel,
+  typeLabel,
+  type Certification,
+} from '../../utils/sustainability';
+
+interface Props {
+  certs: Certification[];
+  lang: Locale;
+  /** Mostrar la región/lugar de cada empresa. */
+  showPlace?: boolean;
+}
+
+const { certs, lang, showPlace = true } = Astro.props;
+const es = lang === 'es';
+const fmt = (d: string | null) =>
+  d ? new Date(`${d}T12:00:00Z`).toLocaleDateString(es ? 'es-PE' : 'en-GB', { year: 'numeric', month: 'short', day: 'numeric' }) : null;
+const rows = certs.map((c) => ({ ...c, status: certStatus(c) }));
+---
+
+<ul class="cert-list">
+  {rows.map((c) => (
+    <li class={`cert cert--${c.status}`}>
+      <div class="cert-name">
+        {c.companyIds.length > 0 ? <a href={companyPath(lang, c.companyIds[0])}>{c.company}</a> : <span>{c.company}</span>}
+        {showPlace && (c.place || c.region) && <span class="cert-place">{[typeLabel(c.type, lang), c.place ?? c.region].filter(Boolean).join(' · ')}</span>}
+      </div>
+      <div class="cert-seal">
+        <strong>{certificationLabel(c, lang)}</strong>
+        <span>{[c.certifier, c.level && c.level !== 'Certified' ? c.level : null].filter(Boolean).join(' · ')}</span>
+      </div>
+      <div class="cert-status">
+        <span class="cert-badge">{statusLabel(c.status, lang)}</span>
+        {c.validUntil && <span>{es ? 'Hasta' : 'Until'} {fmt(c.validUntil)}</span>}
+        {c.source && <a href={c.source} rel="noopener nofollow">{es ? 'Ver en el registro' : 'Check the register'}</a>}
+      </div>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .cert-list {
+    list-style: none;
+    padding: 0;
+    margin: var(--space-2) 0 var(--space-4);
+    border-top: 2px solid var(--ink);
+  }
+
+  .cert {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: 0.35rem var(--space-3);
+    padding: 0.85rem 0;
+    border-bottom: 1px solid var(--rule);
+    font-size: 0.95rem;
+  }
+
+  .cert-name,
+  .cert-seal,
+  .cert-status {
+    display: grid;
+    align-content: start;
+    gap: 0.15rem;
+  }
+
+  .cert-name > a,
+  .cert-name > span:first-child {
+    font-weight: 650;
+    color: var(--ink);
+  }
+
+  .cert-place,
+  .cert-seal span,
+  .cert-status > span:not(.cert-badge) {
+    color: var(--text-2);
+    font-size: 0.88rem;
+  }
+
+  .cert-badge {
+    justify-self: start;
+    font-family: var(--font-poster);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 0.9rem;
+    padding: 0.1rem 0.5rem 0.05rem;
+    background: var(--green);
+    color: var(--ink);
+  }
+
+  .cert--expiring .cert-badge {
+    background: var(--yellow);
+  }
+
+  .cert--valid-undated .cert-badge {
+    background: var(--teal);
+  }
+
+  .cert--expired .cert-badge,
+  .cert--terminated .cert-badge,
+  .cert--not-certified .cert-badge {
+    background: var(--paper-2);
+    color: var(--text-2);
+  }
+
+  @media (max-width: 760px) {
+    .cert {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,201 @@
+---
+/**
+ * Página de guía editorial (FAQ, tours, artículos): cabecera negra con título de cartel y foto
+ * opcional, y columna de lectura. Pasa todas las props de SEO a Layout.
+ */
+import Layout from '../../layouts/Layout.astro';
+import Photo from './Photo.astro';
+import photos from '../../data/photos.json';
+import type { Locale } from '../../utils/i18n';
+
+interface Props {
+  title: string;
+  description: string;
+  currentPath: string;
+  lang: Locale;
+  /** Título visible (h1). Por defecto, el <title>. */
+  heading?: string;
+  /** Entradilla bajo el título. */
+  dek?: string;
+  photo?: string;
+  breadcrumb?: string;
+  date?: string;
+  noindex?: boolean;
+  /** URLs de la misma página en cada idioma, cuando el path no coincide entre idiomas. */
+  alternates?: { es: string; en: string };
+  /** true = el artículo usa todo el ancho (tablas y listados), sin medida de lectura. */
+  wide?: boolean;
+}
+
+const { title, description, currentPath, lang, heading = title, dek, photo, breadcrumb, date, noindex, alternates, wide = false } = Astro.props;
+const hreflangOverrides = alternates ? { es: alternates.es, en: alternates.en, 'x-default': alternates.en } : undefined;
+const p = photo ? (photos as any)[photo] : null;
+---
+
+<Layout
+  title={title}
+  description={description}
+  currentPath={currentPath}
+  lang={lang}
+  breadcrumb={breadcrumb}
+  date={date}
+  noindex={noindex}
+  hreflangOverrides={hreflangOverrides}
+  image={p ? `${p.file}-1920.webp` : undefined}
+  bleed
+>
+  <slot name="head" slot="head" />
+  <header class={`g-head ${p ? 'g-head--photo' : ''}`}>
+    {p && (
+      <div class="g-photo">
+        <Photo name={photo!} eager sizes="(max-width: 900px) 100vw, 50vw" />
+      </div>
+    )}
+    <div class="g-band">
+      <h1 class="g-title">{heading}</h1>
+      {dek && <p class="g-dek">{dek}</p>}
+      {p && (
+        <p class="photo-credit g-credit">
+          {lang === 'es' ? 'Foto' : 'Photo'}: <a href={p.source} rel="noopener">{p.credit}</a>, {p.license}
+        </p>
+      )}
+    </div>
+  </header>
+  <div class="poster-strip" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+  <div class="wrap g-body">
+    <article class={`g-article ${wide ? 'g-article--wide' : 'prose'}`}>
+      <slot />
+    </article>
+    {Astro.slots.has('aside') && (
+      <aside class="g-aside">
+        <slot name="aside" />
+      </aside>
+    )}
+  </div>
+</Layout>
+
+<style>
+  .g-head {
+    background: var(--ink);
+    color: var(--on-ink);
+  }
+
+  .g-head--photo {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    min-height: 420px;
+  }
+
+  .g-photo {
+    position: relative;
+    min-height: 260px;
+  }
+
+  .g-photo :global(img) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .g-band {
+    align-self: end;
+    padding: var(--space-5) var(--gutter) var(--space-4);
+    max-width: calc(var(--wrap) / 2 + 4rem);
+  }
+
+  .g-head:not(.g-head--photo) .g-band {
+    max-width: var(--wrap);
+    margin-inline: auto;
+    width: 100%;
+  }
+
+  .g-title {
+    color: var(--yellow);
+    font-size: clamp(2.6rem, 5.5vw, 4.75rem);
+    font-weight: 900;
+    line-height: 0.92;
+    margin: 0 0 var(--space-2);
+  }
+
+  .g-dek {
+    color: var(--on-ink);
+    font-size: 1.12rem;
+    max-width: 52ch;
+    margin: 0;
+  }
+
+  .g-credit {
+    margin: var(--space-3) 0 0;
+  }
+
+  .g-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-5);
+    padding-block: var(--space-5) var(--space-6);
+  }
+
+  .g-body:has(.g-aside) {
+    grid-template-columns: minmax(0, 1fr) 19rem;
+  }
+
+  .g-article :global(h2) {
+    font-size: clamp(1.9rem, 3.4vw, 2.6rem);
+    margin-top: var(--space-5);
+  }
+
+  .g-article :global(h2:first-child) {
+    margin-top: 0;
+  }
+
+  .g-article :global(h3) {
+    font-size: 1.45rem;
+    margin-top: var(--space-3);
+    margin-bottom: 0.4rem;
+  }
+
+  .g-article :global(table) {
+    margin: var(--space-3) 0 var(--space-4);
+    font-size: 0.95rem;
+  }
+
+  .g-article :global(td:first-child) {
+    font-weight: 600;
+  }
+
+  .g-article--wide > :global(p),
+  .g-article--wide > :global(ul:not([class])) {
+    max-width: var(--measure);
+  }
+
+  .g-aside {
+    position: sticky;
+    top: var(--space-3);
+    align-self: start;
+  }
+
+  @media (max-width: 900px) {
+    .g-head--photo {
+      grid-template-columns: 1fr;
+    }
+
+    .g-band {
+      padding-top: var(--space-4);
+    }
+
+    .g-body:has(.g-aside) {
+      grid-template-columns: 1fr;
+    }
+
+    .g-aside {
+      position: static;
+    }
+
+    .g-article :global(table) {
+      display: block;
+      overflow-x: auto;
+    }
+  }
+</style>
