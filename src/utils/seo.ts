@@ -42,6 +42,8 @@ const LABELS: Record<string, Record<Locale, string>> = {
   peru: { es: 'Destinos', en: 'Destinations' },
   destinos: { es: 'Destinos', en: 'Destinations' },
   destinations: { es: 'Destinos', en: 'Destinations' },
+  sustainability: { es: 'Sostenibilidad', en: 'Sustainability' },
+  sostenibilidad: { es: 'Sostenibilidad', en: 'Sustainability' },
   empresas: { es: 'Empresas', en: 'Companies' },
   companies: { es: 'Empresas', en: 'Companies' },
   'ai-prompts': { es: 'Prompts de IA', en: 'AI prompts' },

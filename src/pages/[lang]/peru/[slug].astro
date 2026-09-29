@@ -14,6 +14,9 @@ import { SITE_URL, companyPath } from '../../../utils/seo';
 import { DESTINATION_ORDER, destinationsPath, directoryPath, itineraryPath } from '../../../data/site';
 import { categoryLabel, itinerariesFor, operatorsIn } from '../../../utils/graph';
 import photos from '../../../data/photos.json';
+import sustainability from '../../../data/sustainability.json';
+import { currentCertificationsIn, recognitionsFor, certificationLabel, type Certification, type RecognizedDestination } from '../../../utils/sustainability';
+import { sustainabilityPath } from '../../../data/sustainable-itineraries';
 
 export async function getStaticPaths() {
   const destinos = await getCollection('destinos');
@@ -52,6 +55,8 @@ const categories = allCatDest
   .sort((a, b) => a.name.localeCompare(b.name, lang));
 
 const itineraries = itinerariesFor(slug);
+const recognitions = recognitionsFor(sustainability.recognizedDestinations as RecognizedDestination[], slug);
+const certified = currentCertificationsIn(sustainability.certifications as Certification[], slug);
 const faq = (d.faq ?? []) as { question: any; answer: any }[];
 const related = DESTINATION_ORDER.filter((s) => s !== slug).slice(0, 5);
 
@@ -157,6 +162,34 @@ const jsonLd = {
           <p><a href={`/${lang}/peru/cusco/tours-machu-picchu/`}>{t('Tours a Machu Picchu desde Cusco', 'Machu Picchu tours from Cusco')}</a></p>
         </div>
       ) : null}
+
+      {(recognitions.length > 0 || certified.length > 0) && (
+        <div class="d-card">
+          <h2>{t('Sostenibilidad', 'Sustainability')}</h2>
+          {recognitions.length > 0 && (
+            <ul>
+              {recognitions.map((r) => (
+                <li>{r.organization}: {r.recognition} ({r.year})</li>
+              ))}
+            </ul>
+          )}
+          {certified.length > 0 && (
+            <p class="d-cert-count">
+              {certified.length === 1
+                ? t('1 empresa con certificación de sostenibilidad vigente en la región:', '1 business with a valid sustainability certification in the region:')
+                : t(`${certified.length} empresas con certificación de sostenibilidad vigente en la región:`, `${certified.length} businesses with a valid sustainability certification in the region:`)}
+            </p>
+          )}
+          {certified.length > 0 && (
+            <ul>
+              {certified.map((c) => (
+                <li>{c.source ? <a href={c.source} rel="noopener nofollow">{c.company}</a> : c.company} <span class="d-cert-seal">{certificationLabel(c, lang)}</span></li>
+              ))}
+            </ul>
+          )}
+          <p><a href={sustainabilityPath(lang)}>{t('Turismo sostenible en Perú', 'Sustainable travel in Peru')}</a></p>
+        </div>
+      )}
 
       {categories.length > 0 && (
         <div class="d-card">
@@ -345,6 +378,22 @@ const jsonLd = {
 
   .d-card p {
     margin: 0;
+  }
+
+  .d-cert-count {
+    margin: 0.6rem 0 0.35rem !important;
+    font-size: 0.95rem;
+  }
+
+  .d-cert-seal {
+    display: block;
+    color: var(--text-2);
+    font-size: 0.85rem;
+  }
+
+  .d-card p + p,
+  .d-card ul + p {
+    margin-top: 0.6rem;
   }
 
   .d-chips {

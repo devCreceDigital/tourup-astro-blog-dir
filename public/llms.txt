@@ -2,23 +2,29 @@
 
 > Directorio bilingüe (ES/EN) de operadores turísticos en Perú: agencias, DMC y mayoristas, destinos, categorías de tours y respuestas a las consultas más frecuentes de los viajeros en buscadores de IA.
 
-Cada página existe en español (`/es/`) y en inglés (`/en/`). Las fichas de empresa incluyen datos de contacto, licencias y métricas B2B. Para el detalle completo de destinos, categorías, empresas y prompts consulta `llms-full.txt`.
+The guide is in English (primary) and Spanish (`/es/`). Company profiles show registry data (RUC tax ID, address, contact). Sustainability data (certifications and recognised destinations) comes from the TourVerificado registry, with each certifier as source. Full detail in `llms-full.txt`.
 
 ## Secciones principales
 
+- [Home (EN)](https://guia.tourup.co/)
 - [Inicio (ES)](https://guia.tourup.co/es/)
-- [Home (EN)](https://guia.tourup.co/en/)
+- [Destinations in Peru](https://guia.tourup.co/en/destinations/): every destination guide, with the registered companies operating there
+- [Destinos de Perú](https://guia.tourup.co/es/destinos/)
+- [Sustainable travel in Peru](https://guia.tourup.co/en/sustainability/): companies with a valid sustainability certification, Green Destinations recognitions, sustainable itineraries
+- [Turismo sostenible en Perú](https://guia.tourup.co/es/sostenibilidad/)
+- [Sustainable itinerary: 1 day](https://guia.tourup.co/en/sustainability/1-day/)
+- [Sustainable itinerary: 7 days (northern Peru)](https://guia.tourup.co/en/sustainability/7-days/)
+- [Sustainable itinerary: 14 days (southern Peru)](https://guia.tourup.co/en/sustainability/14-days/)
+- [Company directory](https://guia.tourup.co/en/companies/): tour operators, agencies and DMCs in Peru (B2B)
 - [Directorio de empresas](https://guia.tourup.co/es/empresas/): operadores, agencias y DMC de Perú
-- [Company directory](https://guia.tourup.co/en/companies/): tour operators, agencies and DMCs in Peru
-- [Prompts de IA (ES)](https://guia.tourup.co/es/ai-prompts/): consultas frecuentes de viajeros y marcas que citan los buscadores de IA
-- [AI prompts (EN)](https://guia.tourup.co/en/ai-prompts/): frequent traveler queries and the brands AI search engines cite
+- [AI prompts (EN)](https://guia.tourup.co/en/ai-prompts/): frequent traveller queries and the brands AI assistants cite
 - [Preguntas frecuentes sobre Perú](https://guia.tourup.co/es/peru/preguntas-frecuentes/)
 - [Peru FAQ](https://guia.tourup.co/en/peru/preguntas-frecuentes/)
 - [Itinerario de 7 días](https://guia.tourup.co/es/peru/itinerario-7-dias/)
 - [Itinerario de 10 días](https://guia.tourup.co/es/peru/itinerario-10-dias/)
 - [Itinerario de 14 días](https://guia.tourup.co/es/peru/itinerario-14-dias/)
 - [Tours a Machu Picchu desde Cusco](https://guia.tourup.co/es/peru/cusco/tours-machu-picchu/)
-- [Blog](https://guia.tourup.co/blog/)
+- [Guides](https://guia.tourup.co/blog/)
 
 ## Destinos (ES)
 

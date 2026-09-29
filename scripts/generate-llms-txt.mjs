@@ -57,7 +57,8 @@ const link = (label, url, note) => `- [${label}](${url})${note ? `: ${note}` : '
 
 // ── URLs (deben coincidir con src/pages) ────────────────────────
 export const urls = {
-  home: (lang) => `${SITE}/${lang}/`,
+  // El inglés es el idioma principal: su portada es `/` (/en/ redirige allí).
+  home: (lang) => (lang === 'en' ? `${SITE}/` : `${SITE}/es/`),
   destino: (lang, slug) => `${SITE}/${lang}/peru/${slug}/`,
   categoria: (lang, destino, cat) => `${SITE}/${lang}/peru/${destino}/tours/${cat}/`,
   company: (lang, slug) => `${SITE}/${lang}/${lang === 'es' ? 'empresas' : 'companies'}/${encodeURIComponent(slug)}/`,
@@ -80,25 +81,31 @@ function buildLlmsTxt() {
   const out = [];
   out.push(`# ${TITLE}`, '', `> ${SUMMARY}`, '');
   out.push(
-    'Cada página existe en español (`/es/`) y en inglés (`/en/`). Las fichas de empresa incluyen datos de contacto, licencias y métricas B2B. Para el detalle completo de destinos, categorías, empresas y prompts consulta `llms-full.txt`.',
+    'The guide is in English (primary) and Spanish (`/es/`). Company profiles show registry data (RUC tax ID, address, contact). Sustainability data (certifications and recognised destinations) comes from the TourVerificado registry, with each certifier as source. Full detail in `llms-full.txt`.',
     '',
   );
 
   out.push('## Secciones principales', '');
   out.push(
-    link('Inicio (ES)', urls.home('es')),
     link('Home (EN)', urls.home('en')),
+    link('Inicio (ES)', urls.home('es')),
+    link('Destinations in Peru', `${SITE}/en/destinations/`, 'every destination guide, with the registered companies operating there'),
+    link('Destinos de Perú', `${SITE}/es/destinos/`),
+    link('Sustainable travel in Peru', `${SITE}/en/sustainability/`, 'companies with a valid sustainability certification, Green Destinations recognitions, sustainable itineraries'),
+    link('Turismo sostenible en Perú', `${SITE}/es/sostenibilidad/`),
+    link('Sustainable itinerary: 1 day', `${SITE}/en/sustainability/1-day/`),
+    link('Sustainable itinerary: 7 days (northern Peru)', `${SITE}/en/sustainability/7-days/`),
+    link('Sustainable itinerary: 14 days (southern Peru)', `${SITE}/en/sustainability/14-days/`),
+    link('Company directory', `${SITE}/en/companies/`, 'tour operators, agencies and DMCs in Peru (B2B)'),
     link('Directorio de empresas', `${SITE}/es/empresas/`, 'operadores, agencias y DMC de Perú'),
-    link('Company directory', `${SITE}/en/companies/`, 'tour operators, agencies and DMCs in Peru'),
-    link('Prompts de IA (ES)', `${SITE}/es/ai-prompts/`, 'consultas frecuentes de viajeros y marcas que citan los buscadores de IA'),
-    link('AI prompts (EN)', `${SITE}/en/ai-prompts/`, 'frequent traveler queries and the brands AI search engines cite'),
+    link('AI prompts (EN)', `${SITE}/en/ai-prompts/`, 'frequent traveller queries and the brands AI assistants cite'),
     link('Preguntas frecuentes sobre Perú', `${SITE}/es/peru/preguntas-frecuentes/`),
     link('Peru FAQ', `${SITE}/en/peru/preguntas-frecuentes/`),
     link('Itinerario de 7 días', `${SITE}/es/peru/itinerario-7-dias/`),
     link('Itinerario de 10 días', `${SITE}/es/peru/itinerario-10-dias/`),
     link('Itinerario de 14 días', `${SITE}/es/peru/itinerario-14-dias/`),
     link('Tours a Machu Picchu desde Cusco', `${SITE}/es/peru/cusco/tours-machu-picchu/`),
-    link('Blog', `${SITE}/blog/`),
+    link('Guides', `${SITE}/blog/`),
     '',
   );
 

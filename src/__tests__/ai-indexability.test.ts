@@ -30,7 +30,13 @@ function extractUrls(content: string): string[] {
 
 /** Solo rutas que existen realmente en src/pages. */
 const ROUTES: RegExp[] = [
-  /^\/(es|en)\/$/,
+  // Portada inglesa en `/`; `/en/` es una redirección y no debe anunciarse.
+  /^\/$/,
+  /^\/es\/$/,
+  /^\/en\/destinations\/$/,
+  /^\/es\/destinos\/$/,
+  /^\/en\/sustainability\/((1-day|7-days|14-days)\/)?$/,
+  /^\/es\/sostenibilidad\/((1-dia|7-dias|14-dias)\/)?$/,
   /^\/es\/empresas\/$/,
   /^\/en\/companies\/$/,
   /^\/(es|en)\/ai-prompts\/$/,

@@ -25,6 +25,7 @@ export function navItems(lang: Locale) {
     { label: es ? 'Destinos' : 'Destinations', href: destinationsPath(lang), match: /\/(destinations|destinos)\/|\/peru\/(?!itinerario|preguntas)/ },
     { label: es ? 'Itinerarios' : 'Itineraries', href: `${homePath(lang)}#itineraries`, match: /itinerario/ },
     { label: es ? 'Guías' : 'Guides', href: guidesPath(lang), match: /ai-prompts|blog|preguntas-frecuentes/ },
+    { label: es ? 'Sostenibilidad' : 'Sustainability', href: es ? '/es/sostenibilidad/' : '/en/sustainability/', match: /sustainability|sostenibilidad/ },
     { label: es ? 'Directorio de operadores' : 'Operator directory', href: directoryPath(lang), match: /companies|empresas/ },
   ];
 }

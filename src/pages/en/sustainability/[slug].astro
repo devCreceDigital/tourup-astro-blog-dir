@@ -1,0 +1,12 @@
+---
+import SustainableItineraryPage from '../../../components/site/SustainableItineraryPage.astro';
+import { SUSTAINABLE_ITINERARIES } from '../../../data/sustainable-itineraries';
+
+export function getStaticPaths() {
+  return SUSTAINABLE_ITINERARIES.map((itinerary) => ({ params: { slug: itinerary.slug.en }, props: { itinerary } }));
+}
+
+const { itinerary } = Astro.props;
+---
+
+<SustainableItineraryPage lang="en" itinerary={itinerary} />
