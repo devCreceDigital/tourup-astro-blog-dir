@@ -1,0 +1,176 @@
+---
+/**
+ * Cabecera: barra turquesa TourUp con el logotipo y el cambio de idioma, y la franja negra de
+ * navegación. Funciona sin JavaScript; en móvil la navegación se desplaza en horizontal.
+ */
+import type { Locale } from '../../utils/i18n';
+import { homePath, navItems } from '../../data/site';
+
+interface Props {
+  lang: Locale;
+  currentPath: string;
+  /** URL de la misma página en el otro idioma, si existe. */
+  altUrl?: string | null;
+}
+
+const { lang, currentPath, altUrl } = Astro.props;
+const items = navItems(lang);
+const other: Locale = lang === 'en' ? 'es' : 'en';
+const otherHref = altUrl ?? homePath(other);
+---
+
+<header class="masthead">
+  <div class="masthead-bar">
+    <div class="wrap masthead-row">
+      <a class="logotype" href={homePath(lang)} aria-label={lang === 'es' ? 'TourUp Guía, inicio' : 'TourUp Guide, home'}>
+        <span class="logotype-mark">TourUp</span>
+        <span class="logotype-sub">{lang === 'es' ? 'Guía de Perú' : 'Peru Guide'}</span>
+      </a>
+      <nav class="lang-switch" aria-label={lang === 'es' ? 'Idioma' : 'Language'}>
+        <a href={lang === 'en' ? currentPath : otherHref} aria-current={lang === 'en' ? 'true' : undefined} hreflang="en" lang="en">EN</a>
+        <a href={lang === 'es' ? currentPath : otherHref} aria-current={lang === 'es' ? 'true' : undefined} hreflang="es" lang="es">ES</a>
+      </nav>
+    </div>
+  </div>
+  <nav class="masthead-nav" aria-label={lang === 'es' ? 'Secciones' : 'Sections'}>
+    <ul class="wrap">
+      {items.map((item) => (
+        <li>
+          <a href={item.href} aria-current={item.match.test(currentPath) ? 'page' : undefined}>{item.label}</a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+</header>
+
+<style>
+  .masthead-bar {
+    background: var(--teal);
+    color: var(--ink);
+  }
+
+  .masthead-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 56px;
+  }
+
+  .logotype {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.55rem;
+    color: var(--ink);
+    text-decoration: none;
+    font-family: var(--font-poster);
+    text-transform: uppercase;
+    line-height: 1;
+  }
+
+  .logotype:hover {
+    color: var(--ink);
+  }
+
+  .logotype-mark {
+    font-weight: 900;
+    font-size: 1.9rem;
+    letter-spacing: -0.005em;
+  }
+
+  .logotype-sub {
+    font-weight: 700;
+    font-size: 1.05rem;
+    letter-spacing: 0.08em;
+    padding: 0.18em 0.45em 0.12em;
+    background: var(--ink);
+    color: var(--yellow);
+  }
+
+  .lang-switch {
+    display: flex;
+    gap: 2px;
+  }
+
+  .lang-switch a {
+    font-family: var(--font-poster);
+    font-weight: 800;
+    font-size: 1rem;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    color: var(--ink);
+    padding: 0.25rem 0.6rem;
+    border: 2px solid transparent;
+  }
+
+  .lang-switch a[aria-current] {
+    border-color: var(--ink);
+  }
+
+  .lang-switch a:hover {
+    background: var(--ink);
+    color: var(--teal);
+  }
+
+  .masthead-nav {
+    background: var(--ink);
+  }
+
+  .masthead-nav ul {
+    list-style: none;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .masthead-nav li + li {
+    border-left: 1px solid #3a3a3a;
+  }
+
+  .masthead-nav a {
+    display: block;
+    white-space: nowrap;
+    font-family: var(--font-poster);
+    font-weight: 800;
+    font-size: 1.12rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--on-ink);
+    padding: 0.8rem 1.35rem 0.7rem;
+    box-shadow: inset 0 -4px 0 transparent;
+    transition: box-shadow 200ms var(--ease-out), color 200ms var(--ease-out);
+  }
+
+  .masthead-nav a:hover {
+    color: var(--yellow);
+    box-shadow: inset 0 -4px 0 var(--magenta);
+  }
+
+  .masthead-nav a[aria-current='page'] {
+    color: var(--yellow);
+    box-shadow: inset 0 -4px 0 var(--yellow);
+  }
+
+  @media (max-width: 720px) {
+    .masthead-nav ul {
+      justify-content: flex-start;
+      padding-inline: 0.25rem;
+    }
+
+    .masthead-nav a {
+      font-size: 1rem;
+      padding: 0.75rem 0.9rem 0.65rem;
+    }
+
+    .logotype-mark {
+      font-size: 1.6rem;
+    }
+
+    .logotype-sub {
+      font-size: 0.9rem;
+    }
+  }
+</style>

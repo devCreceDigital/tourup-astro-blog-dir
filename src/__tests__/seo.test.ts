@@ -6,10 +6,10 @@ import { hreflangAlternates, breadcrumbTrail, companyDescription, companyDisplay
 const read = (rel: string) => fs.readFileSync(path.resolve(rel), 'utf-8');
 
 describe('hreflangAlternates', () => {
-  it('home: es, en y x-default apuntan a páginas reales', () => {
+  it('home: la inglesa es `/` (idioma principal) y la española `/es/`', () => {
     expect(hreflangAlternates('/')).toEqual({
       es: `${SITE_URL}/es/`,
-      en: `${SITE_URL}/en/`,
+      en: `${SITE_URL}/`,
       xDefault: `${SITE_URL}/`,
     });
   });
@@ -40,19 +40,25 @@ describe('breadcrumbTrail', () => {
   it('no incluye el idioma como miga ("En") y usa etiquetas legibles', () => {
     const t = breadcrumbTrail('/en/companies/alpaca-expeditions-cusco/', 'en', 'Alpaca Expeditions');
     expect(t.map((c) => c.name)).toEqual(['Home', 'Companies', 'Alpaca Expeditions']);
-    expect(t[0].url).toBe(`${SITE_URL}/en/`);
+    expect(t[0].url).toBe(`${SITE_URL}/`);
   });
 
   it('localiza la miga raíz', () => {
     expect(breadcrumbTrail('/es/ai-prompts/x/', 'es', 'X')[0].name).toBe('Inicio');
   });
 
-  it('/{lang}/peru/ es una redirección: la miga apunta a /{lang}/peru/peru/ sin duplicarse', () => {
-    const t = breadcrumbTrail('/es/peru/peru/', 'es', 'Perú – TourUp');
-    expect(t.map((c) => c.url)).toEqual([`${SITE_URL}/es/`, `${SITE_URL}/es/peru/peru/`]);
+  it('la miga "Destinos" de /{lang}/peru/x/ apunta al índice de destinos del idioma', () => {
     const cusco = breadcrumbTrail('/es/peru/cusco/', 'es', 'Cusco');
-    expect(cusco[1].url).toBe(`${SITE_URL}/es/peru/peru/`);
-    expect(cusco[2].url).toBe(`${SITE_URL}/es/peru/cusco/`);
+    expect(cusco.map((c) => c.url)).toEqual([`${SITE_URL}/es/`, `${SITE_URL}/es/destinos/`, `${SITE_URL}/es/peru/cusco/`]);
+    expect(cusco[1].name).toBe('Destinos');
+    const hub = breadcrumbTrail('/en/destinations/', 'en', 'Destinations');
+    expect(hub.map((c) => c.url)).toEqual([`${SITE_URL}/`, `${SITE_URL}/en/destinations/`]);
+  });
+
+  it('destinations (en) ↔ destinos (es) en hreflang', () => {
+    const a = hreflangAlternates('/es/destinos/')!;
+    expect(a.en).toBe(`${SITE_URL}/en/destinations/`);
+    expect(a.es).toBe(`${SITE_URL}/es/destinos/`);
   });
 
   it('páginas sin prefijo de idioma cuelgan de la raíz', () => {

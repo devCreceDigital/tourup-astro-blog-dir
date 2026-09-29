@@ -1,0 +1,243 @@
+---
+/**
+ * Índice de destinos (/en/destinations/, /es/destinos/): lista editorial con foto a la
+ * izquierda y título, resumen y enlace a la derecha. Orden editorial fijo (data/site.ts).
+ */
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Photo from './Photo.astro';
+import type { Locale } from '../../utils/i18n';
+import { getLocalizedString } from '../../utils/i18n';
+import { DESTINATION_ORDER, INKS, destinationPath, destinationsPath } from '../../data/site';
+import { SITE_URL } from '../../utils/seo';
+import { operatorsIn } from '../../utils/graph';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const es = lang === 'es';
+const t = (esText: string, enText: string) => (es ? esText : enText);
+
+const [destinos, companies] = await Promise.all([
+  getCollection(es ? 'destinos' : 'destinos_en'),
+  getCollection('companies'),
+]);
+const bySlug = new Map(destinos.map((d) => [d.id.replace(/\.md$/i, ''), d]));
+const operatorCount = (slug: string) => operatorsIn(companies, slug, lang).length;
+
+const ordered = [...DESTINATION_ORDER, ...[...bySlug.keys()].filter((s) => s !== 'peru' && !DESTINATION_ORDER.includes(s))]
+  .map((slug) => ({ slug, d: bySlug.get(slug) }))
+  .filter((x) => x.d)
+  .map(({ slug, d }, i) => ({
+    slug,
+    name: getLocalizedString(d!.data.name, lang),
+    region: getLocalizedString(d!.data.region, lang),
+    summary: getLocalizedString(d!.data.summary, lang),
+    operators: operatorCount(slug),
+    ink: INKS[i % INKS.length],
+  }));
+
+const overview = bySlug.get('peru');
+const path = destinationsPath(lang);
+const title = t('Destinos de Perú: guía de viaje por regiones | TourUp', 'Peru destinations: travel guide by region | TourUp Guide');
+const description = t(
+  `${ordered.length} destinos de Perú, de Cusco y Machu Picchu a la Amazonía y la costa norte, con las empresas de turismo registradas que operan en cada uno.`,
+  `${ordered.length} Peru destinations, from Cusco and Machu Picchu to the Amazon and the north coast, with the registered travel companies operating in each.`,
+);
+const itemList = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  '@id': `${SITE_URL}${path}#destinations`,
+  name: t('Destinos de Perú', 'Peru destinations'),
+  numberOfItems: ordered.length,
+  itemListElement: ordered.map((x, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    item: { '@type': 'TouristDestination', name: x.name, url: `${SITE_URL}${destinationPath(lang, x.slug)}` },
+  })),
+};
+---
+
+<Layout title={title} description={description} currentPath={path} lang={lang} breadcrumb={t('Destinos', 'Destinations')} bleed>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(itemList)} />
+
+  <header class="hub-head">
+    <div class="wrap hub-head-inner">
+      <h1 class="poster-lines hub-title">
+        <span class="ink-yellow">{t('Destinos', 'Destinations')}</span>
+        <span class="ink-white">{t('de Perú', 'in Peru')}</span>
+      </h1>
+      <div class="hub-intro">
+        <p>
+          {t(
+            `${ordered.length} lugares, de la costa desértica a los Andes y la Amazonía. Cada guía reúne cuándo ir, cómo moverse y qué empresas registradas operan allí.`,
+            `${ordered.length} places, from the desert coast to the Andes and the Amazon. Each guide covers when to go, how to get around and which registered companies operate there.`,
+          )}
+        </p>
+        {overview && (
+          <a class="btn-poster btn-poster--on-ink" href={destinationPath(lang, 'peru')}>
+            {t('Perú: por dónde empezar', 'Peru: where to start')}
+          </a>
+        )}
+      </div>
+    </div>
+  </header>
+  <div class="poster-strip" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+
+  <ol class="wrap hub-list">
+    {ordered.map((x) => (
+      <li class={`hub-row hub-row--${x.ink}`}>
+        <a class="hub-photo" href={destinationPath(lang, x.slug)} tabindex="-1" aria-hidden="true">
+          <Photo name={x.slug} sizes="(max-width: 700px) 100vw, 360px" alt="" />
+        </a>
+        <div class="hub-body">
+          <h2 class="hub-name"><a href={destinationPath(lang, x.slug)}>{x.name}</a></h2>
+          <p class="hub-meta">
+            {x.region && x.region !== x.name && <span>{t('Región', 'Region')}: {x.region}</span>}
+            {x.operators > 0 && (
+              <span>{x.operators === 1 ? t('1 empresa registrada', '1 registered company') : t(`${x.operators} empresas registradas`, `${x.operators} registered companies`)}</span>
+            )}
+          </p>
+          <p class="hub-summary">{x.summary}</p>
+          <a class="btn-poster" href={destinationPath(lang, x.slug)} aria-label={`${t('Leer la guía de', 'Read the guide to')} ${x.name}`}>
+            {t('Leer la guía', 'Read the guide')}
+          </a>
+        </div>
+      </li>
+    ))}
+  </ol>
+</Layout>
+
+<style>
+  .hub-head {
+    background: var(--ink);
+    color: var(--on-ink);
+    padding-block: var(--space-5) var(--space-4);
+  }
+
+  .hub-head-inner {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--space-5);
+    align-items: end;
+  }
+
+  .hub-title {
+    font-size: clamp(3.75rem, 10vw, 7.5rem);
+    margin: 0;
+  }
+
+  .hub-intro p {
+    color: var(--on-ink-2);
+    font-size: 1.1rem;
+    max-width: 46ch;
+  }
+
+  .hub-list {
+    list-style: none;
+    margin-block: var(--space-5) var(--space-6);
+    display: grid;
+    gap: 0;
+    max-width: 1080px;
+  }
+
+  .hub-row {
+    display: grid;
+    grid-template-columns: minmax(0, 360px) minmax(0, 1fr);
+    gap: var(--space-4);
+    padding-block: var(--space-4);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .hub-row:first-child {
+    padding-top: 0;
+  }
+
+  .hub-photo {
+    display: block;
+    aspect-ratio: 16 / 11;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .hub-photo :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: scale 600ms var(--ease-out);
+  }
+
+  /* Filo de tinta en la base de la foto: la misma banda del mosaico, en pequeño. */
+  .hub-photo::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 22px;
+    background: var(--row-ink);
+    transform: scaleY(0.36);
+    transform-origin: bottom;
+    transition: transform 380ms var(--ease-out);
+  }
+
+  .hub-row--magenta { --row-ink: var(--magenta); }
+  .hub-row--orange { --row-ink: var(--orange); }
+  .hub-row--yellow { --row-ink: var(--yellow); }
+  .hub-row--green { --row-ink: var(--green); }
+
+  .hub-row:hover .hub-photo :global(img) {
+    scale: 1.04;
+  }
+
+  .hub-row:hover .hub-photo::after {
+    transform: scaleY(1);
+  }
+
+  .hub-name {
+    font-size: clamp(2.25rem, 4.5vw, 3.25rem);
+    margin-bottom: 0.4rem;
+  }
+
+  .hub-name a {
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .hub-name a:hover {
+    color: var(--link);
+    text-decoration: underline;
+    text-decoration-color: var(--row-ink);
+    text-decoration-thickness: 5px;
+  }
+
+  .hub-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.1rem;
+    font-family: var(--font-poster);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 1rem;
+    color: var(--text-2);
+    margin-bottom: 0.7rem;
+  }
+
+  .hub-summary {
+    color: var(--text);
+    max-width: 62ch;
+  }
+
+  @media (max-width: 760px) {
+    .hub-head-inner {
+      grid-template-columns: 1fr;
+      gap: var(--space-2);
+    }
+
+    .hub-row {
+      grid-template-columns: 1fr;
+      gap: var(--space-2);
+    }
+  }
+</style>

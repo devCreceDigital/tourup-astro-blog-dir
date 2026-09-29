@@ -1,0 +1,760 @@
+---
+/**
+ * Portada de la revista (EN en `/`, ES en `/es/`). Estructura fijada por el usuario:
+ * portada con foto y buscador, "Lo más popular", mosaico de destinos, itinerarios,
+ * preguntas de viajeros y el directorio B2B. Todo el contenido sale de datos del repo.
+ */
+import { getCollection } from 'astro:content';
+import Photo from './Photo.astro';
+import DestinationMosaic from './DestinationMosaic.astro';
+import type { Locale } from '../../utils/i18n';
+import { getLocalizedString } from '../../utils/i18n';
+import { directoryStats } from '../../utils/prompts';
+import {
+  ITINERARIES,
+  destinationPath,
+  destinationsPath,
+  directoryPath,
+  guidesPath,
+  itineraryPath,
+} from '../../data/site';
+import photos from '../../data/photos.json';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const es = lang === 'es';
+const t = (esText: string, enText: string) => (es ? esText : enText);
+
+const [companies, destinos, prompts] = await Promise.all([
+  getCollection('companies'),
+  getCollection(es ? 'destinos' : 'destinos_en'),
+  getCollection('prompts'),
+]);
+const stats = directoryStats(companies, lang);
+const destinationCount = destinos.filter((d) => d.id.replace(/\.md$/i, '') !== 'peru').length;
+const hero = (photos as any)['machu-picchu-hero'];
+
+const popular = [
+  {
+    href: itineraryPath(lang, 'itinerario-7-dias'),
+    photo: 'cusco',
+    title: t('Itinerario de 7 días por Perú', '7-day Peru itinerary'),
+    text: t(
+      'Lima, Cusco, el Valle Sagrado y Machu Picchu en una semana, día por día, con presupuesto y variantes.',
+      'Lima, Cusco, the Sacred Valley and Machu Picchu in one week, day by day, with a budget and variations.',
+    ),
+  },
+  {
+    href: itineraryPath(lang, 'itinerario-10-dias'),
+    photo: 'arequipa',
+    title: t('Itinerario de 10 días', '10-day Peru itinerary'),
+    text: t(
+      'Añade Arequipa a la ruta clásica: Lima, Cusco, Valle Sagrado, Machu Picchu y la Ciudad Blanca.',
+      'The classic route plus Arequipa: Lima, Cusco, the Sacred Valley, Machu Picchu and the White City.',
+    ),
+  },
+  {
+    href: itineraryPath(lang, 'itinerario-14-dias'),
+    photo: 'titicaca',
+    title: t('Itinerario de 14 días', '14-day Peru itinerary'),
+    text: t(
+      'Dos semanas de sur a sur: Cusco, Machu Picchu, Arequipa, el cañón del Colca y el lago Titicaca.',
+      'Two weeks across the south: Cusco, Machu Picchu, Arequipa, the Colca Canyon and Lake Titicaca.',
+    ),
+  },
+  {
+    href: `/${lang}/peru/cusco/tours-machu-picchu/`,
+    photo: 'machu_picchu',
+    title: t('Tours a Machu Picchu desde Cusco', 'Machu Picchu tours from Cusco'),
+    text: t(
+      'Full day, dos días, Camino Inca, en grupo o privado: cómo funciona la entrada y qué tour elegir.',
+      'Full day, two days, the Inca Trail, group or private: how entry works and which tour to choose.',
+    ),
+  },
+  {
+    href: `/${lang}/peru/preguntas-frecuentes/`,
+    photo: 'lima',
+    title: t('Preguntas frecuentes antes de viajar', 'Peru travel FAQ'),
+    text: t(
+      'Requisitos de entrada, visados, dinero, propinas, seguro de viaje y transporte interno.',
+      'Entry requirements, visas, money, tipping, travel insurance and getting around.',
+    ),
+  },
+  {
+    href: destinationPath(lang, 'peru'),
+    photo: 'peru',
+    title: t('Perú: por dónde empezar', 'Peru: where to start'),
+    text: t(
+      'Regiones, temporadas, presupuesto por día y cómo combinar costa, Andes y Amazonía.',
+      'Regions, seasons, daily budgets and how to combine the coast, the Andes and the Amazon.',
+    ),
+  },
+  {
+    href: destinationPath(lang, 'puno'),
+    photo: 'puno',
+    title: t('Puno y el lago Titicaca', 'Puno and Lake Titicaca'),
+    text: t(
+      'Las islas flotantes de los Uros, Taquile y cómo llevar la altura: la ciudad está a 3.827 metros.',
+      'The Uros floating islands, Taquile and how to handle the altitude: the city sits at 3,827 metres.',
+    ),
+  },
+  {
+    href: destinationPath(lang, 'iquitos'),
+    photo: 'iquitos',
+    title: t('Iquitos y la Amazonía', 'Iquitos and the Amazon'),
+    text: t(
+      'La ciudad que solo se alcanza por aire o río, y los lodges todo incluido de la selva.',
+      'The city you can only reach by air or river, and the all-inclusive jungle lodges around it.',
+    ),
+  },
+];
+
+// Preguntas reales de viajeros: primero las que tienen menciones propias de IA.
+const questions = prompts
+  .map((p) => ({ slug: p.id.replace(/\.md$/i, ''), title: getLocalizedString(p.data.title, 'en') }))
+  .sort((a, b) => a.title.localeCompare(b.title))
+  .slice(0, 8);
+
+const valley = t('Valle Sagrado', 'Sacred Valley');
+const itineraryRoutes: Record<number, string> = {
+  7: `Lima · Cusco · ${valley} · Machu Picchu`,
+  10: `Lima · Cusco · ${valley} · Machu Picchu · Arequipa`,
+  14: 'Lima · Cusco · Machu Picchu · Arequipa · Colca · Titicaca',
+};
+const rolesText = stats.roles
+  .slice(0, 3)
+  .map((r) => `${r.count} ${r.label}`)
+  .join(es ? ', ' : ', ');
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero-photo">
+    <Photo name="machu-picchu-hero" eager sizes="100vw" alt={t('Machu Picchu entre montañas', 'Machu Picchu among the mountains')} />
+  </div>
+  <div class="hero-inner wrap">
+    <div class="hero-band">
+      <h1 id="hero-title" class="poster-lines hero-title">
+        <span class="ink-magenta">{t('Perú', 'Peru')}</span>
+        <span class="ink-yellow">{t('La guía', 'The guide')}</span>
+      </h1>
+      <p class="hero-lede">
+        {t(
+          `Destinos, itinerarios y respuestas claras para viajar por Perú. Y ${stats.total} empresas de turismo registradas, con su RUC y contacto.`,
+          `Destinations, itineraries and straight answers for travelling in Peru. Plus ${stats.total} registered Peruvian travel companies, with their tax ID and contact details.`,
+        )}
+      </p>
+    </div>
+    <form class="hero-search" action={`/${lang}/search/`} method="get" role="search">
+      <label for="q" class="visually-hidden">{t('Buscar en la guía', 'Search the guide')}</label>
+      <input id="q" name="q" type="search" placeholder={t('Cusco, Camino Inca, agencia en Lima…', 'Cusco, Inca Trail, operator in Lima…')} autocomplete="off" />
+      <button type="submit" class="hero-search-btn">{t('Buscar', 'Search')}</button>
+    </form>
+  </div>
+  <p class="hero-credit photo-credit">
+    {t('Foto', 'Photo')}: <a href={hero.source} rel="noopener">{hero.credit}</a>, {hero.license}
+  </p>
+  <a class="hero-cue" href="#popular" aria-label={t('Ir a lo más popular', 'Go to most popular')}>
+    <svg viewBox="0 0 40 24" width="40" height="24" aria-hidden="true"><path d="M3 4l17 16L37 4" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="square" /></svg>
+  </a>
+</section>
+
+<section id="popular" class="popular wrap" aria-labelledby="popular-title">
+  <h2 id="popular-title" class="popular-title">
+    <span class="popular-title-small">{t('Lo más', 'Most')}</span>
+    <span class="popular-title-big">{t('Leído', 'Popular')}</span>
+  </h2>
+  <ul class="popular-grid">
+    {popular.map((item) => (
+      <li class="story">
+        <a class="story-photo" href={item.href} tabindex="-1" aria-hidden="true">
+          <Photo name={item.photo} sizes="(max-width: 700px) 50vw, 300px" alt="" />
+        </a>
+        <h3 class="story-title"><a href={item.href}>{item.title}</a></h3>
+        <p class="story-text">{item.text}</p>
+        <a class="btn-poster story-btn" href={item.href} aria-label={`${t('Leer', 'Read')}: ${item.title}`}>{t('Leer', 'Read more')}</a>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<section id="destinations" class="destinations" aria-labelledby="dest-title">
+  <div class="wrap destinations-head">
+    <h2 id="dest-title" class="poster-lines dest-title">
+      <span class="ink-black">{t('Adónde', 'Where')}</span>
+      <span class="ink-magenta">{t('ir', 'to go')}</span>
+    </h2>
+    <p>
+      {t(
+        `${destinationCount} destinos, de la costa desértica a la Amazonía. Cada guía enlaza a las empresas registradas que operan allí.`,
+        `${destinationCount} destinations, from the desert coast to the Amazon. Each guide links to the registered companies that operate there.`,
+      )}
+    </p>
+  </div>
+  <DestinationMosaic lang={lang} slugs={['lima', 'arequipa', 'cusco', 'puno', 'iquitos']} />
+  <div class="wrap destinations-foot">
+    <a class="btn-poster" href={destinationsPath(lang)}>{t(`Los ${destinationCount} destinos`, `All ${destinationCount} destinations`)}</a>
+  </div>
+</section>
+
+<section id="itineraries" class="itineraries" aria-labelledby="itin-title">
+  <div class="wrap">
+    <h2 id="itin-title" class="poster-lines itin-title">
+      <span class="ink-yellow">{t('7, 10 o 14', '7, 10 or 14')}</span>
+      <span class="ink-white">{t('días en Perú', 'days in Peru')}</span>
+    </h2>
+    <ol class="itin-list">
+      {ITINERARIES.map((it, i) => (
+        <li class="itin">
+          <a class="itin-link" href={itineraryPath(lang, it.slug)}>
+            <span class={`itin-days ink-${['magenta', 'orange', 'green'][i]}`}>{it.days}</span>
+            <span class="itin-body">
+              <span class="itin-name">{t(`${it.days} días`, `${it.days} days`)}</span>
+              <span class="itin-route">{itineraryRoutes[it.days]}</span>
+            </span>
+          </a>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<section class="questions wrap" aria-labelledby="q-title">
+  <h2 id="q-title">{t('Lo que preguntan los viajeros', 'What travellers ask')}</h2>
+  <p class="questions-lede">
+    {t(
+      'Preguntas reales que los viajeros hacen a ChatGPT y otros asistentes, respondidas con datos del directorio. En inglés.',
+      'Real questions travellers put to ChatGPT and other assistants, answered with directory data.',
+    )}
+  </p>
+  <ul class="question-list">
+    {questions.map((q) => (
+      <li>
+        <a href={`/en/ai-prompts/${q.slug}/`} lang="en">
+          <span>{q.title}</span>
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="3" /></svg>
+        </a>
+      </li>
+    ))}
+  </ul>
+  <a class="btn-poster" href={guidesPath('en')}>{t('Todas las preguntas', 'All questions')}</a>
+</section>
+
+<section class="directory" aria-labelledby="dir-title">
+  <div class="wrap directory-inner">
+    <h2 id="dir-title" class="poster-lines dir-title">
+      <span class="ink-black">{t('Para agencias', 'For agencies')}</span>
+      <span class="ink-black">{t('y DMC', '& DMCs')}</span>
+    </h2>
+    <div class="directory-text">
+      <p>
+        {t(
+          `El directorio reúne ${stats.total} empresas de turismo registradas en Perú: ${rolesText}. Cada ficha muestra el RUC, la dirección y los datos de contacto que publica la fuente oficial, para que puedas comprobar a un socio receptivo antes de trabajar con él.`,
+          `The directory lists ${stats.total} registered Peruvian travel companies: ${rolesText}. Each profile shows the tax ID (RUC), address and contact details from the official source, so you can check a receptive partner before working with them.`,
+        )}
+      </p>
+      <p class="directory-regions">
+        {t('Por región:', 'By region:')}{' '}
+        {stats.regions.slice(0, 5).map((r, i) => (
+          <span>{i > 0 && ' · '}{r.label} <span class="count">{r.count}</span></span>
+        ))}
+      </p>
+      <a class="btn-poster" href={directoryPath(lang)}>{t('Ver el directorio', 'Browse the directory')}</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ── Portada ─────────────────────────────────────────────────── */
+  .hero {
+    position: relative;
+    min-height: min(82vh, 820px);
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    background: var(--ink);
+    isolation: isolate;
+  }
+
+  .hero-photo,
+  .hero-photo :global(img) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+  }
+
+  .hero-photo::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgb(18 18 18 / 0.15) 40%, rgb(18 18 18 / 0.55) 100%);
+  }
+
+  .hero-inner {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-3);
+    padding-block: var(--space-6) var(--space-5);
+  }
+
+  .hero-band {
+    background: var(--ink);
+    padding: clamp(1.25rem, 3vw, 2.25rem) clamp(1.5rem, 4vw, 3rem) clamp(1.25rem, 3vw, 2rem);
+    max-width: 44rem;
+    box-shadow: 0 30px 60px -20px rgb(0 0 0 / 0.55);
+  }
+
+  .hero-title {
+    font-size: clamp(4rem, 12vw, 8.25rem);
+    margin: 0;
+    color: var(--on-ink);
+  }
+
+  .hero-lede {
+    color: var(--on-ink);
+    margin: var(--space-2) 0 0;
+    font-size: clamp(1rem, 1.6vw, 1.15rem);
+    max-width: 44ch;
+  }
+
+  .hero-search {
+    display: flex;
+    width: min(100%, 36rem);
+    background: var(--paper);
+    border: 3px solid var(--ink);
+  }
+
+  .hero-search input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    font: inherit;
+    font-size: 1.05rem;
+    padding: 0.8rem 1rem;
+    color: var(--text);
+    background: transparent;
+  }
+
+  .hero-search input::placeholder {
+    color: var(--text-3);
+  }
+
+  .hero-search input:focus-visible {
+    outline: 3px solid var(--magenta);
+    outline-offset: -3px;
+  }
+
+  .hero-search-btn {
+    border: 0;
+    background: var(--yellow);
+    color: var(--ink);
+    font-family: var(--font-poster);
+    font-weight: 900;
+    font-size: 1.2rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0 1.4rem;
+    cursor: pointer;
+    transition: background-color 180ms var(--ease-out);
+  }
+
+  .hero-search-btn:hover {
+    background: var(--magenta);
+    color: var(--ink);
+  }
+
+  .hero-credit {
+    position: absolute;
+    right: var(--gutter);
+    bottom: 0.6rem;
+    margin: 0;
+    text-shadow: 0 1px 2px rgb(0 0 0 / 0.8);
+  }
+
+  .hero-cue {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    translate: -50% 0;
+    color: var(--magenta);
+    display: grid;
+    place-items: center;
+    padding: 0.25rem;
+  }
+
+  .hero-cue:hover {
+    color: var(--yellow);
+  }
+
+  /* ── Lo más popular ──────────────────────────────────────────── */
+  .popular {
+    display: grid;
+    grid-template-columns: minmax(10rem, 15rem) 1fr;
+    gap: var(--space-4);
+    padding-block: var(--space-6) var(--space-5);
+  }
+
+  .popular-title {
+    display: grid;
+    align-content: start;
+    line-height: 0.85;
+    margin: 0;
+    position: sticky;
+    top: var(--space-3);
+    align-self: start;
+  }
+
+  .popular-title-small {
+    font-size: 2.1rem;
+    color: var(--ink);
+  }
+
+  .popular-title-big {
+    font-size: clamp(3.25rem, 6vw, 4.75rem);
+    font-weight: 900;
+    color: var(--magenta);
+  }
+
+  .popular-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-5) var(--space-3);
+  }
+
+  .story {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .story-photo {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--paper-2);
+    margin-bottom: var(--space-2);
+  }
+
+  .story-photo :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: scale 500ms var(--ease-out);
+  }
+
+  .story:hover .story-photo :global(img) {
+    scale: 1.04;
+  }
+
+  .story-title {
+    font-size: 1.5rem;
+    line-height: 1;
+    margin-bottom: 0.6rem;
+  }
+
+  .story-title a {
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .story-title a:hover {
+    color: var(--link);
+    text-decoration: underline;
+    text-decoration-color: var(--magenta);
+  }
+
+  .story-text {
+    font-size: 0.97rem;
+    color: var(--text-2);
+    flex: 1;
+    margin-bottom: var(--space-2);
+  }
+
+  .story-btn {
+    font-size: 0.95rem;
+  }
+
+  /* ── Destinos ────────────────────────────────────────────────── */
+  .destinations {
+    padding-block: var(--space-5);
+    background: var(--paper-2);
+  }
+
+  .destinations-head {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: end;
+    gap: var(--space-4);
+    margin-bottom: var(--space-4);
+  }
+
+  .dest-title {
+    font-size: clamp(3.5rem, 8vw, 6rem);
+    margin: 0;
+  }
+
+  .destinations-head p {
+    max-width: 46ch;
+    margin: 0;
+    color: var(--text-2);
+  }
+
+  .destinations-foot {
+    margin-top: var(--space-4);
+  }
+
+  /* ── Itinerarios ─────────────────────────────────────────────── */
+  .itineraries {
+    background: var(--ink);
+    color: var(--on-ink);
+    padding-block: var(--space-6);
+  }
+
+  .itin-title {
+    font-size: clamp(3.25rem, 8vw, 6.25rem);
+    margin-bottom: var(--space-4);
+  }
+
+  .itin-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid #3a3a3a;
+  }
+
+  .itin + .itin {
+    border-left: 1px solid #3a3a3a;
+  }
+
+  .itin-link {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-4) var(--space-3);
+    color: var(--on-ink);
+    text-decoration: none;
+    height: 100%;
+    transition: background-color 250ms var(--ease-out);
+  }
+
+  .itin-link:hover {
+    background: #1e1e1e;
+    color: var(--on-ink);
+  }
+
+  .itin-days {
+    font-family: var(--font-poster);
+    font-weight: 900;
+    font-size: clamp(5rem, 9vw, 7.5rem);
+    line-height: 0.8;
+  }
+
+  .itin-name {
+    display: block;
+    font-family: var(--font-poster);
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 1.6rem;
+    line-height: 1;
+    margin-bottom: 0.4rem;
+  }
+
+  .itin-link:hover .itin-name {
+    color: var(--yellow);
+  }
+
+  .itin-route {
+    display: block;
+    color: var(--on-ink-2);
+    font-size: 0.95rem;
+    line-height: 1.45;
+  }
+
+  /* ── Preguntas ───────────────────────────────────────────────── */
+  .questions {
+    padding-block: var(--space-6);
+  }
+
+  .questions-lede {
+    color: var(--text-2);
+    max-width: 60ch;
+  }
+
+  .question-list {
+    list-style: none;
+    padding: 0;
+    margin: var(--space-3) 0 var(--space-4);
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--space-4);
+    border-top: 2px solid var(--ink);
+  }
+
+  .question-list li {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .question-list a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    padding: 0.95rem 0;
+    color: var(--ink);
+    text-decoration: none;
+    font-size: 1.05rem;
+  }
+
+  .question-list a svg {
+    flex: none;
+    color: var(--magenta);
+    transition: translate 220ms var(--ease-out);
+  }
+
+  .question-list a:hover {
+    color: var(--link);
+  }
+
+  .question-list a:hover svg {
+    translate: 4px 0;
+  }
+
+  /* ── Directorio B2B ──────────────────────────────────────────── */
+  .directory {
+    background: var(--yellow);
+    padding-block: var(--space-6);
+  }
+
+  .directory-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
+    gap: var(--space-5);
+    align-items: start;
+  }
+
+  .dir-title {
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    margin: 0;
+  }
+
+  .directory-text p {
+    color: var(--ink);
+    max-width: 58ch;
+  }
+
+  .directory-regions {
+    font-family: var(--font-poster);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 1.15rem;
+  }
+
+  .directory-regions .count {
+    font-family: var(--font-text);
+    font-weight: 600;
+    font-size: 0.95rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .directory .btn-poster:hover {
+    background: var(--ink);
+    color: var(--yellow);
+  }
+
+  @media (max-width: 1020px) {
+    .popular {
+      grid-template-columns: 1fr;
+    }
+
+    .popular-title {
+      position: static;
+      display: flex;
+      align-items: baseline;
+      gap: 0.6rem;
+    }
+
+    .popular-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 760px) {
+    .destinations-head,
+    .directory-inner {
+      grid-template-columns: 1fr;
+      gap: var(--space-2);
+    }
+
+    .itin-list {
+      grid-template-columns: 1fr;
+    }
+
+    .itin + .itin {
+      border-left: 0;
+      border-top: 1px solid #3a3a3a;
+    }
+
+    .question-list {
+      grid-template-columns: 1fr;
+    }
+
+    .hero-credit {
+      bottom: 0.3rem;
+      right: 0.75rem;
+      left: 3.5rem;
+      text-align: right;
+    }
+  }
+
+  @media (max-width: 480px) {
+    /* En móvil, filas compactas: foto pequeña a la izquierda, texto a la derecha. */
+    .popular-grid {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+
+    .story {
+      display: grid;
+      grid-template-columns: 38% 1fr;
+      column-gap: var(--space-2);
+      align-items: start;
+      padding-block: var(--space-2);
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .story-photo {
+      grid-row: 1 / span 3;
+      margin-bottom: 0;
+    }
+
+    .story-title {
+      font-size: 1.3rem;
+    }
+
+    .story-text {
+      font-size: 0.9rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .story-btn {
+      display: none;
+    }
+
+    .hero-search-btn {
+      padding: 0 0.9rem;
+    }
+  }
+</style>

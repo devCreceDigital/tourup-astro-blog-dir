@@ -1,0 +1,38 @@
+---
+/**
+ * Foto de Wikimedia Commons alojada en /public/images/photos (960 y 1920 px, WebP).
+ * Las licencias CC BY / BY-SA exigen atribución visible: `credit` la muestra junto a la foto.
+ */
+import photos from '../../data/photos.json';
+
+interface Props {
+  name: keyof typeof photos | string;
+  alt?: string;
+  sizes?: string;
+  eager?: boolean;
+  class?: string;
+  credit?: boolean;
+}
+
+const { name, alt, sizes = '100vw', eager = false, class: className, credit = false } = Astro.props;
+const p = (photos as Record<string, any>)[name] ?? (photos as Record<string, any>).peru;
+const ratio = p.height / p.width;
+---
+
+<img
+  class={className}
+  src={`${p.file}-960.webp`}
+  srcset={`${p.file}-960.webp 960w, ${p.file}-1920.webp 1920w`}
+  sizes={sizes}
+  width="1920"
+  height={Math.round(1920 * ratio)}
+  alt={alt ?? p.alt}
+  loading={eager ? 'eager' : 'lazy'}
+  fetchpriority={eager ? 'high' : undefined}
+  decoding="async"
+/>
+{credit && (
+  <p class="photo-credit">
+    Photo: <a href={p.source} rel="noopener">{p.credit}</a>, {p.license}
+  </p>
+)}

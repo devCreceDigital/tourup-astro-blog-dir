@@ -17,26 +17,31 @@ export interface Alternates {
 }
 
 /**
- * Alternates hreflang SOLO hacia URLs que existen:
- * - `/`                  → /es/, /en/ (x-default `/`)
+ * Alternates hreflang SOLO hacia URLs que existen. El inglés es el idioma principal: su
+ * portada es `/` (no `/en/`, que redirige a `/`).
+ * - `/`, `/en/`, `/es/`  → en `/`, es `/es/` (x-default `/`)
  * - `/es|en/...`         → mismo path en el otro idioma; `empresas` (es) ↔ `companies` (en)
- * - resto (blog, admin)  → null: no tienen versión por idioma, así que no se emite hreflang.
+ * - resto (blog)         → null: no tienen versión por idioma, así que no se emite hreflang.
  */
 export function hreflangAlternates(currentPath: string, siteUrl = SITE_URL): Alternates | null {
-  if (currentPath === '/') {
-    return { es: `${siteUrl}/es/`, en: `${siteUrl}/en/`, xDefault: `${siteUrl}/` };
+  if (currentPath === '/' || currentPath === '/en/' || currentPath === '/es/') {
+    return { es: `${siteUrl}/es/`, en: `${siteUrl}/`, xDefault: `${siteUrl}/` };
   }
   const m = currentPath.match(/^\/(?:es|en)(\/.*)?$/);
   if (!m) return null;
   const rest = m[1] ?? '/';
   const forLang = (lang: Locale) =>
-    `${siteUrl}/${lang}${rest.replace(/^\/(empresas|companies)(?=\/|$)/, lang === 'es' ? '/empresas' : '/companies')}`;
+    `${siteUrl}/${lang}${rest
+      .replace(/^\/(empresas|companies)(?=\/|$)/, lang === 'es' ? '/empresas' : '/companies')
+      .replace(/^\/(destinos|destinations)(?=\/|$)/, lang === 'es' ? '/destinos' : '/destinations')}`;
   return { es: forLang('es'), en: forLang('en'), xDefault: forLang('en') };
 }
 
 // ── Breadcrumbs ─────────────────────────────────────────────────
 const LABELS: Record<string, Record<Locale, string>> = {
-  peru: { es: 'Perú', en: 'Peru' },
+  peru: { es: 'Destinos', en: 'Destinations' },
+  destinos: { es: 'Destinos', en: 'Destinations' },
+  destinations: { es: 'Destinos', en: 'Destinations' },
   empresas: { es: 'Empresas', en: 'Companies' },
   companies: { es: 'Empresas', en: 'Companies' },
   'ai-prompts': { es: 'Prompts de IA', en: 'AI prompts' },
@@ -58,21 +63,24 @@ export interface Crumb {
 
 /**
  * Migas de pan con etiquetas legibles y en el idioma de la página. El segmento de idioma
- * no es una miga ("En"): la raíz es Inicio/Home → /es/ o /en/. `/{lang}/peru/` es una
- * redirección, así que esa miga apunta a la página real `/{lang}/peru/peru/`.
+ * no es una miga ("En"): la raíz es Home → `/` (inglés) o Inicio → `/es/`. El segmento
+ * `peru` apunta al índice de destinos (/en/destinations/, /es/destinos/).
  */
 export function breadcrumbTrail(currentPath: string, lang: Locale, title?: string, siteUrl = SITE_URL): Crumb[] {
   const parts = currentPath.split('/').filter(Boolean);
   const prefixed = parts[0] === 'es' || parts[0] === 'en';
   const segs = prefixed ? parts.slice(1) : parts;
   const base = prefixed ? `/${parts[0]}/` : '/';
+  const home = prefixed && parts[0] === 'es' ? '/es/' : '/';
 
-  const crumbs: Crumb[] = [{ name: lang === 'en' ? 'Home' : 'Inicio', url: `${siteUrl}${base}` }];
+  const crumbs: Crumb[] = [{ name: lang === 'en' ? 'Home' : 'Inicio', url: `${siteUrl}${home}` }];
   let acc = base;
   segs.forEach((seg, i) => {
     acc += `${seg}/`;
     const isLast = i === segs.length - 1;
-    const url = `${siteUrl}${seg === 'peru' && i === 0 ? `${base}peru/peru/` : acc}`;
+    // /{lang}/peru/ no es una página: la miga "Destinos" apunta al índice de destinos.
+    const hub = lang === 'es' ? '/es/destinos/' : '/en/destinations/';
+    const url = `${siteUrl}${seg === 'peru' && i === 0 && prefixed ? hub : acc}`;
     const name = isLast && title ? title : LABELS[seg]?.[lang] ?? titleCase(seg);
     const prev = crumbs[crumbs.length - 1];
     if (prev.url === url) {

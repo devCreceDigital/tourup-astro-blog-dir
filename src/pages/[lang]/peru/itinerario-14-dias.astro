@@ -1,9 +1,5 @@
 ---
-import NavCmstourup from '../../../components/NavCmstourup.astro';
-import FooterCmstourup from '../../../components/FooterCmstourup.astro';
-import SettingsHead from '../../../components/SettingsHead.astro';
-import SettingsBodyEnd from '../../../components/SettingsBodyEnd.astro';
-import '../../../styles/theme.css';
+import Layout from '../../../layouts/Layout.astro';
 
 export async function getStaticPaths() {
   return [
@@ -30,100 +26,11 @@ const pageDesc = t(
   "Plan 14 days in Peru with this complete itinerary: Lima, Cusco, Sacred Valley, Machu Picchu, Arequipa, Colca Canyon, Puno & Lake Titicaca."
 );
 ---
-
-<!doctype html>
-<html class="light" lang={lang}>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <SettingsHead
-      title={pageTitle}
+<Layout title={pageTitle}
       description={pageDesc}
       currentPath={currentPath}
-      lang={lang}
-    />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    <meta name="robots" content="index, follow" />
-    <style>
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      body { background: var(--color-surface); color: var(--color-on-surface); font-family: 'Plus Jakarta Sans', sans-serif; min-height: 100vh; }
-      .main-grid { max-width: 1200px; margin: 0 auto; padding: 48px 16px; display: grid; grid-template-columns: 1fr; gap: 32px; align-items: start; }
-      @media (min-width: 1024px) { .main-grid { grid-template-columns: 8fr 4fr; gap: 32px; } }
-      .breadcrumbs { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #3e4851; }
-      .breadcrumb-chevron { font-size: 14px !important; line-height: 1; }
-      .breadcrumb-current { font-weight: 600; color: #1b1b1d; }
-      .breadcrumb-path { color: #a6aab0; font-size: 12px; }
-      .hero-section { display: flex; flex-direction: column; gap: 16px; }
-      .hero-title { font-size: 28px; font-weight: 700; letter-spacing: normal; line-height: 36px; color: #1b1b1d; max-width: 768px; }
-      @media (min-width: 768px) { .hero-title { font-size: 48px; font-weight: 800; letter-spacing: -0.02em; line-height: 56px; } }
-      .tags-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
-      .tag { border: 1px solid #e4e2e4; background: #fcf8fb; border-radius: 9999px; padding: 4px 12px; font-size: 12px; font-weight: 500; color: #3e4851; }
-      .tag-fill { background: #f0edef; }
-      .hero-summary { font-size: 14px; line-height: 1.43; color: #3e4851; max-width: 576px; margin-top: 16px; }
-      .hero-actions { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 16px; }
-      .hero-image { width: 100%; margin-top: 24px; border-radius: 12px; border: 1px solid #e4e2e4; overflow: hidden; aspect-ratio: 16/9; background: #dcd9dc; }
-      .hero-image img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1); opacity: 0.9; }
-      .btn-primary { display: inline-block; background: var(--color-primary); color: #ffffff; border-radius: 8px; padding: 12px 24px; font-size: 14px; font-weight: 600; text-decoration: none; transition: background 0.1s; border: none; cursor: pointer; text-align: center; }
-      .btn-primary:hover { background: var(--color-primary-hover); }
-      .btn-ghost { display: inline-block; background: transparent; color: #1b1b1d; border-radius: 8px; padding: 12px 24px; font-size: 14px; font-weight: 600; text-decoration: none; border: 1px solid #e4e2e4; transition: background 0.1s; }
-      .btn-ghost:hover { background: #f0edef; }
-      .btn-full { width: 100%; }
-      .cards-stack { display: flex; flex-direction: column; gap: 24px; }
-      .card { background: #ffffff; border: 1px solid #e4e2e4; border-radius: 12px; padding: 24px; position: relative; overflow: hidden; }
-      .card-accent { position: absolute; left: 0; top: 24px; bottom: 24px; width: 4px; background: var(--color-primary); border-radius: 0 2px 2px 0; }
-      .card-title { font-size: 24px; font-weight: 700; line-height: 32px; color: #1b1b1d; margin-bottom: 24px; padding-left: 16px; letter-spacing: normal; }
-      .card-body { padding-left: 16px; }
-      .it-day { padding: 16px 0; }
-      .it-day + .it-day { border-top: 1px solid #e4e2e4; }
-      .it-day-label { display: inline-block; font-size: 10px; font-weight: 600; color: var(--color-primary); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px; }
-      .it-day h3 { font-size: 16px; font-weight: 600; color: #1b1b1d; margin-bottom: 8px; }
-      .it-day p { font-size: 14px; color: #3e4851; line-height: 1.6; }
-      .budget-list { list-style: none; padding: 0; }
-      .budget-list li { font-size: 14px; color: #3e4851; margin-bottom: 12px; line-height: 1.5; padding-left: 0; }
-      .budget-list li::before { content: "•"; color: var(--color-primary); font-weight: bold; display: inline-block; width: 16px; margin-left: -16px; }
-      .budget-list strong { color: #1b1b1d; font-weight: 600; }
-      .faq-item { padding: 20px 0; }
-      .faq-item-bordered { border-top: 1px solid #e4e2e4; }
-      .faq-q { font-size: 14px; font-weight: 500; color: #1b1b1d; margin-bottom: 8px; }
-      .faq-a { font-size: 14px; color: #3e4851; line-height: 1.5; }
-      .prose p { font-size: 14px; color: #3e4851; line-height: 1.6; margin-bottom: 12px; }
-      .prose ul { margin-bottom: 12px; padding-left: 20px; }
-      .prose li { font-size: 14px; color: #3e4851; margin-bottom: 6px; line-height: 1.5; }
-      .prose strong { color: #1b1b1d; font-weight: 600; }
-      .col-sidebar { display: flex; flex-direction: column; gap: 24px; }
-      @media (min-width: 1024px) { .col-sidebar { position: sticky; top: 88px; } }
-      .sidebar-card { background: #ffffff; border: 1px solid #e4e2e4; border-radius: 12px; padding: 24px; }
-      .sidebar-card-alt { background: #fcf8fb; }
-      .sidebar-label { display: block; font-size: 10px; font-weight: 500; color: #3e4851; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
-      .price-row { display: flex; align-items: baseline; gap: 8px; margin-bottom: 24px; }
-      .price-value { font-size: 32px; font-weight: 700; letter-spacing: -0.02em; color: #1b1b1d; }
-      .price-unit { font-size: 14px; color: #3e4851; }
-      .price-footnote { text-align: center; font-size: 10px; color: #3e4851; margin-top: 8px; margin-bottom: 24px; }
-      .meta-list { display: flex; flex-direction: column; gap: 12px; font-size: 14px; }
-      .meta-row { display: flex; justify-content: space-between; border-bottom: 1px solid #e4e2e4; padding-bottom: 8px; }
-      .meta-label { color: #3e4851; }
-      .meta-value { color: #1b1b1d; font-weight: 500; }
-      .schema-tags { display: flex; flex-wrap: wrap; gap: 8px; font-size: 14px; }
-      .schema-tag { background: #e4e2e4; color: #1b1b1d; padding: 4px 8px; border-radius: 4px; font-size: 12px; }
-      .var-list { display: flex; flex-direction: column; gap: 8px; font-size: 14px; }
-      .var-key { color: #1b1b1d; font-weight: 500; }
-      .var-val { color: #3e4851; }
-      .var-url { word-break: break-all; }
-      .internal-links { list-style: none; display: flex; flex-direction: column; gap: 12px; }
-      .internal-link { display: flex; justify-content: space-between; align-items: center; text-decoration: none; color: #1b1b1d; font-size: 12px; border-bottom: 1px solid #e4e2e4; padding-bottom: 8px; transition: color 0.1s; }
-      .internal-link:hover { color: #3e4851; }
-      .internal-link .material-symbols-outlined { font-size: 14px; color: #a6aab0; }
-      .related-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
-      .related-item { display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px; }
-      .related-item-bordered { border-bottom: 1px solid #e4e2e4; }
-      .related-link { color: #1b1b1d; font-size: 14px; font-weight: 500; text-decoration: none; transition: color 0.1s; }
-      .related-link:hover { color: #3e4851; }
-      .related-path { font-size: 12px; color: #3e4851; }
-
-    </style>
-    <script type="application/ld+json" set:html={JSON.stringify({
+      lang={lang}>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify({
       "@context": "https://schema.org",
       "@type": "Trip",
       "name": t("Itinerario de 14 días por Perú", "14-Day Peru Itinerary"),
@@ -136,22 +43,17 @@ const pageDesc = t(
         { "@type": "City", "name": "Puno" }
       ]
     })} />
-  </head>
 
-  <body>
-
-    <NavCmstourup lang={lang} />
-
-    <main class="main-grid">
+  <div class="main-grid">
 
       <div class="col-main">
 
         <section class="hero-section">
           <div class="breadcrumbs">
             <span>{t('Perú', 'Peru')}</span>
-            <span class="material-symbols-outlined breadcrumb-chevron">chevron_right</span>
+            <span class="bc-sep" aria-hidden="true">/</span>
             <span class="breadcrumb-current">{t('Itinerario 14 días', '14-Day Itinerary')}</span>
-            <span class="material-symbols-outlined breadcrumb-chevron">chevron_right</span>
+            <span class="bc-sep" aria-hidden="true">/</span>
             <span class="breadcrumb-path">/peru/itinerario-14-dias/</span>
           </div>
 
@@ -439,10 +341,10 @@ const pageDesc = t(
         <div class="sidebar-card">
           <span class="sidebar-label">{t('Links Internos', 'Internal Links')}</span>
           <ul class="internal-links">
-            <li><a href={`/${lang}/peru/itinerario-7-dias/`} class="internal-link">/{lang}/peru/itinerario-7-dias/<span class="material-symbols-outlined">arrow_forward</span></a></li>
-            <li><a href={`/${lang}/peru/itinerario-10-dias/`} class="internal-link">/{lang}/peru/itinerario-10-dias/<span class="material-symbols-outlined">arrow_forward</span></a></li>
-            <li><a href={`/${lang}/peru/cusco/`} class="internal-link">/{lang}/peru/cusco/<span class="material-symbols-outlined">arrow_forward</span></a></li>
-            <li><a href={`/${lang}/peru/puno/`} class="internal-link">/{lang}/peru/puno/<span class="material-symbols-outlined">arrow_forward</span></a></li>
+            <li><a href={`/${lang}/peru/itinerario-7-dias/`} class="internal-link">/{lang}/peru/itinerario-7-dias/</a></li>
+            <li><a href={`/${lang}/peru/itinerario-10-dias/`} class="internal-link">/{lang}/peru/itinerario-10-dias/</a></li>
+            <li><a href={`/${lang}/peru/cusco/`} class="internal-link">/{lang}/peru/cusco/</a></li>
+            <li><a href={`/${lang}/peru/puno/`} class="internal-link">/{lang}/peru/puno/</a></li>
           </ul>
         </div>
 
@@ -473,12 +375,80 @@ const pageDesc = t(
         </div>
 
       </aside>
-    </main>
+    </div>
+</Layout>
 
-    <FooterCmstourup lang={lang} />
-    <SettingsBodyEnd />
-
-  </body>
-</html>
-
-
+<style>
+.main-grid { max-width: 1200px; margin: 0 auto; padding: 48px 16px; display: grid; grid-template-columns: 1fr; gap: 32px; align-items: start; }
+      @media (min-width: 1024px) { .main-grid { grid-template-columns: 8fr 4fr; gap: 32px; } }
+      .breadcrumbs { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #3e4851; }
+      .breadcrumb-chevron { font-size: 14px !important; line-height: 1; }
+      .breadcrumb-current { font-weight: 600; color: #1b1b1d; }
+      .breadcrumb-path { color: #a6aab0; font-size: 12px; }
+      .hero-section { display: flex; flex-direction: column; gap: 16px; }
+      .hero-title { font-size: 28px; font-weight: 700; letter-spacing: normal; line-height: 36px; color: #1b1b1d; max-width: 768px; }
+      @media (min-width: 768px) { .hero-title { font-size: 48px; font-weight: 800; letter-spacing: -0.02em; line-height: 56px; } }
+      .tags-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+      .tag { border: 1px solid #e4e2e4; background: #fcf8fb; border-radius: 9999px; padding: 4px 12px; font-size: 12px; font-weight: 500; color: #3e4851; }
+      .tag-fill { background: #f0edef; }
+      .hero-summary { font-size: 14px; line-height: 1.43; color: #3e4851; max-width: 576px; margin-top: 16px; }
+      .hero-actions { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 16px; }
+      .hero-image { width: 100%; margin-top: 24px; border-radius: 12px; border: 1px solid #e4e2e4; overflow: hidden; aspect-ratio: 16/9; background: #dcd9dc; }
+      .hero-image img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1); opacity: 0.9; }
+      .btn-primary { display: inline-block; background: var(--color-primary); color: #ffffff; border-radius: 8px; padding: 12px 24px; font-size: 14px; font-weight: 600; text-decoration: none; transition: background 0.1s; border: none; cursor: pointer; text-align: center; }
+      .btn-primary:hover { background: var(--color-primary-hover); }
+      .btn-ghost { display: inline-block; background: transparent; color: #1b1b1d; border-radius: 8px; padding: 12px 24px; font-size: 14px; font-weight: 600; text-decoration: none; border: 1px solid #e4e2e4; transition: background 0.1s; }
+      .btn-ghost:hover { background: #f0edef; }
+      .btn-full { width: 100%; }
+      .cards-stack { display: flex; flex-direction: column; gap: 24px; }
+      .card { background: #ffffff; border: 1px solid #e4e2e4; border-radius: 12px; padding: 24px; position: relative; overflow: hidden; }
+      .card-accent { position: absolute; left: 0; top: 24px; bottom: 24px; width: 4px; background: var(--color-primary); border-radius: 0 2px 2px 0; }
+      .card-title { font-size: 24px; font-weight: 700; line-height: 32px; color: #1b1b1d; margin-bottom: 24px; padding-left: 16px; letter-spacing: normal; }
+      .card-body { padding-left: 16px; }
+      .it-day { padding: 16px 0; }
+      .it-day + .it-day { border-top: 1px solid #e4e2e4; }
+      .it-day-label { display: inline-block; font-size: 10px; font-weight: 600; color: var(--color-primary); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px; }
+      .it-day h3 { font-size: 16px; font-weight: 600; color: #1b1b1d; margin-bottom: 8px; }
+      .it-day p { font-size: 14px; color: #3e4851; line-height: 1.6; }
+      .budget-list { list-style: none; padding: 0; }
+      .budget-list li { font-size: 14px; color: #3e4851; margin-bottom: 12px; line-height: 1.5; padding-left: 0; }
+      .budget-list li::before { content: "•"; color: var(--color-primary); font-weight: bold; display: inline-block; width: 16px; margin-left: -16px; }
+      .budget-list strong { color: #1b1b1d; font-weight: 600; }
+      .faq-item { padding: 20px 0; }
+      .faq-item-bordered { border-top: 1px solid #e4e2e4; }
+      .faq-q { font-size: 14px; font-weight: 500; color: #1b1b1d; margin-bottom: 8px; }
+      .faq-a { font-size: 14px; color: #3e4851; line-height: 1.5; }
+      .prose p { font-size: 14px; color: #3e4851; line-height: 1.6; margin-bottom: 12px; }
+      .prose ul { margin-bottom: 12px; padding-left: 20px; }
+      .prose li { font-size: 14px; color: #3e4851; margin-bottom: 6px; line-height: 1.5; }
+      .prose strong { color: #1b1b1d; font-weight: 600; }
+      .col-sidebar { display: flex; flex-direction: column; gap: 24px; }
+      @media (min-width: 1024px) { .col-sidebar { position: sticky; top: 88px; } }
+      .sidebar-card { background: #ffffff; border: 1px solid #e4e2e4; border-radius: 12px; padding: 24px; }
+      .sidebar-card-alt { background: #fcf8fb; }
+      .sidebar-label { display: block; font-size: 10px; font-weight: 500; color: #3e4851; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
+      .price-row { display: flex; align-items: baseline; gap: 8px; margin-bottom: 24px; }
+      .price-value { font-size: 32px; font-weight: 700; letter-spacing: -0.02em; color: #1b1b1d; }
+      .price-unit { font-size: 14px; color: #3e4851; }
+      .price-footnote { text-align: center; font-size: 10px; color: #3e4851; margin-top: 8px; margin-bottom: 24px; }
+      .meta-list { display: flex; flex-direction: column; gap: 12px; font-size: 14px; }
+      .meta-row { display: flex; justify-content: space-between; border-bottom: 1px solid #e4e2e4; padding-bottom: 8px; }
+      .meta-label { color: #3e4851; }
+      .meta-value { color: #1b1b1d; font-weight: 500; }
+      .schema-tags { display: flex; flex-wrap: wrap; gap: 8px; font-size: 14px; }
+      .schema-tag { background: #e4e2e4; color: #1b1b1d; padding: 4px 8px; border-radius: 4px; font-size: 12px; }
+      .var-list { display: flex; flex-direction: column; gap: 8px; font-size: 14px; }
+      .var-key { color: #1b1b1d; font-weight: 500; }
+      .var-val { color: #3e4851; }
+      .var-url { word-break: break-all; }
+      .internal-links { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+      .internal-link { display: flex; justify-content: space-between; align-items: center; text-decoration: none; color: #1b1b1d; font-size: 12px; border-bottom: 1px solid #e4e2e4; padding-bottom: 8px; transition: color 0.1s; }
+      .internal-link:hover { color: #3e4851; }
+      .internal-link 
+      .related-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+      .related-item { display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px; }
+      .related-item-bordered { border-bottom: 1px solid #e4e2e4; }
+      .related-link { color: #1b1b1d; font-size: 14px; font-weight: 500; text-decoration: none; transition: color 0.1s; }
+      .related-link:hover { color: #3e4851; }
+      .related-path { font-size: 12px; color: #3e4851; }
+</style>

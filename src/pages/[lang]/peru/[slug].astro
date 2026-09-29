@@ -1,31 +1,27 @@
 ---
+/**
+ * Guía de destino. Contenido real del repo: la guía en Markdown, sus FAQ, los itinerarios que
+ * pasan por él, las categorías de tours y las empresas registradas que operan allí (B2B).
+ * Se retiraron los bloques fijos que se repetían en todos los destinos (clima, altitud,
+ * "itinerario base de 3 días"), porque solo eran ciertos para Cusco.
+ */
 import { getCollection } from 'astro:content';
-import NavCmstourup from '../../../components/NavCmstourup.astro';
-import FooterCmstourup from '../../../components/FooterCmstourup.astro';
-import SettingsHead from '../../../components/SettingsHead.astro';
-import SettingsBodyEnd from '../../../components/SettingsBodyEnd.astro';
-import { getLocalizedString } from '../../../utils/i18n';
-import { companyDescription, companyDisplayName, companyPath, hasCompanyName } from '../../../utils/seo';
-import '../../../styles/theme.css';
+import Layout from '../../../layouts/Layout.astro';
+import Photo from '../../../components/site/Photo.astro';
+import DestinationMosaic from '../../../components/site/DestinationMosaic.astro';
+import { getLocalizedString, type Locale } from '../../../utils/i18n';
+import { SITE_URL, companyPath } from '../../../utils/seo';
+import { DESTINATION_ORDER, destinationsPath, directoryPath, itineraryPath } from '../../../data/site';
+import { categoryLabel, itinerariesFor, operatorsIn } from '../../../utils/graph';
+import photos from '../../../data/photos.json';
 
 export async function getStaticPaths() {
   const destinos = await getCollection('destinos');
   const destinosEn = await getCollection('destinos_en');
-  const paths = [
-    ...destinos.map((d) => ({
-      params: { lang: 'es', slug: d.id.replace('.md', '') },
-      props: { entry: d, lang: 'es' },
-    })),
-    ...destinosEn.map((d) => ({
-      params: { lang: 'en', slug: d.id.replace('.md', '') },
-      props: { entry: d, lang: 'en' },
-    })),
+  return [
+    ...destinos.map((d) => ({ params: { lang: 'es', slug: d.id.replace(/\.md$/i, '') }, props: { entry: d, lang: 'es' } })),
+    ...destinosEn.map((d) => ({ params: { lang: 'en', slug: d.id.replace(/\.md$/i, '') }, props: { entry: d, lang: 'en' } })),
   ];
-  return paths;
-}
-
-function stripMd(id: string) {
-  return id.replace(/\.md$/i, '');
 }
 
 interface Props {
@@ -33,86 +29,51 @@ interface Props {
   lang: string;
 }
 
-const { entry, lang } = Astro.props;
+const { entry, lang: langProp } = Astro.props;
+const lang = langProp as Locale;
+const es = lang === 'es';
+const t = (esText: string, enText: string) => (es ? esText : enText);
+const loc = (field: any) => getLocalizedString(field, lang);
 const { Content } = await entry.render();
 const d = entry.data;
-const loc = (field: any) => getLocalizedString(field, lang);
-
-const siteUrl = 'https://guia.tourup.co';
-const slug = stripMd(entry.id);
+const slug = entry.id.replace(/\.md$/i, '');
 const isCountry = slug === 'peru';
-const schemaType = isCountry ? 'Country' : 'TouristDestination';
+const name = loc(d.name);
+const pageUrl = `${SITE_URL}/${lang}/peru/${slug}/`;
+const photo = (photos as any)[slug] ?? (photos as any).peru;
 
-const allCompanies = await getCollection('companies');
-const allCatDest = await getCollection('categorias_destino');
-const allDestinos = await getCollection('destinos');
-const allDestinosEn = await getCollection('destinos_en');
+const [allCompanies, allCatDest] = await Promise.all([getCollection('companies'), getCollection('categorias_destino')]);
 
-const tourCategories = allCatDest
-  .filter((cd) => cd.data.destino_slug === slug);
+const operators = operatorsIn(allCompanies, slug, lang);
 
-const companies = allCompanies.filter(
-  (c) => c.data.destinos && c.data.destinos.includes(slug)
-);
+const categories = allCatDest
+  .filter((cd) => cd.data.destino_slug === slug)
+  .map((cd) => ({ slug: cd.data.categoria, name: categoryLabel(cd.data.categoria, lang) }))
+  .sort((a, b) => a.name.localeCompare(b.name, lang));
 
-const seenTaxIds = new Set<string>();
-const deduped: typeof companies = [];
-for (const c of companies) {
-  const tid = c.data.regulation?.tax_id;
-  if (!tid) { deduped.push(c); continue; }
-  if (!seenTaxIds.has(tid)) { seenTaxIds.add(tid); deduped.push(c); }
-}
-
-const companiesByCategory: Record<string, any[]> = {};
-for (const company of deduped) {
-  if (company.data.categorias) {
-    for (const cat of company.data.categorias) {
-      if (!companiesByCategory[cat]) companiesByCategory[cat] = [];
-      if (!companiesByCategory[cat].find((c) => c.slug === company.slug)) {
-        companiesByCategory[cat].push(company);
-      }
-    }
-  }
-}
-
-const destFaq = d.faq || [];
-const catNames = tourCategories.map((cd) => loc(cd.data.name));
-
-const relatedPool = lang === 'en' ? allDestinosEn : allDestinos;
-const relatedDestinos = relatedPool
-  .filter((dd) => dd.id.replace('.md', '') !== slug)
-  .slice(0, 4);
-
-const categoryLabels: Record<string, string> = {
-  'aventura': 'Aventura', 'trekking': 'Trekking', 'full-day': 'Full Day',
-  'multi-day': 'Multi-Day', 'gastronomico': 'Gastronomía', 'cultural': 'Cultural',
-  'tours-culturales': 'Tours Culturales', 'tours-comunitarios': 'Tours Comunitarios',
-  'lujo': 'Lujo', 'familia': 'Familia', 'mice': 'MICE', 'birdwatching': 'Birdwatching',
-  'arqueologico': 'Arqueológico',
-};
-
-const t = (es: string, en: string) => lang === 'en' ? en : es;
+const itineraries = itinerariesFor(slug);
+const faq = (d.faq ?? []) as { question: any; answer: any }[];
+const related = DESTINATION_ORDER.filter((s) => s !== slug).slice(0, 5);
 
 const jsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
     {
-      '@type': schemaType,
-      '@id': `${siteUrl}/${lang}/peru/${slug}/#place`,
-      name: loc(d.name),
+      '@type': isCountry ? 'Country' : 'TouristDestination',
+      '@id': `${pageUrl}#place`,
+      name,
       description: loc(d.summary),
-      url: `${siteUrl}/${lang}/peru/${slug}/`,
-      mainEntityOfPage: { '@id': `${siteUrl}/${lang}/peru/${slug}/#webpage` },
-      ...(isCountry
-        ? { containsPlace: catNames.map((c) => ({ '@type': 'Place', name: c })) }
-        : { containedInPlace: { '@type': 'Country', name: 'PE' }, touristType: catNames }),
+      url: pageUrl,
+      image: `${SITE_URL}${photo.file}-1920.webp`,
+      mainEntityOfPage: { '@id': `${pageUrl}#webpage` },
+      ...(isCountry ? {} : { containedInPlace: { '@type': 'Country', name: 'Peru' } }),
     },
-    ...(destFaq.length > 0
+    ...(faq.length
       ? [{
           '@type': 'FAQPage',
-          '@id': `${siteUrl}/${lang}/peru/${slug}/#faq`,
-          mainEntityOfPage: { '@id': `${siteUrl}/${lang}/peru/${slug}/#webpage` },
-          mainEntity: destFaq.map((item: any) => ({
+          '@id': `${pageUrl}#faq`,
+          mainEntityOfPage: { '@id': `${pageUrl}#webpage` },
+          mainEntity: faq.map((item) => ({
             '@type': 'Question',
             name: loc(item.question),
             acceptedAnswer: { '@type': 'Answer', text: loc(item.answer) },
@@ -121,433 +82,379 @@ const jsonLd = {
       : []),
   ],
 };
-
-const heroImg = slug === 'cusco' ? '3250613' : slug === 'lima' ? '3290049' : slug === 'arequipa' ? '2356059' : slug === 'machu_picchu' ? '2356059' : slug === 'puno' ? '3617500' : slug === 'iquitos' ? '3608263' : slug === 'huaraz' ? '1366919' : slug === 'nazca' ? '3591519' : slug === 'paracas' ? '1583339' : slug === 'colca' ? '1131458' : '3250613';
-const heroImgUrl = `https://images.pexels.com/photos/${heroImg}/pexels-photo-${heroImg}.jpeg?auto=compress&cs=tinysrgb&w=1200`;
 ---
 
-<!doctype html>
-<html class="light" lang={lang}>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <SettingsHead
-      title={loc(d.seo_title) || `${loc(d.name)} – TourUp Peru`}
-      description={loc(d.summary)}
-      breadcrumb={loc(d.name)}
-      currentPath={`/${lang}/peru/${slug}/`}
-      lang={lang}
-    />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    <meta name="robots" content="index, follow" />
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
-    <style>
-      .zone-company-list { columns: 2 220px; gap: 24px; list-style: none; padding: 0; margin: 20px 0 0; font-size: 14px; line-height: 1.9; }
-      .zone-company-list a { color: inherit; }
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      body { background: #f9f9f9; color: #1a1c1c; font-family: 'Plus Jakarta Sans', sans-serif; min-height: 100vh; -webkit-font-smoothing: antialiased; }
-      .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
+<Layout
+  title={loc(d.seo_title) || t(`Viajar a ${name}: guía de viaje | TourUp`, `Travel to ${name}: travel guide | TourUp Guide`)}
+  description={loc(d.summary)}
+  currentPath={`/${lang}/peru/${slug}/`}
+  lang={lang}
+  breadcrumb={name}
+  image={`${photo.file}-1920.webp`}
+  bleed
+>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
-      /* Main */
-      .main-wrapper { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
-      .main-content { display: grid; grid-template-columns: 1fr; gap: 48px; padding: 48px 0; }
-      @media (min-width: 1024px) { .main-content { grid-template-columns: 1fr 320px; } }
-
-      /* Hero */
-      .hero-section { display: flex; flex-direction: column; gap: 16px; border-bottom: 1px solid #e5e5e5; padding-bottom: 48px; }
-      .hero-title { font-size: 32px; font-weight: 700; letter-spacing: -0.04em; line-height: 1.2; color: #171717; }
-      @media (min-width: 768px) { .hero-title { font-size: 48px; letter-spacing: -0.05em; } }
-      .hero-summary { font-size: 14px; line-height: 1.5; color: #737373; max-width: 672px; }
-      .hero-image { width: 100%; margin-top: 16px; aspect-ratio: 1.5; border: 1px solid #e5e5e5; overflow: hidden; position: relative; }
-      .hero-image img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.25); transition: transform 0.7s; }
-      .hero-image:hover img { transform: scale(1.05); }
-      .hero-badge { position: absolute; bottom: 16px; right: 16px; background: rgba(255,255,255,0.9); backdrop-filter: blur(4px); border: 1px solid #e5e5e5; padding: 4px 12px; border-radius: 9999px; display: flex; align-items: center; gap: 8px; }
-      .hero-badge-dot { width: 8px; height: 8px; border-radius: 50%; background: #171717; animation: pulse 2s infinite; }
-      @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-      .hero-badge-text { font-size: 12px; font-weight: 500; color: #171717; text-transform: uppercase; letter-spacing: 0.1em; }
-
-      /* Section header */
-      .section-header { display: flex; align-items: center; gap: 8px; margin-bottom: 24px; }
-      .section-header .material-symbols-outlined { font-size: 20px; color: #171717; }
-      .section-title { font-size: 18px; font-weight: 600; color: #171717; text-transform: uppercase; letter-spacing: -0.025em; }
-
-      /* Bento Essential Info */
-      .bento-grid { display: grid; grid-template-columns: 1fr; gap: 8px; }
-      @media (min-width: 640px) { .bento-grid { grid-template-columns: repeat(3, 1fr); } }
-      .bento-card { border: 1px solid #e5e5e5; background: #fff; border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 12px; position: relative; overflow: hidden; transition: background 0.2s; }
-      .bento-card:hover { background: #f2f2f2; }
-      .bento-card-dark { background: #171717; border-color: #171717; }
-      .bento-card-dark:hover { background: #000; }
-      .bento-card-dark .bento-icon { color: #b9b9b9; }
-      .bento-card-dark .bento-label { color: #fff; }
-      .bento-card-dark .bento-desc { color: #b9b9b9; }
-      .bento-card-dark .bento-meta { border-top-color: #5f5e5e; color: #b9b9b9; }
-      .bento-icon { color: #737373; font-size: 20px; }
-      .bento-label { font-size: 14px; font-weight: 500; color: #171717; text-transform: uppercase; letter-spacing: 0; }
-      .bento-desc { font-size: 14px; line-height: 1.43; color: #737373; flex: 1; }
-      .bento-meta { margin-top: 12px; padding-top: 12px; border-top: 1px solid #e5e5e5; font-size: 12px; font-family: 'Plus Jakarta Sans', monospace; color: #a1a1a1; text-transform: uppercase; letter-spacing: 0.05em; }
-
-      /* Zone cards */
-      .zone-grid { display: grid; grid-template-columns: 1fr; gap: 8px; }
-      @media (min-width: 640px) { .zone-grid { grid-template-columns: repeat(2, 1fr); } }
-      @media (min-width: 1024px) { .zone-grid { grid-template-columns: repeat(3, 1fr); } }
-      .zone-card { border: 1px solid #e5e5e5; background: #fff; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; text-decoration: none; transition: border-color 0.15s; }
-      .zone-card:hover { border-color: #171717; }
-      .zone-card-image { height: 144px; border-bottom: 1px solid #e5e5e5; background: #f2f2f2; position: relative; overflow: hidden; }
-      .zone-card-image .zone-img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1); opacity: 0.8; }
-      .zone-card-tag { position: absolute; top: 8px; left: 8px; background: #fff; border: 1px solid #e5e5e5; padding: 2px 8px; font-size: 10px; font-weight: 500; color: #171717; border-radius: 2px; }
-      .zone-card-body { padding: 16px; flex: 1; display: flex; flex-direction: column; }
-      .zone-card-title { font-size: 18px; font-weight: 600; color: #171717; letter-spacing: -0.025em; margin-bottom: 8px; }
-      .zone-card-desc { font-size: 14px; line-height: 1.43; color: #737373; flex: 1; }
-
-      /* Companies zone variant */
-      .zone-card-company .zone-card-body { padding: 16px; }
-      .zone-card-company .zone-card-title { font-size: 14px; font-weight: 500; }
-      .zone-card-company .zone-card-desc { font-size: 12px; }
-      .zone-card-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
-
-      /* FAQ */
-      .faq-list { display: flex; flex-direction: column; }
-      .faq-item { padding: 20px 0; }
-      .faq-item + .faq-item { border-top: 1px solid #e5e5e5; }
-      .faq-q { font-size: 14px; font-weight: 600; color: #171717; margin-bottom: 8px; }
-      .faq-a { font-size: 14px; line-height: 1.5; color: #737373; }
-
-      /* Timeline */
-      .timeline { display: flex; flex-direction: column; border-left: 1px solid #e5e5e5; margin-left: 8px; padding-left: 24px; gap: 32px; position: relative; }
-      .timeline-item { position: relative; }
-      .timeline-dot { position: absolute; left: -29px; top: 4px; width: 12px; height: 12px; background: #fff; border: 2px solid #171717; border-radius: 50%; }
-      .timeline-dot-filled { background: #171717; }
-      .timeline-title { font-size: 14px; font-weight: 500; color: #171717; text-transform: uppercase; margin-bottom: 4px; }
-      .timeline-desc { font-size: 14px; line-height: 1.5; color: #737373; }
-
-      /* CTA */
-      .cta-section { border-top: 1px solid #e5e5e5; padding-top: 48px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 16px; margin-top: 24px; }
-      .cta-title { font-size: 32px; font-weight: 700; letter-spacing: -0.04em; color: #171717; }
-      @media (min-width: 768px) { .cta-title { font-size: 48px; letter-spacing: -0.05em; } }
-      .cta-desc { font-size: 14px; color: #737373; max-width: 400px; }
-      .cta-btn { background: #171717; color: #fff; font-size: 14px; font-weight: 500; text-transform: uppercase; padding: 16px 32px; border: none; border-radius: 8px; cursor: pointer; text-decoration: none; transition: background 0.2s; }
-      .cta-btn:hover { background: #000; }
-
-      /* Sidebar */
-      .sidebar { display: flex; flex-direction: column; gap: 24px; }
-      @media (min-width: 1024px) { .sidebar { position: sticky; top: 88px; } }
-      .sidebar-card { background: #fff; border: 1px solid #e5e5e5; border-radius: 8px; padding: 20px; }
-      .sidebar-card-alt { background: #f2f2f2; }
-      .sidebar-label { display: block; font-size: 10px; font-weight: 500; color: #171717; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
-      .sidebar-price-row { display: flex; align-items: baseline; gap: 8px; margin-bottom: 20px; }
-      .sidebar-price-val { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; color: #171717; }
-      .sidebar-price-unit { font-size: 14px; color: #737373; }
-      .sidebar-btn { display: block; background: #171717; color: #fff; border-radius: 8px; padding: 12px 24px; font-size: 14px; font-weight: 600; text-decoration: none; text-align: center; transition: background 0.15s; }
-      .sidebar-btn:hover { background: #000; }
-      .sidebar-footnote { text-align: center; font-size: 10px; color: #737373; margin-top: 8px; margin-bottom: 20px; }
-      .sidebar-meta { display: flex; flex-direction: column; gap: 12px; font-size: 14px; }
-      .sidebar-meta-row { display: flex; justify-content: space-between; border-bottom: 1px solid #e5e5e5; padding-bottom: 8px; }
-      .sidebar-meta-label { color: #737373; }
-      .sidebar-meta-value { color: #171717; font-weight: 500; }
-      .sidebar-tags { display: flex; flex-wrap: wrap; gap: 8px; }
-      .sidebar-tag { background: #e5e5e5; color: #171717; padding: 4px 8px; border-radius: 4px; font-size: 12px; }
-      .sidebar-links { list-style: none; display: flex; flex-direction: column; gap: 12px; }
-      .sidebar-link { display: flex; justify-content: space-between; align-items: center; text-decoration: none; color: #171717; font-size: 12px; border-bottom: 1px solid #e5e5e5; padding-bottom: 8px; transition: color 0.1s; }
-      .sidebar-link:hover { color: #737373; }
-      .sidebar-link .material-symbols-outlined { font-size: 14px; color: #a1a1a1; }
-      .sidebar-related { list-style: none; display: flex; flex-direction: column; gap: 12px; }
-      .sidebar-related-item { display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px; }
-      .sidebar-related-item + .sidebar-related-item { border-top: 1px solid #e5e5e5; padding-top: 12px; }
-      .sidebar-related-link { color: #171717; font-size: 14px; font-weight: 500; text-decoration: none; }
-      .sidebar-related-link:hover { color: #737373; }
-      .sidebar-related-path { font-size: 12px; color: #737373; }
-
-      /* Prose content from markdown */
-      .prose h2 { font-size: 20px; font-weight: 700; color: #171717; margin-top: 32px; margin-bottom: 12px; letter-spacing: -0.025em; }
-      .prose h3 { font-size: 16px; font-weight: 600; color: #171717; margin-top: 24px; margin-bottom: 8px; }
-      .prose p { font-size: 14px; color: #737373; line-height: 1.6; margin-bottom: 16px; }
-      .prose ul { margin-bottom: 16px; padding-left: 20px; }
-      .prose li { font-size: 14px; color: #737373; margin-bottom: 8px; line-height: 1.5; }
-      .prose strong { color: #171717; font-weight: 600; }
-      .prose a { color: #171717; text-decoration: underline; text-underline-offset: 2px; }
-      .prose a:hover { color: #737373; }
-
-      /* Section spacing */
-      .content-section { border-top: 1px solid #e5e5e5; padding-top: 48px; }
-
-      /* Section divider */
-      .section-block { margin-bottom: 48px; }
-    </style>
-  </head>
-
-  <body>
-    <NavCmstourup lang={lang} toursSlug={slug} />
-
-    <div class="main-wrapper">
-      <div class="main-content">
-        <div>
-          <!-- Hero -->
-          <section class="hero-section">
-            <h1 class="hero-title">
-              {t(`Viajar a ${d.name}: guía completa para planificar tu viaje a Perú`, `Travel to ${d.name}: complete guide to plan your trip to Peru`)}
-            </h1>
-            <p class="hero-summary">{d.summary}</p>
-            <div class="hero-image">
-              <img src={heroImgUrl} alt={`${d.name}, Perú`} loading="eager" />
-              <div class="hero-badge">
-                <span class="hero-badge-dot"></span>
-                <span class="hero-badge-text">{t('Guía de Destino', 'Destination Guide')}</span>
-              </div>
-            </div>
-          </section>
-
-          <!-- Essential Info Bento -->
-          <section class="section-block">
-            <div class="section-header">
-              <span class="material-symbols-outlined">info</span>
-              <h2 class="section-title">{t('Información Esencial', 'Essential Information')}</h2>
-            </div>
-            <div class="bento-grid">
-              <div class="bento-card">
-                <span class="material-symbols-outlined bento-icon">calendar_month</span>
-                <div>
-                  <h3 class="bento-label">{t('Clima y Época', 'Climate & Season')}</h3>
-                  <p class="bento-desc">{t('Temporada seca (Mayo - Octubre) ofrece cielos despejados. Ideal para expediciones.', 'Dry season (May - October) offers clear skies. Ideal for expeditions.')}</p>
-                </div>
-                <div class="bento-meta">{t('TEMP: 0°C - 22°C', 'TEMP: 32°F - 72°F')}</div>
-              </div>
-              <div class="bento-card bento-card-dark">
-                <span class="material-symbols-outlined bento-icon">terrain</span>
-                <div>
-                  <h3 class="bento-label">{t(`Altitud: ${slug === 'cusco' ? '3,399m' : slug === 'arequipa' ? '2,335m' : slug === 'puno' ? '3,827m' : slug === 'huaraz' ? '3,052m' : 'Variable'}`, `Elevation: ${slug === 'cusco' ? '11,152ft' : slug === 'arequipa' ? '7,661ft' : slug === 'puno' ? '12,556ft' : slug === 'huaraz' ? '10,013ft' : 'Variable'}`)}</h3>
-                  <p class="bento-desc">{t('Aclimatación crítica. Requiere 24-48hrs de actividad mínima. Hidratación constante.', 'Critical acclimatization. Requires 24-48hrs of minimal activity. Constant hydration.')}</p>
-                </div>
-                <div class="bento-meta">{t('METRICA: O₂ REDUCIDO 30%', 'METRIC: O₂ REDUCED 30%')}</div>
-              </div>
-              <div class="bento-card">
-                <span class="material-symbols-outlined bento-icon">directions_bus</span>
-                <div>
-                  <h3 class="bento-label">{t('Transporte Base', 'Base Transport')}</h3>
-                  <p class="bento-desc">{t('Tránsito peatonal primario en centro histórico. Red ferroviaria y aérea para conexiones regionales.', 'Primary pedestrian transit in historic center. Rail and air network for regional connections.')}</p>
-                </div>
-                <div class="bento-meta">{t('LOGÍSTICA: AEROPUERTO + FERROCARRIL', 'LOGISTICS: AIRPORT + RAILWAY')}</div>
-              </div>
-            </div>
-          </section>
-
-          <!-- Content from markdown -->
-          <section class="section-block content-section prose">
-            <Content />
-          </section>
-
-          <!-- Tour Categories as Zone Cards -->
-          {tourCategories.length > 0 && (
-            <section class="section-block content-section">
-              <div class="section-header">
-                <span class="material-symbols-outlined">map</span>
-                <h2 class="section-title">{t(`Tours y experiencias en ${d.name}`, `Tours and experiences in ${d.name}`)}</h2>
-              </div>
-              <div class="zone-grid">
-                {tourCategories.slice(0, 9).map((cd) => {
-                  const count = companiesByCategory[cd.data.categoria]?.length || 0;
-                  return (
-                    <a href={`/${lang}/peru/${slug}/tours/${cd.data.categoria}/`} class="zone-card">
-                      <div class="zone-card-image">
-                        <div class="zone-img" style="background: #e5e5e5; display:flex; align-items:center; justify-content:center;">
-                          <span class="material-symbols-outlined" style="font-size:32px;color:#a1a1a1;">
-                            {cd.data.categoria === 'trekking' ? 'hiking' : cd.data.categoria === 'aventura' ? 'downhill_skiing' : cd.data.categoria === 'full-day' ? 'wb_sunny' : cd.data.categoria === 'multi-day' ? 'days' : cd.data.categoria === 'gastronomico' ? 'restaurant' : cd.data.categoria === 'cultural' ? 'museum' : cd.data.categoria === 'lujo' ? 'stars' : cd.data.categoria === 'familia' ? 'family_history' : cd.data.categoria === 'birdwatching' ? 'nest_early_feathers' : cd.data.categoria === 'arqueologico' ? 'temple_buddhist' : 'explore'}
-                          </span>
-                        </div>
-                        <span class="zone-card-tag">{cd.data.categoria?.toUpperCase()}</span>
-                      </div>
-                      <div class="zone-card-body">
-                        <h3 class="zone-card-title">{categoryLabels[cd.data.categoria] || cd.data.name}</h3>
-                        {cd.data.summary && <p class="zone-card-desc">{cd.data.summary}</p>}
-                        <div style="margin-top:8px;font-size:12px;color:#a1a1a1;">{count} {t(`empresa${count !== 1 ? 's' : ''}`, `compan${count !== 1 ? 'ies' : 'y'}`)}</div>
-                      </div>
-                    </a>
-                  );
-                })}
-              </div>
-            </section>
-          )}
-
-          <!-- FAQ -->
-          {destFaq.length > 0 && (
-            <section class="section-block content-section">
-              <div class="section-header">
-                <span class="material-symbols-outlined">help</span>
-                <h2 class="section-title">{t(`Preguntas frecuentes sobre viajar a ${d.name}`, `Frequently asked questions about traveling to ${d.name}`)}</h2>
-              </div>
-              <div class="faq-list">
-                {destFaq.map((item: any, i: number) => (
-                  <div class="faq-item">
-                    <h3 class="faq-q">{item.question}</h3>
-                    <p class="faq-a">{item.answer}</p>
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
-
-          <!-- Tour Operators -->
-          <section class="section-block content-section">
-            <div class="section-header">
-              <span class="material-symbols-outlined">badge</span>
-              <h2 class="section-title">{t(`Operadores turísticos en ${d.name}`, `Tour operators in ${d.name}`)}</h2>
-            </div>
-            {deduped.length === 0 ? (
-              <p style="font-size:14px;color:#a1a1a1;font-style:italic;">{t('No hay empresas registradas en este destino aún.', 'No companies registered in this destination yet.')}</p>
-            ) : (
-              <>
-                <div class="zone-grid">
-                  {deduped.slice(0, 6).map((c: any) => (
-                    <a href={companyPath(lang, c.id)} class="zone-card zone-card-company">
-                      <div class="zone-card-body">
-                        <h3 class="zone-card-title">{companyDisplayName(c.data, lang)}</h3>
-                        <p class="zone-card-desc">{companyDescription(c.data, lang)}</p>
-                        <div class="zone-card-tags">
-                          {c.data.categorias?.slice(0, 3).map((cat: string) => (
-                            <span style="font-size:10px;background:#f2f2f2;color:#171717;border:1px solid #e5e5e5;padding:2px 8px;border-radius:9999px;">{categoryLabels[cat] || cat}</span>
-                          ))}
-                        </div>
-                      </div>
-                    </a>
-                  ))}
-                </div>
-                {deduped.length > 6 && (
-                  <ul class="zone-company-list" aria-label={t(`Todos los operadores en ${d.name}`, `All operators in ${d.name}`)}>
-                    {deduped.slice(6).filter((c: any) => hasCompanyName(loc(c.data.title))).map((c: any) => (
-                      <li><a href={companyPath(lang, c.id)}>{companyDisplayName(c.data, lang)}</a></li>
-                    ))}
-                  </ul>
-                )}
-                {deduped.length > 6 && (
-                  <a href={`/${lang}/${lang === 'en' ? 'companies' : 'empresas'}/`} style="display:inline-flex;align-items:center;gap:4px;margin-top:16px;font-size:14px;color:#737373;text-decoration:none;">
-                    {t(`Ver los ${deduped.length} operadores en ${d.name}`, `See all ${deduped.length} operators in ${d.name}`)}
-                    <span class="material-symbols-outlined" style="font-size:14px;">arrow_forward</span>
-                  </a>
-                )}
-              </>
-            )}
-          </section>
-
-          <!-- Timeline / Itinerary -->
-          <section class="section-block content-section">
-            <div class="section-header">
-              <span class="material-symbols-outlined">route</span>
-              <h2 class="section-title">{t('Estructura de Itinerario Base (3 Días)', 'Base Itinerary Structure (3 Days)')}</h2>
-            </div>
-            <div class="timeline">
-              <div class="timeline-item">
-                <div class="timeline-dot"></div>
-                <h3 class="timeline-title">{t('Fase 1: Aclimatación y Centro Histórico', 'Phase 1: Acclimatization & Historic Center')}</h3>
-                <p class="timeline-desc">{t('Llegada y estabilización física. Recorrido perimetral por Plaza de Armas, Catedral y Qorikancha. Cena ligera.', 'Arrival and physical stabilization. Perimeter tour of Plaza de Armas, Cathedral, and Qorikancha. Light dinner.')}</p>
-              </div>
-              <div class="timeline-item">
-                <div class="timeline-dot"></div>
-                <h3 class="timeline-title">{t('Fase 2: Expansión Periférica', 'Phase 2: Peripheral Expansion')}</h3>
-                <p class="timeline-desc">{t('Circuito arqueológico norte: Sacsayhuamán, Qenqo, Puka Pukara y Tambomachay. Tarde libre en distrito San Blas.', 'Northern archaeological circuit: Sacsayhuamán, Qenqo, Puka Pukara, and Tambomachay. Free afternoon in San Blas district.')}</p>
-              </div>
-              <div class="timeline-item">
-                <div class="timeline-dot timeline-dot-filled"></div>
-                <h3 class="timeline-title">{t('Fase 3: Proyección Valle Sagrado', 'Phase 3: Sacred Valley Projection')}</h3>
-                <p class="timeline-desc">{t('Desplazamiento hacia el noroeste. Písac (mercado y ruinas) y fortaleza de Ollantaytambo. Conexión ferroviaria opcional a Aguas Calientes.', 'Northwest displacement. Pisac (market and ruins) and Ollantaytambo fortress. Optional railway connection to Aguas Calientes.')}</p>
-              </div>
-            </div>
-          </section>
-
-          <!-- CTA -->
-          <section class="cta-section">
-            <h2 class="cta-title">{t('Inicia tu Expedición', 'Start Your Expedition')}</h2>
-            <p class="cta-desc">{t('Asegura el acceso a las infraestructuras históricas. Capacidad regulada por autoridades locales.', 'Secure access to historical infrastructure. Capacity regulated by local authorities.')}</p>
-            <a href={`/${lang}/peru/${slug}/tours/`} class="cta-btn">
-              {t('Reservar Infraestructura', 'Book Infrastructure')}
-            </a>
-          </section>
-        </div>
-
-        <!-- Sidebar -->
-        <aside class="sidebar">
-          <div class="sidebar-card">
-            <span class="sidebar-label">{t('Tours Desde', 'Tours From')}</span>
-            <div class="sidebar-price-row">
-              <span class="sidebar-price-val">USD 89</span>
-              <span class="sidebar-price-unit">{t('/ persona', '/ person')}</span>
-            </div>
-            <a href={`/${lang}/peru/${slug}/tours/`} class="sidebar-btn">
-              {t('Comparar tours', 'Compare tours')}
-            </a>
-            <p class="sidebar-footnote">{t('Sin cargos ocultos · Cancelación flexible', 'No hidden fees · Flexible cancellation')}</p>
-            <div class="sidebar-meta">
-              <div class="sidebar-meta-row">
-                <span class="sidebar-meta-label">{t('Mejor época', 'Best season')}</span>
-                <span class="sidebar-meta-value">{t('May – Oct', 'May – Oct')}</span>
-              </div>
-              <div class="sidebar-meta-row">
-                <span class="sidebar-meta-label">{t('Días recomendados', 'Recommended days')}</span>
-                <span class="sidebar-meta-value">{t('4–5 días', '4–5 days')}</span>
-              </div>
-              <div class="sidebar-meta-row">
-                <span class="sidebar-meta-label">{t('Operadores', 'Operators')}</span>
-                <span class="sidebar-meta-value">{deduped.length}+</span>
-              </div>
-              <div class="sidebar-meta-row">
-                <span class="sidebar-meta-label">{t('Categorías', 'Categories')}</span>
-                <span class="sidebar-meta-value">{tourCategories.length}</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="sidebar-card sidebar-card-alt">
-            <span class="sidebar-label">SCHEMA.ORG</span>
-            <div class="sidebar-tags">
-              <span class="sidebar-tag">{schemaType}</span>
-              {destFaq.length > 0 && <span class="sidebar-tag">FAQPage</span>}
-              <span class="sidebar-tag">BreadcrumbList</span>
-              <span class="sidebar-tag">TouristTrip</span>
-            </div>
-          </div>
-
-          <div class="sidebar-card sidebar-card-alt">
-            <span class="sidebar-label">{t('VARIABLES', 'VARIABLES')}</span>
-            <div style="display:flex;flex-direction:column;gap:8px;font-size:14px;">
-              <div><span style="font-weight:500;color:#171717;">tipo_pagina:</span> <span style="color:#737373;">"destino"</span></div>
-              <div><span style="font-weight:500;color:#171717;">destino:</span> <span style="color:#737373;">"{d.name}"</span></div>
-              <div style="word-break:break-all;"><span style="font-weight:500;color:#171717;">url:</span> <span style="color:#737373;">"/peru/{slug}/"</span></div>
-              <div><span style="font-weight:500;color:#171717;">anio:</span> <span style="color:#737373;">"2026"</span></div>
-            </div>
-          </div>
-
-          <div class="sidebar-card">
-            <span class="sidebar-label">{t('Links Internos', 'Internal Links')}</span>
-            <ul class="sidebar-links">
-              <li><a href={`/${lang}/peru/${slug}/tours/`} class="sidebar-link">/{lang}/peru/{slug}/tours/<span class="material-symbols-outlined">arrow_forward</span></a></li>
-              {slug === 'cusco' && (
-              <li><a href={`/${lang}/peru/cusco/tours-machu-picchu/`} class="sidebar-link">/{lang}/peru/cusco/tours-machu-picchu/<span class="material-symbols-outlined">arrow_forward</span></a></li>
-              )}
-              <li><a href={`/${lang}/peru/itinerario-7-dias/`} class="sidebar-link">/{lang}/peru/itinerario-7-dias/<span class="material-symbols-outlined">arrow_forward</span></a></li>
-              <li><a href={`/${lang}/peru/itinerario-10-dias/`} class="sidebar-link">/{lang}/peru/itinerario-10-dias/<span class="material-symbols-outlined">arrow_forward</span></a></li>
-            </ul>
-          </div>
-
-          <div class="sidebar-card">
-            <span class="sidebar-label">{t('Destinos Relacionados', 'Related Destinations')}</span>
-            <ul class="sidebar-related">
-              {relatedDestinos.map((rd, i) => {
-                const rdSlug = rd.id.replace('.md', '');
-                return (
-                  <li class="sidebar-related-item">
-                    <a href={`/${lang}/peru/${rdSlug}/`} class="sidebar-related-link">{rd.data.name}</a>
-                    <span class="sidebar-related-path">/peru/{rdSlug}/</span>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        </aside>
+  <header class="d-hero">
+    <div class="d-hero-photo">
+      <Photo name={slug in photos ? slug : 'peru'} eager sizes="100vw" />
+    </div>
+    <div class="wrap d-hero-inner">
+      <div class="d-hero-band">
+        <h1 class="poster-lines d-title">
+          <span class="ink-yellow">{name}</span>
+        </h1>
+        <p class="d-summary">{loc(d.summary)}</p>
       </div>
     </div>
+    <p class="d-credit photo-credit">
+      {t('Foto', 'Photo')}: <a href={photo.source} rel="noopener">{photo.credit}</a>, {photo.license}
+    </p>
+  </header>
+  <div class="poster-strip" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
 
-    <FooterCmstourup lang={lang} />
-    <SettingsBodyEnd />
-  </body>
-</html>
+  <div class="wrap d-layout">
+    <article class="d-article prose">
+      <Content />
+
+      {faq.length > 0 && (
+        <section class="d-faq" aria-labelledby="faq-title">
+          <h2 id="faq-title">{t(`Preguntas frecuentes sobre ${name}`, `${name}: frequently asked questions`)}</h2>
+          {faq.map((item) => (
+            <div class="d-faq-item">
+              <h3>{loc(item.question)}</h3>
+              <p>{loc(item.answer)}</p>
+            </div>
+          ))}
+        </section>
+      )}
+    </article>
+
+    <aside class="d-aside" aria-label={t('Planifica', 'Plan your trip')}>
+      <div class="d-card">
+        <h2>{t('De un vistazo', 'At a glance')}</h2>
+        <dl>
+          {d.region && loc(d.region) !== name && (<><dt>{t('Región', 'Region')}</dt><dd>{loc(d.region)}</dd></>)}
+          <dt>{t('Empresas registradas', 'Registered companies')}</dt>
+          <dd>{operators.length > 0 ? <a href="#operators">{operators.length}</a> : t('Ninguna aún', 'None yet')}</dd>
+        </dl>
+      </div>
+
+      {itineraries.length > 0 && (
+        <div class="d-card">
+          <h2>{t('Itinerarios que pasan por aquí', 'Itineraries through here')}</h2>
+          <ul>
+            {itineraries.map((it) => (
+              <li><a href={itineraryPath(lang, it.slug)}>{t(`Itinerario de ${it.days} días`, `${it.days}-day Peru itinerary`)}</a></li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {slug === 'cusco' || slug === 'machu_picchu' ? (
+        <div class="d-card">
+          <h2>{t('Machu Picchu', 'Machu Picchu')}</h2>
+          <p><a href={`/${lang}/peru/cusco/tours-machu-picchu/`}>{t('Tours a Machu Picchu desde Cusco', 'Machu Picchu tours from Cusco')}</a></p>
+        </div>
+      ) : null}
+
+      {categories.length > 0 && (
+        <div class="d-card">
+          <h2>{t('Tipos de tour', 'Tour types')}</h2>
+          <ul class="d-chips">
+            {categories.map((c) => (
+              <li><a href={`/${lang}/peru/${slug}/tours/${c.slug}/`}>{c.name}</a></li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </aside>
+  </div>
+
+  <section id="operators" class="d-operators" aria-labelledby="ops-title">
+    <div class="wrap">
+      <h2 id="ops-title" class="poster-lines ops-title">
+        <span class="ink-green">{t('Operadores', 'Operators')}</span>
+        <span class="ink-white">{t(`en ${name}`, `in ${name}`)}</span>
+      </h2>
+      <p class="ops-lede">
+        {operators.length > 0
+          ? t(
+              `${operators.length === 1 ? '1 empresa de turismo registrada declara' : `${operators.length} empresas de turismo registradas declaran`} operar en ${name}. Cada ficha muestra su RUC, dirección y contacto. Para agencias y DMC.`,
+              `${operators.length === 1 ? '1 registered travel company lists' : `${operators.length} registered travel companies list`} ${name} as an operating area. Each profile shows the tax ID (RUC), address and contact. For agencies and DMCs.`,
+            )
+          : t(`Aún no hay empresas registradas que operen en ${name}.`, `No registered companies list ${name} as an operating area yet.`)}
+      </p>
+      {operators.length > 0 && (
+        <ul class="ops-list">
+          {operators.map((o) => (
+            <li>
+              <a href={companyPath(lang, o.id)}>{o.name}</a>
+              <span>{[o.role, o.city].filter(Boolean).join(' · ')}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+      <a class="btn-poster btn-poster--on-ink" href={directoryPath(lang)}>{t('Todo el directorio', 'Full directory')}</a>
+    </div>
+  </section>
+
+  <section class="d-related" aria-labelledby="rel-title">
+    <div class="wrap d-related-head">
+      <h2 id="rel-title">{t('Más destinos', 'More destinations')}</h2>
+      <a class="btn-poster" href={destinationsPath(lang)}>{t('Todos los destinos', 'All destinations')}</a>
+    </div>
+    <DestinationMosaic lang={lang} slugs={related} />
+  </section>
+</Layout>
+
+<style>
+  .d-hero {
+    position: relative;
+    min-height: min(68vh, 640px);
+    display: grid;
+    align-items: end;
+    background: var(--ink);
+    isolation: isolate;
+    overflow: hidden;
+  }
+
+  .d-hero-photo,
+  .d-hero-photo :global(img) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+  }
+
+  .d-hero-inner {
+    padding-block: var(--space-6) var(--space-4);
+  }
+
+  .d-hero-band {
+    background: var(--ink);
+    padding: var(--space-3) var(--space-4) var(--space-3);
+    max-width: 48rem;
+    box-shadow: 0 30px 60px -24px rgb(0 0 0 / 0.6);
+  }
+
+  .d-title {
+    font-size: clamp(3.5rem, 10vw, 7.5rem);
+    margin: 0 0 var(--space-2);
+  }
+
+  .d-summary {
+    color: var(--on-ink);
+    margin: 0;
+    font-size: 1.08rem;
+    max-width: 58ch;
+  }
+
+  .d-credit {
+    position: absolute;
+    right: var(--gutter);
+    bottom: 0.5rem;
+    margin: 0;
+    text-shadow: 0 1px 2px rgb(0 0 0 / 0.8);
+  }
+
+  .d-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 20rem;
+    gap: var(--space-5);
+    padding-block: var(--space-5);
+    align-items: start;
+  }
+
+  .d-article :global(h2) {
+    font-size: clamp(2rem, 3.6vw, 2.75rem);
+  }
+
+  .d-article :global(h2 + p),
+  .d-article :global(h3 + p) {
+    margin-top: 0;
+  }
+
+  .d-article :global(strong) {
+    font-weight: 650;
+  }
+
+  .d-faq {
+    margin-top: var(--space-5);
+    padding-top: var(--space-4);
+    border-top: 3px solid var(--ink);
+  }
+
+  .d-faq-item + .d-faq-item {
+    margin-top: var(--space-3);
+  }
+
+  .d-faq-item h3 {
+    font-size: 1.45rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .d-aside {
+    position: sticky;
+    top: var(--space-3);
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  /* Cada bloque lleva su título como rótulo de cartel: banda negra, letras en una tinta. */
+  .d-card:nth-child(4n + 1) { --card-ink: var(--magenta); }
+  .d-card:nth-child(4n + 2) { --card-ink: var(--orange); }
+  .d-card:nth-child(4n + 3) { --card-ink: var(--green); }
+  .d-card:nth-child(4n + 4) { --card-ink: var(--yellow); }
+
+  .d-card h2 {
+    font-size: 1.35rem;
+    line-height: 1;
+    background: var(--ink);
+    color: var(--card-ink);
+    padding: 0.45rem 0.7rem 0.35rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .d-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .d-card dl {
+    margin: 0;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.35rem 1rem;
+  }
+
+  .d-card dt {
+    color: var(--text-2);
+  }
+
+  .d-card dd {
+    margin: 0;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .d-card p {
+    margin: 0;
+  }
+
+  .d-chips {
+    display: flex !important;
+    flex-wrap: wrap;
+    gap: 0.4rem !important;
+  }
+
+  .d-chips a {
+    display: inline-block;
+    font-family: var(--font-poster);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 0.95rem;
+    text-decoration: none;
+    color: var(--ink);
+    border: 2px solid var(--ink);
+    padding: 0.15rem 0.55rem 0.1rem;
+  }
+
+  .d-chips a:hover {
+    background: var(--yellow);
+  }
+
+  .d-operators {
+    background: var(--ink);
+    color: var(--on-ink);
+    padding-block: var(--space-6);
+  }
+
+  .ops-title {
+    font-size: clamp(3rem, 7vw, 5.25rem);
+  }
+
+  .ops-lede {
+    color: var(--on-ink-2);
+    max-width: 62ch;
+  }
+
+  .ops-list {
+    list-style: none;
+    padding: 0;
+    margin: var(--space-3) 0 var(--space-4);
+    columns: 3 16rem;
+    column-gap: var(--space-4);
+    border-top: 1px solid #3a3a3a;
+  }
+
+  .ops-list li {
+    break-inside: avoid;
+    padding: 0.55rem 0;
+    border-bottom: 1px solid #2c2c2c;
+    display: grid;
+    gap: 0.05rem;
+  }
+
+  .ops-list a {
+    color: var(--on-ink);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .ops-list a:hover {
+    color: var(--yellow);
+    text-decoration: underline;
+    text-decoration-color: var(--magenta);
+  }
+
+  .ops-list span {
+    color: var(--on-ink-2);
+    font-size: 0.85rem;
+  }
+
+  .d-related {
+    padding-top: var(--space-5);
+    background: var(--paper-2);
+  }
+
+  .d-related-head {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+  }
+
+  .d-related-head h2 {
+    margin: 0;
+  }
+
+  @media (max-width: 960px) {
+    .d-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .d-aside {
+      position: static;
+      grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    }
+  }
+
+  @media (max-width: 560px) {
+    .d-hero-band {
+      padding: var(--space-2) var(--space-3);
+    }
+
+    .d-related-head {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

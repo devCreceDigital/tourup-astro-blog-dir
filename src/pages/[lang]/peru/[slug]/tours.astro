@@ -1,10 +1,6 @@
 ---
+import Layout from '../../../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
-import NavCmstourup from '../../../../components/NavCmstourup.astro';
-import FooterCmstourup from '../../../../components/FooterCmstourup.astro';
-import SettingsHead from '../../../../components/SettingsHead.astro';
-import SettingsBodyEnd from '../../../../components/SettingsBodyEnd.astro';
-import '../../../../styles/theme.css';
 
 export async function getStaticPaths() {
   const destinos = await getCollection('destinos');
@@ -65,38 +61,22 @@ const pageDesc = lang === 'en'
 
 const t = (es: string, en: string) => lang === 'en' ? en : es;
 ---
-
-<!doctype html>
-<html class="light" lang={lang}>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <SettingsHead
-      title={pageTitle}
+<Layout title={pageTitle}
       description={pageDesc}
       currentPath={`/${lang}/peru/${slug}/tours/`}
-      lang={lang}
-    />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    <meta name="robots" content="index, follow" />
-  </head>
+      lang={lang}>
+  
 
-  <body>
-
-    <NavCmstourup lang={lang} toursSlug={slug} />
-
-    <main class="main-content">
+  <div class="main-content">
 
       <!-- Breadcrumbs -->
       <div class="breadcrumbs">
         <a href="/" class="bc-link">{t('Inicio', 'Home')}</a>
-        <span class="material-symbols-outlined bc-chevron">chevron_right</span>
+        <span class="bc-sep" aria-hidden="true">/</span>
         <a href={`/${lang}/peru/`} class="bc-link">{t('Perú', 'Peru')}</a>
-        <span class="material-symbols-outlined bc-chevron">chevron_right</span>
+        <span class="bc-sep" aria-hidden="true">/</span>
         <a href={`/${lang}/peru/${slug}/`} class="bc-link">{d.name}</a>
-        <span class="material-symbols-outlined bc-chevron">chevron_right</span>
+        <span class="bc-sep" aria-hidden="true">/</span>
         <span class="bc-current">{t('Tours', 'Tours')}</span>
       </div>
 
@@ -126,7 +106,7 @@ const t = (es: string, en: string) => lang === 'en' ? en : es;
                 <p class="category-desc">{cd.data.summary}</p>
                 <div class="category-footer">
                   <span class="category-count">{count} {t(`empresa${count !== 1 ? 's' : ''}`, `compan${count !== 1 ? 'ies' : 'y'}`)}</span>
-                  <span class="material-symbols-outlined category-arrow">arrow_forward</span>
+                  <svg class="icon-arrow" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="3" /></svg>
                 </div>
               </a>
             );
@@ -137,189 +117,14 @@ const t = (es: string, en: string) => lang === 'en' ? en : es;
       <!-- Back link -->
       <div class="back-link-wrap">
         <a href={`/${lang}/peru/${slug}/`} class="back-link">
-          <span class="material-symbols-outlined back-link-icon">arrow_back</span>
+          <svg class="icon-arrow" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M20 12H5M11 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="3" /></svg>
           {t(`Volver a la guía de ${d.name}`, `Back to ${d.name} guide`)}
         </a>
       </div>
 
-    </main>
+    </div>
+</Layout>
 
-    <FooterCmstourup lang={lang} />
-    <SettingsBodyEnd />
-  </body>
-</html>
-
-<style is:global>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    color: var(--color-on-surface);
-    background: var(--color-surface);
-    min-height: 100vh;
-  }
-
-  .main-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 48px 16px;
-  }
-
-  .breadcrumbs {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.75rem;
-    color: #3e4851;
-    margin-bottom: 32px;
-    flex-wrap: wrap;
-  }
-
-  .bc-link {
-    color: #3e4851;
-    text-decoration: none;
-    transition: color 0.15s;
-  }
-
-  .bc-link:hover { color: #1b1b1d; }
-
-  .bc-chevron {
-    font-size: 14px !important;
-    line-height: 1;
-  }
-
-  .bc-current {
-    font-weight: 600;
-    color: #1b1b1d;
-  }
-
-  .page-title {
-    font-size: 28px;
-    font-weight: 700;
-    letter-spacing: normal;
-    color: #1b1b1d;
-    line-height: 36px;
-    max-width: 48rem;
-    margin-bottom: 16px;
-  }
-
-  @media (min-width: 768px) {
-    .page-title {
-      font-size: 48px;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      line-height: 56px;
-    }
-  }
-
-  .page-summary {
-    font-size: 0.875rem;
-    color: #3e4851;
-    max-width: 40rem;
-    margin-bottom: 40px;
-    line-height: 1.625;
-  }
-
-  .category-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-
-  @media (min-width: 640px) {
-    .category-grid { grid-template-columns: repeat(2, 1fr); }
-  }
-
-  @media (min-width: 1024px) {
-    .category-grid { grid-template-columns: repeat(3, 1fr); }
-  }
-
-  .category-card {
-    background: #ffffff;
-    border: 1px solid #e4e2e4;
-    border-radius: 0.75rem;
-    padding: 24px;
-    text-decoration: none;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    transition: border-color 0.15s, background 0.15s;
-  }
-
-  .category-card:hover {
-    border-color: var(--color-primary);
-    background: #fcf8fb;
-  }
-
-  .category-name {
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: #1b1b1d;
-  }
-
-  .category-card:hover .category-name {
-    text-decoration: underline;
-  }
-
-  .category-desc {
-    font-size: 0.75rem;
-    color: #6e7882;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    line-height: 1.625;
-  }
-
-  .category-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: auto;
-    padding-top: 12px;
-  }
-
-  .category-count {
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: #3e4851;
-  }
-
-  .category-arrow {
-    color: #a6aab0;
-    font-size: 16px !important;
-    transition: color 0.15s;
-  }
-
-  .category-card:hover .category-arrow {
-    color: #1b1b1d;
-  }
-
-  .empty-msg {
-    font-size: 0.875rem;
-    color: #6e7882;
-    font-style: italic;
-  }
-
-  .back-link-wrap {
-    margin-top: 48px;
-  }
-
-  .back-link {
-    font-size: 0.875rem;
-    color: #3e4851;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    transition: color 0.15s;
-  }
-
-  .back-link:hover { color: #1b1b1d; }
-
-  .back-link-icon {
-    font-size: 14px !important;
-  }
-
+<style>
 
 </style>

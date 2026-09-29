@@ -27,6 +27,8 @@ export default defineConfig({
 	output: 'static',
 	adapter: node({ mode: 'standalone' }),
 	trailingSlash: 'always',
+	// El inglés es el idioma principal: su portada es `/`.
+	redirects: { '/en/': '/' },
 	markdown: { rehypePlugins: [rehypeDemoteH1] },
 	integrations: [
 		// @astrojs/sitemap es la ÚNICA fuente del sitemap (sitemap-index.xml + sitemap-N.xml).
@@ -35,7 +37,7 @@ export default defineConfig({
 		// que no existen como páginas.
 		sitemap({
 			filter: (page) => {
-				if (/\/(admin|api)\//.test(page)) return false;
+				if (/\/(admin|api|search)\//.test(page)) return false;
 				const m = page.match(/\/(?:companies|empresas)\/([^/]+)\/$/);
 				if (m && nameless.has(decodeURIComponent(m[1]))) return false;
 				const p = page.match(/\/es\/ai-prompts\/([^/]+)\/$/);

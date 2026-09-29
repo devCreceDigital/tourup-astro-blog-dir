@@ -1,10 +1,21 @@
 ---
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import { getSettings } from '../lib/settings';
+/**
+ * Estructura común de todas las páginas públicas: SEO (canonical, hreflang, Open Graph,
+ * JSON-LD) + cabecera y pie del sistema "cartel chicha". Sitio estático: sin ajustes en base
+ * de datos ni scripts de terceros.
+ */
+// Fuentes autoalojadas: sin peticiones a Google Fonts (privacidad de visitantes de la UE).
+import '@fontsource/big-shoulders-display/700';
+import '@fontsource/big-shoulders-display/800';
+import '@fontsource/big-shoulders-display/900';
+import '@fontsource-variable/source-serif-4/opsz';
+import '@fontsource-variable/source-serif-4/opsz-italic';
+import '../styles/global.css';
+import Masthead from '../components/site/Masthead.astro';
+import SiteFooter from '../components/site/SiteFooter.astro';
 import SiteJsonLd from '../components/SiteJsonLd.astro';
-import { hreflangAlternates } from '../utils/seo';
-import '../styles/theme.css';
+import { hreflangAlternates, SITE_URL } from '../utils/seo';
+import type { Locale } from '../utils/i18n';
 
 interface Props {
   title?: string;
@@ -19,49 +30,44 @@ interface Props {
   breadcrumb?: string;
   lang?: string;
   date?: string;
-}
-
-let settingsSeo, settingsAdvanced, settingsIntegrations;
-try {
-  const s = await getSettings();
-  settingsSeo = s.seo;
-  settingsAdvanced = s.advanced;
-  settingsIntegrations = s.integrations;
-} catch {
-  settingsSeo = {};
-  settingsAdvanced = {};
-  settingsIntegrations = {};
+  /** true = el contenido ocupa todo el ancho (portadas); false = columna centrada. */
+  bleed?: boolean;
 }
 
 const {
-  title = settingsSeo?.siteTitle || 'TourUp Content Hub',
+  title = 'TourUp Guide — Peru travel guide and operator directory',
   description: descriptionProp,
   currentPath = '/',
   canonicalUrl: canonicalUrlProp,
   hreflangOverrides,
-  image = settingsSeo?.ogImage || '/og-default.jpg',
+  image = '/og-default.jpg',
   noindex = false,
   hreflang = true,
   breadcrumb,
   date = '',
+  bleed = false,
 } = Astro.props;
+
+const lang: Locale = (Astro.props.lang ?? (currentPath.startsWith('/es/') ? 'es' : 'en')) === 'es' ? 'es' : 'en';
 
 // Una descripción vacía ('') no debe llegar al <meta>: cae al valor por defecto.
 const description =
   (typeof descriptionProp === 'string' && descriptionProp.trim()) ||
-  settingsSeo?.description ||
-  'Directorio de operadores turísticos en Perú — encuentra agencias, tours y destinos verificados';
+  (lang === 'es'
+    ? 'Guía de viaje de Perú: destinos, itinerarios y respuestas, más un directorio de empresas de turismo registradas.'
+    : 'Peru travel guide: destinations, itineraries and answers, plus a directory of registered Peruvian travel companies.');
 
-const siteUrl = settingsSeo?.canonicalUrl || 'https://guia.tourup.co';
+const siteUrl = SITE_URL;
 const canonicalUrl = canonicalUrlProp || `${siteUrl}${currentPath}`;
-
-const lang = Astro.props.lang ?? (currentPath.startsWith('/en/') ? 'en' : 'es');
 const ogLocale = lang === 'en' ? 'en_US' : 'es_PE';
-
 const ogType = currentPath.startsWith('/blog/') ? 'article' : 'website';
+const ogImage = image.startsWith('http') ? image : `${siteUrl}${image}`;
 
 // hreflang solo hacia páginas que existen (ver utils/seo.ts); null = sin versión por idioma (blog).
 const alternates = hreflangAlternates(currentPath, siteUrl);
+const altHref = (l: Locale) => (l === 'es' ? hreflangOverrides?.es ?? alternates?.es : hreflangOverrides?.en ?? alternates?.en);
+const otherLang: Locale = lang === 'en' ? 'es' : 'en';
+const altUrl = hreflang && !noindex ? altHref(otherLang)?.replace(siteUrl, '') ?? null : null;
 ---
 
 <!doctype html>
@@ -71,6 +77,7 @@ const alternates = hreflangAlternates(currentPath, siteUrl);
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#00c9b1" />
     {noindex && <meta name="robots" content="noindex, follow" />}
     {import.meta.env.GOOGLE_VERIFICATION_CODE && <meta name="google-site-verification" content={import.meta.env.GOOGLE_VERIFICATION_CODE} />}
     {import.meta.env.BING_VERIFICATION_CODE && <meta name="msvalidate.01" content={import.meta.env.BING_VERIFICATION_CODE} />}
@@ -78,71 +85,28 @@ const alternates = hreflangAlternates(currentPath, siteUrl);
     <link rel="canonical" href={canonicalUrl} />
     <title>{title}</title>
 
-    <!-- Open Graph -->
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalUrl} />
-    <meta property="og:image" content={`${siteUrl}${image}`} />
+    <meta property="og:image" content={ogImage} />
     <meta property="og:type" content={ogType} />
     <meta property="og:locale" content={ogLocale} />
-    <meta property="og:site_name" content="TourUp Peru" />
-
-    <!-- Twitter Cards -->
+    <meta property="og:site_name" content="TourUp Guide" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={`${siteUrl}${image}`} />
+    <meta name="twitter:image" content={ogImage} />
 
-    <!-- Google Fonts: Plus Jakarta Sans -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-
-    <!-- hreflang -->
     {hreflang && (hreflangOverrides || alternates) && (
       <>
-        <link rel="alternate" hreflang="es" href={hreflangOverrides?.es ?? alternates?.es} />
-        <link rel="alternate" hreflang="en" href={hreflangOverrides?.en ?? alternates?.en} />
+        <link rel="alternate" hreflang="es" href={altHref('es')} />
+        <link rel="alternate" hreflang="en" href={altHref('en')} />
         <link rel="alternate" hreflang="x-default" href={hreflangOverrides?.['x-default'] ?? alternates?.xDefault} />
       </>
     )}
 
-    {settingsSeo?.metaKeywords && <meta name="keywords" content={settingsSeo.metaKeywords} />}
-
     <link rel="sitemap" type="application/xml" href={`${siteUrl}/sitemap-index.xml`} />
 
-    {settingsAdvanced?.customCss && <style>{settingsAdvanced.customCss}</style>}
-    {settingsAdvanced?.inlineStyles && <style>{settingsAdvanced.inlineStyles}</style>}
-    {settingsAdvanced?.customJsHead && <script set:html={settingsAdvanced.customJsHead}></script>}
-
-    {settingsIntegrations?.googleAnalyticsId && (
-      <script async src={`https://www.googletagmanager.com/gtag/js?id=${settingsIntegrations.googleAnalyticsId}`}></script>
-    )}
-    {settingsIntegrations?.googleAnalyticsId && (
-      <script set:html={`
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', '${settingsIntegrations.googleAnalyticsId}');
-      `}></script>
-    )}
-
-    {settingsIntegrations?.facebookPixelId && (
-      <script set:html={`
-        !function(f,b,e,v,n,t,s)
-        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-        n.queue=[];t=b.createElement(e);t.async=!0;
-        t.src=v;s=b.getElementsByTagName(e)[0];
-        s.parentNode.insertBefore(t,s)}(window, document,'script',
-        'https://connect.facebook.net/en_US/fbevents.js');
-        fbq('init', '${settingsIntegrations.facebookPixelId}');
-        fbq('track', 'PageView');
-      `}></script>
-    )}
-
-    <!-- Schema.org: Organization + WebSite + WebPage + BreadcrumbList -->
     <SiteJsonLd
       title={title}
       description={description}
@@ -152,174 +116,43 @@ const alternates = hreflangAlternates(currentPath, siteUrl);
       breadcrumb={breadcrumb}
       dateModified={date || undefined}
     />
+    <slot name="head" />
   </head>
   <body>
-    <Header currentPath={currentPath} />
-    <main>
+    <a class="skip-link" href="#main">{lang === 'es' ? 'Saltar al contenido' : 'Skip to content'}</a>
+    <Masthead lang={lang} currentPath={currentPath} altUrl={altUrl} />
+    <main id="main" class={bleed ? 'main-bleed' : 'main-column wrap'}>
       <slot />
     </main>
-    <Footer />
-    {settingsAdvanced?.customJsBody && <script set:html={settingsAdvanced.customJsBody}></script>}
+    <SiteFooter lang={lang} />
   </body>
 </html>
 
 <style is:global>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  .skip-link {
+    position: absolute;
+    left: 0.5rem;
+    top: -3rem;
+    z-index: 10;
+    background: var(--yellow);
+    color: var(--ink);
+    font-family: var(--font-poster);
+    font-weight: 800;
+    text-transform: uppercase;
+    padding: 0.5rem 1rem;
   }
 
-  html {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    background: var(--color-surface);
-    color: var(--color-on-surface);
-    line-height: 1.6;
-  }
-
-  body {
-    background: var(--color-surface);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+  .skip-link:focus {
+    top: 0.5rem;
   }
 
   main {
     flex: 1;
-    max-width: 1200px;
     width: 100%;
-    margin: 0 auto;
-    padding: 0 2rem;
   }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    font-weight: 700;
-    line-height: 1.2;
-    color: var(--color-on-surface);
-    margin-bottom: 1rem;
-  }
-
-  h1 {
-    font-size: 2.5rem;
-  }
-
-  h2 {
-    font-size: 2rem;
-  }
-
-  h3 {
-    font-size: 1.5rem;
-  }
-
-  h4 {
-    font-size: 1.25rem;
-  }
-
-  p {
-    margin-bottom: 1rem;
-    color: var(--color-on-surface-variant);
-  }
-
-  a {
-    color: var(--color-primary);
-    text-decoration: none;
-    transition: color 0.1s ease;
-  }
-
-  a:hover {
-    color: var(--color-primary-hover);
-  }
-
-  button,
-  .btn {
-    padding: 0.75rem 1.5rem;
-    background: var(--color-primary);
-    color: var(--color-on-primary);
-    border: none;
-    border-radius: 0.5rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.1s ease;
-  }
-
-  button:hover,
-  .btn:hover {
-    background: var(--color-primary-hover);
-  }
-
-  code {
-    background: var(--color-surface-container);
-    padding: 0.25rem 0.5rem;
-    border-radius: 0.25rem;
-    font-family: 'Courier New', monospace;
-    font-size: 0.9rem;
-    color: var(--color-on-surface);
-  }
-
-  pre {
-    background: var(--color-surface-container);
-    padding: 1rem;
-    border-radius: 0.5rem;
-    overflow-x: auto;
-    margin-bottom: 1rem;
-  }
-
-  pre code {
-    background: none;
-    padding: 0;
-    border-radius: 0;
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 1rem;
-  }
-
-  th,
-  td {
-    padding: 0.75rem;
-    text-align: left;
-    border-bottom: 1px solid var(--color-outline-variant);
-    color: var(--color-on-surface-variant);
-  }
-
-  th {
-    background: var(--color-surface-container);
-    font-weight: 600;
-    color: var(--color-on-surface);
-  }
-
-  tr:hover {
-    background: var(--color-surface);
-  }
-
-  img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 0.5rem;
-  }
-
-  @media (max-width: 768px) {
-    main {
-      padding: 0 1rem;
-    }
-
-    h1 {
-      font-size: 1.75rem;
-    }
-
-    h2 {
-      font-size: 1.5rem;
-    }
-
-    h3 {
-      font-size: 1.25rem;
-    }
+  .main-column {
+    padding-top: var(--space-4);
+    padding-bottom: var(--space-5);
   }
 </style>
