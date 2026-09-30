@@ -19,7 +19,9 @@
     "seed": "npx tsx scripts/seed-admin.ts",
     "deploy": "npm run build && node ./dist/server/entry.mjs",
     "enrich:categorias": "python3 scripts/enrich_categoria_content.py",
-    "indexnow": "node scripts/indexnow.mjs"
+    "indexnow": "node scripts/indexnow.mjs",
+    "geo:probe": "node scripts/geo-probe.mjs",
+    "bots:report": "node scripts/ai-bot-report.mjs"
   },
   "dependencies": {
     "@astrojs/node": "^9.0.0",
