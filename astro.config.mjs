@@ -3,9 +3,12 @@ import { defineConfig } from 'astro/config';
 import node from '@astrojs/node';
 import sitemap from '@astrojs/sitemap';
 import { namelessCompanySlugs, untranslatedEsPromptSlugs } from './scripts/lib/content-dedupe.mjs';
+import { contentDates, sourceFileForUrl } from './scripts/lib/content-dates.mjs';
 
 // Fichas sin nombre real en el dato de origen (título "-"): se publican con noindex, no van al sitemap.
 const nameless = namelessCompanySlugs('src/content/companies');
+// Fecha real del último cambio de cada archivo de contenido (git), para <lastmod>.
+const dates = contentDates();
 // Prompts /es/ que son copia sin traducir del inglés: noindex, fuera del sitemap.
 const untranslatedEs = untranslatedEsPromptSlugs('src/content/prompts_es', 'src/content/prompts');
 
@@ -74,6 +77,8 @@ export default defineConfig({
 				} else {
 					entry.priority = 0.5;
 				}
+				const src = sourceFileForUrl(entry.url);
+				if (src && dates.has(src)) entry.lastmod = dates.get(src);
 				return entry;
 			},
 		}),
