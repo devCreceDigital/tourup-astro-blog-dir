@@ -74,7 +74,7 @@ const t = (es: string, en: string) => lang === 'en' ? en : es;
       <div class="breadcrumbs">
         <a href="/" class="bc-link">{t('Inicio', 'Home')}</a>
         <span class="bc-sep" aria-hidden="true">/</span>
-        <a href={`/${lang}/peru/`} class="bc-link">{t('Perú', 'Peru')}</a>
+        <a href={lang === 'en' ? '/en/destinations/' : '/es/destinos/'} class="bc-link">{t('Destinos', 'Destinations')}</a>
         <span class="bc-sep" aria-hidden="true">/</span>
         <a href={`/${lang}/peru/${slug}/`} class="bc-link">{d.name}</a>
         <span class="bc-sep" aria-hidden="true">/</span>
