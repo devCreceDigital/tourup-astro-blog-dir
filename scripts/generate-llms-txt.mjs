@@ -147,12 +147,8 @@ function buildLlmsFullTxt() {
       }
     }
 
-    out.push(`## ${lang === 'es' ? 'Categorías de tours por destino' : 'Tour categories by destination'} (${lang.toUpperCase()})`, '');
-    for (const c of categorias) {
-      const { destino_slug, categoria } = c.data;
-      out.push(link(loc(c.data.name, lang) || `${categoria} ${destino_slug}`, urls.categoria(lang, destino_slug, categoria), `${destName(lang, destino_slug)} — ${clip(loc(c.data.summary, lang), 140)}`));
-    }
-    out.push('');
+    // Las páginas de categoría de tours son noindex (contenido de plantilla, categorías asignadas
+    // automáticamente a las empresas): no se anuncian a los LLM.
   }
 
   out.push('## Empresas / Companies', '');

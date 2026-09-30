@@ -2,6 +2,8 @@
 import Layout from '../../../../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 import { companyDescription, companyDisplayName, companyPath } from '../../../../../utils/seo';
+import { categoryLabel } from '../../../../../utils/graph';
+import { getLocalizedString } from '../../../../../utils/i18n';
 
 export async function getStaticPaths() {
   const allCatDest = await getCollection('categorias_destino');
@@ -25,7 +27,6 @@ interface Props {
 }
 
 const { cd, lang } = Astro.props;
-const { Content } = await cd.render();
 
 const slug = cd.data.destino_slug;
 const categoria = cd.data.categoria;
@@ -50,13 +51,16 @@ for (const c of companies) {
 }
 
 const siteUrl = 'https://guide.tourup.co';
+// Las FAQ de categoría son plantilla ("operadores verificados", "precio neto B2B") sin dato que
+// las respalde: no se publican ni en la página ni en el JSON-LD.
+const templatedFaq: any[] = [];
 
-const categoriaJsonLd = cd.data.faq?.length > 0 ? {
+const categoriaJsonLd = templatedFaq?.length > 0 ? {
   '@context': 'https://schema.org',
   '@graph': [
     {
       '@type': 'FAQPage',
-      mainEntity: cd.data.faq.map((item: any) => ({
+      mainEntity: templatedFaq.map((item: any) => ({
         '@type': 'Question',
         name: item.question,
         acceptedAnswer: {
@@ -69,11 +73,21 @@ const categoriaJsonLd = cd.data.faq?.length > 0 ? {
 } : null;
 
 const t = (es: string, en: string) => lang === 'en' ? en : es;
+// Página de apoyo (noindex): las categorías de las empresas se asignaron automáticamente, así
+// que aquí no se afirma verificación ni tarifas; solo lo que dice el dato.
+const destName = destino ? getLocalizedString(destino.data.name, lang === 'en' ? 'en' : 'es') : slug;
+const label = categoryLabel(categoria, lang === 'en' ? 'en' : 'es');
+const pageName = t(`${label} en ${destName}`, `${label} in ${destName}`);
+const pageDescription = t(
+  `Empresas de turismo registradas en ${destName} que incluyen ${label.toLowerCase()} entre sus servicios.`,
+  `Registered travel companies in ${destName} that list ${label.toLowerCase()} among their services.`,
+);
 ---
-<Layout title={`${cd.data.name} – TourUp Peru`}
-      description={cd.data.summary}
+<Layout title={`${pageName} – TourUp`}
+      description={pageDescription}
       currentPath={`/${lang}/peru/${slug}/tours/${categoria}/`}
-      lang={lang}>
+      lang={lang}
+      noindex>
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(categoriaJsonLd)} />
 
   <div class="main-content">
@@ -88,7 +102,7 @@ const t = (es: string, en: string) => lang === 'en' ? en : es;
         <span class="bc-sep" aria-hidden="true">/</span>
         <a href={`/${lang}/peru/${slug}/tours/`} class="bc-link">{t('Tours', 'Tours')}</a>
         <span class="bc-sep" aria-hidden="true">/</span>
-        <span class="bc-current">{cd.data.name}</span>
+        <span class="bc-current">{pageName}</span>
       </div>
 
       <!-- Meta tags -->
@@ -99,29 +113,23 @@ const t = (es: string, en: string) => lang === 'en' ? en : es;
 
       <!-- Title -->
       <h1 class="page-title">
-        {cd.data.name}
+        {pageName}
       </h1>
 
       <!-- Summary -->
       <p class="page-summary">
-        {cd.data.summary}
+        {pageDescription}
       </p>
 
-      <!-- Content -->
-      <article class="article-card">
-        <div class="article-accent"></div>
-        <div class="article-body prose">
-          <Content />
-        </div>
-      </article>
+      {/* El cuerpo Markdown de las categorías es plantilla sin dato que lo respalde: no se muestra. */}
 
       <!-- FAQ -->
-      {cd.data.faq && cd.data.faq.length > 0 && (
+      {templatedFaq && templatedFaq.length > 0 && (
         <article class="article-card">
           <div class="article-accent"></div>
           <h2 class="article-heading">{t('Preguntas Frecuentes', 'Frequently Asked Questions')}</h2>
           <div class="faq-list">
-            {cd.data.faq.map((item: any, i: number) => (
+            {templatedFaq.map((item: any, i: number) => (
               <div class={`faq-item ${i > 0 ? 'faq-item-bordered' : ''}`}>
                 <h3 class="faq-q">{item.question}</h3>
                 <p class="faq-a">{item.answer}</p>
@@ -134,7 +142,7 @@ const t = (es: string, en: string) => lang === 'en' ? en : es;
       <!-- Companies -->
       <article class="article-card">
         <div class="article-accent"></div>
-        <h2 class="article-heading">{t(`Empresas que ofrecen ${cd.data.name}`, `Companies offering ${cd.data.name}`)}</h2>
+        <h2 class="article-heading">{t(`Empresas que ofrecen ${pageName}`, `Companies offering ${pageName}`)}</h2>
         <div class="company-grid">
           {deduped.length === 0 ? (
             <p class="empty-msg">{t('No se encontraron empresas para esta categoría en este destino.', 'No companies found for this category in this destination.')}</p>

@@ -53,6 +53,8 @@ export default defineConfig({
 		sitemap({
 			filter: (page) => {
 				if (/\/(admin|api|search)\//.test(page)) return false;
+				// Páginas de tours por categoría: noindex (plantilla, categorías autoasignadas).
+				if (/\/peru\/[^/]+\/tours\//.test(page)) return false;
 				const m = page.match(/\/(?:companies|empresas)\/([^/]+)\/$/);
 				if (m && nameless.has(decodeURIComponent(m[1]))) return false;
 				const p = page.match(/\/es\/ai-prompts\/([^/]+)\/$/);

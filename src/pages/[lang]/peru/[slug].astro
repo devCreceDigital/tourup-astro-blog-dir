@@ -191,16 +191,7 @@ const jsonLd = {
         </div>
       )}
 
-      {categories.length > 0 && (
-        <div class="d-card">
-          <h2>{t('Tipos de tour', 'Tour types')}</h2>
-          <ul class="d-chips">
-            {categories.map((c) => (
-              <li><a href={`/${lang}/peru/${slug}/tours/${c.slug}/`}>{c.name}</a></li>
-            ))}
-          </ul>
-        </div>
-      )}
+      {/* Los tipos de tour no se enlazan: las categorías de las empresas son autoasignadas y sus páginas son noindex. */}
     </aside>
   </div>
 

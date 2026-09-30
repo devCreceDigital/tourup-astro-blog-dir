@@ -169,10 +169,8 @@ function contentPathToUrl(relativePath, lang, frontmatter = {}) {
   if (dir === 'prompts') return `/en/ai-prompts/${slug}/`;
   if (dir === 'prompts_es') return `/es/ai-prompts/${slug}/`;
   if (dir === 'posts' || dir === 'blog') return `/blog/${slug}/`;
-  if (dir.startsWith('categorias_destino')) {
-    const { destino_slug, categoria } = frontmatter;
-    return destino_slug && categoria ? `/en/peru/${destino_slug}/tours/${categoria}/` : null;
-  }
+  // Categorías de tours: páginas noindex (plantilla), fuera del índice para IA.
+  if (dir.startsWith('categorias_destino')) return null;
   return null;
 }
 
