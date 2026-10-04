@@ -46,7 +46,7 @@ const sortedDestinos = [...destinos].sort((a, b) => a.name.localeCompare(b.name)
             <h4>{t("Sistema", "System")}</h4>
             <ul>
               <li><a href={`/${lang}/ai-prompts/`}>{t("Documentación", "Documentation")}</a></li>
-              <li><a href="https://tourup.co">{t("Contacto", "Contact")}</a></li>
+              <li><a href="https://guia.tourup.co">{t("Contacto", "Contact")}</a></li>
               <li><a href="/blog/">{t("Prensa", "Press")}</a></li>
             </ul>
           </div>
@@ -72,7 +72,6 @@ const sortedDestinos = [...destinos].sort((a, b) => a.name.localeCompare(b.name)
         <div class="cms-footer-links">
           <a href="/">{t('Inicio', 'Home')}</a>
           <a href={`/${lang}/${lang === 'en' ? 'companies' : 'empresas'}/`}>{t('Empresas', 'Companies')}</a>
-          <a href="/partner-scout/">Partner Scout</a>
           <a href={`/${lang}/ai-prompts/`}>{t('Guías IA', 'AI Guides')}</a>
         </div>
       </div>

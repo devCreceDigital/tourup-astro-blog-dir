@@ -1,25 +1,31 @@
 :root {
   /* ── Surface / Background ── */
-  --color-surface: #fcf8fb;
-  --color-surface-dim: #dcd9dc;
-  --color-surface-container: #f0edef;
+  --color-surface: #f8fafc;
+  --color-surface-dim: #e2e8f0;
+  --color-surface-container: #f1f5f9;
   --color-surface-container-lowest: #ffffff;
 
   /* ── Text ── */
-  --color-on-surface: #1b1b1d;
-  --color-on-surface-variant: #3e4851;
+  --color-on-surface: #0f172a;
+  --color-on-surface-variant: #475569;
 
-  /* ── Primary (blue) ── */
-  --color-primary: #006591;
-  --color-primary-hover: #004c6e;
+  /* ── Primary (light blue) ── */
+  --color-primary: #0ea5e9;
+  --color-primary-rgb: 14, 165, 233;
+  --color-primary-hover: #0284c7;
   --color-on-primary: #ffffff;
 
+  /* ── Secondary (gray) ── */
+  --color-secondary: #6b7280;
+  --color-secondary-hover: #4b5563;
+  --color-on-secondary: #ffffff;
+
   /* ── Borders / Outlines ── */
-  --color-outline: #6e7882;
-  --color-outline-variant: #e4e2e4;
+  --color-outline: #94a3b8;
+  --color-outline-variant: #e2e8f0;
 
   /* ── Misc ── */
-  --color-tertiary-container: #a6aab0;
+  --color-tertiary-container: #cbd5e1;
 
   /* ── Navigation aliases ── */
   --nav-border: var(--color-outline-variant);
@@ -35,8 +41,8 @@
   --footer-text-muted: var(--color-on-surface-variant);
   --footer-hover: var(--color-on-surface);
 
-  /* ── Page-level aliases (was undefined) ── */
+  /* ── Page-level aliases ── */
   --color-border: var(--color-outline-variant);
-  --gradient-main: linear-gradient(135deg, var(--color-primary) 0%, #00b4ff 100%);
+  --gradient-main: linear-gradient(135deg, var(--color-primary) 0%, #38bdf8 100%);
   --color-dark-light: var(--color-surface-container);
 }

@@ -1,7 +1,7 @@
 /**
  * graphify.ts – Local helper for querying the Graphify knowledge graph.
  *
- * Usage by agents (GraphNavigator, PartnerScout):
+ * Usage by agents:
  *   1. Attempt to load graphify-out/graph.json (produced by `graphify . --backend gemini`)
  *   2. If the graph is available, filter Company nodes by destino / categoria / rating edges.
  *   3. If the graph is missing or the query returns 0 results, fall back to
@@ -255,13 +255,8 @@ async function filterViaCollection(filters: CompanyFilters): Promise<CompanyResu
  * Find companies matching the given filters.
  *
  * Strategy:
- *   1. Try graphify-out/graph.json (preferred – used by GraphNavigator agent).
+ *   1. Try graphify-out/graph.json (preferred – used by agents).
  *   2. Fallback: filter content collection directly (development / no graph).
- *
- * To be called by:
- *   - Partner Scout API endpoint (/api/partner-scout/search)
- *   - Partner Scout page (build-time embedding)
- *   - Any OpenClaw/Hermes agent that needs a shortlist
  */
 export async function findCompaniesByFilters(
   filters: CompanyFilters
@@ -280,7 +275,6 @@ export async function findCompaniesByFilters(
 
 /**
  * Load all companies as a lightweight catalog for client-side filtering.
- * Used by the Partner Scout page to embed data at build time.
  */
 export async function getAllCompaniesCatalog(): Promise<CompanyResult[]> {
   return findCompaniesByFilters({});
