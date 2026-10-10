@@ -33,6 +33,10 @@ const pageDesc = t(
   <script slot="head" type="application/ld+json" set:html={JSON.stringify({
       "@context": "https://schema.org",
       "@type": "Trip",
+      "@id": `${canonicalUrl}#trip`,
+      "url": canonicalUrl,
+      "inLanguage": lang,
+      "provider": { "@id": `${siteUrl}/#organization` },
       "name": t("Itinerario de 7 días por Perú", "7-Day Peru Itinerary"),
       "description": t("Lima, Cusco, Valle Sagrado y Machu Picchu en 7 días", "Lima, Cusco, Sacred Valley & Machu Picchu in 7 days"),
       "itinerary": [
@@ -259,25 +263,7 @@ const pageDesc = t(
           </div>
         </div>
 
-        <div class="sidebar-card sidebar-card-alt">
-          <span class="sidebar-label">SCHEMA.ORG EN &lt;HEAD&gt;</span>
-          <div class="schema-tags">
-            <span class="schema-tag">Trip</span>
-            <span class="schema-tag">Itinerary</span>
-            <span class="schema-tag">BreadcrumbList</span>
-            <span class="schema-tag">TouristTrip</span>
-          </div>
-        </div>
 
-        <div class="sidebar-card sidebar-card-alt">
-          <span class="sidebar-label">{t('VARIABLES ASTRO (AGENTE)', 'ASTRO VARIABLES (AGENT)')}</span>
-          <div class="var-list">
-            <div><span class="var-key">tipo_pagina:</span> <span class="var-val">"itinerario"</span></div>
-            <div><span class="var-key">itinerario:</span> <span class="var-val">"7 días"</span></div>
-            <div class="var-url"><span class="var-key">url:</span> <span class="var-val">"/peru/itinerario-7-dias/"</span></div>
-            <div><span class="var-key">anio:</span> <span class="var-val">"2026"</span></div>
-          </div>
-        </div>
 
         <div class="sidebar-card">
           <span class="sidebar-label">{t('Links Internos', 'Internal Links')}</span>
@@ -372,12 +358,6 @@ const pageDesc = t(
       .meta-row { display: flex; justify-content: space-between; border-bottom: 1px solid #e4e2e4; padding-bottom: 8px; }
       .meta-label { color: #3e4851; }
       .meta-value { color: #1b1b1d; font-weight: 500; }
-      .schema-tags { display: flex; flex-wrap: wrap; gap: 8px; font-size: 14px; }
-      .schema-tag { background: #e4e2e4; color: #1b1b1d; padding: 4px 8px; border-radius: 4px; font-size: 12px; }
-      .var-list { display: flex; flex-direction: column; gap: 8px; font-size: 14px; }
-      .var-key { color: #1b1b1d; font-weight: 500; }
-      .var-val { color: #3e4851; }
-      .var-url { word-break: break-all; }
       .internal-links { list-style: none; display: flex; flex-direction: column; gap: 12px; }
       .internal-link { display: flex; justify-content: space-between; align-items: center; text-decoration: none; color: #1b1b1d; font-size: 12px; border-bottom: 1px solid #e4e2e4; padding-bottom: 8px; transition: color 0.1s; }
       .internal-link:hover { color: #3e4851; }

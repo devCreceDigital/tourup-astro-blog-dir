@@ -22,13 +22,20 @@ interface Props {
 const { title, description, canonicalUrl, currentPath, lang, dateModified, breadcrumb } = Astro.props;
 const crumbs = breadcrumbTrail(currentPath, lang, breadcrumb || shortTitle(title));
 
+const orgDescription =
+  lang === 'es'
+    ? 'Guía de viaje por Perú y directorio de operadores turísticos: destinos, itinerarios y empresas.'
+    : 'Peru travel guide and tour operator directory: destinations, itineraries and companies.';
+
 const graph = [
   {
     '@type': 'Organization',
     '@id': `${SITE_URL}/#organization`,
-    name: 'TourUp Peru',
+    name: 'TourUp',
+    alternateName: ['TourUp Peru', 'TourUp Guide'],
     url: SITE_URL,
-    description: 'Directorio de operadores turísticos en Perú',
+    logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo-tourup.png`, width: 1966, height: 528 },
+    description: orgDescription,
     areaServed: { '@type': 'Country', name: 'PE' },
     ...(ORG_SAME_AS.length ? { sameAs: ORG_SAME_AS } : {}),
   },
@@ -36,8 +43,8 @@ const graph = [
     '@type': 'WebSite',
     '@id': `${SITE_URL}/#website`,
     url: SITE_URL,
-    name: 'TourUp Peru',
-    description: 'Directorio de operadores turísticos en Perú',
+    name: 'TourUp Guide',
+    description: orgDescription,
     publisher: { '@id': `${SITE_URL}/#organization` },
     inLanguage: ['es', 'en'],
   },

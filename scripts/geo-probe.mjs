@@ -7,7 +7,7 @@
  *   PERPLEXITY_API_KEY=... npm run geo:probe -- --limit 20   # una muestra
  *   OPENAI_API_KEY=... OPENAI_MODEL=<modelo con búsqueda web> npm run geo:probe
  *
- * Motores: Perplexity (API "sonar", devuelve las fuentes citadas) y, si se configuran
+ * Motores: Perplexity (Agent API, devuelve las fuentes citadas) y, si se configuran
  * OPENAI_API_KEY y OPENAI_MODEL, OpenAI Responses con la herramienta web_search. Sin claves no
  * hace nada. Escribe reports/geo-probe-AAAA-MM-DD.csv (una fila por pregunta y motor).
  * Cada ejecución tiene coste en la API del proveedor.
@@ -36,17 +36,28 @@ const companies = readdirSync('src/content/companies')
   .filter((t) => t && /[\p{L}\p{N}]{4,}/u.test(t));
 const companyNames = [...new Set(companies)];
 
+// Perplexity Agent API (la API "sonar" de chat/completions deja de tener soporte el 2026-09-27).
+// El formato de la respuesta puede cambiar: se recorre el JSON entero para sacar texto y URLs.
+function collect(node, out) {
+  if (Array.isArray(node)) node.forEach((n) => collect(n, out));
+  else if (node && typeof node === 'object') {
+    const url = node.url ?? node.uri;
+    if (typeof url === 'string' && url.startsWith('http')) out.sources.push(url);
+    if ((node.type === 'text' || node.type === 'output_text') && typeof node.text === 'string') out.texts.push(node.text);
+    Object.values(node).forEach((v) => collect(v, out));
+  }
+}
+
 async function askPerplexity(question) {
-  const res = await fetch('https://api.perplexity.ai/chat/completions', {
+  const res = await fetch('https://api.perplexity.ai/v1/agent', {
     method: 'POST',
     headers: { Authorization: `Bearer ${process.env.PERPLEXITY_API_KEY}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ model: 'sonar', messages: [{ role: 'user', content: question }] }),
+    body: JSON.stringify({ preset: 'fast', input: question }),
   });
   if (!res.ok) throw new Error(`Perplexity HTTP ${res.status}`);
-  const data = await res.json();
-  const text = data.choices?.[0]?.message?.content ?? '';
-  const sources = data.citations ?? data.search_results?.map((s) => s.url) ?? [];
-  return { text, sources };
+  const out = { sources: [], texts: [] };
+  collect(await res.json(), out);
+  return { text: out.texts.join('\n'), sources: [...new Set(out.sources)] };
 }
 
 async function askOpenAI(question) {
