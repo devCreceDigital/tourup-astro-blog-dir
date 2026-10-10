@@ -1,0 +1,351 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Tourup Hub - Content</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline": "#747878",
+                        "inverse-on-surface": "#f0f1f1",
+                        "on-tertiary-container": "#868381",
+                        "primary-fixed-dim": "#c9c6c5",
+                        "smoke": "#b9b9b9",
+                        "error": "#ba1a1a",
+                        "tertiary-container": "#1d1b1a",
+                        "on-primary-container": "#858383",
+                        "surface-variant": "#e2e2e2",
+                        "secondary-container": "#e3e2e2",
+                        "pure-black": "#000000",
+                        "inverse-primary": "#c9c6c5",
+                        "on-tertiary-fixed-variant": "#484645",
+                        "on-tertiary-fixed": "#1d1b1a",
+                        "surface-dim": "#dadada",
+                        "secondary": "#5e5e5e",
+                        "chalk": "#ffffff",
+                        "surface-bright": "#f9f9f9",
+                        "on-primary-fixed-variant": "#474646",
+                        "tertiary": "#000000",
+                        "on-secondary-container": "#646464",
+                        "on-background": "#1a1c1c",
+                        "secondary-fixed": "#e3e2e2",
+                        "outline-variant": "#c4c7c7",
+                        "surface-container-lowest": "#ffffff",
+                        "surface": "#f9f9f9",
+                        "error-container": "#ffdad6",
+                        "carbon": "#171717",
+                        "surface-container-low": "#f3f3f4",
+                        "on-primary": "#ffffff",
+                        "surface-tint": "#5f5e5e",
+                        "tertiary-fixed": "#e6e1df",
+                        "primary": "#000000",
+                        "on-error": "#ffffff",
+                        "ash": "#a1a1a1",
+                        "inverse-surface": "#2f3131",
+                        "on-secondary": "#ffffff",
+                        "primary-container": "#1c1b1b",
+                        "surface-container-high": "#e8e8e8",
+                        "surface-container": "#eeeeee",
+                        "mist": "#f2f2f2",
+                        "on-primary-fixed": "#1c1b1b",
+                        "secondary-fixed-dim": "#c7c6c6",
+                        "on-secondary-fixed-variant": "#464747",
+                        "background": "#f9f9f9",
+                        "surface-container-highest": "#e2e2e2",
+                        "on-surface": "#1a1c1c",
+                        "primary-fixed": "#e5e2e1",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "hairline": "#e5e5e5",
+                        "on-error-container": "#93000a",
+                        "on-tertiary": "#ffffff",
+                        "on-surface-variant": "#444748",
+                        "tertiary-fixed-dim": "#cac6c3"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "padding-card": "16px",
+                        "gap-element": "8px",
+                        "gap-nav": "10px",
+                        "max-width": "1200px",
+                        "nav-height": "64px",
+                        "base": "4px",
+                        "gap-section": "48px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Geist"],
+                        "caption": ["Geist"],
+                        "code": ["Geist Mono"],
+                        "label-md": ["Geist"],
+                        "display-xl-mobile": ["Geist"],
+                        "display-xl": ["Geist"],
+                        "headline-sm": ["Geist"]
+                    },
+                    "fontSize": {
+                        "body-md": ["14px", { "lineHeight": "1.43", "letterSpacing": "-0.025em", "fontWeight": "400" }],
+                        "caption": ["12px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "500" }],
+                        "code": ["14px", { "lineHeight": "1.43", "letterSpacing": "0", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "500" }],
+                        "display-xl-mobile": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.04em", "fontWeight": "600" }],
+                        "display-xl": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.05em", "fontWeight": "600" }],
+                        "headline-sm": ["18px", { "lineHeight": "1.5", "letterSpacing": "-0.45px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-surface text-on-surface font-body-md h-screen flex overflow-hidden">
+<!-- SideNavBar (Shared Component) -->
+<nav class="bg-chalk dark:bg-pure-black border-r border-hairline dark:border-carbon h-screen w-64 fixed left-0 top-0 flex flex-col p-gap-nav gap-base z-50">
+<div class="px-4 py-6 border-b border-hairline mb-4">
+<div class="flex items-center gap-3">
+<img class="w-8 h-8 object-cover rounded" data-alt="A highly geometric and brutalist abstract logo, composed of sharp black and white intersecting lines on a stark white background. The aesthetic is purely functional, architectural, and drafting-table inspired. High contrast, precise edges, vector style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBlrBuVsheQDXemjEa0u5XpWV0mS2AUF9TLpFsoBrFCQtNo9o0psxHsV-vXvpoRNu31mPOpTk8YlIJ96T301UFAnPul0B8_Cg6gebppz01Y-zHcYDU5ki5EsOSpCHPEU3WdsZLpSjbr0adsRbGvS_wLPyv6nsTss9EHMWW0xS4hxdZ6HPW5yJQwGBkinif2UnIzxa0p7uLaTiXaEjFAb55g8cDSEMe9vNQkCwOUcRwJ6cPpYZB3cuQHA8CQdRDLH54rCxGT5b-R6Eoo">
+<div>
+<h1 class="font-headline-sm text-headline-sm font-black text-primary dark:text-chalk tracking-tight">Tourup Hub</h1>
+<span class="font-code text-code text-secondary text-[10px]">v1.0.4</span>
+</div>
+</div>
+<button class="w-full mt-6 bg-pure-black text-chalk font-label-md text-label-md py-2.5 rounded-[10px] hover:bg-carbon transition-colors active:opacity-80">
+                Create New
+            </button>
+</div>
+<div class="flex flex-col gap-1 flex-1 px-2">
+<!-- Inactive -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-md text-secondary dark:text-ash hover:bg-mist dark:hover:bg-carbon transition-all duration-75 active:opacity-80 font-label-md text-label-md uppercase tracking-tight" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+                Dashboard
+            </a>
+<!-- Active (Content Dashboard) -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-md bg-primary dark:bg-chalk text-on-primary dark:text-pure-black font-bold transition-all duration-75 active:opacity-80 font-label-md text-label-md uppercase tracking-tight" href="#">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">folder_open</span>
+                Content
+            </a>
+<!-- Inactive -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-md text-secondary dark:text-ash hover:bg-mist dark:hover:bg-carbon transition-all duration-75 active:opacity-80 font-label-md text-label-md uppercase tracking-tight" href="#">
+<span class="material-symbols-outlined text-[20px]">insights</span>
+                Analytics
+            </a>
+<!-- Inactive -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-md text-secondary dark:text-ash hover:bg-mist dark:hover:bg-carbon transition-all duration-75 active:opacity-80 font-label-md text-label-md uppercase tracking-tight" href="#">
+<span class="material-symbols-outlined text-[20px]">perm_media</span>
+                Media
+            </a>
+<!-- Inactive -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-md text-secondary dark:text-ash hover:bg-mist dark:hover:bg-carbon transition-all duration-75 active:opacity-80 font-label-md text-label-md uppercase tracking-tight" href="#">
+<span class="material-symbols-outlined text-[20px]">group</span>
+                Team
+            </a>
+</div>
+<div class="mt-auto px-2 border-t border-hairline pt-4 flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-md text-secondary dark:text-ash hover:bg-mist dark:hover:bg-carbon transition-all duration-75 active:opacity-80 font-label-md text-label-md uppercase tracking-tight" href="#">
+<span class="material-symbols-outlined text-[20px]">help</span>
+                Support
+            </a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-md text-secondary dark:text-ash hover:bg-mist dark:hover:bg-carbon transition-all duration-75 active:opacity-80 font-label-md text-label-md uppercase tracking-tight" href="#">
+<span class="material-symbols-outlined text-[20px]">logout</span>
+                Logout
+            </a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="ml-64 flex-1 h-screen overflow-y-auto bg-surface p-8">
+<div class="max-w-max-width mx-auto flex flex-col gap-gap-section">
+<!-- Header Section -->
+<header class="flex justify-between items-end border-b border-hairline pb-4">
+<div>
+<h2 class="font-display-xl text-display-xl text-primary m-0">Content Library</h2>
+<p class="font-body-md text-body-md text-secondary mt-1">Manage and publish your travel guides and articles.</p>
+</div>
+<div class="flex gap-3">
+<button class="bg-transparent border border-hairline text-primary font-label-md text-label-md uppercase px-4 py-2 rounded-md hover:bg-mist transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">filter_list</span>
+                        Filter
+                    </button>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary text-[18px]">search</span>
+<input class="pl-9 pr-4 py-2 border border-hairline bg-chalk rounded-[10px] font-code text-code text-primary placeholder-secondary focus:outline-none focus:border-pure-black focus:ring-1 focus:ring-pure-black focus:ring-offset-2 focus:ring-offset-chalk transition-all w-64" placeholder="SEARCH GUIDES..." type="text">
+</div>
+</div>
+</header>
+<!-- Stats Grid -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-gap-element">
+<!-- Stat Card 1 -->
+<div class="bg-chalk border border-hairline rounded-[14px] p-padding-card flex flex-col gap-2 relative overflow-hidden">
+<div class="flex justify-between items-start">
+<span class="font-label-md text-label-md text-secondary uppercase tracking-wider">Total Views</span>
+<span class="material-symbols-outlined text-smoke">visibility</span>
+</div>
+<div class="font-headline-sm text-[32px] leading-none font-bold text-primary">1.2M</div>
+<div class="font-caption text-caption text-secondary flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-[14px] text-primary">trending_up</span>
+                        +12.4% from last month
+                    </div>
+<!-- Minimal structural accent -->
+<div class="absolute bottom-0 left-0 w-full h-[2px] bg-primary"></div>
+</div>
+<!-- Stat Card 2 (Inverted) -->
+<div class="bg-chalk border border-hairline rounded-[14px] p-padding-card flex flex-col gap-2 relative overflow-hidden">
+<div class="flex justify-between items-start">
+<span class="font-label-md text-label-md text-secondary uppercase tracking-wider">Active Guides</span>
+<span class="material-symbols-outlined text-smoke">article</span>
+</div>
+<div class="font-headline-sm text-[32px] leading-none font-bold text-primary">342</div>
+<div class="font-caption text-caption text-secondary flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-[14px] text-primary">check_circle</span>
+                        24 published this week
+                    </div>
+<div class="absolute bottom-0 left-0 w-full h-[2px] bg-primary"></div>
+</div>
+<!-- Stat Card 3 -->
+<div class="bg-chalk border border-hairline rounded-[14px] p-padding-card flex flex-col gap-2">
+<div class="flex justify-between items-start">
+<span class="font-label-md text-label-md text-secondary uppercase tracking-wider">Drafts Pending</span>
+<span class="material-symbols-outlined text-smoke">edit_document</span>
+</div>
+<div class="font-headline-sm text-[32px] leading-none font-bold text-primary">18</div>
+<div class="font-caption text-caption text-secondary flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-[14px]">schedule</span>
+                        Requires review
+                    </div>
+</div>
+</section>
+<!-- Content Grid (Recent Articles) -->
+<section>
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-headline-sm text-headline-sm text-primary uppercase tracking-tight">Recent Articles</h3>
+<a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors border-b border-hairline hover:border-primary pb-0.5" href="#">View All</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gap-element">
+<!-- Article Card 1 -->
+<div class="bg-chalk border border-hairline rounded-[14px] flex flex-col group hover:border-primary transition-colors duration-200">
+<div class="h-40 border-b border-hairline relative">
+<img class="w-full h-full object-cover rounded-t-[13px]" data-alt="A stark, high-contrast, black and white architectural photograph of an ancient stone wall in Cusco, Peru. The massive polygonal stones fit perfectly together. Taken with harsh directional sunlight creating sharp, brutalist shadows. Minimalist composition emphasizing structure and texture over romanticism." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5qybwVobR3dId4sliYZ0iiSVjKw0Zvj099xiSvxgYyYe6zK4Oin36F4JpsP3qb6-OuLyM01IvUHPyY9RmSqN99Xf6Ywmpxa_5UcObcRCZX6DZc9BrKw_tDOoa572cFcYQjSN3ByeWcupGNmGBr2p9qTSdSo9cooXsNS1yO_UR3VBV1EmM23UA1kSy5cf6uIwU5Cbc_WuulBSg4o48m44j2c1ZVHaz6Cphmem6OnaexRphNc5xLCWIV6On0-Km2-HtMF_yg-fyXIvd">
+<div class="absolute top-3 left-3 flex gap-2">
+<span class="bg-chalk border border-hairline rounded-[26px] px-2 py-0.5 font-caption text-caption text-primary flex items-center gap-1">
+<div class="w-1.5 h-1.5 rounded-full bg-pure-black"></div> Published
+                                </span>
+</div>
+</div>
+<div class="p-padding-card flex flex-col gap-3 flex-1">
+<div>
+<h4 class="font-headline-sm text-headline-sm text-primary leading-tight group-hover:underline decoration-2 underline-offset-4">Viajar a Cusco: The Ultimate Structural Guide</h4>
+<p class="font-code text-code text-secondary mt-1 truncate">Comprehensive architectural breakdown of historical sites.</p>
+</div>
+<div class="mt-auto flex justify-between items-center pt-3 border-t border-hairline">
+<span class="font-caption text-caption text-secondary">Updated 2h ago</span>
+<div class="flex gap-2">
+<button class="text-secondary hover:text-primary transition-colors"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+<button class="text-secondary hover:text-primary transition-colors"><span class="material-symbols-outlined text-[18px]">more_horiz</span></button>
+</div>
+</div>
+</div>
+</div>
+<!-- Article Card 2 -->
+<div class="bg-chalk border border-hairline rounded-[14px] flex flex-col group hover:border-primary transition-colors duration-200">
+<div class="h-40 border-b border-hairline relative bg-surface-container flex items-center justify-center">
+<!-- Using CSS pattern for draft state -->
+<div class="absolute inset-0 opacity-10" style="background-image: repeating-linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000), repeating-linear-gradient(45deg, #000 25%, #f9f9f9 25%, #f9f9f9 75%, #000 75%, #000); background-position: 0 0, 10px 10px; background-size: 20px 20px;"></div>
+<span class="material-symbols-outlined text-[48px] text-smoke relative z-10">image</span>
+<div class="absolute top-3 left-3 flex gap-2 z-10">
+<span class="bg-mist border border-hairline rounded-[26px] px-2 py-0.5 font-caption text-caption text-secondary flex items-center gap-1">
+<div class="w-1.5 h-1.5 rounded-full bg-secondary"></div> Draft
+                                </span>
+</div>
+</div>
+<div class="p-padding-card flex flex-col gap-3 flex-1">
+<div>
+<h4 class="font-headline-sm text-headline-sm text-primary leading-tight group-hover:underline decoration-2 underline-offset-4">Guía de Lima: Culinary Infrastructure</h4>
+<p class="font-code text-code text-secondary mt-1 truncate">Mapping the logistical supply chains of top restaurants.</p>
+</div>
+<div class="mt-auto flex justify-between items-center pt-3 border-t border-hairline">
+<span class="font-caption text-caption text-secondary">Edited 5h ago</span>
+<div class="flex gap-2">
+<button class="text-secondary hover:text-primary transition-colors"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+<button class="text-secondary hover:text-primary transition-colors"><span class="material-symbols-outlined text-[18px]">more_horiz</span></button>
+</div>
+</div>
+</div>
+</div>
+<!-- Article Card 3 -->
+<div class="bg-chalk border border-hairline rounded-[14px] flex flex-col group hover:border-primary transition-colors duration-200">
+<div class="h-40 border-b border-hairline relative">
+<img class="w-full h-full object-cover rounded-t-[13px]" data-alt="A stark, minimalist photograph of the salt mines of Maras, Peru. Shot from directly above in black and white, emphasizing the brutal, geometric grid pattern of the evaporation ponds. High contrast, sharp lines, architectural precision. Bright, light-mode aesthetic with deep shadows defining the edges." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_DSWVcKsKOvd8J8yIQruGKGRgkxfK4JBHo9a6zpSmWT2YpEMfW4LuYo5maGNsugm1uCUdoYbG4RWsPQG3ZQBue07Q4c-cMtUprtJASnm_odBOSeMEzEC9SYoJ2lCcD0E2U29_AAz0PFav1yheS5SYZwob8dOb2zIzqBypvwrzmsrgcdMSml12zG3QRwWkPon51e8BWg0Nu3UNfGjDwPKIG2U7kqySpqqL-4MGkd9d8XCvmPgexHl212Q_ICnO9RLn9JKxC2GcG48u">
+<div class="absolute top-3 left-3 flex gap-2">
+<span class="bg-chalk border border-hairline rounded-[26px] px-2 py-0.5 font-caption text-caption text-primary flex items-center gap-1">
+<div class="w-1.5 h-1.5 rounded-full bg-pure-black"></div> Published
+                                </span>
+</div>
+</div>
+<div class="p-padding-card flex flex-col gap-3 flex-1">
+<div>
+<h4 class="font-headline-sm text-headline-sm text-primary leading-tight group-hover:underline decoration-2 underline-offset-4">Maras: The Geometry of Salt</h4>
+<p class="font-code text-code text-secondary mt-1 truncate">Analyzing the terraced grid systems of the Sacred Valley.</p>
+</div>
+<div class="mt-auto flex justify-between items-center pt-3 border-t border-hairline">
+<span class="font-caption text-caption text-secondary">Updated 1d ago</span>
+<div class="flex gap-2">
+<button class="text-secondary hover:text-primary transition-colors"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+<button class="text-secondary hover:text-primary transition-colors"><span class="material-symbols-outlined text-[18px]">more_horiz</span></button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Activity Table -->
+<section class="mb-12">
+<h3 class="font-headline-sm text-headline-sm text-primary uppercase tracking-tight mb-4">Recent Activity Logs</h3>
+<div class="bg-chalk border border-hairline rounded-[14px] overflow-hidden">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-bright border-b border-hairline font-label-md text-label-md text-secondary uppercase">
+<th class="py-3 px-4 font-medium tracking-tight w-1/2">Event</th>
+<th class="py-3 px-4 font-medium tracking-tight">User</th>
+<th class="py-3 px-4 font-medium tracking-tight text-right">Timestamp</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-body-md text-primary">
+<tr class="border-b border-hairline hover:bg-mist transition-colors">
+<td class="py-3 px-4 flex items-center gap-3">
+<span class="material-symbols-outlined text-[18px] text-secondary">publish</span>
+                                    Published "Viajar a Cusco: The Ultimate Structural Guide"
+                                </td>
+<td class="py-3 px-4 font-code text-code">admin_01</td>
+<td class="py-3 px-4 text-right text-secondary font-code text-code">10:42 AM</td>
+</tr>
+<tr class="border-b border-hairline hover:bg-mist transition-colors">
+<td class="py-3 px-4 flex items-center gap-3">
+<span class="material-symbols-outlined text-[18px] text-secondary">edit_document</span>
+                                    Draft updated: "Guía de Lima: Culinary Infrastructure"
+                                </td>
+<td class="py-3 px-4 font-code text-code">editor_rc</td>
+<td class="py-3 px-4 text-right text-secondary font-code text-code">08:15 AM</td>
+</tr>
+<tr class="hover:bg-mist transition-colors">
+<td class="py-3 px-4 flex items-center gap-3">
+<span class="material-symbols-outlined text-[18px] text-secondary">image</span>
+                                    Asset uploaded: "maras-grid-v2.jpg"
+                                </td>
+<td class="py-3 px-4 font-code text-code">sys_auto</td>
+<td class="py-3 px-4 text-right text-secondary font-code text-code">Yesterday</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+</main>
+
+
+</body></html>

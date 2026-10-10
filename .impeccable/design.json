@@ -1,0 +1,484 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-30T01:04:50.828Z",
+  "title": "Design System: TourUp Guide",
+  "extensions": {
+    "colorMeta": {
+      "poster-ink": {
+        "role": "primary",
+        "displayName": "Poster Ink",
+        "canonical": "#121212",
+        "tonalRamp": [
+          "#000000",
+          "#080808",
+          "#121212",
+          "#1e1e1e",
+          "#2a2a2a",
+          "#3a3a3a",
+          "#555555",
+          "#777777"
+        ]
+      },
+      "ink-magenta": {
+        "role": "secondary",
+        "displayName": "Chicha Magenta",
+        "canonical": "#ff1f8e",
+        "tonalRamp": [
+          "#400824",
+          "#730e40",
+          "#a6145c",
+          "#d91a79",
+          "#ff4ca5",
+          "#ff84c1",
+          "#ffbcdd",
+          "#ffe9f4"
+        ]
+      },
+      "ink-yellow": {
+        "role": "secondary",
+        "displayName": "Chicha Yellow",
+        "canonical": "#ffe000",
+        "tonalRamp": [
+          "#403800",
+          "#736500",
+          "#a69200",
+          "#d9be00",
+          "#ffe633",
+          "#ffee73",
+          "#fff6b3",
+          "#fffce6"
+        ]
+      },
+      "ink-orange": {
+        "role": "secondary",
+        "displayName": "Chicha Orange",
+        "canonical": "#ff6a00",
+        "tonalRamp": [
+          "#401b00",
+          "#733000",
+          "#a64500",
+          "#d95a00",
+          "#ff8833",
+          "#ffad73",
+          "#ffd2b3",
+          "#fff0e6"
+        ]
+      },
+      "ink-green": {
+        "role": "secondary",
+        "displayName": "Chicha Green",
+        "canonical": "#22e07a",
+        "tonalRamp": [
+          "#09381f",
+          "#0f6537",
+          "#16924f",
+          "#1dbe68",
+          "#4ee695",
+          "#85eeb6",
+          "#bdf6d7",
+          "#e9fcf2"
+        ]
+      },
+      "masthead-teal": {
+        "role": "tertiary",
+        "displayName": "TourUp Teal",
+        "canonical": "#00c9b1",
+        "tonalRamp": [
+          "#00322c",
+          "#005a50",
+          "#008373",
+          "#00ab96",
+          "#33d4c1",
+          "#73e1d4",
+          "#b3efe8",
+          "#e6faf7"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "#404040",
+          "#737373",
+          "#a6a6a6",
+          "#d9d9d9",
+          "#ffffff",
+          "#ffffff",
+          "#ffffff",
+          "#ffffff"
+        ]
+      },
+      "paper-2": {
+        "role": "neutral",
+        "displayName": "Paper Grey",
+        "canonical": "#f3f3f1",
+        "tonalRamp": [
+          "#3d3d3c",
+          "#6d6d6c",
+          "#9e9e9d",
+          "#cfcfcd",
+          "#f5f5f4",
+          "#f8f8f7",
+          "#fbfbfb",
+          "#fefefe"
+        ]
+      },
+      "text": {
+        "role": "neutral",
+        "displayName": "Text",
+        "canonical": "#161616",
+        "tonalRamp": [
+          "#060606",
+          "#0a0a0a",
+          "#0e0e0e",
+          "#131313",
+          "#454545",
+          "#7f7f7f",
+          "#b9b9b9",
+          "#e8e8e8"
+        ]
+      },
+      "text-2": {
+        "role": "neutral",
+        "displayName": "Text Secondary",
+        "canonical": "#4a4a48",
+        "tonalRamp": [
+          "#131312",
+          "#212120",
+          "#30302f",
+          "#3f3f3d",
+          "#6e6e6d",
+          "#9b9b9a",
+          "#c9c9c8",
+          "#ededed"
+        ]
+      },
+      "text-3": {
+        "role": "neutral",
+        "displayName": "Text Tertiary",
+        "canonical": "#6b6b68",
+        "tonalRamp": [
+          "#1b1b1a",
+          "#30302f",
+          "#464644",
+          "#5b5b58",
+          "#898986",
+          "#aeaeac",
+          "#d3d3d2",
+          "#f0f0f0"
+        ]
+      },
+      "link-magenta": {
+        "role": "neutral",
+        "displayName": "Link Magenta",
+        "canonical": "#b3005c",
+        "tonalRamp": [
+          "#2d0017",
+          "#510029",
+          "#74003c",
+          "#98004e",
+          "#c2337d",
+          "#d573a5",
+          "#e8b3ce",
+          "#f7e6ef"
+        ]
+      },
+      "rule": {
+        "role": "neutral",
+        "displayName": "Rule",
+        "canonical": "#d9d9d4",
+        "tonalRamp": [
+          "#363635",
+          "#62625f",
+          "#8d8d8a",
+          "#b8b8b4",
+          "#e1e1dd",
+          "#eaeae7",
+          "#f4f4f2",
+          "#fbfbfb"
+        ]
+      },
+      "on-ink": {
+        "role": "neutral",
+        "displayName": "On Ink",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "#404040",
+          "#737373",
+          "#a6a6a6",
+          "#d9d9d9",
+          "#ffffff",
+          "#ffffff",
+          "#ffffff",
+          "#ffffff"
+        ]
+      },
+      "on-ink-2": {
+        "role": "neutral",
+        "displayName": "On Ink Secondary",
+        "canonical": "#c9c9c4",
+        "tonalRamp": [
+          "#323231",
+          "#5a5a58",
+          "#83837f",
+          "#ababa7",
+          "#d4d4d0",
+          "#e1e1df",
+          "#efefed",
+          "#fafaf9"
+        ]
+      },
+      "ink-rule": {
+        "role": "neutral",
+        "displayName": "Ink Rule",
+        "canonical": "#3a3a3a",
+        "tonalRamp": [
+          "#0f0f0f",
+          "#1a1a1a",
+          "#262626",
+          "#313131",
+          "#616161",
+          "#939393",
+          "#c4c4c4",
+          "#ebebeb"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Poster Display",
+        "purpose": "Stacked poster titles, one ink per line (hero, section, destination and hub titles)."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Page h1 outside poster stacks; guide titles yellow on ink."
+      },
+      "title": {
+        "displayName": "Title / Poster Label",
+        "purpose": "h2; in articles set as a black band in a rotating ink."
+      },
+      "subtitle": {
+        "displayName": "Subtitle",
+        "purpose": "h3, story-card titles, itinerary names."
+      },
+      "body": {
+        "displayName": "Body Serif",
+        "purpose": "All reading text, 68ch measure."
+      },
+      "label": {
+        "displayName": "Poster Label Caps",
+        "purpose": "Nav, buttons, chips, badges, table heads, meta lines."
+      },
+      "caption": {
+        "displayName": "Credit Caption",
+        "purpose": "Photo credits on the ink tab."
+      }
+    },
+    "shadows": [
+      {
+        "name": "nav-bar-hover",
+        "value": "inset 0 -4px 0 #ff1f8e",
+        "purpose": "Underline bar on nav hover; not an elevation."
+      },
+      {
+        "name": "nav-bar-current",
+        "value": "inset 0 -4px 0 #ffe000",
+        "purpose": "Underline bar on the current nav item."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "The only easing; all state transitions."
+      },
+      {
+        "name": "button-flood",
+        "value": "180ms",
+        "purpose": "Button and search-button background flood."
+      },
+      {
+        "name": "nav-bar",
+        "value": "200ms",
+        "purpose": "Nav colour and underline bar."
+      },
+      {
+        "name": "tile-flood",
+        "value": "520ms",
+        "purpose": "Mosaic ink band clip-path flood and name lift; teaser fades in 420ms after 80ms."
+      },
+      {
+        "name": "photo-zoom",
+        "value": "500ms-700ms",
+        "purpose": "Photo scale on hover (1.04 cards and hub rows, 1.06 tiles)."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "0.01ms",
+        "purpose": "All transitions and animations collapse under prefers-reduced-motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "phone",
+        "value": "480px"
+      },
+      {
+        "name": "nav-wrap",
+        "value": "720px"
+      },
+      {
+        "name": "tablet",
+        "value": "760px"
+      },
+      {
+        "name": "footer-2col",
+        "value": "860px"
+      },
+      {
+        "name": "article-1col",
+        "value": "900px"
+      },
+      {
+        "name": "popular-2col",
+        "value": "1020px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Poster Button",
+      "kind": "button",
+      "refersTo": "button-poster",
+      "description": "Outlined condensed caps that flood with yellow; the default action.",
+      "html": "<a class=\"ds-btn-poster\" href=\"#\">Read the guide</a>",
+      "css": ".ds-btn-poster{display:inline-flex;align-items:center;font-family:'Big Shoulders Display','Arial Narrow',sans-serif;font-weight:800;font-size:1.05rem;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;color:#121212;background:transparent;border:2px solid #121212;padding:.45em 1.1em .4em;transition:background-color 180ms cubic-bezier(.16,1,.3,1)}.ds-btn-poster:hover,.ds-btn-poster:focus-visible{background:#ffe000}.ds-btn-poster:focus-visible{outline:3px solid #ff1f8e;outline-offset:3px}"
+    },
+    {
+      "name": "Poster Button on Ink",
+      "kind": "button",
+      "refersTo": "button-poster-on-ink",
+      "description": "Poster button on black sections.",
+      "html": "<div class=\"ds-ink-ground\"><a class=\"ds-btn-ink\" href=\"#\">All itineraries</a></div>",
+      "css": ".ds-ink-ground{background:#121212;padding:24px}.ds-btn-ink{display:inline-flex;font-family:'Big Shoulders Display','Arial Narrow',sans-serif;font-weight:800;font-size:1.05rem;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;color:#fff;border:2px solid #fff;padding:.45em 1.1em .4em;transition:background-color 180ms cubic-bezier(.16,1,.3,1),color 180ms cubic-bezier(.16,1,.3,1)}.ds-btn-ink:hover,.ds-btn-ink:focus-visible{background:#ffe000;color:#121212;border-color:#ffe000}"
+    },
+    {
+      "name": "Search Field",
+      "kind": "input",
+      "refersTo": "input-search",
+      "description": "White field in a 3px ink frame, fused to the solid-yellow search button.",
+      "html": "<form class=\"ds-search\" role=\"search\"><input type=\"search\" placeholder=\"Cusco, Inca Trail, operator in Lima…\" aria-label=\"Search the guide\"><button type=\"submit\">Search</button></form>",
+      "css": ".ds-search{display:flex;width:min(100%,36rem);background:#fff;border:3px solid #121212}.ds-search input{flex:1;min-width:0;border:0;font:1.05rem 'Source Serif 4',Georgia,serif;padding:.8rem 1rem;color:#161616;background:transparent}.ds-search input::placeholder{color:#6b6b68}.ds-search input:focus-visible{outline:3px solid #ff1f8e;outline-offset:-3px}.ds-search button{border:0;background:#ffe000;color:#121212;font-family:'Big Shoulders Display','Arial Narrow',sans-serif;font-weight:900;font-size:1.2rem;letter-spacing:.06em;text-transform:uppercase;padding:0 1.4rem;cursor:pointer;transition:background-color 180ms cubic-bezier(.16,1,.3,1)}.ds-search button:hover,.ds-search button:focus-visible{background:#ff1f8e}"
+    },
+    {
+      "name": "Masthead and Nav Strip",
+      "kind": "nav",
+      "refersTo": "nav-strip",
+      "description": "56px teal brand bar over a black nav strip with a yellow current state.",
+      "html": "<header><div class=\"ds-mast\"><a class=\"ds-logo\" href=\"#\"><span>TourUp</span><span class=\"ds-logo-sub\">Guide</span></a><span class=\"ds-lang\"><a aria-current=\"true\">EN</a><a>ES</a></span></div><nav class=\"ds-nav\"><a href=\"#\" aria-current=\"page\">Destinations</a><a href=\"#\">Itineraries</a><a href=\"#\">Guides</a><a href=\"#\">Sustainability</a><a href=\"#\">Operator directory</a></nav></header>",
+      "css": ".ds-mast{background:#00c9b1;min-height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 24px}.ds-logo{display:inline-flex;align-items:baseline;gap:.55rem;color:#121212;text-decoration:none;font-family:'Big Shoulders Display','Arial Narrow',sans-serif;text-transform:uppercase;font-weight:900;font-size:1.9rem;line-height:1}.ds-logo-sub{font-weight:700;font-size:1.05rem;letter-spacing:.08em;padding:.18em .45em .12em;background:#121212;color:#ffe000}.ds-lang a{font-family:'Big Shoulders Display','Arial Narrow',sans-serif;font-weight:800;letter-spacing:.08em;padding:.25rem .6rem;border:2px solid transparent;color:#121212}.ds-lang a[aria-current]{border-color:#121212}.ds-lang a:hover{background:#121212;color:#00c9b1}.ds-nav{background:#121212;display:flex;flex-wrap:wrap;justify-content:center}.ds-nav a{font-family:'Big Shoulders Display','Arial Narrow',sans-serif;font-weight:800;font-size:1.12rem;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;color:#fff;padding:.8rem 1.35rem .7rem;box-shadow:inset 0 -4px 0 transparent;transition:box-shadow 200ms cubic-bezier(.16,1,.3,1),color 200ms cubic-bezier(.16,1,.3,1)}.ds-nav a+a{border-left:1px solid #3a3a3a}.ds-nav a:hover{color:#ffe000;box-shadow:inset 0 -4px 0 #ff1f8e}.ds-nav a[aria-current=page]{color:#ffe000;box-shadow:inset 0 -4px 0 #ffe000}"
+    },
+    {
+      "name": "Place Chip",
+      "kind": "chip",
+      "refersTo": "place-chip",
+      "description": "Outlined caps chip linking an operator to a destination.",
+      "html": "<a class=\"ds-chip\" href=\"#\">Cusco</a>",
+      "css": ".ds-chip{display:inline-block;font-family:'Big Shoulders Display','Arial Narrow',sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:.04em;text-decoration:none;color:#121212;border:2px solid #121212;padding:.2rem .7rem .15rem}.ds-chip:hover,.ds-chip:focus-visible{background:#ffe000}"
+    },
+    {
+      "name": "Status Badge",
+      "kind": "chip",
+      "refersTo": "status-badge",
+      "description": "Solid ink block for certification status: green valid, yellow expiring, teal undated, grey expired.",
+      "html": "<span class=\"ds-badge\">Valid</span> <span class=\"ds-badge ds-badge--exp\">Expiring</span> <span class=\"ds-badge ds-badge--off\">Expired</span>",
+      "css": ".ds-badge{display:inline-block;font-family:'Big Shoulders Display','Arial Narrow',sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:.04em;font-size:.9rem;padding:.1rem .5rem .05rem;background:#22e07a;color:#121212}.ds-badge--exp{background:#ffe000}.ds-badge--off{background:#f3f3f1;color:#4a4a48}"
+    },
+    {
+      "name": "Poster Strip",
+      "kind": "custom",
+      "refersTo": "poster-strip",
+      "description": "Section break: four stacked 6px ink bars.",
+      "html": "<div class=\"ds-strip\" aria-hidden=\"true\"><span></span><span></span><span></span><span></span></div>",
+      "css": ".ds-strip{display:grid;height:24px;grid-template-rows:repeat(4,1fr);background:#121212}.ds-strip span:nth-child(1){background:#ff1f8e}.ds-strip span:nth-child(2){background:#ff6a00}.ds-strip span:nth-child(3){background:#ffe000}.ds-strip span:nth-child(4){background:#22e07a}"
+    },
+    {
+      "name": "Poster Title and Label",
+      "kind": "custom",
+      "refersTo": "poster-label",
+      "description": "Stacked title with one ink per line, and an article h2 painted line by line on a black band.",
+      "html": "<div class=\"ds-band\"><h1 class=\"ds-lines\"><span class=\"ds-m\">Peru</span><span class=\"ds-y\">The guide</span></h1></div><h2 class=\"ds-label\"><span>When to visit Cusco</span></h2>",
+      "css": ".ds-band{display:inline-block;background:#121212;padding:1.5rem 2rem}.ds-lines{display:grid;justify-items:start;margin:0;font-family:'Big Shoulders Display','Arial Narrow',sans-serif;font-weight:900;text-transform:uppercase;line-height:.86;letter-spacing:.01em;font-size:5rem}.ds-lines span{display:block}.ds-m{color:#ff1f8e}.ds-y{color:#ffe000}.ds-label{font-family:'Big Shoulders Display','Arial Narrow',sans-serif;font-weight:800;text-transform:uppercase;font-size:2.2rem;line-height:1.22;color:#ff1f8e}.ds-label span{background:#121212;padding:.12em .3em .02em;-webkit-box-decoration-break:clone;box-decoration-break:clone}"
+    },
+    {
+      "name": "Destination Tile",
+      "kind": "card",
+      "refersTo": "destination-mosaic",
+      "description": "Signature: the ink band floods the tile on hover or focus and reveals the one-line summary.",
+      "html": "<a class=\"ds-tile\" href=\"#\"><span class=\"ds-tile-band\"></span><span class=\"ds-tile-name\">Arequipa</span><span class=\"ds-tile-teaser\">White volcanic-stone city under El Misti.</span></a>",
+      "css": ".ds-tile{position:relative;display:grid;align-content:center;width:240px;aspect-ratio:5/8;overflow:hidden;text-decoration:none;color:#121212;isolation:isolate;background:#6b6b68}.ds-tile-band{position:absolute;inset:0;z-index:-1;background:#ff6a00;opacity:.9;clip-path:inset(38% 0 38% 0);transition:clip-path 520ms cubic-bezier(.16,1,.3,1),opacity 520ms cubic-bezier(.16,1,.3,1)}.ds-tile-name{text-align:center;font-family:'Big Shoulders Display','Arial Narrow',sans-serif;font-weight:900;text-transform:uppercase;font-size:2.2rem;line-height:1;transition:translate 520ms cubic-bezier(.16,1,.3,1)}.ds-tile-teaser{position:absolute;left:1.1rem;right:1.1rem;bottom:1.25rem;font:.95rem/1.45 'Source Serif 4',Georgia,serif;opacity:0;translate:0 .75rem;transition:opacity 420ms cubic-bezier(.16,1,.3,1) 80ms,translate 420ms cubic-bezier(.16,1,.3,1) 80ms}.ds-tile:hover .ds-tile-band,.ds-tile:focus-visible .ds-tile-band{clip-path:inset(0);opacity:.94}.ds-tile:hover .ds-tile-name,.ds-tile:focus-visible .ds-tile-name{translate:0 -2.5rem}.ds-tile:hover .ds-tile-teaser,.ds-tile:focus-visible .ds-tile-teaser{opacity:1;translate:0 0}.ds-tile:focus-visible{outline:3px solid #121212;outline-offset:-6px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Chicha Poster Magazine",
+    "overview": "The guide speaks in the voice of Lima's chicha street posters: stacked, condensed, all-caps lettering in flat fluorescent inks, set on black bands, laid over big photographs of Peru. It is a travel magazine in structure (teal masthead bar, black nav strip, full-bleed photo hero, most-read grid, destination mosaic, list hub, dark multi-column footer) and a street poster in voice. Reading happens on plain white; everything that announces, navigates or frames happens in black ink.\n\nDensity is magazine-loose: sections breathe on a 4rem to 6rem vertical rhythm, and each is sealed off by the poster strip. Colour is never a tint or a wash. An ink either owns a whole block (a yellow directory band, a magenta tile band) or a whole word-line of a stacked title. The system rejects the category default of cream paper, italic serif display and muted terracotta; it also has no rounded corners and no drop shadows anywhere.",
+    "keyCharacteristics": [
+      "Black poster ink (#121212) for every band, nav strip, footer, table head and photo-credit tab.",
+      "Four flat fluorescent inks (magenta, orange, yellow, green) used as whole blocks or one ink per title line.",
+      "TourUp teal appears on the masthead bar, the footer logotype and one status badge; nowhere else.",
+      "Big Shoulders Display, black weight, all caps, leading under 1, for every heading and label; Source Serif 4 for reading.",
+      "Square corners throughout; depth comes from ink bands, not shadows.",
+      "The poster strip (four stacked 6px ink bars) is the section break."
+    ],
+    "rules": [
+      {
+        "name": "The Flat Ink Rule",
+        "body": "An ink is a whole block or a whole word-line. Never a gradient, tint, transparency wash or partial fill. The only gradient in the build is the black photo scrim under the hero, and it is ink over photo, not colour.",
+        "section": "colors"
+      },
+      {
+        "name": "The Teal Stays Up Top Rule",
+        "body": "Teal is the TourUp brand bar. It does not become an accent, a button or a link.",
+        "section": "colors"
+      },
+      {
+        "name": "The White Reading Ground Rule",
+        "body": "Body text sits on plain white. Paper Grey is never used to fill a section or a card.",
+        "section": "colors"
+      },
+      {
+        "name": "The Poster Caps Rule",
+        "body": "Every heading, button, nav item, badge and label is Big Shoulders Display in uppercase. Serif never sets a heading; the poster face never sets a paragraph.",
+        "section": "typography"
+      },
+      {
+        "name": "The One Ink Per Line Rule",
+        "body": "A stacked title gives each line its own ink (magenta, yellow, orange, green, or white/black against the ground). Two inks never share a line.",
+        "section": "typography"
+      },
+      {
+        "name": "The Ink Not Shadow Rule",
+        "body": "To separate a layer, lay a black band or a flat ink block. Never a box-shadow, blur or glow.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** set every heading and label in Big Shoulders Display caps, weight 800 to 900, leading 0.86 to 1.",
+      "**Do** give each line of a stacked title its own ink, and each poster label its own ink in the magenta, orange, green, yellow rotation.",
+      "**Do** close sections with the poster strip (four stacked 6px bars, magenta, orange, yellow, green).",
+      "**Do** make buttons 2px ink outlines in condensed caps that flood with yellow on hover and focus.",
+      "**Do** put photo credits on a black ink tab over the photo, and list every photo on the photo-credits page.",
+      "**Do** use link magenta (#b3005c) for inline links on white; keep fluorescent inks for blocks, lines and bars.",
+      "**Do** keep every corner square."
+    ],
+    "donts": [
+      "**Don't** use gradients, tints or transparency washes of the four inks; the only gradient is the black scrim under the hero photo.",
+      "**Don't** use teal beyond the masthead bar, footer logotype and the undated-valid badge.",
+      "**Don't** fill sections or cards with grey; reading ground is plain white.",
+      "**Don't** add drop shadows, glows or rounded corners.",
+      "**Don't** set fluorescent ink text on white for body copy or links; it fails contrast. On white, inks live as backgrounds or as display-size title lines.",
+      "**Don't** use cream paper, italic serif display or muted terracotta."
+    ]
+  }
+}

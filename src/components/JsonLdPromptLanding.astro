@@ -1,8 +1,25 @@
 ---
-interface BrandMention {
+/**
+ * JSON-LD específico de una landing de prompt de IA: FAQPage + ItemList de marcas.
+ * WebPage, BreadcrumbList, Organization y WebSite los emite Layout (SiteJsonLd); aquí solo
+ * se enlazan por @id, sin duplicarlos.
+ *
+ * Se eliminaron SpecialAnnouncement (es para avisos de emergencia, no para esto) y HowTo
+ * con pasos inventados ("Consider X for your Peru travel needs"): ambos son marcado
+ * engañoso que los buscadores y los motores de IA penalizan.
+ */
+import { SITE_URL } from '../utils/seo';
+import { getLocalizedString, type Locale } from '../utils/i18n';
+
+interface Brand {
   name: string;
   entity_type: 'company' | 'external_brand' | 'unknown';
   entity_slug?: string;
+  /** La ficha existe en el sitio (company) o en la colección (external_brand). */
+  found?: boolean;
+  entity?: { data: Record<string, any> };
+  /** Ruta interna de la ficha (company) o web oficial (external_brand). */
+  url?: string;
 }
 
 interface FAQItem {
@@ -12,64 +29,55 @@ interface FAQItem {
 
 interface Props {
   title: string;
-  description: string;
-  searchTerm: string;
-  brands: BrandMention[];
+  brands: Brand[];
   faqItems?: FAQItem[];
-  url?: string;
+  lang: Locale;
+  /** Ruta canónica de la página, p. ej. /en/ai-prompts/slug/ */
+  currentPath: string;
 }
 
-const { title, description, searchTerm, brands, faqItems = [], url } = Astro.props;
+const { title, brands, faqItems = [], lang, currentPath } = Astro.props;
+const pageUrl = `${SITE_URL}${currentPath}`;
 
-// Build WebPage schema
-const webPageSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'WebPage',
-  name: title,
-  description: description,
-  url: url || Astro.url.href,
-};
+/** Un ListItem por marca; con URL solo si la página/fuente existe realmente. */
+const items = brands.map((brand, i) => {
+  const base = { '@type': 'ListItem', position: i + 1 };
+  if (brand.entity_type === 'company' && brand.found && brand.url) {
+    // brand.url ya es la ruta real de la ficha (resuelta por utils/prompts.ts, tildes incluidas).
+    const url = `${SITE_URL}${brand.url}`;
+    return { ...base, item: { '@type': 'TravelAgency', '@id': url, name: brand.name, url } };
+  }
+  const official = brand.entity_type === 'external_brand' ? brand.entity?.data?.official_url : undefined;
+  return { ...base, item: { '@type': 'Organization', name: brand.name, ...(official ? { url: official } : {}) } };
+});
 
-// Build ItemList schema for brands
-const brandItems = brands.map((brand, index) => ({
-  '@type': 'ListItem',
-  position: index + 1,
-  name: brand.name,
-  url: brand.entity_slug ? `/companies/${brand.entity_slug}/` : undefined,
-})).filter((item) => item.url);
+const graph: Record<string, unknown>[] = [];
 
-const itemListSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'ItemList',
-  itemListElement: brandItems,
-};
+if (items.length > 0) {
+  graph.push({
+    '@type': 'ItemList',
+    '@id': `${pageUrl}#brands`,
+    name: title,
+    numberOfItems: items.length,
+    itemListElement: items,
+    mainEntityOfPage: { '@id': `${pageUrl}#webpage` },
+  });
+}
 
-// Build FAQPage schema
-const faqPageSchema = faqItems.length > 0 ? {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: faqItems.map((item) => ({
-    '@type': 'Question',
-    name: item.question,
-    acceptedAnswer: {
-      '@type': 'Answer',
-      text: item.answer,
-    },
-  })),
-} : null;
-
-// TODO: Combine these into a single, richer schema
-// that includes breadcrumbs, offers, ratings, etc.
+if (faqItems.length > 0) {
+  graph.push({
+    '@type': 'FAQPage',
+    '@id': `${pageUrl}#faq`,
+    mainEntity: faqItems.map((f) => ({
+      '@type': 'Question',
+      name: getLocalizedString(f.question as any, lang),
+      acceptedAnswer: { '@type': 'Answer', text: getLocalizedString(f.answer as any, lang) },
+    })),
+    mainEntityOfPage: { '@id': `${pageUrl}#webpage` },
+  });
+}
 ---
 
-{webPageSchema && (
-  <script type="application/ld+json" set:html={JSON.stringify(webPageSchema)} />
-)}
-
-{brandItems.length > 0 && (
-  <script type="application/ld+json" set:html={JSON.stringify(itemListSchema)} />
-)}
-
-{faqPageSchema && (
-  <script type="application/ld+json" set:html={JSON.stringify(faqPageSchema)} />
+{graph.length > 0 && (
+  <script type="application/ld+json" set:html={JSON.stringify({ '@context': 'https://schema.org', '@graph': graph })} />
 )}

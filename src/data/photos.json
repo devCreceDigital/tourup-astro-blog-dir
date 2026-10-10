@@ -1,0 +1,227 @@
+{
+ "arequipa": {
+  "width": 8687,
+  "height": 5792,
+  "alt": "Municipality Gate, Arequipa, Peru",
+  "credit": "Diego Delso",
+  "license": "CC BY-SA 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Portal_de_la_Municipalidad,_Arequipa,_Per%C3%BA,_2015-08-02,_DD_76-78_HDR.JPG",
+  "file": "/images/photos/arequipa"
+ },
+ "ayacucho": {
+  "width": 4872,
+  "height": 2508,
+  "alt": "Catedral de Ayacucho",
+  "credit": "EduardoZambrano from Lima, Peru",
+  "license": "CC BY-SA 2.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Catedral_de_Ayacucho_(25646655978).jpg",
+  "file": "/images/photos/ayacucho"
+ },
+ "cajamarca": {
+  "width": 3968,
+  "height": 2976,
+  "alt": "Plaza de Armas de Cajamarca des de San Francisco de Asís",
+  "credit": "Pitxiquin",
+  "license": "CC BY-SA 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Plaza_de_Armas_de_Cajamarca_03.jpg",
+  "file": "/images/photos/cajamarca"
+ },
+ "chachapoyas": {
+  "width": 4805,
+  "height": 3003,
+  "alt": "Vue depuis la forteresse de Kuelap.",
+  "credit": "Christopher Crouzet",
+  "license": "CC BY-SA 3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Vue_From_Kuelap,_Chachapoyas,_Peru.jpg",
+  "file": "/images/photos/chachapoyas"
+ },
+ "chiclayo": {
+  "width": 2100,
+  "height": 1182,
+  "alt": "Plaza de Armas, Chiclayo, Peru",
+  "credit": "Burkhard Mücke",
+  "license": "CC BY-SA 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Chiclayo,_Plaza_de_Armas.jpg",
+  "file": "/images/photos/chiclayo"
+ },
+ "colca": {
+  "width": 8050,
+  "height": 4009,
+  "alt": "Colca Valley, Perú",
+  "credit": "Diego Delso",
+  "license": "CC BY-SA 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Valle_del_Colca,_Per%C3%BA,_2015-08-02,_DD_64.JPG",
+  "file": "/images/photos/colca"
+ },
+ "cusco": {
+  "width": 7633,
+  "height": 3644,
+  "alt": "Plaza de Armas, Cusco, Peru",
+  "credit": "Diego Delso",
+  "license": "CC BY-SA 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Plaza_de_Armas,_Cusco,_Per%C3%BA,_2015-07-31,_DD_52.JPG",
+  "file": "/images/photos/cusco"
+ },
+ "huaraz": {
+  "width": 4032,
+  "height": 1855,
+  "alt": "View from a rooftop in Huaraz to the north, showing the snowy peaks of the Cordillera Blanca",
+  "credit": "68hgzujv",
+  "license": "CC BY-SA 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Mountains_seen_from_Huaraz_to_the_north.jpg",
+  "file": "/images/photos/huaraz"
+ },
+ "ica": {
+  "width": 8688,
+  "height": 4614,
+  "alt": "Huacachina oasis, Ica Region, Peru",
+  "credit": "Diego Delso",
+  "license": "CC BY-SA 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Oasis_de_Huacachina,_Ica,_Per%C3%BA,_2015-07-29,_DD_18.JPG",
+  "file": "/images/photos/ica"
+ },
+ "iquitos": {
+  "width": 1500,
+  "height": 1001,
+  "alt": "Iquitos rooftops beside the flooded Amazon river",
+  "credit": "TourUp",
+  "license": "Supplied by TourUp",
+  "source": null,
+  "file": "/images/photos/iquitos"
+ },
+ "lima": {
+  "width": 5540,
+  "height": 3567,
+  "alt": "Lima - Plaza Mayor - Fontaine",
+  "credit": "PA",
+  "license": "CC BY-SA 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Lima_-_Plaza_Mayor_-_Fontaine.jpg",
+  "file": "/images/photos/lima"
+ },
+ "machu_picchu": {
+  "width": 5365,
+  "height": 3590,
+  "alt": "Machu Picchu, Peru",
+  "credit": "Diego Delso",
+  "license": "CC BY-SA 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Machu_Picchu,_Per%C3%BA,_2015-07-30,_DD_60.JPG",
+  "file": "/images/photos/machu_picchu"
+ },
+ "manu": {
+  "width": 6000,
+  "height": 4000,
+  "alt": "Hoatzin on a branch in the Manu national park",
+  "credit": "Uriel caballero quispitupa",
+  "license": "CC BY-SA 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Parque_nacional_del_Manu_0-21.jpg",
+  "file": "/images/photos/manu"
+ },
+ "nazca": {
+  "width": 7836,
+  "height": 4755,
+  "alt": "Aerial view of \"The Hummingbird\", one of the most popular geoglyphs of the Nazca Lines, which are located in the Nazca D",
+  "credit": "Diego Delso",
+  "license": "CC BY-SA 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:L%C3%ADneas_de_Nazca,_Nazca,_Per%C3%BA,_2015-07-29,_DD_52.JPG",
+  "file": "/images/photos/nazca"
+ },
+ "paracas": {
+  "width": 7384,
+  "height": 4923,
+  "alt": "Port of Paracas, Peru",
+  "credit": "Diego Delso",
+  "license": "CC BY-SA 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Puerto_de_Paracas,_Per%C3%BA,_2015-07-29,_DD_08.JPG",
+  "file": "/images/photos/paracas"
+ },
+ "peru": {
+  "width": 8060,
+  "height": 4534,
+  "alt": "Uchullucllo, Pitumarca, Cusco, Peru",
+  "credit": "Steve FUNG",
+  "license": "CC BY-SA 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Vinicunca_(Rainbow_Mountain).jpg",
+  "file": "/images/photos/peru"
+ },
+ "puno": {
+  "width": 6871,
+  "height": 3177,
+  "alt": "Uros floating islands, Titicaca Lake, Peru",
+  "credit": "Diego Delso",
+  "license": "CC BY-SA 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Islas_flotantes_de_los_Uros,_Lago_Titicaca,_Per%C3%BA,_2015-08-01,_DD_25.JPG",
+  "file": "/images/photos/puno"
+ },
+ "tarapoto": {
+  "width": 2560,
+  "height": 1920,
+  "alt": "Rice fields of Tarapoto, San Martín, Peru.",
+  "credit": "JYB Devot",
+  "license": "CC BY-SA 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Tarapoto_P6260053mod.jpg",
+  "file": "/images/photos/tarapoto"
+ },
+ "trujillo": {
+  "width": 5065,
+  "height": 3377,
+  "alt": "Site of Chan Chan, Peru",
+  "credit": "Bernard Gagnon",
+  "license": "CC BY-SA 3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Chan_Chan_02.jpg",
+  "file": "/images/photos/trujillo"
+ },
+ "sacred-valley": {
+  "width": 7785,
+  "height": 4477,
+  "alt": "Pisac, Cuzco, Peru",
+  "credit": "Diego Delso",
+  "license": "CC BY-SA 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Pisac,_Cuzco,_Per%C3%BA,_2015-07-31,_DD_100.JPG",
+  "file": "/images/photos/sacred-valley"
+ },
+ "titicaca": {
+  "width": 8688,
+  "height": 4205,
+  "alt": "Sunrise in the Lake Titicaca, near Puno, in the Peruvian Andes, not far from Bolivia",
+  "credit": "Diego Delso",
+  "license": "CC BY-SA 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Amanecer_en_el_lago_Titicaca,_Puno,_Per%C3%BA,_2015-08-01,_DD_01.JPG",
+  "file": "/images/photos/titicaca"
+ },
+ "machu-picchu-hero": {
+  "width": 8669,
+  "height": 5763,
+  "alt": "View of the ancient houses of Machu Picchu houses, Urubamba Province, Cusco Region, today Peru",
+  "credit": "Diego Delso",
+  "license": "CC BY-SA 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Machu_Picchu,_Per%C3%BA,_2015-07-30,_DD_47.JPG",
+  "file": "/images/photos/machu-picchu-hero"
+ },
+ "huacachina-dunes": {
+  "width": 7550,
+  "height": 4638,
+  "alt": "Huacachina oasis, Ica, Peru",
+  "credit": "Diego Delso",
+  "license": "CC BY-SA 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Oasis_de_Huacachina,_Ica,_Per%C3%BA,_2015-07-29,_DD_23.JPG",
+  "file": "/images/photos/huacachina-dunes"
+ },
+ "piura": {
+  "width": 3863,
+  "height": 1932,
+  "alt": "Máncora beach, Piura, northern Peru",
+  "credit": "Melissamarzo",
+  "license": "CC BY-SA 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:M%C3%A1ncora_Beach.jpg",
+  "file": "/images/photos/piura"
+ },
+ "puerto_maldonado": {
+  "width": 4032,
+  "height": 3024,
+  "alt": "Paisaje obsequiado por el río y el buen clima",
+  "credit": "Chanson seche",
+  "license": "CC BY 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Madre_de_Dios_visto_desde_Taricaya.jpg",
+  "file": "/images/photos/puerto_maldonado"
+ }
+}

@@ -185,6 +185,8 @@
   },
   "active": "acdb8a6326682545",
   "lastOpenFiles": [
+    "Second Brain/Bienvenido.md",
+    "Second Brain",
     "src/content/categorias_destino/arequipa-educativo.md",
     "src/content/categorias_destino/arequipa-birdwatching.md",
     "src/content/categorias_destino/arequipa-bienestar.md",
@@ -217,10 +219,8 @@
     "dist/ai/peru-puno.md",
     "dist/ai/peru-puerto_maldonado.md",
     "dist/ai/peru-piura.md",
-    "dist/ai/peru-nazca.md",
     "dist/ai",
     "dist/en/peru/trujillo/tours/trekking/index.html",
-    "dist/en/peru/trujillo/tours/tours-culturales/index.html",
     "dist/favicon.svg",
     "backup_conflictivos/favicon.svg"
   ]

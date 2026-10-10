@@ -1,5 +1,6 @@
 ---
 type: destino
+lang: es
 name: Nazca
 country: Peru
 region: Ica

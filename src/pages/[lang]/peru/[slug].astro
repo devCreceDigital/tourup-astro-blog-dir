@@ -1,0 +1,525 @@
+---
+/**
+ * Guía de destino. Contenido real del repo: la guía en Markdown, sus FAQ, los itinerarios que
+ * pasan por él, las categorías de tours y las empresas registradas que operan allí (B2B).
+ * Se retiraron los bloques fijos que se repetían en todos los destinos (clima, altitud,
+ * "itinerario base de 3 días"), porque solo eran ciertos para Cusco.
+ */
+import { getCollection } from 'astro:content';
+import Layout from '../../../layouts/Layout.astro';
+import Photo from '../../../components/site/Photo.astro';
+import DestinationMosaic from '../../../components/site/DestinationMosaic.astro';
+import { getLocalizedString, type Locale } from '../../../utils/i18n';
+import { SITE_URL, companyPath } from '../../../utils/seo';
+import { DESTINATION_ORDER, destinationsPath, directoryPath, itineraryPath } from '../../../data/site';
+import { categoryLabel, itinerariesFor, operatorsIn } from '../../../utils/graph';
+import photos from '../../../data/photos.json';
+import sustainability from '../../../data/sustainability.json';
+import { currentCertificationsIn, recognitionsFor, certificationLabel, type Certification, type RecognizedDestination } from '../../../utils/sustainability';
+import { sustainabilityPath } from '../../../data/sustainable-itineraries';
+
+export async function getStaticPaths() {
+  const destinos = await getCollection('destinos');
+  const destinosEn = await getCollection('destinos_en');
+  return [
+    ...destinos.map((d) => ({ params: { lang: 'es', slug: d.id.replace(/\.md$/i, '') }, props: { entry: d, lang: 'es' } })),
+    ...destinosEn.map((d) => ({ params: { lang: 'en', slug: d.id.replace(/\.md$/i, '') }, props: { entry: d, lang: 'en' } })),
+  ];
+}
+
+interface Props {
+  entry: any;
+  lang: string;
+}
+
+const { entry, lang: langProp } = Astro.props;
+const lang = langProp as Locale;
+const es = lang === 'es';
+const t = (esText: string, enText: string) => (es ? esText : enText);
+const loc = (field: any) => getLocalizedString(field, lang);
+const { Content } = await entry.render();
+const d = entry.data;
+const slug = entry.id.replace(/\.md$/i, '');
+const isCountry = slug === 'peru';
+const name = loc(d.name);
+const pageUrl = `${SITE_URL}/${lang}/peru/${slug}/`;
+const photo = (photos as any)[slug] ?? (photos as any).peru;
+
+const [allCompanies, allCatDest] = await Promise.all([getCollection('companies'), getCollection('categorias_destino')]);
+
+const operators = operatorsIn(allCompanies, slug, lang);
+
+const categories = allCatDest
+  .filter((cd) => cd.data.destino_slug === slug)
+  .map((cd) => ({ slug: cd.data.categoria, name: categoryLabel(cd.data.categoria, lang) }))
+  .sort((a, b) => a.name.localeCompare(b.name, lang));
+
+const itineraries = itinerariesFor(slug);
+const recognitions = recognitionsFor(sustainability.recognizedDestinations as RecognizedDestination[], slug);
+const certified = currentCertificationsIn(sustainability.certifications as Certification[], slug);
+const faq = (d.faq ?? []) as { question: any; answer: any }[];
+const related = DESTINATION_ORDER.filter((s) => s !== slug).slice(0, 5);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': isCountry ? 'Country' : 'TouristDestination',
+      '@id': `${pageUrl}#place`,
+      name,
+      description: loc(d.summary),
+      url: pageUrl,
+      image: `${SITE_URL}${photo.file}-1920.webp`,
+      mainEntityOfPage: { '@id': `${pageUrl}#webpage` },
+      ...(isCountry ? {} : { containedInPlace: { '@type': 'Country', name: 'Peru' } }),
+    },
+    ...(faq.length
+      ? [{
+          '@type': 'FAQPage',
+          '@id': `${pageUrl}#faq`,
+          mainEntityOfPage: { '@id': `${pageUrl}#webpage` },
+          mainEntity: faq.map((item) => ({
+            '@type': 'Question',
+            name: loc(item.question),
+            acceptedAnswer: { '@type': 'Answer', text: loc(item.answer) },
+          })),
+        }]
+      : []),
+  ],
+};
+---
+
+<Layout
+  title={loc(d.seo_title) || t(`Viajar a ${name}: guía de viaje | TourUp`, `Travel to ${name}: travel guide | TourUp Guide`)}
+  description={loc(d.summary)}
+  currentPath={`/${lang}/peru/${slug}/`}
+  lang={lang}
+  breadcrumb={name}
+  image={`${photo.file}-1920.webp`}
+  bleed
+>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <header class="d-hero">
+    <div class="d-hero-photo">
+      <Photo name={slug in photos ? slug : 'peru'} eager sizes="100vw" />
+    </div>
+    <div class="wrap d-hero-inner">
+      <div class="d-hero-band">
+        <h1 class="poster-lines d-title">
+          <span class="ink-yellow">{name}</span>
+        </h1>
+        <p class="d-summary">{loc(d.summary)}</p>
+      </div>
+    </div>
+    <p class="d-credit photo-credit">
+      {t('Foto', 'Photo')}: {photo.source ? <a href={photo.source} rel="noopener">{photo.credit}</a> : photo.credit}, {photo.license}
+    </p>
+  </header>
+  <div class="poster-strip" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+
+  <div class="wrap d-layout">
+    <article class="d-article prose">
+      <Content />
+
+      {faq.length > 0 && (
+        <section class="d-faq" aria-labelledby="faq-title">
+          <h2 id="faq-title"><span class="h-band">{t(`Preguntas frecuentes sobre ${name}`, `${name}: frequently asked questions`)}</span></h2>
+          {faq.map((item) => (
+            <div class="d-faq-item">
+              <h3>{loc(item.question)}</h3>
+              <p>{loc(item.answer)}</p>
+            </div>
+          ))}
+        </section>
+      )}
+    </article>
+
+    <aside class="d-aside" aria-label={t('Planifica', 'Plan your trip')}>
+      <div class="d-card">
+        <h2>{t('De un vistazo', 'At a glance')}</h2>
+        <dl>
+          {d.region && loc(d.region) !== name && (<><dt>{t('Región', 'Region')}</dt><dd>{loc(d.region)}</dd></>)}
+          <dt>{t('Empresas registradas', 'Registered companies')}</dt>
+          <dd>{operators.length > 0 ? <a href="#operators">{operators.length}</a> : t('Ninguna aún', 'None yet')}</dd>
+        </dl>
+      </div>
+
+      {itineraries.length > 0 && (
+        <div class="d-card">
+          <h2>{t('Itinerarios que pasan por aquí', 'Itineraries through here')}</h2>
+          <ul>
+            {itineraries.map((it) => (
+              <li><a href={itineraryPath(lang, it.slug)}>{t(`Itinerario de ${it.days} días`, `${it.days}-day Peru itinerary`)}</a></li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {slug === 'cusco' || slug === 'machu_picchu' ? (
+        <div class="d-card">
+          <h2>{t('Machu Picchu', 'Machu Picchu')}</h2>
+          <p><a href={`/${lang}/peru/cusco/tours-machu-picchu/`}>{t('Tours a Machu Picchu desde Cusco', 'Machu Picchu tours from Cusco')}</a></p>
+        </div>
+      ) : null}
+
+      {(recognitions.length > 0 || certified.length > 0) && (
+        <div class="d-card">
+          <h2>{t('Sostenibilidad', 'Sustainability')}</h2>
+          {recognitions.length > 0 && (
+            <ul>
+              {recognitions.map((r) => (
+                <li>{r.organization}: {r.recognition} ({r.year})</li>
+              ))}
+            </ul>
+          )}
+          {certified.length > 0 && (
+            <p class="d-cert-count">
+              {certified.length === 1
+                ? t('1 empresa con certificación de sostenibilidad vigente en la región:', '1 business with a valid sustainability certification in the region:')
+                : t(`${certified.length} empresas con certificación de sostenibilidad vigente en la región:`, `${certified.length} businesses with a valid sustainability certification in the region:`)}
+            </p>
+          )}
+          {certified.length > 0 && (
+            <ul>
+              {certified.map((c) => (
+                <li>{c.source ? <a href={c.source} rel="noopener nofollow">{c.company}</a> : c.company} <span class="d-cert-seal">{certificationLabel(c, lang)}</span></li>
+              ))}
+            </ul>
+          )}
+          <p><a href={sustainabilityPath(lang)}>{t('Turismo sostenible en Perú', 'Sustainable travel in Peru')}</a></p>
+        </div>
+      )}
+
+      {/* Los tipos de tour no se enlazan: las categorías de las empresas son autoasignadas y sus páginas son noindex. */}
+    </aside>
+  </div>
+
+  <section id="operators" class="d-operators" aria-labelledby="ops-title">
+    <div class="wrap">
+      <h2 id="ops-title" class="poster-lines ops-title">
+        <span class="ink-green">{t('Operadores', 'Operators')}</span>
+        <span class="ink-white">{t(`en ${name}`, `in ${name}`)}</span>
+      </h2>
+      <p class="ops-lede">
+        {operators.length > 0
+          ? t(
+              `${operators.length === 1 ? '1 empresa de turismo registrada declara' : `${operators.length} empresas de turismo registradas declaran`} operar en ${name}. Cada ficha muestra su RUC, dirección y contacto. Para agencias y DMC.`,
+              `${operators.length === 1 ? '1 registered travel company lists' : `${operators.length} registered travel companies list`} ${name} as an operating area. Each profile shows the tax ID (RUC), address and contact. For agencies and DMCs.`,
+            )
+          : t(`Aún no hay empresas registradas que operen en ${name}.`, `No registered companies list ${name} as an operating area yet.`)}
+      </p>
+      {operators.length > 0 && (
+        <ul class="ops-list">
+          {operators.map((o) => (
+            <li>
+              <a href={companyPath(lang, o.id)}>{o.name}</a>
+              <span>{[o.role, o.city].filter(Boolean).join(' · ')}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+      <a class="btn-poster btn-poster--on-ink" href={directoryPath(lang)}>{t('Todo el directorio', 'Full directory')}</a>
+    </div>
+  </section>
+
+  <section class="d-related" aria-labelledby="rel-title">
+    <div class="wrap d-related-head">
+      <h2 id="rel-title">{t('Más destinos', 'More destinations')}</h2>
+      <a class="btn-poster" href={destinationsPath(lang)}>{t('Todos los destinos', 'All destinations')}</a>
+    </div>
+    <DestinationMosaic lang={lang} slugs={related} />
+  </section>
+</Layout>
+
+<style>
+  .d-hero {
+    position: relative;
+    min-height: min(68vh, 640px);
+    display: grid;
+    align-items: end;
+    background: var(--ink);
+    isolation: isolate;
+    overflow: hidden;
+  }
+
+  .d-hero-photo,
+  .d-hero-photo :global(img) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+  }
+
+  .d-hero-inner {
+    padding-block: var(--space-6) var(--space-4);
+  }
+
+  .d-hero-band {
+    background: var(--ink);
+    padding: var(--space-3) var(--space-4) var(--space-3);
+    max-width: 48rem;
+  }
+
+  .d-title {
+    font-size: clamp(3.5rem, 10vw, 7.5rem);
+    margin: 0 0 var(--space-2);
+  }
+
+  .d-summary {
+    color: var(--on-ink);
+    margin: 0;
+    font-size: 1.08rem;
+    max-width: 58ch;
+  }
+
+  .d-credit {
+    position: absolute;
+    right: var(--gutter);
+    bottom: 0.5rem;
+    margin: 0;
+    /* Pestaña de tinta: el crédito se lee sobre cualquier foto (piedra clara, cielo). */
+    background: var(--ink);
+    color: var(--on-ink-2);
+    padding: 0.25rem 0.55rem;
+  }
+
+  .d-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 20rem;
+    gap: var(--space-5);
+    padding-block: var(--space-5);
+    align-items: start;
+  }
+
+  /* Los títulos del artículo son rótulos de cartel: banda negra, una tinta que rota. */
+  .d-article :global(h2) {
+    font-size: clamp(1.85rem, 3.4vw, 2.6rem);
+    display: table;
+    background: var(--ink);
+    color: var(--magenta);
+    padding: 0.14em 0.3em 0.04em;
+  }
+
+  .d-article :global(h2:nth-of-type(4n + 2)) { color: var(--orange); }
+  .d-article :global(h2:nth-of-type(4n + 3)) { color: var(--green); }
+  .d-article :global(h2:nth-of-type(4n + 4)) { color: var(--yellow); }
+
+  /* Con <span class="h-band"> (títulos del Markdown) la banda se pinta línea a línea, ajustada al texto. */
+  .d-article :global(h2:has(.h-band)) {
+    display: block;
+    background: none;
+    padding: 0;
+    line-height: 1.22;
+  }
+
+  .d-article :global(.h-band) {
+    background: var(--ink);
+    padding: 0.12em 0.3em 0.02em;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+
+  .d-article :global(h2 + p),
+  .d-article :global(h3 + p) {
+    margin-top: 0;
+  }
+
+  .d-article :global(strong) {
+    font-weight: 650;
+  }
+
+  .d-faq {
+    margin-top: var(--space-5);
+    padding-top: var(--space-4);
+    border-top: 3px solid var(--ink);
+  }
+
+  .d-faq-item + .d-faq-item {
+    margin-top: var(--space-3);
+  }
+
+  .d-faq-item h3 {
+    font-size: 1.45rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .d-aside {
+    position: sticky;
+    top: var(--space-3);
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  /* Cada bloque lleva su título como rótulo de cartel: banda negra, letras en una tinta. */
+  .d-card:nth-child(4n + 1) { --card-ink: var(--magenta); }
+  .d-card:nth-child(4n + 2) { --card-ink: var(--orange); }
+  .d-card:nth-child(4n + 3) { --card-ink: var(--green); }
+  .d-card:nth-child(4n + 4) { --card-ink: var(--yellow); }
+
+  .d-card h2 {
+    font-size: 1.35rem;
+    line-height: 1;
+    background: var(--ink);
+    color: var(--card-ink);
+    padding: 0.45rem 0.7rem 0.35rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .d-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .d-card dl {
+    margin: 0;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.35rem 1rem;
+  }
+
+  .d-card dt {
+    color: var(--text-2);
+  }
+
+  .d-card dd {
+    margin: 0;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .d-card p {
+    margin: 0;
+  }
+
+  .d-cert-count {
+    margin: 0.6rem 0 0.35rem !important;
+    font-size: 0.95rem;
+  }
+
+  .d-cert-seal {
+    display: block;
+    color: var(--text-2);
+    font-size: 0.85rem;
+  }
+
+  .d-card p + p,
+  .d-card ul + p {
+    margin-top: 0.6rem;
+  }
+
+  .d-chips {
+    display: flex !important;
+    flex-wrap: wrap;
+    gap: 0.4rem !important;
+  }
+
+  .d-chips a {
+    display: inline-block;
+    font-family: var(--font-poster);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 0.95rem;
+    text-decoration: none;
+    color: var(--ink);
+    border: 2px solid var(--ink);
+    padding: 0.15rem 0.55rem 0.1rem;
+  }
+
+  .d-chips a:hover {
+    background: var(--yellow);
+  }
+
+  .d-operators {
+    background: var(--ink);
+    color: var(--on-ink);
+    padding-block: var(--space-6);
+  }
+
+  .ops-title {
+    font-size: clamp(3rem, 7vw, 5.25rem);
+  }
+
+  .ops-lede {
+    color: var(--on-ink-2);
+    max-width: 62ch;
+  }
+
+  .ops-list {
+    list-style: none;
+    padding: 0;
+    margin: var(--space-3) 0 var(--space-4);
+    columns: 3 16rem;
+    column-gap: var(--space-4);
+    border-top: 1px solid #3a3a3a;
+  }
+
+  .ops-list li {
+    break-inside: avoid;
+    padding: 0.55rem 0;
+    border-bottom: 1px solid #2c2c2c;
+    display: grid;
+    gap: 0.05rem;
+  }
+
+  .ops-list a {
+    color: var(--on-ink);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .ops-list a:hover {
+    color: var(--yellow);
+    text-decoration: underline;
+    text-decoration-color: var(--magenta);
+  }
+
+  .ops-list span {
+    color: var(--on-ink-2);
+    font-size: 0.85rem;
+  }
+
+  .d-related {
+    padding-top: var(--space-5);
+  }
+
+  .d-related-head {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+  }
+
+  .d-related-head h2 {
+    margin: 0;
+  }
+
+  @media (max-width: 960px) {
+    .d-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .d-aside {
+      position: static;
+      grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    }
+  }
+
+  @media (max-width: 560px) {
+    .d-hero-band {
+      padding: var(--space-2) var(--space-3);
+    }
+
+    .d-related-head {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

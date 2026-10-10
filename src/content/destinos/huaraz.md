@@ -1,5 +1,6 @@
 ---
 type: destino
+lang: es
 name: Huaraz
 country: Peru
 region: Áncash
@@ -23,3 +24,4 @@ Huaraz es la capital del andinismo en Perú, puerta de entrada al Parque Naciona
 ## Productos turísticos principales
 
 Los operadores receptivos en Huaraz ofrecen servicios para agencias emisoras y compradores B2B que buscan experiencias auténticas y operadores verificados en Perú.
+

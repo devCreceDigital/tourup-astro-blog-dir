@@ -1,0 +1,179 @@
+---
+/**
+ * Itinerario sostenible: plan por días, empresas certificadas citadas por ID (estado
+ * calculado hoy) y los reconocimientos de destino de la base TourVerificado.
+ */
+import GuidePage from './GuidePage.astro';
+import CertifiedList from './CertifiedList.astro';
+import type { Locale } from '../../utils/i18n';
+import { SITE_URL } from '../../utils/seo';
+import { destinationPath } from '../../data/site';
+import data from '../../data/sustainability.json';
+import type { Certification, RecognizedDestination } from '../../utils/sustainability';
+import {
+  SUSTAINABLE_ITINERARIES,
+  sustainabilityPath,
+  sustainableItineraryPath,
+  type SustainableItinerary,
+} from '../../data/sustainable-itineraries';
+
+interface Props {
+  lang: Locale;
+  itinerary: SustainableItinerary;
+}
+
+const { lang, itinerary: it } = Astro.props;
+const es = lang === 'es';
+const t = (esText: string, enText: string) => (es ? esText : enText);
+const certsById = new Map((data.certifications as Certification[]).map((c) => [c.id, c]));
+const recognitions = data.recognizedDestinations as RecognizedDestination[];
+const recFor = (name?: string) =>
+  name ? recognitions.filter((r) => r.name === name).sort((a, b) => (b.year ?? 0) - (a.year ?? 0)) : [];
+const steps = it.extension ? [...it.plan, it.extension] : it.plan;
+const others = SUSTAINABLE_ITINERARIES.filter((x) => x.days !== it.days);
+const path = sustainableItineraryPath(lang, it);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Trip',
+  '@id': `${SITE_URL}${path}#trip`,
+  name: it.title[lang],
+  description: it.dek[lang],
+  url: `${SITE_URL}${path}`,
+  itinerary: {
+    '@type': 'ItemList',
+    itemListElement: it.plan.map((d, i) => ({ '@type': 'ListItem', position: i + 1, name: `${d.days[lang]}: ${d.title[lang]}` })),
+  },
+};
+---
+
+<GuidePage
+  title={`${it.title[lang]} | TourUp`}
+  heading={it.title[lang]}
+  dek={it.dek[lang]}
+  description={it.dek[lang]}
+  currentPath={path}
+  lang={lang}
+  breadcrumb={t(`${it.days} ${it.days === 1 ? 'día' : 'días'}`, `${it.days} ${it.days === 1 ? 'day' : 'days'}`)}
+  photo={it.photo}
+  alternates={{ es: `${SITE_URL}${sustainableItineraryPath('es', it)}`, en: `${SITE_URL}${sustainableItineraryPath('en', it)}` }}
+>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <p class="si-route">{it.route[lang]}</p>
+
+  <ol class="si-plan">
+    {steps.map((d) => {
+      const certs = (d.certIds ?? []).map((id) => certsById.get(id)).filter(Boolean) as Certification[];
+      const recs = recFor(d.recognition);
+      return (
+        <li class="si-step">
+          <p class="si-when">{d.days[lang]}</p>
+          <h2 class="si-title">
+            {d.destination ? <a href={destinationPath(lang, d.destination)}>{d.title[lang]}</a> : d.title[lang]}
+          </h2>
+          <p>{d.text[lang]}</p>
+          {recs.length > 0 && (
+            <p class="si-recognition">
+              {t('Reconocido por Green Destinations', 'Recognised by Green Destinations')}:{' '}
+              {recs.map((r, i) => (
+                <span>{i > 0 && ', '}{r.source ? <a href={r.source} rel="noopener nofollow">{r.recognition} {r.year}</a> : `${r.recognition} ${r.year}`}</span>
+              ))}
+            </p>
+          )}
+          {certs.length > 0 && (
+            <>
+              <p class="si-certs-label">{t('Empresas certificadas para esta etapa', 'Certified businesses for this stage')}</p>
+              <CertifiedList certs={certs} lang={lang} showPlace={certs.length > 1} />
+            </>
+          )}
+        </li>
+      );
+    })}
+  </ol>
+
+  <p class="si-note">
+    {t(
+      'Ruta orientativa: los tiempos por carretera y los vuelos cambian según la temporada. Los sellos se comprueban cada día contra su fecha de vencimiento; confírmalos en el registro de la certificadora antes de reservar.',
+      'A suggested route: road times and flights change with the season. Seals are checked daily against their expiry date; confirm them in the certifier’s register before booking.',
+    )}
+  </p>
+
+  <h2>{t('Otros itinerarios sostenibles', 'More sustainable itineraries')}</h2>
+  <ul>
+    {others.map((o) => (
+      <li><a href={sustainableItineraryPath(lang, o)}>{o.title[lang]}</a></li>
+    ))}
+    <li><a href={sustainabilityPath(lang)}>{t('Toda la sección Sostenibilidad', 'The full Sustainability section')}</a></li>
+  </ul>
+</GuidePage>
+
+<style>
+  .si-route {
+    font-family: var(--font-poster);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 1.2rem;
+    color: var(--ink);
+    border-bottom: 3px solid var(--ink);
+    padding-bottom: var(--space-2);
+  }
+
+  .si-plan {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .si-step {
+    padding-block: var(--space-3);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .si-when {
+    display: inline-block;
+    font-family: var(--font-poster);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: var(--ink);
+    color: var(--green);
+    padding: 0.15rem 0.55rem 0.1rem;
+    margin: 0 0 0.6rem;
+  }
+
+  .si-title {
+    font-size: clamp(1.7rem, 3vw, 2.2rem) !important;
+    margin: 0 0 0.5rem !important;
+  }
+
+  .si-title a {
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .si-title a:hover {
+    color: var(--link);
+    text-decoration: underline;
+  }
+
+  .si-recognition {
+    font-size: 0.95rem;
+    color: var(--text-2);
+  }
+
+  .si-certs-label {
+    font-family: var(--font-poster);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: var(--space-2) 0 0;
+  }
+
+  .si-note {
+    margin-top: var(--space-4);
+    color: var(--text-2);
+    font-size: 0.95rem;
+  }
+</style>

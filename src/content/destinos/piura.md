@@ -1,5 +1,6 @@
 ---
 type: destino
+lang: es
 name: Piura
 country: Peru
 region: Piura

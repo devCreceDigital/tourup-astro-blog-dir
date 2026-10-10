@@ -173,6 +173,61 @@ Integration points:
 
 ---
 
+## Deployment
+
+The project uses `@astrojs/node` with `mode: 'standalone'` for SSR of admin/media/settings/sitemap/robots pages. Static pages are prerendered at build time.
+
+### Build
+
+```bash
+npm run build
+```
+
+Output:
+- `dist/client/` — static assets (HTML, JS, CSS, images)
+- `dist/server/` — Node.js server entry point
+
+### Run production server
+
+```bash
+node ./dist/server/entry.mjs
+```
+
+Or use the start script:
+
+```bash
+npm start
+```
+
+### Environment variables
+
+| Variable | Required | Description |
+|---|---|---|
+| `CLOUDINARY_CLOUD_NAME` | Yes | Cloudinary cloud name for media uploads |
+| `CLOUDINARY_API_KEY` | Yes | Cloudinary API key |
+| `CLOUDINARY_API_SECRET` | Yes | Cloudinary API secret |
+| `GEMINI_API_KEY` | No | Gemini API key for Graphify knowledge graph extraction |
+
+Copy `.env.example` to `.env` and fill in the values.
+
+### Docker
+
+```bash
+docker build -t tourup-astro-blog .
+docker run -p 8080:8080 \
+  -e CLOUDINARY_CLOUD_NAME=... \
+  -e CLOUDINARY_API_KEY=... \
+  -e CLOUDINARY_API_SECRET=... \
+  tourup-astro-blog
+```
+
+### Platform guides
+
+- **Render / Railway / Fly.io**: set build command to `npm run build`, start command to `node ./dist/server/entry.mjs`, configure env vars in dashboard.
+- **Cloudflare Pages**: not supported (uses Node.js adapter). Switch to `@astrojs/cloudflare` adapter if needed.
+
+---
+
 ## Status
 
 - [ ] Astro scaffolding

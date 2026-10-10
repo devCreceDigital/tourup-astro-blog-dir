@@ -1,0 +1,20 @@
+---
+/** Portada en español. La inglesa es `/` (idioma principal); `/en/` redirige allí (astro.config). */
+import Layout from '../../layouts/Layout.astro';
+import HomePage from '../../components/site/HomePage.astro';
+
+export function getStaticPaths() {
+  return [{ params: { lang: 'es' } }];
+}
+---
+
+<Layout
+  title="Guía de viaje de Perú y directorio de operadores | TourUp"
+  description="Guía de viaje de Perú: destinos, itinerarios de 7 a 14 días, tours a Machu Picchu y respuestas claras, más un directorio de empresas de turismo registradas en Perú."
+  currentPath="/es/"
+  lang="es"
+  breadcrumb="Inicio"
+  bleed
+>
+  <HomePage lang="es" />
+</Layout>

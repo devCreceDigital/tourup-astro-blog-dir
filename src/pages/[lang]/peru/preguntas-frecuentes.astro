@@ -1,0 +1,129 @@
+---
+import GuidePage from '../../../components/site/GuidePage.astro';
+
+export async function getStaticPaths() {
+  return [
+    { params: { lang: 'en' }, props: { lang: 'en' } },
+    { params: { lang: 'es' }, props: { lang: 'es' } },
+  ];
+}
+
+interface Props { lang: string; }
+const { lang } = Astro.props;
+
+const faqItems = lang === 'en' ? [
+  {
+    q: "Do I need a visa to travel to Peru?",
+    a: "Citizens of the US, Canada, UK, EU, Australia, New Zealand, Japan and most Latin American countries do not need a visa for tourism. Maximum stay without a visa is 183 days (extendable by 90 additional days)."
+  },
+  {
+    q: "What vaccines are required for Peru?",
+    a: "No vaccines are mandatory to enter Peru, except yellow fever if traveling from an endemic country. Yellow fever is recommended if visiting the Amazon (Iquitos, Puerto Maldonado, Manu). Hepatitis A, tetanus and typhoid are also recommended."
+  },
+  {
+    q: "Is it safe to travel to Peru?",
+    a: "Peru is safe for tourists who take basic precautions. Tourist areas (Miraflores, Barranco, Cusco center, Arequipa center) have constant police presence. Avoid non-tourist areas at night, use ride-sharing apps (Uber, Cabify), and don't display valuables on the street."
+  },
+  {
+    q: "What currency is used in Peru?",
+    a: "The official currency is the Peruvian sol (PEN, S/). Bills come in 10, 20, 50, 100 and 200 soles. Coins in 1, 2, 5 soles and 10, 20, 50 centimos. US dollars are accepted in hotels and tour bookings, but the exchange rate may not be favorable."
+  },
+  {
+    q: "Can I pay with credit card in Peru?",
+    a: "Yes, Visa and Mastercard are widely accepted in hotels, restaurants, supermarkets and stores in tourist areas. American Express has less coverage. Markets, taxis and small shops only accept cash. Inform your bank before traveling."
+  },
+  {
+    q: "Is travel insurance mandatory for Peru?",
+    a: "Not mandatory to enter Peru, but highly recommended. Comprehensive travel insurance covers medical expenses, altitude evacuation, flight cancellations, lost luggage, and legal assistance. For trekking (Inca Trail, Rainbow Mountain), rescue coverage in mountains is essential."
+  },
+  {
+    q: "Can you drink tap water in Peru?",
+    a: "Tap water is not recommended in Peru, even in luxury hotels. Always use bottled water (available everywhere) or filtered water. Ice in established restaurants is made with filtered water and is safe."
+  },
+  {
+    q: "Is tipping expected in Peru?",
+    a: "Not mandatory, but it's a well-received custom. In restaurants, 10% of the bill is expected if service was good. On tours, $5-10 per day for the guide and $2-5 for the driver is standard. Luxury hotels often include service in the bill."
+  },
+] : [
+  {
+    q: "¿Necesito visa para viajar a Perú?",
+    a: "Los ciudadanos de Estados Unidos, Canadá, Reino Unido, Unión Europea, Australia, Nueva Zelanda, Japón y la mayoría de países latinoamericanos no necesitan visa para turismo. El plazo máximo de estancia sin visa es de 183 días."
+  },
+  {
+    q: "¿Qué vacunas son obligatorias para Perú?",
+    a: "No hay vacunas obligatorias para ingresar a Perú, excepto la vacuna contra la fiebre amarilla si se viaja desde un país endémico. Se recomienda la vacuna contra la fiebre amarilla si visitas la Amazonía. También se recomienda hepatitis A, tétanos y fiebre tifoidea."
+  },
+  {
+    q: "¿Es seguro viajar a Perú?",
+    a: "Perú es seguro para turistas que toman precauciones básicas. Las zonas turísticas tienen presencia policial constante. Evita zonas no turísticas de noche, usa taxis de aplicación (Uber, Cabify) y no exhibas objetos de valor en la calle."
+  },
+  {
+    q: "¿Qué moneda se usa en Perú?",
+    a: "La moneda oficial es el sol peruano (PEN, S/). Los billetes son de 10, 20, 50, 100 y 200 soles. Las monedas de 1, 2, 5 soles y de 10, 20, 50 céntimos. El dólar se acepta en hoteles y tours, pero el cambio puede no ser favorable."
+  },
+  {
+    q: "¿Puedo pagar con tarjeta de crédito en Perú?",
+    a: "Sí, las tarjetas Visa y Mastercard se aceptan en hoteles, restaurantes, supermercados y tiendas de zonas turísticas. American Express tiene menor cobertura. En mercados y taxis solo se acepta efectivo. Informa a tu banco antes de viajar."
+  },
+  {
+    q: "¿Es obligatorio el seguro de viaje para Perú?",
+    a: "No es obligatorio para ingresar a Perú, pero es altamente recomendado. Un seguro de viaje integral cubre gastos médicos, evacuación en altura, cancelación de vuelos y pérdida de equipaje. Para trekking en altura, es indispensable tener cobertura de rescate en montaña."
+  },
+  {
+    q: "¿Se puede beber agua del grifo en Perú?",
+    a: "No se recomienda beber agua del grifo en Perú. Usa siempre agua embotellada (disponible en todos los hoteles y restaurantes) o agua filtrada. El hielo en restaurantes establecidos se hace con agua filtrada y es seguro."
+  },
+  {
+    q: "¿Es obligatorio dejar propina en Perú?",
+    a: "No es obligatorio, pero es una costumbre bien recibida. En restaurantes, se espera una propina del 10% si el servicio fue bueno. En tours, 5-10 USD por día para el guía y 2-5 USD para el conductor es un estándar aceptado."
+  },
+];
+---
+
+<GuidePage
+  title={lang === 'en' ? "Frequently Asked Questions About Traveling to Peru | Complete Guide 2026" : "Preguntas frecuentes sobre viajar a Perú | Guía completa 2026"}
+  description={lang === 'en'
+    ? "All answers about traveling to Peru: entry requirements, visas, safety, money, tipping, travel insurance and domestic transport. Updated guide 2026."
+    : "Todas las respuestas sobre viajar a Perú: requisitos de entrada, visados, seguridad, dinero, propinas, seguro de viaje y transporte interno. Guía actualizada 2026."}
+  currentPath={`/${lang}/peru/preguntas-frecuentes/`}
+  lang={lang}
+  heading={lang === 'en' ? 'Peru travel FAQ' : 'Preguntas frecuentes para viajar a Perú'}
+  dek={lang === 'en' ? 'Visas, vaccines, safety, money, tipping and travel insurance: what to know before you fly.' : 'Visados, vacunas, seguridad, dinero, propinas y seguro de viaje: lo que conviene saber antes de volar.'}
+  photo="lima"
+>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqItems.map(item => ({
+      "@type": "Question",
+      "name": item.q,
+      "acceptedAnswer": { "@type": "Answer", "text": item.a }
+    }))
+  })} />
+
+
+    <h2>{lang === 'en' ? "Entry Requirements, Visas & Vaccines" : "Requisitos de entrada, visados y vacunas"}</h2>
+    {faqItems.slice(0, 3).map(item => (
+      <>
+        <h3>{item.q}</h3>
+        <p>{item.a}</p>
+      </>
+    ))}
+
+    <h2>{lang === 'en' ? "Money & Payments" : "Dinero y pagos"}</h2>
+    {faqItems.slice(3, 6).map(item => (
+      <>
+        <h3>{item.q}</h3>
+        <p>{item.a}</p>
+      </>
+    ))}
+
+    <h2>{lang === 'en' ? "Health, Safety & Tips" : "Salud, seguridad y consejos"}</h2>
+    {faqItems.slice(6).map(item => (
+      <>
+        <h3>{item.q}</h3>
+        <p>{item.a}</p>
+      </>
+    ))}
+</GuidePage>
+

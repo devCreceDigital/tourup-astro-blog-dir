@@ -1,0 +1,269 @@
+---
+/**
+ * Sección Sostenibilidad (/en/sustainability/, /es/sostenibilidad/). Todo sale de la base
+ * TourVerificado: certificaciones vigentes (estado calculado hoy), Empresas B del sector y
+ * destinos reconocidos por Green Destinations. Nada se afirma sin su fuente.
+ */
+import GuidePage from './GuidePage.astro';
+import CertifiedList from './CertifiedList.astro';
+import Photo from './Photo.astro';
+import type { Locale } from '../../utils/i18n';
+import { SITE_URL } from '../../utils/seo';
+import { destinationPath } from '../../data/site';
+import data from '../../data/sustainability.json';
+import {
+  currentCertifications,
+  destinationForRecognized,
+  type Certification,
+  type RecognizedDestination,
+} from '../../utils/sustainability';
+import {
+  SUSTAINABLE_ITINERARIES,
+  sustainabilityPath,
+  sustainableItineraryPath,
+} from '../../data/sustainable-itineraries';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const es = lang === 'es';
+const t = (esText: string, enText: string) => (es ? esText : enText);
+
+const certs = currentCertifications(data.certifications as Certification[]);
+const byRegion = new Map<string, typeof certs>();
+for (const c of certs) {
+  const key = c.region && c.region !== 'Por confirmar' ? c.region : t('Región por confirmar', 'Region to be confirmed');
+  byRegion.set(key, [...(byRegion.get(key) ?? []), c]);
+}
+const regions = [...byRegion.entries()].sort((a, b) => b[1].length - a[1].length);
+
+const recognized = (data.recognizedDestinations as RecognizedDestination[])
+  .slice()
+  .sort((a, b) => (b.year ?? 0) - (a.year ?? 0) || a.name.localeCompare(b.name));
+const certifiedPlace = recognized.find((d) => /certificaci[oó]n/i.test(d.recognition ?? ''));
+const bCorps = data.bCorps as { name: string; sector: string | null; city: string | null; website: string | null }[];
+
+const verified = new Date(`${data.verifiedAt}T12:00:00Z`).toLocaleDateString(es ? 'es-PE' : 'en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
+const path = sustainabilityPath(lang);
+const recognitionText = (r: string | null) => {
+  if (!r) return '';
+  if (es) return r;
+  return r
+    .replace(/^Certificación Gold \(primer destino peruano\)$/, 'Gold certification (first in Peru)')
+    .replace(/^Top 100 Green Destinations Stories$/, 'Top 100 Green Destinations Stories');
+};
+---
+
+<GuidePage
+  title={t('Turismo sostenible en Perú: empresas certificadas, destinos e itinerarios | TourUp', 'Sustainable travel in Peru: certified companies, destinations and itineraries | TourUp Guide')}
+  heading={t('Sostenibilidad', 'Sustainability')}
+  dek={t(
+    `${certs.length} empresas turísticas con certificación de sostenibilidad vigente, los destinos peruanos reconocidos por Green Destinations e itinerarios de 1, 7 y 14 días construidos con ellos.`,
+    `${certs.length} travel businesses with a valid sustainability certification, the Peruvian destinations recognised by Green Destinations, and 1, 7 and 14-day itineraries built around them.`,
+  )}
+  description={t(
+    'Empresas turísticas de Perú con certificación de sostenibilidad vigente (TourCert, Preferred by Nature, Empresa B), destinos reconocidos por Green Destinations e itinerarios sostenibles.',
+    'Peruvian travel businesses with a valid sustainability certification (TourCert, Preferred by Nature, B Corp), destinations recognised by Green Destinations, and sustainable itineraries.',
+  )}
+  currentPath={path}
+  lang={lang}
+  breadcrumb={t('Sostenibilidad', 'Sustainability')}
+  photo="titicaca"
+  wide
+  alternates={{ es: `${SITE_URL}${sustainabilityPath('es')}`, en: `${SITE_URL}${sustainabilityPath('en')}` }}
+>
+  <p>
+    {t(
+      `Datos de la base TourVerificado, revisados el ${verified} contra los registros públicos de cada certificadora. El estado de cada certificación se recalcula cada día con su fecha de vencimiento: solo aparecen aquí las vigentes.`,
+      `Data from the TourVerificado registry, checked on ${verified} against each certifier's public register. Each certification's status is recalculated daily from its expiry date: only valid ones are listed here.`,
+    )}
+  </p>
+
+  <h2 id="itineraries">{t('Itinerarios sostenibles', 'Sustainable itineraries')}</h2>
+  <ul class="s-itins">
+    {SUSTAINABLE_ITINERARIES.map((it, i) => (
+      <li class={`s-itin s-itin--${['green', 'orange', 'magenta'][i % 3]}`}>
+        <a href={sustainableItineraryPath(lang, it)}>
+          <Photo name={it.photo} alt="" sizes="(max-width: 760px) 100vw, 320px" />
+          <span class="s-itin-days">{it.days}</span>
+          <span class="s-itin-body">
+            <span class="s-itin-title">{it.title[lang]}</span>
+            <span class="s-itin-route">{it.route[lang]}</span>
+          </span>
+        </a>
+      </li>
+    ))}
+  </ul>
+
+  <h2 id="destinations">{t('Destinos reconocidos', 'Recognised destinations')}</h2>
+  <p>
+    {certifiedPlace
+      ? t(
+          `${certifiedPlace.name} es el primer destino peruano con certificación de Green Destinations (${recognitionText(certifiedPlace.recognition)}, ${certifiedPlace.year}). Los demás figuran en su selección anual “Top 100 Stories”: es un reconocimiento a una buena práctica, no una certificación del destino.`,
+          `${certifiedPlace.name} is the first Peruvian destination certified by Green Destinations (${recognitionText(certifiedPlace.recognition)}, ${certifiedPlace.year}). The others appear in its yearly “Top 100 Stories” selection: that recognises a good practice, it is not a certification of the destination.`,
+        )
+      : ''}
+  </p>
+  <table>
+    <thead>
+      <tr>
+        <th>{t('Destino', 'Destination')}</th>
+        <th>{t('Región', 'Region')}</th>
+        <th>{t('Reconocimiento', 'Recognition')}</th>
+        <th>{t('Año', 'Year')}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {recognized.map((d) => {
+        const slug = destinationForRecognized(d.name);
+        return (
+          <tr>
+            <td>{slug ? <a href={destinationPath(lang, slug)}>{d.name}</a> : d.name}</td>
+            <td>{d.region}</td>
+            <td>{d.source ? <a href={d.source} rel="noopener nofollow">{recognitionText(d.recognition)}</a> : recognitionText(d.recognition)}</td>
+            <td>{d.year}</td>
+          </tr>
+        );
+      })}
+    </tbody>
+  </table>
+
+  <h2 id="companies">{t('Empresas con certificación vigente', 'Companies with a valid certification')}</h2>
+  <p>
+    {t(
+      'Alojamientos, operadores y agencias con un sello de sostenibilidad vigente según el registro de su certificadora: TourCert, Preferred by Nature (estándar Sustainable Travel, reconocido por el GSTC) y B Lab (Empresa B). Comprueba el sello en el registro antes de contratar.',
+      'Lodges, operators and agencies holding a valid sustainability seal according to their certifier’s register: TourCert, Preferred by Nature (Sustainable Travel standard, GSTC-recognised) and B Lab (B Corporation). Check the seal in the register before you book.',
+    )}
+  </p>
+  {regions.map(([region, list]) => (
+    <>
+      <h3>{region}</h3>
+      <CertifiedList certs={list} lang={lang} />
+    </>
+  ))}
+
+  <h2 id="b-corps">{t('Empresas B del sector turismo', 'B Corporations in Peruvian tourism')}</h2>
+  <p>
+    {t(
+      'Empresas del catálogo de Empresas B de Perú cuyo rubro es turismo u hospedaje. Una Empresa B cumple estándares verificados de impacto social y ambiental en toda la empresa, no solo en un producto.',
+      'Companies in Peru’s B Corporation directory whose sector is tourism or lodging. A B Corp meets verified social and environmental standards across the whole company, not just one product.',
+    )}
+  </p>
+  <ul class="s-bcorps">
+    {bCorps.map((b) => (
+      <li>
+        {b.website ? <a href={`https://${b.website.replace(/^https?:\/\//, '')}`} rel="noopener nofollow">{b.name}</a> : <span>{b.name}</span>}
+        {b.city && <span>{b.city}</span>}
+      </li>
+    ))}
+  </ul>
+
+  <h2 id="method">{t('Cómo se verifica', 'How this is verified')}</h2>
+  <ul>
+    <li>{t('Una fila por certificación, no por empresa: una empresa puede tener varias.', 'One record per certification, not per company: a company can hold several.')}</li>
+    <li>{t('Fuentes: directorio de TourCert, buscador de certificados de Preferred by Nature, directorio del GSTC y catálogo de B Lab.', 'Sources: the TourCert directory, the Preferred by Nature certificate search, the GSTC directory and the B Lab directory.')}</li>
+    <li>{t(`“Vence pronto” significa que la certificación termina en menos de 120 días.`, `“Expires soon” means the certification ends within 120 days.`)}</li>
+    <li>{t('Las certificaciones terminadas, vencidas o solo de formación no se listan.', 'Terminated, expired and training-only records are not listed.')}</li>
+  </ul>
+</GuidePage>
+
+<style>
+  .s-itins {
+    list-style: none;
+    padding: 0;
+    margin: var(--space-2) 0 var(--space-4);
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .s-itin a {
+    display: grid;
+    grid-template-columns: 11rem auto 1fr;
+    align-items: center;
+    gap: var(--space-3);
+    background: var(--ink);
+    color: var(--on-ink);
+    text-decoration: none;
+    overflow: hidden;
+  }
+
+  .s-itin a :global(img) {
+    width: 100%;
+    height: 100%;
+    min-height: 7.5rem;
+    object-fit: cover;
+  }
+
+  .s-itin--green { --itin-ink: var(--green); }
+  .s-itin--orange { --itin-ink: var(--orange); }
+  .s-itin--magenta { --itin-ink: var(--magenta); }
+
+  .s-itin-days {
+    font-family: var(--font-poster);
+    font-weight: 900;
+    font-size: 4.5rem;
+    line-height: 0.8;
+    color: var(--itin-ink);
+  }
+
+  .s-itin-body {
+    display: grid;
+    gap: 0.3rem;
+    padding-right: var(--space-3);
+  }
+
+  .s-itin-title {
+    font-family: var(--font-poster);
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 1.45rem;
+    line-height: 1;
+  }
+
+  .s-itin-route {
+    color: var(--on-ink-2);
+    font-size: 0.9rem;
+  }
+
+  .s-itin a:hover .s-itin-title {
+    color: var(--yellow);
+  }
+
+  .s-bcorps {
+    list-style: none;
+    padding: 0;
+    columns: 2 16rem;
+    border-top: 2px solid var(--ink);
+  }
+
+  .s-bcorps li {
+    break-inside: avoid;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.55rem 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .s-bcorps li span:last-child {
+    color: var(--text-2);
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 560px) {
+    .s-itin a {
+      grid-template-columns: 6rem auto 1fr;
+      gap: var(--space-2);
+    }
+
+    .s-itin-days {
+      font-size: 3rem;
+    }
+
+    .s-itin-title {
+      font-size: 1.15rem;
+    }
+  }
+</style>

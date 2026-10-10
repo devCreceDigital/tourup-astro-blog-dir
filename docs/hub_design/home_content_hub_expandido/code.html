@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PerúTours - Guía de Viaje</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            graphite: '#0a0a0a',
+            hairline: '#e5e5e5',
+            mist: '#f2f2f2',
+            carbon: '#171717',
+            concrete: '#737373',
+          },
+          fontFamily: {
+            sans: ['Geist', 'Inter', 'system-ui', 'sans-serif'],
+          },
+          borderRadius: {
+            'card': '14px',
+            'pill': '9999px',
+            'badge': '26px',
+            'btn': '10px',
+          },
+          letterSpacing: {
+            'tightest': '-0.05em',
+            'tight': '-0.025em',
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="base-typography">
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+    body {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+  </style>
+</head>
+<body class="bg-white text-graphite font-sans flex flex-col min-h-screen selection:bg-graphite selection:text-white">
+<!-- BEGIN: Global Navigation -->
+<header class="border-b border-hairline sticky top-0 bg-white/90 backdrop-blur-sm z-50">
+<div class="max-w-[1200px] mx-auto px-6 h-16 flex items-center justify-between">
+<!-- Brand Logo -->
+<div class="flex items-center gap-2">
+<svg class="text-graphite" fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<path d="M2 12h20M12 2v20"></path>
+<path d="m4.93 4.93 14.14 14.14M19.07 4.93 4.93 19.07"></path>
+</svg>
+<span class="font-medium text-[14px] tracking-tight">PerúTours</span>
+</div>
+<!-- Main Navigation Links -->
+<nav class="hidden md:flex items-center gap-[10px] text-[14px] font-medium">
+<a class="flex items-center gap-1 hover:bg-mist px-3 py-2 rounded-btn transition-colors" href="#">
+          Destinos
+          <svg fill="none" height="12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="m6 9 6 6 6-6"></path></svg>
+</a>
+<a class="flex items-center gap-1 hover:bg-mist px-3 py-2 rounded-btn transition-colors" href="#">
+          Guías
+          <svg fill="none" height="12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="m6 9 6 6 6-6"></path></svg>
+</a>
+<a class="hover:bg-mist px-3 py-2 rounded-btn transition-colors" href="#">Itinerarios</a>
+<a class="hover:bg-mist px-3 py-2 rounded-btn transition-colors" href="#">Lecturas</a>
+</nav>
+<!-- Primary CTA -->
+<div>
+<a class="inline-flex items-center justify-center bg-graphite text-white px-4 py-2 rounded-btn text-[14px] font-medium hover:bg-carbon transition-colors" href="#">
+          Comenzar
+        </a>
+</div>
+</div>
+</header>
+<!-- END: Global Navigation -->
+<main class="flex-grow">
+<!-- BEGIN: Hero Section -->
+<section class="max-w-[1200px] mx-auto px-6 py-[48px] md:py-[80px] border-b border-hairline">
+<div class="max-w-3xl">
+<h1 class="text-[48px] leading-[1.1] tracking-tightest font-semibold mb-[24px]">
+          Conocimiento profundo para viajeros exigentes.
+        </h1>
+<p class="text-[16px] text-concrete leading-[1.43] mb-[32px] max-w-xl">
+          Explora nuestras guías documentadas sobre la historia, arquitectura y naturaleza de los Andes peruanos. Diseñado para quienes buscan entender antes de visitar.
+        </p>
+<div class="flex gap-4">
+<a class="inline-flex items-center justify-center bg-graphite text-white px-4 py-2 rounded-btn text-[14px] font-medium hover:bg-carbon transition-colors" href="#destinos">
+            Explorar guías
+          </a>
+<a class="inline-flex items-center justify-center bg-transparent text-graphite px-4 py-2 rounded-btn text-[14px] font-medium hover:bg-mist transition-colors" href="#">
+            Leer el manifiesto
+          </a>
+</div>
+</div>
+</section>
+<!-- END: Hero Section -->
+<!-- BEGIN: Destinations Grid Section -->
+<section class="max-w-[1200px] mx-auto px-6 py-[48px]" id="destinos">
+<div class="flex items-center justify-between mb-[24px]">
+<h2 class="text-[18px] font-semibold tracking-tight">Guías de Destino</h2>
+<a class="text-[14px] font-medium hover:bg-mist px-3 py-1.5 rounded-btn transition-colors" href="#">Ver todo el directorio →</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[16px]">
+<!-- Destination Card 1 -->
+<article class="border border-hairline rounded-card overflow-hidden group cursor-pointer hover:border-graphite transition-colors flex flex-col bg-white">
+<div class="aspect-[16/9] bg-mist w-full relative overflow-hidden border-b border-hairline">
+<img alt="Machu Picchu Arquitectura" class="w-full h-full object-cover grayscale mix-blend-multiply" src="https://lh3.googleusercontent.com/aida/AP1WRLtQJX4zICS77evOVeQslJ1gwbYs_pe1_6ECJ-deUBL7Q8WtBgR9Q3LNJO2O8qHZB6aJG9dxI-EcHgtWT_iXGGhMGx6YUaZp3KnA8AQtohcWXMtvLwOefnvveHUKWOcteaNCRTOupbFEMl7Ut3GghzujyPHoCaFktT2KTa-4T9x4IRWjQcso2eZMBOtAxMtJwhe76IvSKJxBOq10kdkVeVFNo_KF_QdQ8KwCRgqJn0Wu0GuLaLwjGpGp4uo"/>
+</div>
+<div class="p-[16px] flex-grow flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-2">
+<span class="inline-flex items-center bg-mist px-[10px] py-[4px] rounded-badge text-[12px] font-medium text-graphite">Guía Completa</span>
+<span class="text-[13px] text-concrete">24 min lectura</span>
+</div>
+<h3 class="text-[16px] font-semibold mb-1 leading-[1.43]">La Ingeniería de Machu Picchu</h3>
+<p class="text-[14px] text-concrete leading-[1.43]">Análisis estructural de las terrazas y sistemas hidráulicos del siglo XV.</p>
+</div>
+</div>
+</article>
+<!-- Destination Card 2 -->
+<article class="border border-hairline rounded-card overflow-hidden group cursor-pointer hover:border-graphite transition-colors flex flex-col bg-white">
+<div class="aspect-[16/9] bg-mist w-full relative overflow-hidden border-b border-hairline">
+<img alt="Valle Sagrado" class="w-full h-full object-cover grayscale mix-blend-multiply" src="https://lh3.googleusercontent.com/aida/AP1WRLtmiEFHe9FrpnvfQWRXVZBbBw0RplZFjzgiOZBnhZMhKp3lZODoRAfot6dLaMv9ubDLaWSuBU7BCTyhTJWGZ2gZceMa8lCrpT7gu0DvGlp4_sQoAwC7jRNaOQLlJmBKrYi5OE2kRzl1LEFjh7WXuzO4ZaJv4bOBFyg9fJvrW9G_h2Id6hpiZ8wrSPFpddcstZdEJN9IBIIri0qJmBuEctx4XOL3LpE91MqVaJFUDoH7JEJ4OlWFCE5RLbg"/>
+</div>
+<div class="p-[16px] flex-grow flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-2">
+<span class="inline-flex items-center bg-mist px-[10px] py-[4px] rounded-badge text-[12px] font-medium text-graphite">Territorio</span>
+<span class="text-[13px] text-concrete">18 min lectura</span>
+</div>
+<h3 class="text-[16px] font-semibold mb-1 leading-[1.43]">Topografía del Valle Sagrado</h3>
+<p class="text-[14px] text-concrete leading-[1.43]">Cómo la geografía andina moldeó los asentamientos desde Pisac hasta Ollantaytambo.</p>
+</div>
+</div>
+</article>
+<!-- Destination Card 3 -->
+<article class="border border-hairline rounded-card overflow-hidden group cursor-pointer hover:border-graphite transition-colors flex flex-col bg-white">
+<div class="aspect-[16/9] bg-mist w-full relative overflow-hidden border-b border-hairline flex items-center justify-center p-8">
+<svg class="text-concrete w-12 h-12" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+</div>
+<div class="p-[16px] flex-grow flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-2">
+<span class="inline-flex items-center bg-mist px-[10px] py-[4px] rounded-badge text-[12px] font-medium text-graphite">Cultura</span>
+<span class="text-[13px] text-concrete">12 min lectura</span>
+</div>
+<h3 class="text-[16px] font-semibold mb-1 leading-[1.43]">Evolución Urbana de Cusco</h3>
+<p class="text-[14px] text-concrete leading-[1.43]">Superposición de la arquitectura colonial sobre los cimientos de piedra inca.</p>
+</div>
+</div>
+</article>
+</div>
+</section>
+<!-- END: Destinations Grid Section -->
+<!-- BEGIN: Featured Articles Hub -->
+<section class="border-y border-hairline py-[48px]">
+<div class="max-w-[1200px] mx-auto px-6">
+<h2 class="text-[18px] font-semibold tracking-tight mb-[24px]">Lecturas Destacadas</h2>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-[16px]">
+<!-- Large Featured Article -->
+<article class="border border-hairline rounded-card overflow-hidden flex flex-col sm:flex-row bg-white hover:border-graphite transition-colors cursor-pointer">
+<div class="sm:w-1/2 aspect-square sm:aspect-auto border-b sm:border-b-0 sm:border-r border-hairline">
+<img alt="Expedición Guiada" class="w-full h-full object-cover grayscale mix-blend-multiply" src="https://lh3.googleusercontent.com/aida/AP1WRLume3ha1Dm7-m5aicVJ0LK1B17F836xBjvwdzmLdVjUX24Mn_O-F-oEqnvcPwD6mefhmjoTyHnld2s0QNz8yxsLrif25uZx3jBaxQpIsXNFTqqq072fw07xfj999rUsEdYtu5RcPY_xNR6WKBV_6neT9MSex_jwdRDVGsyZj2yNdRZa5sO7fByiFdGS8BdmMMi8Xtz6_ugOJC9WoolbVeMr-kpsPdOgq0sABCJKN0cUk7I7JbJ3SVt3G2H2"/>
+</div>
+<div class="p-[20px] sm:w-1/2 flex flex-col justify-center">
+<span class="inline-flex items-center bg-mist px-[10px] py-[4px] rounded-badge text-[12px] font-medium text-graphite self-start mb-4">Reportaje de Campo</span>
+<h3 class="text-[18px] font-semibold leading-[1.2] mb-2 tracking-tight">Documentando la Ruta Inca</h3>
+<p class="text-[14px] text-concrete leading-[1.43] mb-6">Nuestra expedición reciente analizando el desgaste estructural de los senderos originales y las nuevas normativas de conservación.</p>
+<div class="flex items-center text-[13px] text-concrete gap-4 mt-auto">
+<span class="flex items-center gap-1"><svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> 35 min lectura</span>
+<span>Por el Equipo Editorial</span>
+</div>
+</div>
+</article>
+<!-- Article List -->
+<div class="flex flex-col gap-[16px]">
+<a class="flex flex-col p-[16px] border border-hairline rounded-card bg-white hover:border-graphite transition-colors" href="#">
+<div class="flex justify-between items-start mb-2">
+<h4 class="text-[16px] font-semibold leading-[1.43] pr-4">Climatología de Altura</h4>
+<svg class="text-concrete" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+</div>
+<p class="text-[14px] text-concrete mb-3">Guía técnica sobre la aclimatación a más de 3,000 metros sobre el nivel del mar.</p>
+<span class="inline-flex items-center bg-mist px-[10px] py-[4px] rounded-badge text-[12px] font-medium text-graphite self-start">Salud</span>
+</a>
+<a class="flex flex-col p-[16px] border border-hairline rounded-card bg-white hover:border-graphite transition-colors" href="#">
+<div class="flex justify-between items-start mb-2">
+<h4 class="text-[16px] font-semibold leading-[1.43] pr-4">Logística del Sistema Ferroviario</h4>
+<svg class="text-concrete" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+</div>
+<p class="text-[14px] text-concrete mb-3">Análisis operativo de la ruta Ollantaytambo - Aguas Calientes.</p>
+<span class="inline-flex items-center bg-mist px-[10px] py-[4px] rounded-badge text-[12px] font-medium text-graphite self-start">Transporte</span>
+</a>
+</div>
+</div>
+</div>
+</section>
+<!-- END: Featured Articles Hub -->
+<!-- BEGIN: Itineraries & Support Section -->
+<!-- BEGIN: Seasonal Analysis Section -->
+<section class="border-b border-hairline py-[48px]">
+<div class="max-w-[1200px] mx-auto px-6">
+<h2 class="text-[18px] font-semibold tracking-tight mb-[24px]">Análisis de Temporada y Clima</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-[16px]">
+<!-- Cusco -->
+<div class="border border-hairline rounded-card p-[20px] bg-white">
+<div class="flex justify-between items-start mb-4">
+<h3 class="text-[16px] font-semibold">Cusco</h3>
+<span class="inline-flex items-center bg-graphite text-white px-[10px] py-[4px] rounded-badge text-[12px] font-medium">Temporada Alta</span>
+</div>
+<div class="flex flex-col gap-2 font-mono text-[13px]">
+<div class="flex justify-between border-b border-hairline pb-1">
+<span class="text-concrete">Temp. Promedio</span>
+<span class="text-graphite">14°C / 57°F</span>
+</div>
+<div class="flex justify-between border-b border-hairline pb-1">
+<span class="text-concrete">Precipitación</span>
+<span class="text-graphite">12%</span>
+</div>
+<div class="flex justify-between">
+<span class="text-concrete">Humedad</span>
+<span class="text-graphite">45%</span>
+</div>
+</div>
+</div>
+<!-- Lima -->
+<div class="border border-hairline rounded-card p-[20px] bg-white">
+<div class="flex justify-between items-start mb-4">
+<h3 class="text-[16px] font-semibold">Lima</h3>
+<span class="inline-flex items-center bg-mist text-graphite px-[10px] py-[4px] rounded-badge text-[12px] font-medium">Temporada Baja</span>
+</div>
+<div class="flex flex-col gap-2 font-mono text-[13px]">
+<div class="flex justify-between border-b border-hairline pb-1">
+<span class="text-concrete">Temp. Promedio</span>
+<span class="text-graphite">19°C / 66°F</span>
+</div>
+<div class="flex justify-between border-b border-hairline pb-1">
+<span class="text-concrete">Precipitación</span>
+<span class="text-graphite">2%</span>
+</div>
+<div class="flex justify-between">
+<span class="text-concrete">Humedad</span>
+<span class="text-graphite">82%</span>
+</div>
+</div>
+</div>
+<!-- Arequipa -->
+<div class="border border-hairline rounded-card p-[20px] bg-white">
+<div class="flex justify-between items-start mb-4">
+<h3 class="text-[16px] font-semibold">Arequipa</h3>
+<span class="inline-flex items-center bg-graphite text-white px-[10px] py-[4px] rounded-badge text-[12px] font-medium">Temporada Alta</span>
+</div>
+<div class="flex flex-col gap-2 font-mono text-[13px]">
+<div class="flex justify-between border-b border-hairline pb-1">
+<span class="text-concrete">Temp. Promedio</span>
+<span class="text-graphite">16°C / 61°F</span>
+</div>
+<div class="flex justify-between border-b border-hairline pb-1">
+<span class="text-concrete">Precipitación</span>
+<span class="text-graphite">5%</span>
+</div>
+<div class="flex justify-between">
+<span class="text-concrete">Humedad</span>
+<span class="text-graphite">30%</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- BEGIN: Researcher Resources Section -->
+<section class="border-b border-hairline py-[48px]">
+<div class="max-w-[1200px] mx-auto px-6">
+<h2 class="text-[18px] font-semibold tracking-tight mb-[24px]">Recursos para el Investigador</h2>
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-[16px]">
+<a class="border border-hairline rounded-card p-[16px] bg-white hover:border-graphite transition-colors flex flex-col gap-4" href="#">
+<div class="w-10 h-10 bg-mist rounded flex items-center justify-center">
+<svg class="text-graphite" fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" x2="8" y1="13" y2="13"></line><line x1="16" x2="8" y1="17" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+</div>
+<div>
+<h4 class="text-[14px] font-semibold mb-1">Estudio Geológico del Valle</h4>
+<p class="text-[12px] text-concrete">PDF • 12.4 MB</p>
+</div>
+</a>
+<a class="border border-hairline rounded-card p-[16px] bg-white hover:border-graphite transition-colors flex flex-col gap-4" href="#">
+<div class="w-10 h-10 bg-mist rounded flex items-center justify-center">
+<svg class="text-graphite" fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" x2="8" y1="13" y2="13"></line><line x1="16" x2="8" y1="17" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+</div>
+<div>
+<h4 class="text-[14px] font-semibold mb-1">Urbanismo Inca: Cusco</h4>
+<p class="text-[12px] text-concrete">PDF • 8.1 MB</p>
+</div>
+</a>
+<a class="border border-hairline rounded-card p-[16px] bg-white hover:border-graphite transition-colors flex flex-col gap-4" href="#">
+<div class="w-10 h-10 bg-mist rounded flex items-center justify-center">
+<svg class="text-graphite" fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" x2="8" y1="13" y2="13"></line><line x1="16" x2="8" y1="17" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+</div>
+<div>
+<h4 class="text-[14px] font-semibold mb-1">Sistemas Hidráulicos</h4>
+<p class="text-[12px] text-concrete">PDF • 15.2 MB</p>
+</div>
+</a>
+<a class="border border-hairline rounded-card p-[16px] bg-white hover:border-graphite transition-colors flex flex-col gap-4" href="#">
+<div class="w-10 h-10 bg-mist rounded flex items-center justify-center">
+<svg class="text-graphite" fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" x2="8" y1="13" y2="13"></line><line x1="16" x2="8" y1="17" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+</div>
+<div>
+<h4 class="text-[14px] font-semibold mb-1">Cartografía de Altura</h4>
+<p class="text-[12px] text-concrete">PDF • 22.0 MB</p>
+</div>
+</a>
+</div>
+</div>
+</section>
+<!-- BEGIN: Community & Chronicles Section -->
+<section class="border-b border-hairline py-[48px]">
+<div class="max-w-[1200px] mx-auto px-6">
+<h2 class="text-[18px] font-semibold tracking-tight mb-[24px]">Comunidad y Crónicas</h2>
+<div class="flex flex-col md:flex-row gap-[24px]">
+<div class="flex-1 flex gap-4 items-start">
+<div class="w-10 h-10 rounded-full bg-mist flex-shrink-0 overflow-hidden">
+<img alt="Avatar" class="w-full h-full object-cover grayscale" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhZft7hqNM5eEfTMWJ8zg7r8IFMRlSCX_MaJSGcYq_nxKOVXqoorHAM_tfAwu8K6yXxSFWkNKHqksPvkSoKI2cwE0BFkV5ufVA2XU5GA-MQmcnvLodvLp0vbWOVCRUAbeBtMLxM4q7lIWmB3ABSA9c4W9ml3s2myzeZa-XYZPtfZcgGQQG9_DSQRf2Lll6yhfDyPnvxPr1CkauwDqsx0OMJKItLMbpFk4z5lo8WNG228Hwkdv5H4NoDt5rsJxZYjydTAeQHSgD1S-p"/>
+</div>
+<div>
+<p class="text-[14px] text-graphite leading-[1.43] italic mb-2">"La precisión de los datos topográficos en la guía del Valle Sagrado fue fundamental para nuestra expedición de mapeo."</p>
+<p class="text-[12px] font-semibold">Dr. Julian M. — Arqueólogo</p>
+</div>
+</div>
+<div class="flex-1 flex gap-4 items-start">
+<div class="w-10 h-10 rounded-full bg-mist flex-shrink-0 overflow-hidden">
+<img alt="Avatar" class="w-full h-full object-cover grayscale" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxJsMU9OgYI36Y3vk9FLNkAVBTlwHFMLpICy8MRcvi36fR7Y228LEftcvhjUMiHwQwwsiAUxtRcNSoj9fGsDUwybZEUIHuruPc1Y9kWvby1DIb8YXx53td8_aO9uSxehO5YjSnHb-3CatYyhpYnfMhGeQzBVTsfidhKWb_1WJeUneDBo06r1RPuwXxPJ4D6f2vDFgS8e5L3s7DSfN1CG5QrCrmdqYf0vpbn3dbh3Uzhw7x2FJv3VWCchlNvz_FKs78gTbewU12XkPG"/>
+</div>
+<div>
+<p class="text-[14px] text-graphite leading-[1.43] italic mb-2">"Crónicas de campo reales. No es solo turismo, es documentación seria para quienes amamos la historia andina."</p>
+<p class="text-[12px] font-semibold">Elena R. — Investigadora Independiente</p>
+</div>
+</div>
+</div>
+</div>
+</section><section class="max-w-[1200px] mx-auto px-6 py-[48px] grid grid-cols-1 lg:grid-cols-2 gap-[48px]">
+<!-- Itineraries Column -->
+<div>
+<h2 class="text-[18px] font-semibold tracking-tight mb-[16px]">Marcos de Itinerario</h2>
+<div class="flex flex-col gap-[8px]">
+<a class="group flex items-center justify-between p-[16px] border border-hairline rounded-card hover:border-graphite transition-colors" href="#">
+<div>
+<span class="inline-flex items-center bg-mist px-[10px] py-[4px] rounded-badge text-[12px] font-medium text-graphite mb-1">Itinerario de 7 días</span>
+<h3 class="text-[16px] font-semibold">Circuito Básico Andino</h3>
+<p class="text-[13px] text-concrete mt-1">Cusco, Valle Sagrado y Ciudadela.</p>
+</div>
+<svg class="text-concrete group-hover:text-graphite transition-colors" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+</a>
+<a class="group flex items-center justify-between p-[16px] border border-hairline rounded-card hover:border-graphite transition-colors" href="#">
+<div>
+<span class="inline-flex items-center bg-mist px-[10px] py-[4px] rounded-badge text-[12px] font-medium text-graphite mb-1">Itinerario de 14 días</span>
+<h3 class="text-[16px] font-semibold">Inmersión Territorial Completa</h3>
+<p class="text-[13px] text-concrete mt-1">Lima, Arequipa, Puno y Cusco.</p>
+</div>
+<svg class="text-concrete group-hover:text-graphite transition-colors" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+</a>
+</div>
+</div>
+<!-- Support Column -->
+<div>
+<h2 class="text-[18px] font-semibold tracking-tight mb-[16px]">Documentación de Referencia</h2>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-[8px]">
+<a class="p-[12px] border border-hairline rounded-card hover:border-graphite transition-colors flex items-center gap-3" href="#">
+<div class="w-8 h-8 rounded flex items-center justify-center bg-mist">
+<svg class="text-graphite" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path><path d="M16 13H8"></path><path d="M16 17H8"></path><path d="M10 9H8"></path></svg>
+</div>
+<span class="font-medium text-[14px]">Requisitos de Visa</span>
+</a>
+<a class="p-[12px] border border-hairline rounded-card hover:border-graphite transition-colors flex items-center gap-3" href="#">
+<div class="w-8 h-8 rounded flex items-center justify-center bg-mist">
+<svg class="text-graphite" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M4 22h14a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v4"></path><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><path d="M3 15h6"></path><path d="M3 18h6"></path><path d="M14 15h4"></path><path d="M14 18h4"></path></svg>
+</div>
+<span class="font-medium text-[14px]">Normativas de Parque Nacional</span>
+</a>
+<a class="p-[12px] border border-hairline rounded-card hover:border-graphite transition-colors flex items-center gap-3" href="#">
+<div class="w-8 h-8 rounded flex items-center justify-center bg-mist">
+<svg class="text-graphite" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>
+</div>
+<span class="font-medium text-[14px]">Clínicas y Altitud</span>
+</a>
+<a class="p-[12px] border border-hairline rounded-card hover:border-graphite transition-colors flex items-center gap-3" href="#">
+<div class="w-8 h-8 rounded flex items-center justify-center bg-mist">
+<svg class="text-graphite" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><path d="M12 17h.01"></path></svg>
+</div>
+<span class="font-medium text-[14px]">Preguntas Frecuentes</span>
+</a>
+</div>
+</div>
+</section>
+<!-- END: Itineraries & Support Section -->
+</main>
+<!-- BEGIN: Main Footer -->
+<footer class="bg-white pt-[80px] pb-[32px] border-t border-hairline">
+<div class="max-w-[1200px] mx-auto px-6">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-[40px] mb-[80px]">
+<!-- Footer Column 1 -->
+<div>
+<h4 class="text-[14px] font-semibold mb-[16px] tracking-tight text-graphite">Directorio</h4>
+<ul class="flex flex-col gap-[12px] text-[14px]">
+<li><a class="text-concrete hover:text-graphite transition-colors" href="/peru/cusco/">/peru/cusco/</a></li>
+<li><a class="text-concrete hover:text-graphite transition-colors" href="/peru/lima/">/peru/lima/</a></li>
+<li><a class="text-concrete hover:text-graphite transition-colors" href="/peru/arequipa/">/peru/arequipa/</a></li>
+<li><a class="text-concrete hover:text-graphite transition-colors" href="/peru/puno/">/peru/puno/</a></li>
+</ul>
+</div>
+<!-- Footer Column 2 -->
+<div>
+<h4 class="text-[14px] font-semibold mb-[16px] tracking-tight text-graphite">Categorías</h4>
+<ul class="flex flex-col gap-[12px] text-[14px]">
+<li><a class="text-concrete hover:text-graphite transition-colors" href="#">Arquitectura</a></li>
+<li><a class="text-concrete hover:text-graphite transition-colors" href="#">Geografía</a></li>
+<li><a class="text-concrete hover:text-graphite transition-colors" href="#">Historia</a></li>
+<li><a class="text-concrete hover:text-graphite transition-colors" href="#">Logística</a></li>
+</ul>
+</div>
+<!-- Footer Column 3 -->
+<div>
+<h4 class="text-[14px] font-semibold mb-[16px] tracking-tight text-graphite">Estructuras</h4>
+<ul class="flex flex-col gap-[12px] text-[14px]">
+<li><a class="text-concrete hover:text-graphite transition-colors" href="#">7 días</a></li>
+<li><a class="text-concrete hover:text-graphite transition-colors" href="#">10 días</a></li>
+<li><a class="text-concrete hover:text-graphite transition-colors" href="#">14 días</a></li>
+</ul>
+</div>
+<!-- Footer Column 4 -->
+<div>
+<h4 class="text-[14px] font-semibold mb-[16px] tracking-tight text-graphite">Sistema</h4>
+<ul class="flex flex-col gap-[12px] text-[14px]">
+<li><a class="text-concrete hover:text-graphite transition-colors" href="#">Documentación</a></li>
+<li><a class="text-concrete hover:text-graphite transition-colors" href="#">Contacto</a></li>
+<li><a class="text-concrete hover:text-graphite transition-colors" href="#">Prensa</a></li>
+</ul>
+</div>
+</div>
+<!-- Footer Bottom -->
+<div class="pt-[32px] border-t border-hairline flex flex-col md:flex-row justify-between items-center gap-4 text-[13px] text-concrete">
+<div class="flex items-center gap-2">
+<svg class="text-graphite" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M2 12h20M12 2v20"></path><path d="m4.93 4.93 14.14 14.14M19.07 4.93 4.93 19.07"></path></svg>
+<span>© 2024 PerúTours Content Hub.</span>
+</div>
+<div class="flex gap-[24px]">
+<a class="hover:text-graphite transition-colors" href="#">Términos</a>
+<a class="hover:text-graphite transition-colors" href="#">Privacidad</a>
+</div>
+</div>
+</div>
+</footer>
+<!-- END: Main Footer -->
+</body></html>

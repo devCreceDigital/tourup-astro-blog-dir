@@ -1,0 +1,184 @@
+---
+import Layout from '../../../../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import { companyDescription, companyDisplayName, companyPath } from '../../../../../utils/seo';
+import { categoryLabel } from '../../../../../utils/graph';
+import { getLocalizedString } from '../../../../../utils/i18n';
+
+export async function getStaticPaths() {
+  const allCatDest = await getCollection('categorias_destino');
+  const paths = [];
+  for (const cd of allCatDest) {
+    paths.push({
+      params: { lang: 'en', slug: cd.data.destino_slug, categoria: cd.data.categoria },
+      props: { cd, lang: 'en' },
+    });
+    paths.push({
+      params: { lang: 'es', slug: cd.data.destino_slug, categoria: cd.data.categoria },
+      props: { cd, lang: 'es' },
+    });
+  }
+  return paths;
+}
+
+interface Props {
+  cd: any;
+  lang: string;
+}
+
+const { cd, lang } = Astro.props;
+
+const slug = cd.data.destino_slug;
+const categoria = cd.data.categoria;
+
+const allCompanies = await getCollection('companies');
+const allDestinos = await getCollection('destinos');
+
+const destino = allDestinos.find((d) => d.id.replace('.md', '') === slug);
+
+const companies = allCompanies.filter(
+  (c) =>
+    c.data.destinos?.includes(slug) &&
+    c.data.categorias?.includes(categoria)
+);
+
+const seenTaxIds = new Set<string>();
+const deduped: typeof companies = [];
+for (const c of companies) {
+  const tid = c.data.regulation?.tax_id;
+  if (!tid) { deduped.push(c); continue; }
+  if (!seenTaxIds.has(tid)) { seenTaxIds.add(tid); deduped.push(c); }
+}
+
+const siteUrl = 'https://guide.tourup.co';
+// Las FAQ de categoría son plantilla ("operadores verificados", "precio neto B2B") sin dato que
+// las respalde: no se publican ni en la página ni en el JSON-LD.
+const templatedFaq: any[] = [];
+
+const categoriaJsonLd = templatedFaq?.length > 0 ? {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'FAQPage',
+      mainEntity: templatedFaq.map((item: any) => ({
+        '@type': 'Question',
+        name: item.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: item.answer,
+        },
+      })),
+    },
+  ],
+} : null;
+
+const t = (es: string, en: string) => lang === 'en' ? en : es;
+// Página de apoyo (noindex): las categorías de las empresas se asignaron automáticamente, así
+// que aquí no se afirma verificación ni tarifas; solo lo que dice el dato.
+const destName = destino ? getLocalizedString(destino.data.name, lang === 'en' ? 'en' : 'es') : slug;
+const label = categoryLabel(categoria, lang === 'en' ? 'en' : 'es');
+const pageName = t(`${label} en ${destName}`, `${label} in ${destName}`);
+const pageDescription = t(
+  `Empresas de turismo registradas en ${destName} que incluyen ${label.toLowerCase()} entre sus servicios.`,
+  `Registered travel companies in ${destName} that list ${label.toLowerCase()} among their services.`,
+);
+---
+<Layout title={`${pageName} – TourUp`}
+      description={pageDescription}
+      currentPath={`/${lang}/peru/${slug}/tours/${categoria}/`}
+      lang={lang}
+      noindex>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(categoriaJsonLd)} />
+
+  <div class="main-content">
+
+      <!-- Breadcrumbs -->
+      <div class="breadcrumbs">
+        <a href="/" class="bc-link">{t('Inicio', 'Home')}</a>
+        <span class="bc-sep" aria-hidden="true">/</span>
+        <a href={lang === 'en' ? '/en/destinations/' : '/es/destinos/'} class="bc-link">{t('Destinos', 'Destinations')}</a>
+        <span class="bc-sep" aria-hidden="true">/</span>
+        <a href={`/${lang}/peru/${slug}/`} class="bc-link">{destino?.data.name || slug}</a>
+        <span class="bc-sep" aria-hidden="true">/</span>
+        <a href={`/${lang}/peru/${slug}/tours/`} class="bc-link">{t('Tours', 'Tours')}</a>
+        <span class="bc-sep" aria-hidden="true">/</span>
+        <span class="bc-current">{pageName}</span>
+      </div>
+
+      <!-- Meta tags -->
+      <div class="meta-tags">
+        <span class="tag tag-fill">{deduped.length} {t(`empresa${deduped.length !== 1 ? 's' : ''}`, `compan${deduped.length !== 1 ? 'ies' : 'y'}`)}</span>
+        <span class="tag">{destino?.data.name || slug}</span>
+      </div>
+
+      <!-- Title -->
+      <h1 class="page-title">
+        {pageName}
+      </h1>
+
+      <!-- Summary -->
+      <p class="page-summary">
+        {pageDescription}
+      </p>
+
+      {/* El cuerpo Markdown de las categorías es plantilla sin dato que lo respalde: no se muestra. */}
+
+      <!-- FAQ -->
+      {templatedFaq && templatedFaq.length > 0 && (
+        <article class="article-card">
+          <div class="article-accent"></div>
+          <h2 class="article-heading">{t('Preguntas Frecuentes', 'Frequently Asked Questions')}</h2>
+          <div class="faq-list">
+            {templatedFaq.map((item: any, i: number) => (
+              <div class={`faq-item ${i > 0 ? 'faq-item-bordered' : ''}`}>
+                <h3 class="faq-q">{item.question}</h3>
+                <p class="faq-a">{item.answer}</p>
+              </div>
+            ))}
+          </div>
+        </article>
+      )}
+
+      <!-- Companies -->
+      <article class="article-card">
+        <div class="article-accent"></div>
+        <h2 class="article-heading">{t(`Empresas que ofrecen ${pageName}`, `Companies offering ${pageName}`)}</h2>
+        <div class="company-grid">
+          {deduped.length === 0 ? (
+            <p class="empty-msg">{t('No se encontraron empresas para esta categoría en este destino.', 'No companies found for this category in this destination.')}</p>
+          ) : (
+            deduped.map((company) => {
+              return (
+                <a href={companyPath(lang === 'en' ? 'en' : 'es', company.id)}
+                  class="company-card">
+                  <span class="company-name">{companyDisplayName(company.data, lang === 'en' ? 'en' : 'es')}</span>
+                  <span class="company-desc">{companyDescription(company.data, lang === 'en' ? 'en' : 'es')}</span>
+                  <div class="company-tags">
+                    {company.data.distribution_role && (
+                      <span class="company-tag">{company.data.distribution_role}</span>
+                    )}
+                    {company.data.nap?.city && (
+                      <span class="company-tag">{company.data.nap.city}</span>
+                    )}
+                  </div>
+                </a>
+              );
+            })
+          )}
+        </div>
+      </article>
+
+      <!-- Back link -->
+      <div class="back-link-wrap">
+        <a href={`/${lang}/peru/${slug}/tours/`} class="back-link">
+          <svg class="icon-arrow" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M20 12H5M11 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="3" /></svg>
+          {t(`Volver a todos los tours en ${destino?.data.name || slug}`, `Back to all tours in ${destino?.data.name || slug}`)}
+        </a>
+      </div>
+
+    </div>
+</Layout>
+
+<style>
+
+</style>

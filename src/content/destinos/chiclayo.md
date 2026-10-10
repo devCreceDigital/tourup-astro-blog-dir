@@ -1,5 +1,6 @@
 ---
 type: destino
+lang: es
 name: Chiclayo
 country: Peru
 region: Lambayeque

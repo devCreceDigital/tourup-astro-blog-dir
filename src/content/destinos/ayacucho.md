@@ -1,5 +1,6 @@
 ---
 type: destino
+lang: es
 name: Ayacucho
 country: Peru
 region: Ayacucho
@@ -23,3 +24,4 @@ Ayacucho, conocida por sus 33 iglesias coloniales y la Semana Santa más importa
 ## Productos turísticos principales
 
 Los operadores receptivos en Ayacucho ofrecen servicios para agencias emisoras y compradores B2B que buscan experiencias auténticas y operadores verificados en Perú.
+

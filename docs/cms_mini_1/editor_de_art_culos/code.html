@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Tourup - Article Editor</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline": "#747878",
+                        "inverse-on-surface": "#f0f1f1",
+                        "on-tertiary-container": "#868381",
+                        "primary-fixed-dim": "#c9c6c5",
+                        "smoke": "#b9b9b9",
+                        "error": "#ba1a1a",
+                        "tertiary-container": "#1d1b1a",
+                        "on-primary-container": "#858383",
+                        "surface-variant": "#e2e2e2",
+                        "secondary-container": "#e3e2e2",
+                        "pure-black": "#000000",
+                        "inverse-primary": "#c9c6c5",
+                        "on-tertiary-fixed-variant": "#484645",
+                        "on-tertiary-fixed": "#1d1b1a",
+                        "surface-dim": "#dadada",
+                        "secondary": "#5e5e5e",
+                        "chalk": "#ffffff",
+                        "surface-bright": "#f9f9f9",
+                        "on-primary-fixed-variant": "#474646",
+                        "tertiary": "#000000",
+                        "on-secondary-container": "#646464",
+                        "on-background": "#1a1c1c",
+                        "secondary-fixed": "#e3e2e2",
+                        "outline-variant": "#c4c7c7",
+                        "surface-container-lowest": "#ffffff",
+                        "surface": "#f9f9f9",
+                        "error-container": "#ffdad6",
+                        "carbon": "#171717",
+                        "surface-container-low": "#f3f3f4",
+                        "on-primary": "#ffffff",
+                        "surface-tint": "#5f5e5e",
+                        "tertiary-fixed": "#e6e1df",
+                        "primary": "#000000",
+                        "on-error": "#ffffff",
+                        "ash": "#a1a1a1",
+                        "inverse-surface": "#2f3131",
+                        "on-secondary": "#ffffff",
+                        "primary-container": "#1c1b1b",
+                        "surface-container-high": "#e8e8e8",
+                        "surface-container": "#eeeeee",
+                        "mist": "#f2f2f2",
+                        "on-primary-fixed": "#1c1b1b",
+                        "secondary-fixed-dim": "#c7c6c6",
+                        "on-secondary-fixed-variant": "#464747",
+                        "background": "#f9f9f9",
+                        "surface-container-highest": "#e2e2e2",
+                        "on-surface": "#1a1c1c",
+                        "primary-fixed": "#e5e2e1",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "hairline": "#e5e5e5",
+                        "on-error-container": "#93000a",
+                        "on-tertiary": "#ffffff",
+                        "on-surface-variant": "#444748",
+                        "tertiary-fixed-dim": "#cac6c3"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "padding-card": "16px",
+                        "gap-element": "8px",
+                        "gap-nav": "10px",
+                        "max-width": "1200px",
+                        "nav-height": "64px",
+                        "base": "4px",
+                        "gap-section": "48px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Geist"],
+                        "caption": ["Geist"],
+                        "code": ["Geist Mono"],
+                        "label-md": ["Geist"],
+                        "display-xl-mobile": ["Geist"],
+                        "display-xl": ["Geist"],
+                        "headline-sm": ["Geist"]
+                    },
+                    "fontSize": {
+                        "body-md": ["14px", { "lineHeight": "1.43", "letterSpacing": "-0.025em", "fontWeight": "400" }],
+                        "caption": ["12px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "500" }],
+                        "code": ["14px", { "lineHeight": "1.43", "letterSpacing": "0", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "500" }],
+                        "display-xl-mobile": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.04em", "fontWeight": "600" }],
+                        "display-xl": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.05em", "fontWeight": "600" }],
+                        "headline-sm": ["18px", { "lineHeight": "1.5", "letterSpacing": "-0.45px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Geist', sans-serif; background-color: #f9f9f9; color: #1a1c1c; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .filled-icon { font-variation-settings: 'FILL' 1; }
+    </style>
+</head>
+<body class="h-full flex antialiased selection:bg-pure-black selection:text-chalk">
+<!-- SideNavBar (Suppressed due to Task-Focused intent: Editor) -->
+<main class="flex-1 flex flex-col h-screen overflow-hidden bg-background">
+<!-- TopAppBar (Minimal for Editor) -->
+<header class="h-nav-height w-full bg-chalk border-b border-hairline flex justify-between items-center px-padding-card flex-shrink-0">
+<div class="flex items-center gap-gap-element">
+<button class="w-8 h-8 flex items-center justify-center rounded hover:bg-mist transition-colors" title="Back to Content">
+<span class="material-symbols-outlined text-primary text-[20px]">arrow_back</span>
+</button>
+<div class="font-label-md text-label-md text-secondary">Draft / <span class="text-primary font-bold">New Article</span></div>
+</div>
+<div class="flex items-center gap-gap-element">
+<button class="h-8 px-4 border border-hairline rounded-[10px] font-label-md text-label-md text-primary hover:bg-mist transition-colors">Save Draft</button>
+<button class="h-8 px-4 bg-pure-black rounded-[10px] font-label-md text-label-md text-chalk hover:opacity-90 transition-opacity">Publish</button>
+</div>
+</header>
+<!-- Editor Canvas -->
+<div class="flex-1 flex overflow-hidden">
+<!-- Main Content Area (Left) -->
+<div class="flex-1 overflow-y-auto p-gap-section flex flex-col items-center">
+<div class="w-full max-w-[800px] flex flex-col gap-8">
+<!-- Title Input -->
+<input class="w-full bg-transparent border-0 border-b border-hairline focus:ring-0 focus:border-pure-black font-display-xl text-display-xl text-primary placeholder:text-smoke pb-2 px-0 transition-colors" placeholder="Article Title" type="text"/>
+<!-- Meta Row -->
+<div class="flex gap-gap-element items-center">
+<div class="flex-1">
+<label class="block font-caption text-caption text-secondary mb-1">Slug</label>
+<input class="w-full h-10 px-3 bg-chalk border border-hairline rounded-[10px] font-code text-code text-primary focus:outline-none focus:ring-2 focus:ring-pure-black focus:ring-offset-2 transition-shadow placeholder:font-code" placeholder="e.g. how-to-design" type="text"/>
+</div>
+<div class="flex-1">
+<label class="block font-caption text-caption text-secondary mb-1">Category</label>
+<select class="w-full h-10 px-3 bg-chalk border border-hairline rounded-[10px] font-body-md text-body-md text-primary focus:outline-none focus:ring-2 focus:ring-pure-black focus:ring-offset-2 transition-shadow appearance-none">
+<option disabled="" selected="" value="">Select Category</option>
+<option value="design">Design</option>
+<option value="development">Development</option>
+<option value="product">Product</option>
+</select>
+</div>
+</div>
+<!-- Rich Text Editor Placeholder -->
+<div class="flex flex-col border border-hairline rounded-[14px] bg-chalk overflow-hidden flex-1 min-h-[500px]">
+<!-- Editor Toolbar -->
+<div class="h-12 border-b border-hairline flex items-center px-2 gap-1 bg-surface-bright">
+<button class="w-8 h-8 flex items-center justify-center rounded hover:bg-mist text-secondary hover:text-primary transition-colors"><span class="material-symbols-outlined text-[18px]">format_bold</span></button>
+<button class="w-8 h-8 flex items-center justify-center rounded hover:bg-mist text-secondary hover:text-primary transition-colors"><span class="material-symbols-outlined text-[18px]">format_italic</span></button>
+<button class="w-8 h-8 flex items-center justify-center rounded hover:bg-mist text-secondary hover:text-primary transition-colors"><span class="material-symbols-outlined text-[18px]">format_underlined</span></button>
+<div class="w-px h-6 bg-hairline mx-1"></div>
+<button class="w-8 h-8 flex items-center justify-center rounded hover:bg-mist text-secondary hover:text-primary transition-colors"><span class="material-symbols-outlined text-[18px]">format_h1</span></button>
+<button class="w-8 h-8 flex items-center justify-center rounded hover:bg-mist text-secondary hover:text-primary transition-colors"><span class="material-symbols-outlined text-[18px]">format_h2</span></button>
+<div class="w-px h-6 bg-hairline mx-1"></div>
+<button class="w-8 h-8 flex items-center justify-center rounded hover:bg-mist text-secondary hover:text-primary transition-colors"><span class="material-symbols-outlined text-[18px]">format_list_bulleted</span></button>
+<button class="w-8 h-8 flex items-center justify-center rounded hover:bg-mist text-secondary hover:text-primary transition-colors"><span class="material-symbols-outlined text-[18px]">format_list_numbered</span></button>
+<div class="w-px h-6 bg-hairline mx-1"></div>
+<button class="w-8 h-8 flex items-center justify-center rounded hover:bg-mist text-secondary hover:text-primary transition-colors"><span class="material-symbols-outlined text-[18px]">link</span></button>
+<button class="w-8 h-8 flex items-center justify-center rounded hover:bg-mist text-secondary hover:text-primary transition-colors"><span class="material-symbols-outlined text-[18px]">image</span></button>
+</div>
+<!-- Editor Area -->
+<textarea class="flex-1 w-full p-padding-card border-none resize-none focus:ring-0 font-body-md text-body-md text-primary placeholder:text-smoke bg-transparent" placeholder="Start writing..."></textarea>
+</div>
+</div>
+</div>
+<!-- Settings Sidebar (Right) -->
+<aside class="w-80 bg-chalk border-l border-hairline flex flex-col overflow-y-auto flex-shrink-0">
+<div class="p-padding-card border-b border-hairline">
+<h3 class="font-headline-sm text-headline-sm text-primary mb-1">Article Settings</h3>
+<p class="font-caption text-caption text-secondary">Configure metadata and visibility.</p>
+</div>
+<div class="flex flex-col p-padding-card gap-6">
+<!-- Featured Image -->
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-primary">Featured Image</label>
+<div class="w-full aspect-video border border-hairline border-dashed rounded-[10px] bg-mist flex flex-col items-center justify-center cursor-pointer hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-secondary mb-1">add_photo_alternate</span>
+<span class="font-caption text-caption text-secondary">Click to upload</span>
+</div>
+</div>
+<!-- SEO Description -->
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-primary">SEO Description</label>
+<textarea class="w-full h-24 p-3 bg-chalk border border-hairline rounded-[10px] font-body-md text-body-md text-primary focus:outline-none focus:ring-2 focus:ring-pure-black focus:ring-offset-2 transition-shadow resize-none" placeholder="Brief summary for search engines..."></textarea>
+<div class="flex justify-between items-center mt-1">
+<span class="font-caption text-caption text-smoke">0/160</span>
+</div>
+</div>
+<!-- Tags -->
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-primary">Tags</label>
+<input class="w-full h-10 px-3 bg-chalk border border-hairline rounded-[10px] font-body-md text-body-md text-primary focus:outline-none focus:ring-2 focus:ring-pure-black focus:ring-offset-2 transition-shadow" placeholder="Add tags separated by commas" type="text"/>
+<div class="flex flex-wrap gap-2 mt-2">
+<div class="flex items-center gap-1 px-3 py-1 bg-mist border border-hairline rounded-full">
+<span class="font-caption text-caption text-secondary">Editorial</span>
+<button class="flex items-center justify-center w-4 h-4 rounded-full hover:bg-smoke hover:text-chalk text-secondary transition-colors"><span class="material-symbols-outlined text-[12px]">close</span></button>
+</div>
+<div class="flex items-center gap-1 px-3 py-1 bg-mist border border-hairline rounded-full">
+<span class="font-caption text-caption text-secondary">News</span>
+<button class="flex items-center justify-center w-4 h-4 rounded-full hover:bg-smoke hover:text-chalk text-secondary transition-colors"><span class="material-symbols-outlined text-[12px]">close</span></button>
+</div>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</main>
+</body></html>

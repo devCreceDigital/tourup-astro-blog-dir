@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cusco Destination Guide - Tourup</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-bright": "#f9f9f9",
+                        "surface-container": "#eeeeee",
+                        "hairline": "#e5e5e5",
+                        "ash": "#a1a1a1",
+                        "error-container": "#ffdad6",
+                        "surface-tint": "#5f5e5e",
+                        "primary-container": "#1c1b1b",
+                        "primary": "#000000",
+                        "surface-container-low": "#f3f3f4",
+                        "secondary-fixed-dim": "#c7c6c6",
+                        "inverse-primary": "#c9c6c5",
+                        "background": "#f9f9f9",
+                        "secondary-container": "#e3e2e2",
+                        "on-tertiary-container": "#868381",
+                        "on-background": "#1a1c1c",
+                        "tertiary-container": "#1d1b1a",
+                        "pure-black": "#000000",
+                        "surface-container-high": "#e8e8e8",
+                        "on-surface": "#1a1c1c",
+                        "on-error-container": "#93000a",
+                        "on-secondary-container": "#646464",
+                        "tertiary-fixed-dim": "#cac6c3",
+                        "tertiary": "#000000",
+                        "chalk": "#ffffff",
+                        "tertiary-fixed": "#e6e1df",
+                        "on-primary": "#ffffff",
+                        "primary-fixed-dim": "#c9c6c5",
+                        "surface": "#f9f9f9",
+                        "primary-fixed": "#e5e2e1",
+                        "on-tertiary": "#ffffff",
+                        "secondary": "#5e5e5e",
+                        "outline": "#747878",
+                        "on-tertiary-fixed": "#1d1b1a",
+                        "surface-variant": "#e2e2e2",
+                        "on-tertiary-fixed-variant": "#484645",
+                        "on-primary-fixed-variant": "#474646",
+                        "surface-dim": "#dadada",
+                        "carbon": "#171717",
+                        "on-error": "#ffffff",
+                        "inverse-surface": "#2f3131",
+                        "smoke": "#b9b9b9",
+                        "on-surface-variant": "#444748",
+                        "on-secondary-fixed-variant": "#464747",
+                        "inverse-on-surface": "#f0f1f1",
+                        "on-secondary": "#ffffff",
+                        "on-primary-container": "#858383",
+                        "mist": "#f2f2f2",
+                        "surface-container-lowest": "#ffffff",
+                        "outline-variant": "#c4c7c7",
+                        "surface-container-highest": "#e2e2e2",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "error": "#ba1a1a",
+                        "on-primary-fixed": "#1c1b1b",
+                        "secondary-fixed": "#e3e2e2"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "nav-height": "64px",
+                        "base": "4px",
+                        "max-width": "1200px",
+                        "gap-element": "8px",
+                        "padding-card": "16px",
+                        "gap-nav": "10px",
+                        "gap-section": "48px"
+                    },
+                    "fontFamily": {
+                        "headline-sm": ["Geist"],
+                        "label-md": ["Geist"],
+                        "code": ["Geist Mono"],
+                        "body-md": ["Geist"],
+                        "display-xl": ["Geist"],
+                        "display-xl-mobile": ["Geist"],
+                        "caption": ["Geist"]
+                    },
+                    "fontSize": {
+                        "headline-sm": ["18px", {"lineHeight": "1.5", "letterSpacing": "-0.45px", "fontWeight": "600"}],
+                        "label-md": ["14px", {"lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "500"}],
+                        "code": ["14px", {"lineHeight": "1.43", "letterSpacing": "0", "fontWeight": "400"}],
+                        "body-md": ["14px", {"lineHeight": "1.43", "letterSpacing": "-0.025em", "fontWeight": "400"}],
+                        "display-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.05em", "fontWeight": "600"}],
+                        "display-xl-mobile": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.04em", "fontWeight": "600"}],
+                        "caption": ["12px", {"lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "500"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Geist', sans-serif; background-color: #f9f9f9; color: #1a1c1c; }
+        .font-code { font-family: 'Geist Mono', monospace; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+</head>
+<body class="bg-background text-on-background antialiased selection:bg-primary selection:text-on-primary">
+<!-- TopNavBar -->
+<nav class="bg-chalk dark:bg-pure-black border-b border-hairline dark:border-carbon h-nav-height w-full sticky top-0 z-50">
+<div class="flex justify-between items-center px-padding-card w-full max-w-max-width mx-auto h-full">
+<!-- Left: Search/Brand -->
+<div class="flex items-center gap-gap-element">
+<span class="font-headline-sm text-headline-sm font-bold tracking-tighter text-primary dark:text-chalk">Tourup</span>
+</div>
+<!-- Center: Search (Mobile Hidden, Desktop Show) -->
+<div class="hidden md:flex flex-1 max-w-md mx-padding-card">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-ash text-sm">search</span>
+<input class="w-full pl-9 pr-4 py-2 border border-hairline bg-chalk rounded-DEFAULT font-code text-code text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent focus:ring-offset-2 focus:ring-offset-primary" placeholder="Search destinations..." type="text"/>
+</div>
+</div>
+<!-- Right: Actions -->
+<div class="flex items-center gap-gap-nav">
+<button class="p-2 text-secondary dark:text-ash hover:bg-mist dark:hover:bg-carbon transition-colors duration-100 ease-linear rounded-full">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-secondary dark:text-ash hover:bg-mist dark:hover:bg-carbon transition-colors duration-100 ease-linear rounded-full">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-mist border border-hairline overflow-hidden flex items-center justify-center ml-2">
+<img alt="User profile avatar" class="w-full h-full object-cover" data-alt="A minimalist black and white user avatar silhouette, geometric shapes, light mode aesthetic, crisp lines." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_YngeC3Zv-c49J_1G6us05934LgWmSBcVg_pdQDuxYiG9qaYKCCfvdQxo6s1eJvn6vDb9TV-3CyxJti_8IS0ia6D6x6-TFG5QPfSGQWyz_NekOsNZR0S1aVO3ftWj6FmACjLn5rJFcgtS1xPKdbgT08quWhlHMfY9CzO2ZNEvsO5-_KWD9FV1R823ZmyPiHeEF5jRa2gD6vyozZGZWl6Zj7-wATVJ7RCEV5MbfblrBtpguXxcVCuj-WIrMZ5isYfFdljuZoHZAoJX"/>
+</div>
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="max-w-max-width mx-auto px-4 md:px-padding-card py-gap-section flex flex-col gap-gap-section">
+<!-- Hero Section -->
+<section class="flex flex-col gap-4 border-b border-hairline pb-gap-section">
+<h1 class="font-display-xl-mobile md:font-display-xl text-display-xl-mobile md:text-display-xl text-primary tracking-tighter leading-none">Guía de Destino: Cusco - Corazón del Imperio</h1>
+<p class="font-body-md text-body-md text-secondary max-w-3xl">Explora la capital histórica del Imperio Inca. Una fusión arquitectónica donde las bases de piedra precolombinas sostienen estructuras coloniales españolas. Este ecosistema de alta densidad cultural requiere preparación técnica para su máxima apreciación.</p>
+<div class="w-full aspect-[1.50] mt-6 border border-hairline overflow-hidden relative group">
+<img alt="Machu Picchu at sunrise" class="w-full h-full object-cover grayscale contrast-125 transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida/AP1WRLtQJX4zICS77evOVeQslJ1gwbYs_pe1_6ECJ-deUBL7Q8WtBgR9Q3LNJO2O8qHZB6aJG9dxI-EcHgtWT_iXGGhMGx6YUaZp3KnA8AQtohcWXMtvLwOefnvveHUKWOcteaNCRTOupbFEMl7Ut3GghzujyPHoCaFktT2KTa-4T9x4IRWjQcso2eZMBOtAxMtJwhe76IvSKJxBOq10kdkVeVFNo_KF_QdQ8KwCRgqJn0Wu0GuLaLwjGpGp4uo"/>
+<div class="absolute bottom-4 right-4 bg-chalk/90 backdrop-blur-sm border border-hairline px-3 py-1 rounded-full flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="font-caption text-caption text-primary uppercase tracking-widest">Santuario Histórico</span>
+</div>
+</div>
+</section>
+<!-- Información Esencial (Bento Grid) -->
+<section class="flex flex-col gap-gap-element">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary text-xl">info</span>
+<h2 class="font-headline-sm text-headline-sm text-primary uppercase tracking-tight">Información Esencial</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gap-element">
+<!-- Card 1 -->
+<div class="border border-hairline bg-chalk rounded-lg p-padding-card flex flex-col gap-3 relative overflow-hidden group">
+<div class="absolute inset-0 bg-mist opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+<div class="relative z-10 flex flex-col h-full justify-between">
+<div>
+<span class="material-symbols-outlined text-secondary mb-2">calendar_month</span>
+<h3 class="font-label-md text-label-md text-primary uppercase">Clima y Época</h3>
+<p class="font-body-md text-body-md text-secondary mt-1">Temporada seca (Mayo - Octubre) ofrece cielos despejados. Ideal para expediciones andinas. Alta radiación solar.</p>
+</div>
+<div class="mt-4 pt-4 border-t border-hairline">
+<span class="font-code text-code text-ash">TEMP: 0°C - 20°C</span>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="border border-hairline bg-carbon text-chalk rounded-lg p-padding-card flex flex-col gap-3 relative overflow-hidden group">
+<div class="absolute inset-0 bg-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+<div class="relative z-10 flex flex-col h-full justify-between">
+<div>
+<span class="material-symbols-outlined text-smoke mb-2">terrain</span>
+<h3 class="font-label-md text-label-md text-chalk uppercase">Altitud: 3,399m</h3>
+<p class="font-body-md text-body-md text-smoke mt-1">Aclimatación crítica. Requiere 24-48hrs de actividad mínima. Hidratación constante y protocolos de oxígeno si es necesario.</p>
+</div>
+<div class="mt-4 pt-4 border-t border-surface-tint">
+<span class="font-code text-code text-smoke">METRICA: O2 REDUCIDO 30%</span>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="border border-hairline bg-chalk rounded-lg p-padding-card flex flex-col gap-3 relative overflow-hidden group">
+<div class="absolute inset-0 bg-mist opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+<div class="relative z-10 flex flex-col h-full justify-between">
+<div>
+<span class="material-symbols-outlined text-secondary mb-2">directions_bus</span>
+<h3 class="font-label-md text-label-md text-primary uppercase">Transporte Base</h3>
+<p class="font-body-md text-body-md text-secondary mt-1">Tránsito peatonal primario en centro histórico. Red ferroviaria (Inca Rail/PeruRail) para acceso a valle sagrado.</p>
+</div>
+<div class="mt-4 pt-4 border-t border-hairline">
+<span class="font-code text-code text-ash">LOGÍSTICA: AEROPUERTO CUZ</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Zonas de Interés -->
+<section class="flex flex-col gap-gap-element pt-gap-section border-t border-hairline">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">map</span>
+<h2 class="font-headline-sm text-headline-sm text-primary uppercase tracking-tight">Zonas de Interés</h2>
+</div>
+<button class="font-label-md text-label-md text-primary border border-hairline px-3 py-1 rounded-full hover:bg-mist transition-colors">Ver Mapa</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gap-element">
+<!-- Zone 1 -->
+<div class="border border-hairline bg-chalk rounded-lg overflow-hidden flex flex-col">
+<div class="h-48 border-b border-hairline bg-mist relative">
+<div class="bg-cover bg-center w-full h-full grayscale opacity-80" data-alt="A highly detailed black and white architectural photograph of Plaza de Armas in Cusco, showing the cathedral facade, tight framing, stark shadows, bright daylight, monochromatic light mode aesthetic." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDQRJPRlfJ5pE4GyYnVpBN3rMWfjbHEuVKMN_VRip2KrTlUc0euvSh554xk5RKNIQuL6ZKQAyqtxQYLpVoJZFoKtz_wJ52vq91wai3RPM9MyukaeRGVvpa8WmOOq08o0M9wkxRdymnxl0d_4bXegXeA4hYUfEFjKkcfxYA4dcsTz4HCVfDXEVL1hOodisvczJGinMy33MemUDro7kzfiAk53BXAJc4XAWGXBYKg4UT14ReyRQ04QyZv7RjPGJkYa01GBL0dn_eM4WKt')"></div>
+<div class="absolute top-2 left-2 bg-chalk border border-hairline px-2 py-0.5 rounded-sm">
+<span class="font-code text-code text-primary text-xs">Z-01</span>
+</div>
+</div>
+<div class="p-4 flex flex-col flex-1">
+<h3 class="font-headline-sm text-headline-sm text-primary">Plaza de Armas</h3>
+<p class="font-body-md text-body-md text-secondary mt-2 flex-1">El epicentro urbano. Estructura perimetral colonial sobre trazado original incaico (Huacaypata). Epicentro de convergencia social.</p>
+</div>
+</div>
+<!-- Zone 2 -->
+<div class="border border-hairline bg-chalk rounded-lg overflow-hidden flex flex-col">
+<div class="h-48 border-b border-hairline bg-mist relative">
+<div class="bg-cover bg-center w-full h-full grayscale opacity-80" data-alt="A highly detailed black and white architectural photograph of Sacsayhuaman massive stone walls, interlocking polygonal blocks, high contrast texture, stark sunlight, monochromatic light mode aesthetic." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAl8c8KZpNzKKtb3HKP-RD0IBqzjKvxuX07ab8bf6PYh8D1vuuLWjHgJQakwr3ioj28oa5UXTks0eTIUP8Rcehn4vs2IpZXougR0Z-RMiBbpHPgbBrSIwYubPf7ImMPRdiFw2AfTAWiEZ_NwSQf9kbtj-1HrTNjssxB_C2bQgBBwieSiuKm0ORKX6xWUiGMXo7pre3tXTKcRvVW-G1aTwCw7jf4NxspTmAdCrnIZs-87Yai8ZxSD94SlVRL-TASkzaLn99qFo-iMsj_')"></div>
+<div class="absolute top-2 left-2 bg-chalk border border-hairline px-2 py-0.5 rounded-sm">
+<span class="font-code text-code text-primary text-xs">Z-02</span>
+</div>
+</div>
+<div class="p-4 flex flex-col flex-1">
+<h3 class="font-headline-sm text-headline-sm text-primary">Sacsayhuamán</h3>
+<p class="font-body-md text-body-md text-secondary mt-2 flex-1">Complejo megalítico. Ingeniería sísmica avanzada con bloques poligonales entrelazados sin argamasa. Dominio visual del valle.</p>
+</div>
+</div>
+<!-- Zone 3 -->
+<div class="border border-hairline bg-chalk rounded-lg overflow-hidden flex flex-col">
+<div class="h-48 border-b border-hairline bg-mist relative">
+<div class="bg-cover bg-center w-full h-full grayscale opacity-80" data-alt="A highly detailed black and white architectural photograph of narrow cobblestone streets in San Blas, Cusco, steep stairs, stark white walls, deep shadows, monochromatic light mode aesthetic." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD25q8yFwle8n875QtndMe3Zp3rKVqk3dIX2dTGyNF6IvpYpyPAmUZWQgJYOjfV8UPyppgNz5wBJQdujdjpLnCCmPfqpePnZlOpMMHcpugjKAGapvJ-SUlv52TvmDABODtNJwQRv4k08CqXmGMr-TU3pEd_EAyppDCEpPZWzqrTCgIcHYwHZl7Q0rDKbutEeyuagspz1W79HDZta0NmrqKjZ6zmxuqBS2g1HJzshMOpqWHJUbA_V59yVMXB2U63dt9VXx5tb5x85PpH')"></div>
+<div class="absolute top-2 left-2 bg-chalk border border-hairline px-2 py-0.5 rounded-sm">
+<span class="font-code text-code text-primary text-xs">Z-03</span>
+</div>
+</div>
+<div class="p-4 flex flex-col flex-1">
+<h3 class="font-headline-sm text-headline-sm text-primary">San Blas</h3>
+<p class="font-body-md text-body-md text-secondary mt-2 flex-1">Distrito artesanal de alta pendiente. Trazado urbano orgánico, calles peatonales estrechas. Concentración de talleres de manufactura local.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Itinerario (Timeline) -->
+<section class="flex flex-col gap-gap-element pt-gap-section border-t border-hairline">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary text-xl">route</span>
+<h2 class="font-headline-sm text-headline-sm text-primary uppercase tracking-tight">Estructura de Itinerario Base (3 Días)</h2>
+</div>
+<div class="flex flex-col border-l border-hairline ml-2 pl-6 gap-8 relative">
+<!-- Día 1 -->
+<div class="relative">
+<div class="absolute -left-[29px] top-1 w-3 h-3 bg-chalk border-2 border-primary rounded-full"></div>
+<h3 class="font-label-md text-label-md text-primary uppercase mb-1">Fase 1: Aclimatación y Centro Histórico</h3>
+<p class="font-body-md text-body-md text-secondary">Llegada y estabilización física. Recorrido perimetral por Plaza de Armas, Catedral y Qorikancha. Cena ligera.</p>
+</div>
+<!-- Día 2 -->
+<div class="relative">
+<div class="absolute -left-[29px] top-1 w-3 h-3 bg-chalk border-2 border-primary rounded-full"></div>
+<h3 class="font-label-md text-label-md text-primary uppercase mb-1">Fase 2: Expansión Periférica</h3>
+<p class="font-body-md text-body-md text-secondary">Circuito arqueológico norte: Sacsayhuamán, Qenqo, Puka Pukara y Tambomachay. Tarde libre en distrito San Blas.</p>
+</div>
+<!-- Día 3 -->
+<div class="relative">
+<div class="absolute -left-[29px] top-1 w-3 h-3 bg-primary border-2 border-primary rounded-full"></div>
+<h3 class="font-label-md text-label-md text-primary uppercase mb-1">Fase 3: Proyección Valle Sagrado</h3>
+<p class="font-body-md text-body-md text-secondary">Desplazamiento hacia el noroeste. Písac (mercado y ruinas) y fortaleza de Ollantaytambo. Conexión ferroviaria opcional a Aguas Calientes.</p>
+</div>
+</div>
+</section>
+<!-- CTA Section -->
+<section class="mt-8 pt-gap-section border-t border-hairline flex flex-col items-center justify-center text-center gap-6">
+<h2 class="font-display-xl-mobile text-display-xl-mobile text-primary tracking-tighter">Inicia tu Expedición</h2>
+<p class="font-body-md text-body-md text-secondary max-w-md">Asegura el acceso a las infraestructuras históricas. Capacidad regulada por autoridades locales.</p>
+<button class="bg-primary text-on-primary font-label-md text-label-md uppercase px-8 py-4 rounded-lg hover:bg-carbon transition-colors duration-200">
+                Reservar Infraestructura
+            </button>
+</section>
+</main>
+<!-- Footer (Minimalist) -->
+<footer class="border-t border-hairline mt-12 bg-chalk">
+<div class="max-w-max-width mx-auto px-padding-card py-8 flex flex-col md:flex-row justify-between items-center gap-4">
+<span class="font-headline-sm text-headline-sm font-bold tracking-tighter text-primary">Tourup</span>
+<div class="flex gap-4">
+<a class="font-code text-code text-secondary hover:text-primary transition-colors" href="#">Sistema</a>
+<a class="font-code text-code text-secondary hover:text-primary transition-colors" href="#">Legal</a>
+<a class="font-code text-code text-secondary hover:text-primary transition-colors" href="#">Contacto</a>
+</div>
+</div>
+</footer>
+</body></html>

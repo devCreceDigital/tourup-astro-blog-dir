@@ -1,0 +1,131 @@
+---
+import Layout from '../../../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const destinos = await getCollection('destinos');
+  const destinosEn = await getCollection('destinos_en');
+  const paths = [
+    ...destinos.map((d) => ({
+      params: { lang: 'es', slug: d.id.replace('.md', '') },
+      props: { entry: d, lang: 'es' },
+    })),
+    ...destinosEn.map((d) => ({
+      params: { lang: 'en', slug: d.id.replace('.md', '') },
+      props: { entry: d, lang: 'en' },
+    })),
+  ];
+  return paths;
+}
+
+interface Props {
+  entry: any;
+  lang: string;
+}
+
+const { entry, lang } = Astro.props;
+const d = entry.data;
+const slug = entry.id.replace('.md', '');
+
+const allCompanies = await getCollection('companies');
+const allCatDest = await getCollection('categorias_destino');
+
+const companies = allCompanies.filter(
+  (c) => c.data.destinos && c.data.destinos.includes(slug)
+);
+
+const categoriasDestino = allCatDest.filter(
+  (cd) => cd.data.destino_slug === slug
+);
+
+const companiesByCategory: Record<string, any[]> = {};
+for (const company of companies) {
+  if (company.data.categorias) {
+    for (const cat of company.data.categorias) {
+      if (!companiesByCategory[cat]) companiesByCategory[cat] = [];
+      if (!companiesByCategory[cat].find((c) => c.slug === company.slug)) {
+        companiesByCategory[cat].push(company);
+      }
+    }
+  }
+}
+
+const totalCompanies = companies.length;
+const siteUrl = 'https://guide.tourup.co';
+const pageTitle = lang === 'en'
+  ? `Tours in ${d.name} – TourUp Peru`
+  : `Tours en ${d.name} – TourUp Peru`;
+const pageDesc = lang === 'en'
+  ? `Browse tour categories and operators in ${d.name}, Peru. ${totalCompanies} companies across ${categoriasDestino.length} categories.`
+  : `Explora categorías de tours y operadores en ${d.name}, Perú. ${totalCompanies} empresas en ${categoriasDestino.length} categorías.`;
+
+const t = (es: string, en: string) => lang === 'en' ? en : es;
+---
+<Layout title={pageTitle}
+      description={pageDesc}
+      currentPath={`/${lang}/peru/${slug}/tours/`}
+      lang={lang}
+      noindex>
+  
+
+  <div class="main-content">
+
+      <!-- Breadcrumbs -->
+      <div class="breadcrumbs">
+        <a href="/" class="bc-link">{t('Inicio', 'Home')}</a>
+        <span class="bc-sep" aria-hidden="true">/</span>
+        <a href={lang === 'en' ? '/en/destinations/' : '/es/destinos/'} class="bc-link">{t('Destinos', 'Destinations')}</a>
+        <span class="bc-sep" aria-hidden="true">/</span>
+        <a href={`/${lang}/peru/${slug}/`} class="bc-link">{d.name}</a>
+        <span class="bc-sep" aria-hidden="true">/</span>
+        <span class="bc-current">{t('Tours', 'Tours')}</span>
+      </div>
+
+      <!-- Title -->
+      <h1 class="page-title">
+        {t('Tours en', 'Tours in')} {d.name}
+      </h1>
+
+      <!-- Summary -->
+      <p class="page-summary">
+        {lang === 'en'
+          ? `Browse ${totalCompanies} tour operator${totalCompanies !== 1 ? 's' : ''} across ${categoriasDestino.length} categor${categoriasDestino.length !== 1 ? 'ies' : 'y'} in ${d.name}, Peru.`
+          : `Explora ${totalCompanies} operadore${totalCompanies !== 1 ? 's' : ''} turístico${totalCompanies !== 1 ? 's' : ''} en ${categoriasDestino.length} categoría${categoriasDestino.length !== 1 ? 's' : ''} en ${d.name}, Perú.`}
+      </p>
+
+      <!-- Categories grid -->
+      {categoriasDestino.length === 0 ? (
+        <p class="empty-msg">{lang === 'en' ? 'No categories defined for this destination yet.' : 'Aún no hay categorías definidas para este destino.'}</p>
+      ) : (
+        <div class="category-grid">
+          {categoriasDestino.map((cd) => {
+            const count = companiesByCategory[cd.data.categoria]?.length || 0;
+            return (
+              <a href={`/${lang}/peru/${slug}/tours/${cd.data.categoria}/`}
+                class="category-card">
+                <h3 class="category-name">{cd.data.name}</h3>
+                <p class="category-desc">{cd.data.summary}</p>
+                <div class="category-footer">
+                  <span class="category-count">{count} {t(`empresa${count !== 1 ? 's' : ''}`, `compan${count !== 1 ? 'ies' : 'y'}`)}</span>
+                  <svg class="icon-arrow" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="3" /></svg>
+                </div>
+              </a>
+            );
+          })}
+        </div>
+      )}
+
+      <!-- Back link -->
+      <div class="back-link-wrap">
+        <a href={`/${lang}/peru/${slug}/`} class="back-link">
+          <svg class="icon-arrow" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M20 12H5M11 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="3" /></svg>
+          {t(`Volver a la guía de ${d.name}`, `Back to ${d.name} guide`)}
+        </a>
+      </div>
+
+    </div>
+</Layout>
+
+<style>
+
+</style>

@@ -1,0 +1,76 @@
+---
+/**
+ * JSON-LD base de sitio: Organization + WebSite + WebPage + BreadcrumbList.
+ * Lo usan Layout y SettingsHead para que TODAS las páginas emitan el mismo grafo,
+ * con @id estables que las páginas específicas (empresa, destino, prompt, blog) referencian.
+ */
+import { SITE_URL, ORG_SAME_AS, breadcrumbTrail, shortTitle } from '../utils/seo';
+import type { Locale } from '../utils/i18n';
+
+interface Props {
+  title: string;
+  description: string;
+  canonicalUrl: string;
+  currentPath: string;
+  lang: Locale;
+  /** Nombre corto para la última miga (por defecto, el <title> sin el sufijo de marca). */
+  breadcrumb?: string;
+  /** Fecha de la última revisión/actualización del contenido (ISO). */
+  dateModified?: string;
+}
+
+const { title, description, canonicalUrl, currentPath, lang, dateModified, breadcrumb } = Astro.props;
+const crumbs = breadcrumbTrail(currentPath, lang, breadcrumb || shortTitle(title));
+
+const orgDescription =
+  lang === 'es'
+    ? 'Guía de viaje por Perú y directorio de operadores turísticos: destinos, itinerarios y empresas.'
+    : 'Peru travel guide and tour operator directory: destinations, itineraries and companies.';
+
+const graph = [
+  {
+    '@type': 'Organization',
+    '@id': `${SITE_URL}/#organization`,
+    name: 'TourUp',
+    alternateName: ['TourUp Peru', 'TourUp Guide'],
+    url: SITE_URL,
+    logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo-tourup.png`, width: 1966, height: 528 },
+    description: orgDescription,
+    areaServed: { '@type': 'Country', name: 'PE' },
+    ...(ORG_SAME_AS.length ? { sameAs: ORG_SAME_AS } : {}),
+  },
+  {
+    '@type': 'WebSite',
+    '@id': `${SITE_URL}/#website`,
+    url: SITE_URL,
+    name: 'TourUp Guide',
+    description: orgDescription,
+    publisher: { '@id': `${SITE_URL}/#organization` },
+    inLanguage: ['es', 'en'],
+  },
+  {
+    '@type': 'WebPage',
+    '@id': `${canonicalUrl}#webpage`,
+    url: canonicalUrl,
+    name: title,
+    description,
+    inLanguage: lang,
+    isPartOf: { '@id': `${SITE_URL}/#website` },
+    about: { '@id': `${SITE_URL}/#organization` },
+    breadcrumb: { '@id': `${canonicalUrl}#breadcrumb` },
+    ...(dateModified ? { dateModified } : {}),
+  },
+  {
+    '@type': 'BreadcrumbList',
+    '@id': `${canonicalUrl}#breadcrumb`,
+    itemListElement: crumbs.map((crumb, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: crumb.name,
+      item: crumb.url,
+    })),
+  },
+];
+---
+
+<script type="application/ld+json" set:html={JSON.stringify({ '@context': 'https://schema.org', '@graph': graph })} />

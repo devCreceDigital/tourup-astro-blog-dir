@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Hub Settings | Tourup</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline": "#747878",
+                        "inverse-on-surface": "#f0f1f1",
+                        "on-tertiary-container": "#868381",
+                        "primary-fixed-dim": "#c9c6c5",
+                        "smoke": "#b9b9b9",
+                        "error": "#ba1a1a",
+                        "tertiary-container": "#1d1b1a",
+                        "on-primary-container": "#858383",
+                        "surface-variant": "#e2e2e2",
+                        "secondary-container": "#e3e2e2",
+                        "pure-black": "#000000",
+                        "inverse-primary": "#c9c6c5",
+                        "on-tertiary-fixed-variant": "#484645",
+                        "on-tertiary-fixed": "#1d1b1a",
+                        "surface-dim": "#dadada",
+                        "secondary": "#5e5e5e",
+                        "chalk": "#ffffff",
+                        "surface-bright": "#f9f9f9",
+                        "on-primary-fixed-variant": "#474646",
+                        "tertiary": "#000000",
+                        "on-secondary-container": "#646464",
+                        "on-background": "#1a1c1c",
+                        "secondary-fixed": "#e3e2e2",
+                        "outline-variant": "#c4c7c7",
+                        "surface-container-lowest": "#ffffff",
+                        "surface": "#f9f9f9",
+                        "error-container": "#ffdad6",
+                        "carbon": "#171717",
+                        "surface-container-low": "#f3f3f4",
+                        "on-primary": "#ffffff",
+                        "surface-tint": "#5f5e5e",
+                        "tertiary-fixed": "#e6e1df",
+                        "primary": "#000000",
+                        "on-error": "#ffffff",
+                        "ash": "#a1a1a1",
+                        "inverse-surface": "#2f3131",
+                        "on-secondary": "#ffffff",
+                        "primary-container": "#1c1b1b",
+                        "surface-container-high": "#e8e8e8",
+                        "surface-container": "#eeeeee",
+                        "mist": "#f2f2f2",
+                        "on-primary-fixed": "#1c1b1b",
+                        "secondary-fixed-dim": "#c7c6c6",
+                        "on-secondary-fixed-variant": "#464747",
+                        "background": "#f9f9f9",
+                        "surface-container-highest": "#e2e2e2",
+                        "on-surface": "#1a1c1c",
+                        "primary-fixed": "#e5e2e1",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "hairline": "#e5e5e5",
+                        "on-error-container": "#93000a",
+                        "on-tertiary": "#ffffff",
+                        "on-surface-variant": "#444748",
+                        "tertiary-fixed-dim": "#cac6c3"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "padding-card": "16px",
+                        "gap-element": "8px",
+                        "gap-nav": "10px",
+                        "max-width": "1200px",
+                        "nav-height": "64px",
+                        "base": "4px",
+                        "gap-section": "48px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Geist"],
+                        "caption": ["Geist"],
+                        "code": ["Geist Mono"],
+                        "label-md": ["Geist"],
+                        "display-xl-mobile": ["Geist"],
+                        "display-xl": ["Geist"],
+                        "headline-sm": ["Geist"]
+                    },
+                    "fontSize": {
+                        "body-md": ["14px", { "lineHeight": "1.43", "letterSpacing": "-0.025em", "fontWeight": "400" }],
+                        "caption": ["12px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "500" }],
+                        "code": ["14px", { "lineHeight": "1.43", "letterSpacing": "0", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "500" }],
+                        "display-xl-mobile": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.04em", "fontWeight": "600" }],
+                        "display-xl": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.05em", "fontWeight": "600" }],
+                        "headline-sm": ["18px", { "lineHeight": "1.5", "letterSpacing": "-0.45px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Custom Toggle Styles for Brutalist Theme */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: transparent;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: theme('colors.pure-black');
+        }
+        .toggle-checkbox:checked + .toggle-label:after {
+            transform: translateX(100%);
+            border-color: theme('colors.pure-black');
+        }
+        .toggle-label {
+            width: 44px;
+            height: 24px;
+            background-color: theme('colors.hairline');
+            border-radius: 9999px;
+            transition: all 0.2s ease;
+            position: relative;
+            cursor: pointer;
+            border: 1px solid theme('colors.hairline');
+        }
+        .toggle-label:after {
+            content: '';
+            position: absolute;
+            top: 1px;
+            left: 1px;
+            width: 20px;
+            height: 20px;
+            background-color: theme('colors.chalk');
+            border-radius: 50%;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1); /* Minimal shadow just for separation */
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md text-body-md antialiased flex flex-col md:flex-row min-h-screen">
+<!-- SideNavBar (Web) -->
+<nav class="hidden md:flex bg-chalk dark:bg-pure-black h-screen w-64 fixed left-0 top-0 border-r border-hairline dark:border-carbon flex-col p-gap-nav gap-base z-50">
+<div class="px-4 py-6 mb-4">
+<h1 class="font-headline-sm text-headline-sm font-black text-primary dark:text-chalk">Tourup Hub</h1>
+<p class="text-caption font-caption text-secondary dark:text-ash mt-1">v1.0.4</p>
+</div>
+<div class="flex flex-col gap-1 flex-grow">
+<!-- Inactive -->
+<a class="flex items-center gap-3 px-4 py-2 rounded-md text-secondary dark:text-ash hover:bg-mist dark:hover:bg-carbon transition-all duration-75 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-weight="regular">dashboard</span>
+<span class="font-label-md text-label-md uppercase tracking-tight">Dashboard</span>
+</a>
+<!-- Inactive -->
+<a class="flex items-center gap-3 px-4 py-2 rounded-md text-secondary dark:text-ash hover:bg-mist dark:hover:bg-carbon transition-all duration-75 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-weight="regular">folder_open</span>
+<span class="font-label-md text-label-md uppercase tracking-tight">Content</span>
+</a>
+<!-- Inactive -->
+<a class="flex items-center gap-3 px-4 py-2 rounded-md text-secondary dark:text-ash hover:bg-mist dark:hover:bg-carbon transition-all duration-75 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-weight="regular">insights</span>
+<span class="font-label-md text-label-md uppercase tracking-tight">Analytics</span>
+</a>
+<!-- Inactive -->
+<a class="flex items-center gap-3 px-4 py-2 rounded-md text-secondary dark:text-ash hover:bg-mist dark:hover:bg-carbon transition-all duration-75 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-weight="regular">perm_media</span>
+<span class="font-label-md text-label-md uppercase tracking-tight">Media</span>
+</a>
+<!-- Active (Settings implied by context) -->
+<a class="flex items-center gap-3 px-4 py-2 rounded-md bg-primary dark:bg-chalk text-on-primary dark:text-pure-black font-bold transition-all duration-75 active:opacity-80" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">settings</span>
+<span class="font-label-md text-label-md uppercase tracking-tight">Settings</span>
+</a>
+</div>
+<div class="mt-auto flex flex-col gap-1 border-t border-hairline dark:border-carbon pt-4">
+<button class="w-full bg-primary text-on-primary font-label-md text-label-md uppercase py-2 px-4 rounded-[10px] hover:bg-primary-container transition-colors duration-100 mb-4">Create New</button>
+<a class="flex items-center gap-3 px-4 py-2 rounded-md text-secondary dark:text-ash hover:bg-mist dark:hover:bg-carbon transition-all duration-75" href="#">
+<span class="material-symbols-outlined" data-weight="regular">help</span>
+<span class="font-label-md text-label-md uppercase tracking-tight">Support</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 rounded-md text-secondary dark:text-ash hover:bg-mist dark:hover:bg-carbon transition-all duration-75" href="#">
+<span class="material-symbols-outlined" data-weight="regular">logout</span>
+<span class="font-label-md text-label-md uppercase tracking-tight">Logout</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-64 flex flex-col min-h-screen">
+<!-- TopNavBar (Mobile only since Web has SideNav, following logic) -->
+<header class="md:hidden bg-chalk dark:bg-pure-black h-nav-height w-full border-b border-hairline dark:border-carbon flex justify-between items-center px-padding-card z-40 sticky top-0">
+<h1 class="font-headline-sm text-headline-sm font-bold tracking-tighter text-primary dark:text-chalk">Tourup</h1>
+<div class="flex items-center gap-4 text-primary dark:text-inverse-primary">
+<button class="hover:bg-mist dark:hover:bg-carbon p-1 rounded transition-colors duration-100 ease-linear">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="hover:bg-mist dark:hover:bg-carbon p-1 rounded transition-colors duration-100 ease-linear">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">settings</span>
+</button>
+</div>
+</header>
+<!-- Canvas -->
+<div class="flex-1 w-full max-w-[800px] mx-auto p-4 md:p-8">
+<header class="mb-12">
+<h2 class="font-display-xl-mobile md:font-display-xl text-display-xl-mobile md:text-display-xl text-primary tracking-tighter mb-2">Hub Settings</h2>
+<p class="font-body-md text-body-md text-secondary max-w-2xl">Manage configuration, access controls, and regional preferences for your Tourup Hub instance. Changes are applied globally.</p>
+</header>
+<div class="flex flex-col gap-gap-section">
+<!-- Section: Access & Visibility -->
+<section class="border border-hairline rounded-[14px] bg-chalk overflow-hidden">
+<div class="px-padding-card py-4 border-b border-hairline bg-surface-bright">
+<h3 class="font-headline-sm text-headline-sm text-primary">Access & Visibility</h3>
+<p class="font-caption text-caption text-secondary mt-1">Control who can see and interact with your hub.</p>
+</div>
+<div class="flex flex-col divide-y divide-hairline">
+<!-- Toggle Row: Public Access -->
+<div class="flex items-center justify-between px-padding-card py-5 hover:bg-surface-bright transition-colors">
+<div class="pr-4">
+<label class="font-label-md text-label-md text-primary block mb-1" for="toggle-public">Public Access</label>
+<p class="font-caption text-caption text-secondary">Allow unauthenticated users to view published content.</p>
+</div>
+<div class="relative inline-block w-11 align-middle select-none flex-shrink-0">
+<input checked="" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-chalk border-4 appearance-none cursor-pointer z-10 opacity-0" id="toggle-public" name="toggle" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-hairline cursor-pointer" for="toggle-public"></label>
+</div>
+</div>
+<!-- Toggle Row: Comments -->
+<div class="flex items-center justify-between px-padding-card py-5 hover:bg-surface-bright transition-colors">
+<div class="pr-4">
+<label class="font-label-md text-label-md text-primary block mb-1" for="toggle-comments">Comments</label>
+<p class="font-caption text-caption text-secondary">Enable discussion threads on published media.</p>
+</div>
+<div class="relative inline-block w-11 align-middle select-none flex-shrink-0">
+<input class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-chalk border-4 appearance-none cursor-pointer z-10 opacity-0" id="toggle-comments" name="toggle" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-hairline cursor-pointer" for="toggle-comments"></label>
+</div>
+</div>
+</div>
+</section>
+<!-- Section: Workflow -->
+<section class="border border-hairline rounded-[14px] bg-chalk overflow-hidden">
+<div class="px-padding-card py-4 border-b border-hairline bg-surface-bright">
+<h3 class="font-headline-sm text-headline-sm text-primary">Workflow</h3>
+<p class="font-caption text-caption text-secondary mt-1">Editor behavior and data persistence.</p>
+</div>
+<div class="flex flex-col">
+<!-- Toggle Row: Auto-save -->
+<div class="flex items-center justify-between px-padding-card py-5 hover:bg-surface-bright transition-colors">
+<div class="pr-4">
+<label class="font-label-md text-label-md text-primary block mb-1" for="toggle-autosave">Auto-save</label>
+<p class="font-caption text-caption text-secondary">Automatically persist changes to drafts every 30 seconds.</p>
+</div>
+<div class="relative inline-block w-11 align-middle select-none flex-shrink-0">
+<input checked="" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-chalk border-4 appearance-none cursor-pointer z-10 opacity-0" id="toggle-autosave" name="toggle" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-hairline cursor-pointer" for="toggle-autosave"></label>
+</div>
+</div>
+</div>
+</section>
+<!-- Section: Localization -->
+<section class="border border-hairline rounded-[14px] bg-chalk overflow-hidden">
+<div class="px-padding-card py-4 border-b border-hairline bg-surface-bright">
+<h3 class="font-headline-sm text-headline-sm text-primary">Localization</h3>
+<p class="font-caption text-caption text-secondary mt-1">Regional formats and default language settings.</p>
+</div>
+<div class="flex flex-col gap-6 px-padding-card py-6">
+<!-- Select: Language -->
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-primary" for="select-language">Language</label>
+<div class="relative">
+<select class="w-full appearance-none border border-hairline bg-chalk text-primary font-body-md text-body-md rounded-[10px] py-3 pl-4 pr-10 focus:outline-none focus:border-pure-black focus:ring-0 transition-colors" id="select-language">
+<option selected="" value="en">English (US)</option>
+<option value="es">Spanish (ES)</option>
+<option value="fr">French (FR)</option>
+<option value="de">German (DE)</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-secondary">
+<span class="material-symbols-outlined text-[20px]">expand_more</span>
+</div>
+</div>
+<p class="font-caption text-caption text-secondary">Primary language for hub interface and default content.</p>
+</div>
+<!-- Select: Timezone -->
+<div class="flex flex-col gap-2 pt-4 border-t border-hairline">
+<label class="font-label-md text-label-md text-primary" for="select-timezone">Timezone</label>
+<div class="relative">
+<select class="w-full appearance-none border border-hairline bg-chalk text-primary font-body-md text-body-md rounded-[10px] py-3 pl-4 pr-10 focus:outline-none focus:border-pure-black focus:ring-0 transition-colors" id="select-timezone">
+<option value="utc">UTC (Coordinated Universal Time)</option>
+<option selected="" value="est">EST (Eastern Standard Time)</option>
+<option value="pst">PST (Pacific Standard Time)</option>
+<option value="cet">CET (Central European Time)</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-secondary">
+<span class="material-symbols-outlined text-[20px]">expand_more</span>
+</div>
+</div>
+<p class="font-caption text-caption text-secondary">Affects analytics reporting and content scheduling.</p>
+</div>
+</div>
+</section>
+<!-- Actions -->
+<div class="flex justify-end gap-4 pt-4 mb-24">
+<button class="px-6 py-2 border border-hairline bg-transparent text-primary font-label-md text-label-md uppercase rounded-[10px] hover:bg-mist transition-colors">Cancel</button>
+<button class="px-6 py-2 bg-pure-black text-chalk font-label-md text-label-md uppercase rounded-[10px] hover:bg-surface-tint transition-colors">Save Changes</button>
+</div>
+</div>
+</div>
+</main>
+</body></html>

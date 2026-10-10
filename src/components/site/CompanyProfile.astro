@@ -1,0 +1,308 @@
+---
+/**
+ * Ficha de empresa (B2B), una sola plantilla para /en/companies/ y /es/empresas/.
+ * Muestra solo datos que existen: registro (RUC, dirección, fecha de captura), dónde opera,
+ * las preguntas de viajeros en que la citan asistentes de IA (solo menciones reales),
+ * certificaciones de sostenibilidad vigentes y, si el dato existe, valoración, testimonios y
+ * tiempo de respuesta con su fuente. Nada se rellena ni se inventa.
+ */
+import { getCollection } from 'astro:content';
+import GuidePage from './GuidePage.astro';
+import CertifiedList from './CertifiedList.astro';
+import type { Locale } from '../../utils/i18n';
+import { getLocalizedString } from '../../utils/i18n';
+import {
+  SITE_URL,
+  cityLabel,
+  companyDescription,
+  companyDisplayName,
+  companyRole,
+  hasCompanyName,
+} from '../../utils/seo';
+import { mentionSignature, placeholderSignatures } from '../../utils/prompts';
+import { destinationPath, directoryPath } from '../../data/site';
+import sustainability from '../../data/sustainability.json';
+import { certificationsForCompany, type Certification } from '../../utils/sustainability';
+import photos from '../../data/photos.json';
+
+interface Props {
+  company: any;
+  lang: Locale;
+}
+
+const { company, lang } = Astro.props;
+const es = lang === 'es';
+const t = (esText: string, enText: string) => (es ? esText : enText);
+const d = company.data;
+const { Content } = await company.render();
+// La mayoría de cuerpos solo repiten nombre y resumen; se muestra si hay texto propio.
+const hasBody = String(company.body ?? '').split(/\s+/).filter(Boolean).length > 30;
+const loc = (v: any) => getLocalizedString(v, lang);
+const id = company.id.replace(/\.md$/i, '');
+const name = companyDisplayName(d, lang);
+const nameless = !hasCompanyName(loc(d.title));
+const description = companyDescription(d, lang);
+const role = companyRole(d, lang);
+const district = cityLabel(d.location?.city ?? d.nap?.city);
+const region = cityLabel(d.location?.region);
+// Abreviaturas de vía del registro (AV., CLLE, JR.…) a su forma legible.
+const STREET: Record<string, string> = { 'AV.': 'Av.', CLLE: 'Calle', 'JR.': 'Jr.', VIA: 'Vía', 'PJ.': 'Pasaje', 'PRLG': 'Prolongación', 'PZA.': 'Plaza', 'BL.': 'Block', 'LT.': 'Lote', 'PO.': 'Paseo' };
+const streetType = d.location?.street_type && !/no definido/i.test(d.location.street_type) ? STREET[d.location.street_type] ?? d.location.street_type : '';
+const streetName = d.location?.street_name ? cityLabel(d.location.street_name) : '';
+const street = [streetType, streetName, d.location?.street_number].filter(Boolean).join(' ');
+const unit = d.location?.unit ? `${t('Of.', 'Unit')} ${d.location.unit}` : '';
+const website = loc(d.nap?.website ?? d.contact?.website);
+const email = loc(d.nap?.email ?? d.contact?.email);
+const phone = loc(d.nap?.phone ?? d.contact?.phone);
+const ruc = d.regulation?.tax_id;
+const snapshot = String(d.regulation?.snapshot_date ?? '');
+const snapshotDate = /^\d{8}$/.test(snapshot) ? `${snapshot.slice(0, 4)}-${snapshot.slice(4, 6)}-${snapshot.slice(6, 8)}` : null;
+const fmtDate = (iso: string) => new Date(`${iso}T12:00:00Z`).toLocaleDateString(es ? 'es-PE' : 'en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
+
+const [destinos, promptsEn] = await Promise.all([getCollection(es ? 'destinos' : 'destinos_en'), getCollection('prompts')]);
+const destBySlug = new Map(destinos.map((x) => [x.id.replace(/\.md$/i, ''), x]));
+const operatesIn = (d.destinos ?? [])
+  .map((slug: string) => ({ slug, entry: destBySlug.get(slug) }))
+  .filter((x: any) => x.entry)
+  .map((x: any) => ({ slug: x.slug, name: loc(x.entry.data.name) }));
+
+// Preguntas de viajeros en que un asistente de IA citó a esta empresa. La lista por defecto
+// que comparten casi todos los prompts no cuenta como mención.
+const placeholders = placeholderSignatures(promptsEn.map((p: any) => p.data.brands_ai_mentions ?? []));
+const citedIn = promptsEn
+  .filter((p: any) => !placeholders.has(mentionSignature(p.data.brands_ai_mentions)))
+  .filter((p: any) =>
+    (p.data.brands_ai_mentions ?? []).some(
+      (m: any) => m?.entity_type === 'company' && String(m.entity_slug ?? '').normalize('NFC') === id.normalize('NFC'),
+    ),
+  )
+  .map((p: any) => ({ slug: p.id.replace(/\.md$/i, ''), title: getLocalizedString(p.data.title, 'en') }));
+
+const certs = certificationsForCompany(sustainability.certifications as Certification[], id);
+const rating = typeof d.rating === 'number' && d.reviews_count ? { value: d.rating, count: d.reviews_count } : null;
+const testimonials = (d.testimonials ?? []).filter((x: any) => x?.text);
+const responseHours = d.trust_metrics?.avg_response_time_hours;
+
+// Descripción con datos del registro, sin adjetivos que el dato no respalde.
+const about = [
+  es
+    ? `${name} es ${role.toLowerCase().startsWith('agencia') ? 'una' : 'un'} ${role.toLowerCase()} con sede en ${district || 'Perú'}${region && region !== district ? ` (${region})` : ''}${ruc ? `, inscrito en el registro de contribuyentes de Perú con el RUC ${ruc}` : ''}.`
+    : `${name} is a ${role.toLowerCase()} based in ${district || 'Peru'}${region && region !== district ? ` (${region} region)` : ''}${ruc ? `, registered with Peru's tax authority under RUC ${ruc}` : ''}.`,
+  operatesIn.length
+    ? es
+      ? `Declara operar en ${operatesIn.map((x: any) => x.name).join(', ')}.`
+      : `It lists ${operatesIn.map((x: any) => x.name).join(', ')} as ${operatesIn.length === 1 ? 'its operating area' : 'operating areas'}.`
+    : '',
+].filter(Boolean).join(' ');
+
+const summaryIsBoilerplate = /based in/i.test(loc(d.summary));
+const ownSummary = !summaryIsBoilerplate ? loc(d.summary) : '';
+const photoKey = operatesIn.find((x: any) => x.slug in photos)?.slug;
+
+const path = es ? `/es/empresas/${id}/` : `/en/companies/${id}/`;
+const pageUrl = `${SITE_URL}${path}`;
+const streetAddress = [street, unit].filter(Boolean).join(', ');
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': ['TravelAgency', 'LocalBusiness'],
+      '@id': `${pageUrl}#company`,
+      name,
+      description,
+      url: website || pageUrl,
+      ...(ruc ? { taxID: ruc, identifier: { '@type': 'PropertyValue', propertyID: 'RUC', value: ruc } } : {}),
+      ...(phone ? { telephone: phone } : {}),
+      ...(email ? { email } : {}),
+      ...(website ? { sameAs: [website] } : {}),
+      address: {
+        '@type': 'PostalAddress',
+        ...(streetAddress ? { streetAddress } : {}),
+        ...(district ? { addressLocality: district } : {}),
+        ...(region ? { addressRegion: region } : {}),
+        addressCountry: 'PE',
+      },
+      ...(operatesIn.length
+        ? { areaServed: operatesIn.map((x: any) => ({ '@type': 'TouristDestination', name: x.name, url: `${SITE_URL}${destinationPath(lang, x.slug)}` })) }
+        : {}),
+      ...(rating ? { aggregateRating: { '@type': 'AggregateRating', ratingValue: rating.value, reviewCount: rating.count, bestRating: 5, worstRating: 1 } } : {}),
+      mainEntityOfPage: { '@id': `${pageUrl}#webpage` },
+    },
+  ],
+};
+---
+
+<GuidePage
+  title={es ? `${name} – Ficha B2B | TourUp` : `${name} – B2B profile | TourUp Guide`}
+  heading={name}
+  dek={[role, district].filter(Boolean).join(' · ')}
+  description={description}
+  currentPath={path}
+  lang={lang}
+  breadcrumb={name}
+  noindex={nameless}
+  photo={photoKey}
+  alternates={{ es: `${SITE_URL}/es/empresas/${id}/`, en: `${SITE_URL}/en/companies/${id}/` }}
+>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <h2>{t(`Sobre ${name}`, `About ${name}`)}</h2>
+  <p>{about}</p>
+  {ownSummary && <p>{ownSummary}</p>}
+  {hasBody && <div class="cp-body"><Content /></div>}
+
+  {operatesIn.length > 0 && (
+    <>
+      <h2>{t('Dónde opera', 'Where it operates')}</h2>
+      <ul class="cp-places">
+        {operatesIn.map((x: any) => (
+          <li><a href={destinationPath(lang, x.slug)}>{x.name}</a></li>
+        ))}
+      </ul>
+    </>
+  )}
+
+  {certs.length > 0 && (
+    <>
+      <h2>{t('Sostenibilidad', 'Sustainability')}</h2>
+      <CertifiedList certs={certs} lang={lang} showPlace={false} />
+    </>
+  )}
+
+  {rating && (
+    <>
+      <h2>{t('Valoraciones', 'Ratings')}</h2>
+      <p class="cp-rating">
+        <strong>{rating.value}</strong> / 5 · {rating.count} {t('reseñas', 'reviews')}
+      </p>
+    </>
+  )}
+
+  {responseHours !== undefined && (
+    <p>{t('Tiempo medio de respuesta declarado', 'Stated average response time')}: <strong>{responseHours} h</strong></p>
+  )}
+
+  {testimonials.length > 0 && (
+    <>
+      <h2>{t('Testimonios', 'Testimonials')}</h2>
+      {testimonials.slice(0, 3).map((x: any) => (
+        <blockquote class="cp-quote">
+          <p>{x.text}</p>
+          <footer>{[x.author, x.source, x.date].filter(Boolean).join(' · ')}</footer>
+        </blockquote>
+      ))}
+    </>
+  )}
+
+  {citedIn.length > 0 && (
+    <>
+      <h2>{t('Citada por asistentes de IA', 'Cited by AI assistants')}</h2>
+      <p>{t('Preguntas de viajeros en cuyas respuestas aparece esta empresa:', 'Traveller questions whose AI answers mention this company:')}</p>
+      <ul>
+        {citedIn.map((q) => (
+          <li><a href={`/en/ai-prompts/${q.slug}/`} lang="en">{q.title}</a></li>
+        ))}
+      </ul>
+    </>
+  )}
+
+  <p class="cp-back"><a class="btn-poster" href={directoryPath(lang)}>{t('Volver al directorio', 'Back to the directory')}</a></p>
+
+  <div slot="aside" class="cp-aside">
+    <h2>{t('Datos de registro', 'Registry data')}</h2>
+    <dl>
+      {ruc && (<><dt>RUC</dt><dd>{ruc}</dd></>)}
+      <dt>{t('Tipo', 'Type')}</dt><dd>{role}</dd>
+      {streetAddress && (<><dt>{t('Dirección', 'Address')}</dt><dd>{streetAddress}</dd></>)}
+      {district && (<><dt>{t('Distrito', 'District')}</dt><dd>{district}</dd></>)}
+      {region && (<><dt>{t('Región', 'Region')}</dt><dd>{region}</dd></>)}
+      {website && (<><dt>Web</dt><dd><a href={website} rel="noopener nofollow">{website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')}</a></dd></>)}
+      {email && (<><dt>Email</dt><dd><a href={`mailto:${email}`}>{email}</a></dd></>)}
+      {phone && (<><dt>{t('Teléfono', 'Phone')}</dt><dd>{phone}</dd></>)}
+    </dl>
+    {snapshotDate && (
+      <p class="cp-source">{t(`Datos del registro oficial al ${fmtDate(snapshotDate)}.`, `Official registry data as of ${fmtDate(snapshotDate)}.`)}</p>
+    )}
+  </div>
+</GuidePage>
+
+<style>
+  .cp-places {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .cp-places a {
+    display: inline-block;
+    font-family: var(--font-poster);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    color: var(--ink);
+    border: 2px solid var(--ink);
+    padding: 0.2rem 0.7rem 0.15rem;
+  }
+
+  .cp-places a:hover {
+    background: var(--yellow);
+  }
+
+  .cp-rating strong {
+    font-family: var(--font-poster);
+    font-size: 2.5rem;
+    font-weight: 900;
+  }
+
+  .cp-quote {
+    margin: 0 0 var(--space-3);
+    padding-left: var(--space-2);
+    border-left: 1px solid var(--ink);
+  }
+
+  .cp-quote footer {
+    color: var(--text-2);
+    font-size: 0.9rem;
+  }
+
+  .cp-back {
+    margin-top: var(--space-5);
+  }
+
+  .cp-aside h2 {
+    font-size: 1.35rem;
+    line-height: 1;
+    background: var(--ink);
+    color: var(--green);
+    padding: 0.45rem 0.7rem 0.35rem;
+    margin: 0 0 0.75rem;
+  }
+
+  .cp-aside dl {
+    margin: 0;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.4rem 1rem;
+    font-size: 0.95rem;
+  }
+
+  .cp-aside dt {
+    color: var(--text-2);
+  }
+
+  .cp-aside dd {
+    margin: 0;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
+  }
+
+  .cp-source {
+    margin-top: var(--space-2);
+    color: var(--text-2);
+    font-size: 0.85rem;
+  }
+</style>

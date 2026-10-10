@@ -19,7 +19,7 @@ import yaml
 SRC = Path("src/content")
 PUBLIC = Path("public")
 AI_DIR = PUBLIC / "ai"
-SITE = "https://tourup.co"
+SITE = "https://guia.tourup.co"
 
 
 # ── Helpers ──────────────────────────────────────────────────────
@@ -97,15 +97,15 @@ def generate_sitemaps():
     index_xml = """<?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <sitemap>
-    <loc>https://tourup.co/sitemap-companies.xml</loc>
+    <loc>https://guia.tourup.co/sitemap-companies.xml</loc>
     <lastmod>2026-06-10</lastmod>
   </sitemap>
   <sitemap>
-    <loc>https://tourup.co/sitemap-destinos.xml</loc>
+    <loc>https://guia.tourup.co/sitemap-destinos.xml</loc>
     <lastmod>2026-06-10</lastmod>
   </sitemap>
   <sitemap>
-    <loc>https://tourup.co/sitemap-prompts.xml</loc>
+    <loc>https://guia.tourup.co/sitemap-prompts.xml</loc>
     <lastmod>2026-06-10</lastmod>
   </sitemap>
 </sitemapindex>"""

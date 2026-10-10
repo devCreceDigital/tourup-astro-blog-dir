@@ -1,0 +1,17 @@
+---
+/** Ficha de empresa (es). La plantilla está en components/site/CompanyProfile.astro. */
+import { getCollection } from 'astro:content';
+import CompanyProfile from '../../../components/site/CompanyProfile.astro';
+
+export async function getStaticPaths() {
+  const companies = await getCollection('companies');
+  return companies.map((company) => ({
+    params: { lang: 'es', slug: company.id.replace(/\.md$/i, '') },
+    props: { company },
+  }));
+}
+
+const { company } = Astro.props;
+---
+
+<CompanyProfile company={company} lang="es" />

@@ -1,77 +1,73 @@
 ---
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
+/**
+ * Estructura común de todas las páginas públicas: SEO (canonical, hreflang, Open Graph,
+ * JSON-LD) + cabecera y pie del sistema "cartel chicha". Sitio estático: sin ajustes en base
+ * de datos ni scripts de terceros.
+ */
+// Fuentes autoalojadas: sin peticiones a Google Fonts (privacidad de visitantes de la UE).
+import '@fontsource/big-shoulders-display/700';
+import '@fontsource/big-shoulders-display/800';
+import '@fontsource/big-shoulders-display/900';
+import '@fontsource-variable/source-serif-4/opsz';
+import '@fontsource-variable/source-serif-4/opsz-italic';
+import '../styles/global.css';
+import Masthead from '../components/site/Masthead.astro';
+import SiteFooter from '../components/site/SiteFooter.astro';
+import SiteJsonLd from '../components/SiteJsonLd.astro';
+import { hreflangAlternates, SITE_URL } from '../utils/seo';
+import type { Locale } from '../utils/i18n';
 
 interface Props {
   title?: string;
   description?: string;
   currentPath?: string;
   canonicalUrl?: string;
-  ogImage?: string;
-  structuredData?: object;
+  hreflangOverrides?: { es?: string; en?: string; 'x-default'?: string };
+  image?: string;
+  noindex?: boolean;
+  /** false = sin hreflang (p. ej. prompts cuya versión /es/ aún no está traducida). */
+  hreflang?: boolean;
+  breadcrumb?: string;
   lang?: string;
+  date?: string;
+  /** true = el contenido ocupa todo el ancho (portadas); false = columna centrada. */
+  bleed?: boolean;
 }
 
 const {
-  title = 'TourUp — Directorio AEO de Turismo en Perú',
-  description = 'Directorio inteligente de operadores turísticos en Perú, optimizado para ChatGPT, Gemini, Claude, Grok y Perplexity. Datos verificados, estructurados y listos para IA.',
+  title = 'TourUp Guide — Peru travel guide and operator directory',
+  description: descriptionProp,
   currentPath = '/',
-  canonicalUrl,
-  ogImage = 'https://tourup.co/og-default.jpg',
-  structuredData,
-  lang = 'es',
+  canonicalUrl: canonicalUrlProp,
+  hreflangOverrides,
+  image = '/og-default.jpg',
+  noindex = false,
+  hreflang = true,
+  breadcrumb,
+  date = '',
+  bleed = false,
 } = Astro.props;
 
-const siteUrl = 'https://tourup.co';
-const canonical = canonicalUrl || `${siteUrl}${currentPath}`;
+const lang: Locale = (Astro.props.lang ?? (currentPath.startsWith('/es/') ? 'es' : 'en')) === 'es' ? 'es' : 'en';
 
-const defaultSchema = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "WebSite",
-      "@id": `${siteUrl}/#website`,
-      "url": siteUrl,
-      "name": "TourUp",
-      "description": "Directorio AEO de operadores turísticos en Perú optimizado para motores de IA",
-      "inLanguage": ["es", "en"],
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": {
-          "@type": "EntryPoint",
-          "urlTemplate": `${siteUrl}/en/ai-prompts/?q={search_term_string}`
-        },
-        "query-input": "required name=search_term_string"
-      }
-    },
-    {
-      "@type": "Organization",
-      "@id": `${siteUrl}/#org`,
-      "name": "TourUp",
-      "url": siteUrl,
-      "logo": `${siteUrl}/favicon.svg`,
-      "description": "Marketplace B2B de turismo en Perú. Conecta agencias con operadores receptivos verificados en Cusco, Lima, Arequipa, Machu Picchu y más.",
-      "sameAs": [
-        "https://tourup.co",
-        "https://github.com/devCreceDigital/tourup-astro-blog"
-      ],
-      "areaServed": {
-        "@type": "Country",
-        "name": "Peru"
-      },
-      "knowsAbout": [
-        "Peru Tourism",
-        "Tour Operators Peru",
-        "Machu Picchu Tours",
-        "Cusco Travel",
-        "B2B Travel Marketplace",
-        "Adventure Tourism Peru"
-      ]
-    }
-  ]
-};
+// Una descripción vacía ('') no debe llegar al <meta>: cae al valor por defecto.
+const description =
+  (typeof descriptionProp === 'string' && descriptionProp.trim()) ||
+  (lang === 'es'
+    ? 'Guía de viaje de Perú: destinos, itinerarios y respuestas, más un directorio de empresas de turismo registradas.'
+    : 'Peru travel guide: destinations, itineraries and answers, plus a directory of registered Peruvian travel companies.');
 
-const schema = structuredData || defaultSchema;
+const siteUrl = SITE_URL;
+const canonicalUrl = canonicalUrlProp || `${siteUrl}${currentPath}`;
+const ogLocale = lang === 'en' ? 'en_US' : 'es_PE';
+const ogType = currentPath.startsWith('/blog/') ? 'article' : 'website';
+const ogImage = image.startsWith('http') ? image : `${siteUrl}${image}`;
+
+// hreflang solo hacia páginas que existen (ver utils/seo.ts); null = sin versión por idioma (blog).
+const alternates = hreflangAlternates(currentPath, siteUrl);
+const altHref = (l: Locale) => (l === 'es' ? hreflangOverrides?.es ?? alternates?.es : hreflangOverrides?.en ?? alternates?.en);
+const otherLang: Locale = lang === 'en' ? 'es' : 'en';
+const altUrl = hreflang && !noindex ? altHref(otherLang)?.replace(siteUrl, '') ?? null : null;
 ---
 
 <!doctype html>
@@ -79,339 +75,84 @@ const schema = structuredData || defaultSchema;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="generator" content={Astro.generator} />
-
-    <!-- Primary SEO -->
-    <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#00c9b1" />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    {import.meta.env.GOOGLE_VERIFICATION_CODE && <meta name="google-site-verification" content={import.meta.env.GOOGLE_VERIFICATION_CODE} />}
+    {import.meta.env.BING_VERIFICATION_CODE && <meta name="msvalidate.01" content={import.meta.env.BING_VERIFICATION_CODE} />}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonicalUrl} />
+    <title>{title}</title>
 
-    <!-- AEO: AI Engine Optimization signals -->
-    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
-    <meta name="googlebot" content="index, follow" />
-    <meta name="bingbot" content="index, follow" />
-
-    <!-- Indexación por LLMs / AI crawlers -->
-    <link rel="alternate" type="text/plain" href="/llms.txt" title="LLM-optimized site index" />
-    <meta name="ai-content-declaration" content="human-curated" />
-    <meta name="content-type" content="travel-directory" />
-    <meta name="coverage" content="Peru" />
-    <meta name="category" content="tourism, travel, operators, B2B" />
-
-    <!-- Open Graph -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content={canonical} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
     <meta property="og:image" content={ogImage} />
-    <meta property="og:site_name" content="TourUp" />
-    <meta property="og:locale" content="es_PE" />
-    <meta property="og:locale:alternate" content="en_US" />
-
-    <!-- Twitter / X -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:locale" content={ogLocale} />
+    <meta property="og:site_name" content="TourUp Guide" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    {hreflang && (hreflangOverrides || alternates) && (
+      <>
+        <link rel="alternate" hreflang="es" href={altHref('es')} />
+        <link rel="alternate" hreflang="en" href={altHref('en')} />
+        <link rel="alternate" hreflang="x-default" href={hreflangOverrides?.['x-default'] ?? alternates?.xDefault} />
+      </>
+    )}
 
-    <!-- Structured Data JSON-LD (AEO core) -->
-    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+    <link rel="sitemap" type="application/xml" href={`${siteUrl}/sitemap-index.xml`} />
 
-    <!-- Preconnect para performance -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <SiteJsonLd
+      title={title}
+      description={description}
+      canonicalUrl={canonicalUrl}
+      currentPath={currentPath}
+      lang={lang}
+      breadcrumb={breadcrumb}
+      dateModified={date || undefined}
+    />
+    <slot name="head" />
   </head>
   <body>
-    <Header currentPath={currentPath} />
-    <main>
+    <a class="skip-link" href="#main">{lang === 'es' ? 'Saltar al contenido' : 'Skip to content'}</a>
+    <Masthead lang={lang} currentPath={currentPath} altUrl={altUrl} />
+    <main id="main" class={bleed ? 'main-bleed' : 'main-column wrap'}>
       <slot />
     </main>
-    <Footer />
+    <SiteFooter lang={lang} />
   </body>
 </html>
 
 <style is:global>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  .skip-link {
+    position: absolute;
+    left: 0.5rem;
+    top: -3rem;
+    z-index: 10;
+    background: var(--yellow);
+    color: var(--ink);
+    font-family: var(--font-poster);
+    font-weight: 800;
+    text-transform: uppercase;
+    padding: 0.5rem 1rem;
   }
 
-  :root {
-    /* Color system */
-    --color-bg: #0a0f1e;
-    --color-bg-2: #0f1729;
-    --color-surface: #141d35;
-    --color-surface-2: #1a2540;
-    --color-border: rgba(99, 131, 255, 0.12);
-    --color-border-hover: rgba(99, 131, 255, 0.3);
-
-    /* Brand */
-    --color-primary: #4f7cff;
-    --color-primary-light: #7a9fff;
-    --color-accent: #00d4b1;
-    --color-accent-warm: #ff6b35;
-
-    /* Text */
-    --color-text: #f0f4ff;
-    --color-text-secondary: #8b9cc8;
-    --color-text-muted: #5a6d94;
-
-    /* AEO signals */
-    --color-ai: #a855f7;
-    --color-verified: #00d4b1;
-    --color-data: #4f7cff;
-
-    /* Gradients */
-    --gradient-brand: linear-gradient(135deg, #4f7cff 0%, #00d4b1 100%);
-    --gradient-hero: linear-gradient(135deg, #0a0f1e 0%, #0f1729 50%, #141d35 100%);
-    --gradient-card: linear-gradient(135deg, rgba(79,124,255,0.05) 0%, rgba(0,212,177,0.05) 100%);
-
-    /* Spacing */
-    --space-1: 0.25rem;
-    --space-2: 0.5rem;
-    --space-3: 0.75rem;
-    --space-4: 1rem;
-    --space-6: 1.5rem;
-    --space-8: 2rem;
-    --space-12: 3rem;
-    --space-16: 4rem;
-    --space-24: 6rem;
-
-    /* Radius */
-    --radius-sm: 0.375rem;
-    --radius-md: 0.625rem;
-    --radius-lg: 1rem;
-    --radius-xl: 1.5rem;
-  }
-
-  html {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: var(--color-bg);
-    color: var(--color-text);
-    line-height: 1.6;
-    scroll-behavior: smooth;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  body {
-    background: var(--color-bg);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+  .skip-link:focus {
+    top: 0.5rem;
   }
 
   main {
     flex: 1;
-    max-width: 1280px;
     width: 100%;
-    margin: 0 auto;
-    padding: 0 var(--space-8);
   }
 
-  /* Typography */
-  h1, h2, h3, h4, h5, h6 {
-    font-weight: 700;
-    line-height: 1.2;
-    margin-bottom: var(--space-4);
-    color: var(--color-text);
-    letter-spacing: -0.02em;
-  }
-
-  h1 { font-size: clamp(2rem, 5vw, 3.5rem); }
-  h2 { font-size: clamp(1.5rem, 3vw, 2.25rem); }
-  h3 { font-size: clamp(1.125rem, 2vw, 1.5rem); }
-  h4 { font-size: 1.125rem; }
-
-  p {
-    margin-bottom: var(--space-4);
-    color: var(--color-text-secondary);
-    line-height: 1.75;
-  }
-
-  a {
-    color: var(--color-primary-light);
-    text-decoration: none;
-    transition: color 0.2s ease;
-  }
-
-  a:hover { color: var(--color-accent); }
-
-  /* Utility classes */
-  .container {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 0 var(--space-8);
-  }
-
-  .text-gradient {
-    background: var(--gradient-brand);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .badge {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-1);
-    padding: 0.25rem 0.625rem;
-    border-radius: 9999px;
-    font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .badge-ai {
-    background: rgba(168,85,247,0.12);
-    color: #c084fc;
-    border: 1px solid rgba(168,85,247,0.2);
-  }
-
-  .badge-verified {
-    background: rgba(0,212,177,0.1);
-    color: var(--color-accent);
-    border: 1px solid rgba(0,212,177,0.2);
-  }
-
-  .badge-data {
-    background: rgba(79,124,255,0.1);
-    color: var(--color-primary-light);
-    border: 1px solid rgba(79,124,255,0.2);
-  }
-
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    padding: 0.75rem 1.5rem;
-    border-radius: var(--radius-md);
-    font-weight: 600;
-    font-size: 0.9rem;
-    text-decoration: none;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    border: none;
-    letter-spacing: 0.01em;
-  }
-
-  .btn-primary {
-    background: var(--gradient-brand);
-    color: white;
-    box-shadow: 0 4px 20px rgba(79,124,255,0.25);
-  }
-
-  .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(79,124,255,0.35);
-    color: white;
-  }
-
-  .btn-secondary {
-    background: rgba(255,255,255,0.04);
-    color: var(--color-text-secondary);
-    border: 1px solid var(--color-border);
-  }
-
-  .btn-secondary:hover {
-    background: rgba(255,255,255,0.07);
-    color: var(--color-text);
-    border-color: var(--color-border-hover);
-  }
-
-  /* Cards */
-  .card {
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    padding: var(--space-6);
-    transition: all 0.2s ease;
-  }
-
-  .card:hover {
-    border-color: var(--color-border-hover);
-    background: var(--color-surface-2);
-    transform: translateY(-2px);
-  }
-
-  /* Code */
-  code {
-    font-family: 'JetBrains Mono', 'Courier New', monospace;
-    font-size: 0.85em;
-    background: rgba(79,124,255,0.08);
-    color: var(--color-primary-light);
-    padding: 0.15em 0.4em;
-    border-radius: var(--radius-sm);
-    border: 1px solid rgba(79,124,255,0.15);
-  }
-
-  pre {
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    padding: var(--space-4);
-    border-radius: var(--radius-md);
-    overflow-x: auto;
-    margin-bottom: var(--space-4);
-  }
-
-  pre code {
-    background: none;
-    padding: 0;
-    border: none;
-    border-radius: 0;
-    color: var(--color-text);
-    font-size: 0.875rem;
-  }
-
-  /* Tables */
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: var(--space-4);
-    font-size: 0.9rem;
-  }
-
-  th, td {
-    padding: 0.75rem var(--space-4);
-    text-align: left;
-    border-bottom: 1px solid var(--color-border);
-  }
-
-  th {
-    background: var(--color-surface);
-    font-weight: 600;
-    color: var(--color-text);
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
-
-  td { color: var(--color-text-secondary); }
-
-  tr:hover td { background: rgba(79,124,255,0.03); }
-
-  img {
-    max-width: 100%;
-    height: auto;
-    border-radius: var(--radius-md);
-  }
-
-  /* Divider */
-  hr {
-    border: none;
-    border-top: 1px solid var(--color-border);
-    margin: var(--space-8) 0;
-  }
-
-  @media (max-width: 768px) {
-    main { padding: 0 var(--space-4); }
-    h1 { font-size: 1.875rem; }
-    h2 { font-size: 1.5rem; }
-    h3 { font-size: 1.125rem; }
+  .main-column {
+    padding-top: var(--space-4);
+    padding-bottom: var(--space-5);
   }
 </style>

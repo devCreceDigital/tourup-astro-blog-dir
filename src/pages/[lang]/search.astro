@@ -1,0 +1,159 @@
+---
+/**
+ * Resultados de búsqueda. Página estática con noindex: el filtrado ocurre en el navegador
+ * sobre /{lang}/search-index.json. Sin JavaScript se muestran las secciones del sitio.
+ */
+import Layout from '../../layouts/Layout.astro';
+import type { Locale } from '../../utils/i18n';
+import { destinationsPath, directoryPath, guidesPath } from '../../data/site';
+
+export function getStaticPaths() {
+  return [{ params: { lang: 'en' } }, { params: { lang: 'es' } }];
+}
+
+const lang = (Astro.params.lang === 'es' ? 'es' : 'en') as Locale;
+const es = lang === 'es';
+const t = (esText: string, enText: string) => (es ? esText : enText);
+const labels = {
+  destination: t('Destinos', 'Destinations'),
+  itinerary: t('Itinerarios', 'Itineraries'),
+  guide: t('Guías', 'Guides'),
+  question: t('Preguntas de viajeros', 'Traveller questions'),
+  company: t('Empresas del directorio', 'Directory companies'),
+};
+---
+
+<Layout
+  title={t('Buscar en la guía | TourUp', 'Search the guide | TourUp Guide')}
+  description={t('Busca destinos, itinerarios, guías y empresas de turismo de Perú.', 'Search Peru destinations, itineraries, guides and travel companies.')}
+  currentPath={`/${lang}/search/`}
+  lang={lang}
+  noindex
+  hreflang={false}
+  breadcrumb={t('Buscar', 'Search')}
+>
+  <h1>{t('Buscar', 'Search')}</h1>
+  <form class="search-form" action={`/${lang}/search/`} method="get" role="search">
+    <label for="sq" class="visually-hidden">{t('Buscar en la guía', 'Search the guide')}</label>
+    <input id="sq" name="q" type="search" autocomplete="off" placeholder={t('Cusco, Camino Inca, agencia en Lima…', 'Cusco, Inca Trail, operator in Lima…')} />
+    <button type="submit" class="btn-poster">{t('Buscar', 'Search')}</button>
+  </form>
+
+  <p id="search-status" class="search-status" role="status" aria-live="polite"></p>
+  <div id="search-results" data-lang={lang} data-labels={JSON.stringify(labels)}></div>
+
+  <noscript>
+    <p>{t('La búsqueda necesita JavaScript. Puedes explorar las secciones:', 'Search needs JavaScript. You can browse the sections:')}</p>
+    <ul>
+      <li><a href={destinationsPath(lang)}>{labels.destination}</a></li>
+      <li><a href={guidesPath('en')}>{labels.question}</a></li>
+      <li><a href={directoryPath(lang)}>{labels.company}</a></li>
+    </ul>
+  </noscript>
+</Layout>
+
+<script>
+  const root = document.getElementById('search-results')!;
+  const status = document.getElementById('search-status')!;
+  const input = document.getElementById('sq') as HTMLInputElement;
+  const lang = root.dataset.lang === 'es' ? 'es' : 'en';
+  const labels = JSON.parse(root.dataset.labels || '{}');
+  const q = new URLSearchParams(location.search).get('q')?.trim() ?? '';
+  input.value = q;
+
+  const fold = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+  const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
+
+  async function run() {
+    if (!q) {
+      status.textContent = lang === 'es' ? 'Escribe qué buscas: un destino, una ruta o una empresa.' : 'Type what you are looking for: a place, a route or a company.';
+      return;
+    }
+    status.textContent = lang === 'es' ? 'Buscando…' : 'Searching…';
+    let items: { k: string; t: string; u: string; s: string }[] = [];
+    try {
+      items = await (await fetch(`/${lang}/search-index.json`)).json();
+    } catch {
+      status.textContent = lang === 'es' ? 'No se pudo cargar la búsqueda. Inténtalo de nuevo.' : 'Search could not load. Please try again.';
+      return;
+    }
+    const terms = fold(q).split(/\s+/).filter(Boolean);
+    const scored = items
+      .map((it) => {
+        const title = fold(it.t);
+        const hay = `${title} ${fold(it.s)}`;
+        if (!terms.every((term) => hay.includes(term))) return null;
+        const score = terms.reduce((n, term) => n + (title.includes(term) ? 3 : 1), 0) + (it.k === 'company' ? 0 : 2);
+        return { it, score };
+      })
+      .filter((x): x is { it: (typeof items)[number]; score: number } => !!x)
+      .sort((a, b) => b.score - a.score);
+
+    const n = scored.length;
+    status.textContent = lang === 'es'
+      ? `${n} resultado${n === 1 ? '' : 's'} para «${q}»`
+      : `${n} result${n === 1 ? '' : 's'} for “${q}”`;
+
+    const groups = ['destination', 'itinerary', 'guide', 'question', 'company'];
+    root.innerHTML = groups
+      .map((k) => {
+        const rows = scored.filter((x) => x.it.k === k).slice(0, k === 'company' ? 30 : 12);
+        if (!rows.length) return '';
+        return `<section class="result-group"><h2>${esc(labels[k])}</h2><ul>${rows
+          .map(({ it }) => `<li><a href="${esc(it.u)}">${esc(it.t)}</a>${it.s ? `<span>${esc(it.s.slice(0, 140))}</span>` : ''}</li>`)
+          .join('')}</ul></section>`;
+      })
+      .join('');
+  }
+
+  run();
+</script>
+
+<style>
+  .search-form {
+    display: flex;
+    gap: 0.5rem;
+    max-width: 40rem;
+    margin-bottom: var(--space-3);
+  }
+
+  .search-form input {
+    flex: 1;
+    min-width: 0;
+    font: inherit;
+    padding: 0.7rem 0.9rem;
+    border: 2px solid var(--ink);
+  }
+
+  .search-status {
+    color: var(--text-2);
+  }
+
+  #search-results :global(.result-group) {
+    margin-top: var(--space-4);
+    max-width: var(--measure);
+  }
+
+  #search-results :global(h2) {
+    font-size: 1.9rem;
+  }
+
+  #search-results :global(ul) {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-top: 2px solid var(--ink);
+  }
+
+  #search-results :global(li) {
+    border-bottom: 1px solid var(--rule);
+    padding: 0.7rem 0;
+    display: grid;
+    gap: 0.15rem;
+  }
+
+  #search-results :global(li span) {
+    color: var(--text-2);
+    font-size: 0.92rem;
+  }
+</style>

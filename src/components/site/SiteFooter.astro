@@ -1,0 +1,170 @@
+---
+import { getCollection } from 'astro:content';
+import type { Locale } from '../../utils/i18n';
+import { getLocalizedString } from '../../utils/i18n';
+import {
+  DESTINATION_ORDER,
+  ITINERARIES,
+  destinationPath,
+  destinationsPath,
+  directoryPath,
+  guidesPath,
+  homePath,
+  itineraryPath,
+} from '../../data/site';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const es = lang === 'es';
+const destinos = await getCollection(es ? 'destinos' : 'destinos_en');
+const bySlug = new Map(destinos.map((d) => [d.id.replace(/\.md$/i, ''), d]));
+const top = DESTINATION_ORDER.slice(0, 7)
+  .map((slug) => ({ slug, d: bySlug.get(slug) }))
+  .filter((x) => x.d);
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="poster-strip" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+  <div class="wrap footer-grid">
+    <div class="footer-brand">
+      <a class="footer-logo" href={homePath(lang)}>TourUp</a>
+      <p>
+        {es
+          ? 'Guía de viaje de Perú y directorio de empresas de turismo registradas, publicado por TourUp.'
+          : 'A Peru travel guide and a directory of registered Peruvian travel companies, published by TourUp.'}
+      </p>
+      <p><a href="https://tourup.co" rel="noopener">tourup.co</a></p>
+    </div>
+
+    <nav aria-label={es ? 'Destinos' : 'Destinations'}>
+      <h2>{es ? 'Destinos' : 'Destinations'}</h2>
+      <ul>
+        {top.map(({ slug, d }) => (
+          <li><a href={destinationPath(lang, slug)}>{getLocalizedString(d!.data.name, lang)}</a></li>
+        ))}
+        <li><a href={destinationsPath(lang)}>{es ? 'Todos los destinos' : 'All destinations'}</a></li>
+      </ul>
+    </nav>
+
+    <nav aria-label={es ? 'Itinerarios y guías' : 'Itineraries and guides'}>
+      <h2>{es ? 'Planifica' : 'Plan'}</h2>
+      <ul>
+        {ITINERARIES.map((it) => (
+          <li><a href={itineraryPath(lang, it.slug)}>{es ? `Itinerario de ${it.days} días` : `${it.days}-day itinerary`}</a></li>
+        ))}
+        <li><a href={`/${lang}/peru/cusco/tours-machu-picchu/`}>{es ? 'Tours a Machu Picchu' : 'Machu Picchu tours'}</a></li>
+        <li><a href={`/${lang}/peru/preguntas-frecuentes/`}>{es ? 'Preguntas frecuentes' : 'Peru FAQ'}</a></li>
+        <li><a href={guidesPath(lang)}>{es ? 'Preguntas de viajeros' : 'Traveler questions'}</a></li>
+      </ul>
+    </nav>
+
+    <nav aria-label={es ? 'Para agencias' : 'For agencies'}>
+      <h2>{es ? 'Para agencias' : 'For agencies'}</h2>
+      <ul>
+        <li><a href={directoryPath(lang)}>{es ? 'Directorio de operadores' : 'Operator directory'}</a></li>
+        <li><a href="/llms.txt">llms.txt</a></li>
+        <li><a href="/sitemap-index.xml">Sitemap</a></li>
+        <li><a href={es ? '/es/creditos-de-fotos/' : '/photo-credits/'}>{es ? 'Créditos de fotos' : 'Photo credits'}</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="wrap footer-legal">
+    <p>
+      © {year} TourUp.{' '}
+      {es
+        ? 'Fotos de colaboradores de Wikimedia Commons (licencias Creative Commons) y de TourUp: el autor y la licencia de cada una están en '
+        : 'Photos by Wikimedia Commons contributors (Creative Commons licences) and by TourUp: the author and licence of each one are listed on '}
+      <a href={es ? '/es/creditos-de-fotos/' : '/photo-credits/'}>{es ? 'Créditos de fotos' : 'Photo credits'}</a>.
+    </p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--ink);
+    color: var(--on-ink-2);
+    margin-top: auto;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1.4fr repeat(3, 1fr);
+    gap: var(--space-4);
+    padding-top: var(--space-5);
+    padding-bottom: var(--space-4);
+  }
+
+  .footer-logo {
+    font-family: var(--font-poster);
+    font-weight: 900;
+    font-size: 2.6rem;
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--teal);
+    text-decoration: none;
+  }
+
+  .footer-brand p {
+    margin-top: var(--space-2);
+    max-width: 34ch;
+    font-size: 0.95rem;
+  }
+
+  .site-footer h2 {
+    color: var(--yellow);
+    font-size: 1.3rem;
+    letter-spacing: 0.06em;
+    margin-bottom: var(--space-2);
+  }
+
+  .site-footer ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.45rem;
+  }
+
+  .site-footer a {
+    color: var(--on-ink);
+    text-decoration: none;
+  }
+
+  .site-footer a:hover {
+    color: var(--yellow);
+    text-decoration: underline;
+    text-decoration-color: var(--magenta);
+  }
+
+  .footer-legal {
+    border-top: 1px solid #333;
+    padding-top: var(--space-2);
+    padding-bottom: var(--space-4);
+    font-size: 0.82rem;
+  }
+
+  .footer-legal p {
+    margin: 0;
+    max-width: 90ch;
+  }
+
+  @media (max-width: 860px) {
+    .footer-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .footer-brand {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .footer-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

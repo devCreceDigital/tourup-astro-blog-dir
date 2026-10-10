@@ -1,5 +1,6 @@
 ---
 type: destino
+lang: es
 name: Ica
 country: Peru
 region: Ica
@@ -23,3 +24,4 @@ Ica es el centro del enoturismo peruano, puerta de entrada a las Líneas de Nazc
 ## Productos turísticos principales
 
 Los operadores receptivos en Ica ofrecen servicios para agencias emisoras y compradores B2B que buscan experiencias auténticas y operadores verificados en Perú.
+

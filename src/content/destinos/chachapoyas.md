@@ -1,5 +1,6 @@
 ---
 type: destino
+lang: es
 name: Chachapoyas
 country: Peru
 region: Amazonas
