@@ -1,6 +1,5 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
-import node from '@astrojs/node';
 import sitemap from '@astrojs/sitemap';
 import { namelessCompanySlugs, untranslatedEsPromptSlugs } from './scripts/lib/content-dedupe.mjs';
 import { contentDates, sourceFileForUrl } from './scripts/lib/content-dates.mjs';
@@ -43,10 +42,16 @@ function rehypeBandH2() {
 export default defineConfig({
 	site: 'https://guide.tourup.co',
 	output: 'static',
-	adapter: node({ mode: 'standalone' }),
 	trailingSlash: 'always',
 	// El inglés es el idioma principal: su portada es `/`.
-	redirects: { '/en/': '/' },
+	redirects: {
+		'/en/': '/',
+		// Rutas antiguas: /{lang}/peru/ ya no existe; el índice de destinos tiene su propia página.
+		'/en/peru/': '/en/destinations/',
+		'/es/peru/': '/es/destinos/',
+		'/companies/': '/en/companies/',
+		'/empresas/': '/es/empresas/',
+	},
 	markdown: { rehypePlugins: [rehypeDemoteH1, rehypeBandH2] },
 	integrations: [
 		// @astrojs/sitemap es la ÚNICA fuente del sitemap (sitemap-index.xml + sitemap-N.xml).

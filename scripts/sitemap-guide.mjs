@@ -1,15 +1,15 @@
 /**
- * postbuild: genera dist/client/sitemap-guide.xml, un único <urlset> con todas las URLs del
+ * postbuild: genera dist/sitemap-guide.xml, un único <urlset> con todas las URLs del
  * sitemap que produce @astrojs/sitemap (sitemap-index.xml → sitemap-N.xml). Es el sitemap que
  * se declara en robots.txt y el que puede referenciar el sitemap principal de tourup.co.
  */
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-const OUT_DIR = 'dist/client';
+const OUT_DIR = 'dist';
 const indexPath = join(OUT_DIR, 'sitemap-index.xml');
 if (!existsSync(indexPath)) {
-  console.error('sitemap-guide: falta dist/client/sitemap-index.xml (¿se ejecutó el build?)');
+  console.error('sitemap-guide: falta dist/sitemap-index.xml (¿se ejecutó el build?)');
   process.exit(1);
 }
 

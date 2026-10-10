@@ -1,6 +1,6 @@
 /**
  * Notifica a IndexNow (Bing, Yandex, Seznam… comparten el aviso) todas las URLs de
- * dist/client/sitemap-guide.xml. Bing alimenta la búsqueda de ChatGPT y de Copilot.
+ * dist/sitemap-guide.xml. Bing alimenta la búsqueda de ChatGPT y de Copilot.
  *
  * Uso, SOLO después de desplegar (las URLs deben responder ya en producción):
  *   npm run build && <desplegar> && npm run indexnow
@@ -12,7 +12,7 @@
 import { readdirSync, readFileSync, existsSync } from 'node:fs';
 
 const HOST = 'guide.tourup.co';
-const SITEMAP = 'dist/client/sitemap-guide.xml';
+const SITEMAP = 'dist/sitemap-guide.xml';
 const dryRun = process.argv.includes('--dry-run');
 
 const keyFile = readdirSync('public').find((f) => /^[0-9a-f]{32}\.txt$/.test(f));

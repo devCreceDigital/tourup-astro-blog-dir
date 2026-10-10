@@ -8,7 +8,7 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-const OUT = 'dist/client';
+const OUT = 'dist';
 const SITE = 'https://guide.tourup.co';
 const exists = (path) => existsSync(join(OUT, decodeURIComponent(path), 'index.html')) || existsSync(join(OUT, decodeURIComponent(path)));
 const stripAccents = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/ñ/g, 'n');

@@ -1,0 +1,23 @@
+---
+/** Página 404 estática: Cloudflare la sirve para cualquier ruta que no existe. */
+import GuidePage from '../components/site/GuidePage.astro';
+---
+
+<GuidePage
+  title="Page not found | TourUp Guide"
+  heading="Page not found"
+  dek="That address does not exist. Try one of these instead."
+  description="The page you were looking for does not exist on TourUp Guide."
+  currentPath="/404/"
+  lang="en"
+  breadcrumb="Not found"
+  noindex
+>
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/en/destinations/">Destinations</a></li>
+    <li><a href="/en/sustainability/">Sustainability</a></li>
+    <li><a href="/en/companies/">Operator directory</a></li>
+    <li><a href="/es/">Versión en español</a></li>
+  </ul>
+</GuidePage>

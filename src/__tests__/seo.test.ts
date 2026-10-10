@@ -163,9 +163,13 @@ describe('JSON-LD: sin marcado engañoso ni duplicado', () => {
     expect(siteLd).toContain('#webpage');
   });
 
-  it('Layout y SettingsHead comparten el mismo grafo', () => {
+  it('todas las páginas emiten el mismo grafo desde Layout', () => {
     expect(read('src/layouts/Layout.astro')).toContain('<SiteJsonLd');
-    expect(read('src/components/SettingsHead.astro')).toContain('<SiteJsonLd');
+  });
+
+  it('el sitio es 100 % estático: sin adaptador ni rutas SSR', () => {
+    expect(read('astro.config.mjs')).not.toMatch(/adapter:|@astrojs\/node/);
+    expect(read('astro.config.mjs')).toContain("output: 'static'");
   });
 });
 
