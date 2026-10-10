@@ -90,7 +90,19 @@ describe('quickAnswer', () => {
 
   it('las estadísticas excluyen fichas sin nombre', () => {
     expect(stats.total).toBe(2);
-    expect(stats.regions.map((c) => c.label)).toEqual(expect.arrayContaining(['Cusco', 'Arequipa']));
+    // Misma cuenta que la página de cada destino (una empresa por RUC, solo con nombre).
+    const destinos = [
+      { id: 'cusco.md', data: { name: 'Cusco' } },
+      { id: 'arequipa.md', data: { name: 'Arequipa' } },
+      { id: 'peru.md', data: { name: 'Peru' } },
+    ];
+    const withDest = [
+      { ...companies[0], data: { ...companies[0].data, destinos: ['cusco'] } },
+      { ...companies[1], data: { ...companies[1].data, destinos: ['arequipa', 'cusco'] } },
+      { ...companies[2], data: { ...companies[2].data, destinos: ['cusco'] } },
+    ];
+    const byDest = directoryStats(withDest, 'es', destinos).destinations;
+    expect(byDest).toEqual([{ label: 'Cusco', count: 2 }, { label: 'Arequipa', count: 1 }]);
     expect(stats.roles.map((r) => r.label)).toContain('operadores turísticos');
   });
 
@@ -127,5 +139,15 @@ describe('isTranslated', () => {
     expect(isTranslated('Best Peru tours', 'Best Peru tours')).toBe(false);
     expect(isTranslated('Mejores tours en Perú', 'Best Peru tours')).toBe(true);
     expect(isTranslated('Solo en español', undefined)).toBe(true);
+  });
+});
+
+describe('prompts de relleno (build)', () => {
+  it('el detector del build coincide con el de la página: 195 de 201 comparten la lista por defecto', async () => {
+    const { placeholderPromptSlugs } = await import('../../scripts/lib/content-dedupe.mjs');
+    const filler = placeholderPromptSlugs('src/content/prompts');
+    expect(filler.size).toBeGreaterThan(150);
+    // Los que tienen menciones propias no se tocan.
+    expect(filler.has('affordable-peru-tour-operators-with-good-reviews')).toBe(false);
   });
 });

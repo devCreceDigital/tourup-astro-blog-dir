@@ -4,27 +4,58 @@
 
 The guide is in English (primary) and Spanish (`/es/`). Company profiles show registry data (RUC tax ID, address, contact). Sustainability data (certifications and recognised destinations) comes from the TourVerificado registry, with each certifier as source. Full detail in `llms-full.txt`.
 
-## Secciones principales
+## Main sections
 
-- [Home (EN)](https://guide.tourup.co/)
-- [Inicio (ES)](https://guide.tourup.co/es/)
+- [Home](https://guide.tourup.co/)
 - [Destinations in Peru](https://guide.tourup.co/en/destinations/): every destination guide, with the registered companies operating there
-- [Destinos de Perú](https://guide.tourup.co/es/destinos/)
+- [7-day Peru itinerary](https://guide.tourup.co/en/peru/itinerario-7-dias/)
+- [10-day Peru itinerary](https://guide.tourup.co/en/peru/itinerario-10-dias/)
+- [14-day Peru itinerary](https://guide.tourup.co/en/peru/itinerario-14-dias/)
+- [Machu Picchu tours from Cusco](https://guide.tourup.co/en/peru/cusco/tours-machu-picchu/)
+- [Peru travel FAQ](https://guide.tourup.co/en/peru/preguntas-frecuentes/)
 - [Sustainable travel in Peru](https://guide.tourup.co/en/sustainability/): companies with a valid sustainability certification, Green Destinations recognitions, sustainable itineraries
-- [Turismo sostenible en Perú](https://guide.tourup.co/es/sostenibilidad/)
 - [Sustainable itinerary: 1 day](https://guide.tourup.co/en/sustainability/1-day/)
 - [Sustainable itinerary: 7 days (northern Peru)](https://guide.tourup.co/en/sustainability/7-days/)
 - [Sustainable itinerary: 14 days (southern Peru)](https://guide.tourup.co/en/sustainability/14-days/)
 - [Company directory](https://guide.tourup.co/en/companies/): tour operators, agencies and DMCs in Peru (B2B)
-- [Directorio de empresas](https://guide.tourup.co/es/empresas/): operadores, agencias y DMC de Perú
-- [AI prompts (EN)](https://guide.tourup.co/en/ai-prompts/): frequent traveller queries and the brands AI assistants cite
-- [Preguntas frecuentes sobre Perú](https://guide.tourup.co/es/peru/preguntas-frecuentes/)
-- [Peru FAQ](https://guide.tourup.co/en/peru/preguntas-frecuentes/)
+- [Traveller questions](https://guide.tourup.co/en/ai-prompts/): frequent traveller questions answered with directory data
+- [Guides](https://guide.tourup.co/blog/)
+
+## Español
+
+- [Inicio](https://guide.tourup.co/es/)
+- [Destinos de Perú](https://guide.tourup.co/es/destinos/)
 - [Itinerario de 7 días](https://guide.tourup.co/es/peru/itinerario-7-dias/)
 - [Itinerario de 10 días](https://guide.tourup.co/es/peru/itinerario-10-dias/)
 - [Itinerario de 14 días](https://guide.tourup.co/es/peru/itinerario-14-dias/)
 - [Tours a Machu Picchu desde Cusco](https://guide.tourup.co/es/peru/cusco/tours-machu-picchu/)
-- [Guides](https://guide.tourup.co/blog/)
+- [Preguntas frecuentes sobre Perú](https://guide.tourup.co/es/peru/preguntas-frecuentes/)
+- [Turismo sostenible en Perú](https://guide.tourup.co/es/sostenibilidad/)
+- [Directorio de empresas](https://guide.tourup.co/es/empresas/): operadores, agencias y DMC de Perú
+
+## Destinations (EN)
+
+- [Arequipa](https://guide.tourup.co/en/peru/arequipa/): Arequipa, the White City, is the second most important tourist destination in Peru.
+- [Ayacucho](https://guide.tourup.co/en/peru/ayacucho/): Ayacucho, known for its 33 colonial churches and the most important Holy Week in Peru. Wari and Vilcashuamán are its main archaeological complexes.
+- [Cajamarca](https://guide.tourup.co/en/peru/cajamarca/): Cajamarca, a historic destination with the Ransom Room, Inca thermal baths, and the Cumbemayo archaeological complex.
+- [Chachapoyas](https://guide.tourup.co/en/peru/chachapoyas/): Chachapoyas offers the Kuélap Fortress, Gocta Waterfall, and Karajía sarcophagi. An emerging destination for nature and archaeology.
+- [Chiclayo](https://guide.tourup.co/en/peru/chiclayo/): Chiclayo is the archaeological center of northern Peru, home to the Lord of Sipán, the Túcume pyramids, and the Royal Tombs Museum.
+- [Colca](https://guide.tourup.co/en/peru/colca/): The Colca Canyon, one of the deepest in the world, is famous for condor flight viewing, pre-Inca terraces, and hot springs.
+- [Cusco](https://guide.tourup.co/en/peru/cusco/): Cusco was the capital of the Inca Empire and today is the gateway to Machu Picchu, the Sacred Valley, and living Andean culture.
+- [Huaraz](https://guide.tourup.co/en/peru/huaraz/): Huaraz is the mountaineering capital of Peru, gateway to Huascarán National Park, Laguna 69, and the Cordillera Blanca.
+- [Ica](https://guide.tourup.co/en/peru/ica/): Ica is the center of Peruvian wine tourism, gateway to the Nazca Lines, Paracas Reserve, and the Huacachina dunes.
+- [Iquitos](https://guide.tourup.co/en/peru/iquitos/): Iquitos is the largest city in the Peruvian Amazon, the largest in the world without road access.
+- [Lima](https://guide.tourup.co/en/peru/lima/): Lima, the capital of Peru, is the main entry hub to the country and the gastronomic capital of Latin America.
+- [Machu Picchu](https://guide.tourup.co/en/peru/machu_picchu/): Machu Picchu, the UNESCO World Heritage Inca citadel, is the most important archaeological destination in South America.
+- [Manu](https://guide.tourup.co/en/peru/manu/): Manu National Park, a UNESCO World Heritage site, is one of the most biodiverse protected areas on the planet for wildlife observation.
+- [Nazca](https://guide.tourup.co/en/peru/nazca/): Nazca is famous for its UNESCO World Heritage Lines and pre-Inca aqueducts. An essential destination for archaeology and scenic flights.
+- [Paracas](https://guide.tourup.co/en/peru/paracas/): Paracas National Reserve, a marine-coastal area with whales, Humboldt penguins, and rock formations. Main marine tourism destination from Lima.
+- [Peru](https://guide.tourup.co/en/peru/peru/): Peru is the country of 84 of the 117 ecological zones on the planet. Empires were born here, cooking techniques date back millennia, and each valley holds a…
+- [Piura](https://guide.tourup.co/en/peru/piura/): Piura is Peru's main sun and beach destination, with Máncora, Colán, and Los Órganos for water sports and northern cuisine.
+- [Puerto Maldonado](https://guide.tourup.co/en/peru/puerto_maldonado/): Puerto Maldonado is the gateway to the Tambopata Reserve and Manu National Park, areas with the highest biodiversity on the planet.
+- [Puno](https://guide.tourup.co/en/peru/puno/): Puno is the folkloric capital of Peru and the gateway to Lake Titicaca, the highest navigable lake in the world.
+- [Tarapoto](https://guide.tourup.co/en/peru/tarapoto/): Tarapoto is the center of the Peruvian high jungle with waterfalls, lagoons, rafting, and adventure tourism in mountain rainforest.
+- [Trujillo](https://guide.tourup.co/en/peru/trujillo/): Trujillo is the capital of the marinera dance, gateway to Chan Chan, Huacas del Sol y la Luna, and the beaches of Huanchaco.
 
 ## Destinos (ES)
 
@@ -34,45 +65,21 @@ The guide is in English (primary) and Spanish (`/es/`). Company profiles show re
 - [Chachapoyas](https://guide.tourup.co/es/peru/chachapoyas/): Chachapoyas ofrece la Fortaleza de Kuélap, la Catarata de Gocta y los sarcófagos de Karajía. Destino emergente para naturaleza y arqueología.
 - [Chiclayo](https://guide.tourup.co/es/peru/chiclayo/): Chiclayo es el centro arqueológico del norte peruano, con el Señor de Sipán, las pirámides de Túcume y el Museo Tumbas Reales.
 - [Colca](https://guide.tourup.co/es/peru/colca/): El Cañón del Colca, uno de los más profundos del mundo, es famoso por el vuelo del cóndor, terrazas preincaicas y aguas termales.
-- [Cusco](https://guide.tourup.co/es/peru/cusco/): Cusco fue la capital del Imperio Inca y hoy es la puerta de entrada a Machu Picchu, el Valle Sagrado y la cultura andina viva. Sus calles de piedra, mercados…
+- [Cusco](https://guide.tourup.co/es/peru/cusco/): Cusco fue la capital del Imperio Inca y hoy es la puerta de entrada a Machu Picchu, el Valle Sagrado y la cultura andina viva.
 - [Huaraz](https://guide.tourup.co/es/peru/huaraz/): Huaraz es la capital del andinismo en Perú, puerta de entrada al Parque Nacional Huascarán, la Laguna 69 y la Cordillera Blanca.
 - [Ica](https://guide.tourup.co/es/peru/ica/): Ica es el centro del enoturismo peruano, puerta de entrada a las Líneas de Nazca, la Reserva de Paracas y las dunas de Huacachina.
-- [Iquitos](https://guide.tourup.co/es/peru/iquitos/): Iquitos es la ciudad más grande de la Amazonía peruana, la mayor del mundo sin acceso por carretera. Es la puerta de entrada a lodges amazónicos, reservas…
-- [Lima](https://guide.tourup.co/es/peru/lima/): Lima, la capital de Perú, es el principal hub de entrada al país y la capital gastronómica de América Latina. Combina historia colonial, arte contemporáneo,…
-- [Machu Picchu](https://guide.tourup.co/es/peru/machu_picchu/): Machu Picchu, la ciudadela inca Patrimonio de la Humanidad, es el destino arqueológico más importante de Sudamérica. Construida en el siglo XV sobre una cresta…
+- [Iquitos](https://guide.tourup.co/es/peru/iquitos/): Iquitos es la ciudad más grande de la Amazonía peruana, la mayor del mundo sin acceso por carretera.
+- [Lima](https://guide.tourup.co/es/peru/lima/): Lima, la capital de Perú, es el principal hub de entrada al país y la capital gastronómica de América Latina.
+- [Machu Picchu](https://guide.tourup.co/es/peru/machu_picchu/): Machu Picchu, la ciudadela inca Patrimonio de la Humanidad, es el destino arqueológico más importante de Sudamérica.
 - [Manu](https://guide.tourup.co/es/peru/manu/): El Parque Nacional del Manu, Patrimonio de la Humanidad, es una de las áreas protegidas más biodiversas del planeta para observación de fauna.
 - [Nazca](https://guide.tourup.co/es/peru/nazca/): Nazca es famosa por sus Líneas Patrimonio de la Humanidad y acueductos preincaicos. Destino imprescindible para arqueología y vuelos panorámicos.
 - [Paracas](https://guide.tourup.co/es/peru/paracas/): Reserva Nacional de Paracas, área marino-costera con ballenas, pingüinos de Humboldt y formaciones rocosas. Principal destino de turismo marino desde Lima.
 - [Peru](https://guide.tourup.co/es/peru/peru/): Perú es el país de los 84 de los 117 pisos ecológicos del planeta. Aquí nacieron imperios, se cocina con técnicas milenarias y cada valle guarda un secreto…
 - [Piura](https://guide.tourup.co/es/peru/piura/): Piura es el principal destino de sol y playa del Perú, con Máncora, Colán y Los Órganos para deportes acuáticos y gastronomía norteña.
 - [Puerto Maldonado](https://guide.tourup.co/es/peru/puerto_maldonado/): Puerto Maldonado es la puerta de entrada a la Reserva Tambopata y el Parque Manu, áreas con la mayor biodiversidad del planeta.
-- [Puno](https://guide.tourup.co/es/peru/puno/): Puno es la capital folclórica del Perú y la puerta de entrada al Lago Titicaca, el lago navegable más alto del mundo. Sus islas flotantes de los Uros, la…
+- [Puno](https://guide.tourup.co/es/peru/puno/): Puno es la capital folclórica del Perú y la puerta de entrada al Lago Titicaca, el lago navegable más alto del mundo.
 - [Tarapoto](https://guide.tourup.co/es/peru/tarapoto/): Tarapoto es el centro de la Amazonía alta peruana con cataratas, lagunas, rafting y turismo de aventura en selva de montaña.
 - [Trujillo](https://guide.tourup.co/es/peru/trujillo/): Trujillo es la capital de la marinera, puerta de entrada a Chan Chan, Huacas del Sol y la Luna, y las playas de Huanchaco.
-
-## Destinations (EN)
-
-- [Arequipa](https://guide.tourup.co/en/peru/arequipa/): Arequipa, the White City, is the second most important tourist destination in Peru. Its historic center built from volcanic sillar, the Misti, Chachani, and…
-- [Ayacucho](https://guide.tourup.co/en/peru/ayacucho/): Ayacucho, known for its 33 colonial churches and the most important Holy Week in Peru. Wari and Vilcashuamán are its main archaeological complexes.
-- [Cajamarca](https://guide.tourup.co/en/peru/cajamarca/): Cajamarca, a historic destination with the Ransom Room, Inca thermal baths, and the Cumbemayo archaeological complex.
-- [Chachapoyas](https://guide.tourup.co/en/peru/chachapoyas/): Chachapoyas offers the Kuélap Fortress, Gocta Waterfall, and Karajía sarcophagi. An emerging destination for nature and archaeology.
-- [Chiclayo](https://guide.tourup.co/en/peru/chiclayo/): Chiclayo is the archaeological center of northern Peru, home to the Lord of Sipán, the Túcume pyramids, and the Royal Tombs Museum.
-- [Colca](https://guide.tourup.co/en/peru/colca/): The Colca Canyon, one of the deepest in the world, is famous for condor flight viewing, pre-Inca terraces, and hot springs.
-- [Cusco](https://guide.tourup.co/en/peru/cusco/): Cusco was the capital of the Inca Empire and today is the gateway to Machu Picchu, the Sacred Valley, and living Andean culture. Its stone streets, traditional…
-- [Huaraz](https://guide.tourup.co/en/peru/huaraz/): Huaraz is the mountaineering capital of Peru, gateway to Huascarán National Park, Laguna 69, and the Cordillera Blanca.
-- [Ica](https://guide.tourup.co/en/peru/ica/): Ica is the center of Peruvian wine tourism, gateway to the Nazca Lines, Paracas Reserve, and the Huacachina dunes.
-- [Iquitos](https://guide.tourup.co/en/peru/iquitos/): Iquitos is the largest city in the Peruvian Amazon, the largest in the world without road access. It is the gateway to Amazon lodges, nature reserves, and…
-- [Lima](https://guide.tourup.co/en/peru/lima/): Lima, the capital of Peru, is the main entry hub to the country and the gastronomic capital of Latin America. It combines colonial history, contemporary art,…
-- [Machu Picchu](https://guide.tourup.co/en/peru/machu_picchu/): Machu Picchu, the UNESCO World Heritage Inca citadel, is the most important archaeological destination in South America. Built in the 15th century on a rocky…
-- [Manu](https://guide.tourup.co/en/peru/manu/): Manu National Park, a UNESCO World Heritage site, is one of the most biodiverse protected areas on the planet for wildlife observation.
-- [Nazca](https://guide.tourup.co/en/peru/nazca/): Nazca is famous for its UNESCO World Heritage Lines and pre-Inca aqueducts. An essential destination for archaeology and scenic flights.
-- [Paracas](https://guide.tourup.co/en/peru/paracas/): Paracas National Reserve, a marine-coastal area with whales, Humboldt penguins, and rock formations. Main marine tourism destination from Lima.
-- [Peru](https://guide.tourup.co/en/peru/peru/): Peru is the country of 84 of the 117 ecological zones on the planet. Empires were born here, cooking techniques date back millennia, and each valley holds a…
-- [Piura](https://guide.tourup.co/en/peru/piura/): Piura is Peru's main sun and beach destination, with Máncora, Colán, and Los Órganos for water sports and northern cuisine.
-- [Puerto Maldonado](https://guide.tourup.co/en/peru/puerto_maldonado/): Puerto Maldonado is the gateway to the Tambopata Reserve and Manu National Park, areas with the highest biodiversity on the planet.
-- [Puno](https://guide.tourup.co/en/peru/puno/): Puno is the folkloric capital of Peru and the gateway to Lake Titicaca, the highest navigable lake in the world. Its Uros floating islands, Quechua-Aymara…
-- [Tarapoto](https://guide.tourup.co/en/peru/tarapoto/): Tarapoto is the center of the Peruvian high jungle with waterfalls, lagoons, rafting, and adventure tourism in mountain rainforest.
-- [Trujillo](https://guide.tourup.co/en/peru/trujillo/): Trujillo is the capital of the marinera dance, gateway to Chan Chan, Huacas del Sol y la Luna, and the beaches of Huanchaco.
 
 ## Optional
 

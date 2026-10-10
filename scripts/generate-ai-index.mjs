@@ -12,12 +12,13 @@
 import { readdirSync, readFileSync, writeFileSync, existsSync, statSync } from 'fs';
 import { join, relative, basename } from 'path';
 import { createHash } from 'crypto';
-import { isOrphanDuplicate, isNamelessTitle, untranslatedEsPromptSlugs } from './lib/content-dedupe.mjs';
+import { isOrphanDuplicate, isNamelessTitle, untranslatedEsPromptSlugs, placeholderPromptSlugs } from './lib/content-dedupe.mjs';
 
 const SITE = 'https://guide.tourup.co';
 const SRC_CONTENT = 'src/content';
 // Prompts /es/ que son copia sin traducir del inglés: noindex, no se incluyen en el índice.
 const untranslatedEs = untranslatedEsPromptSlugs(join(SRC_CONTENT, 'prompts_es'), join(SRC_CONTENT, 'prompts'));
+const fillerPrompts = placeholderPromptSlugs(join(SRC_CONTENT, 'prompts'));
 const PUBLIC_DIR = 'public';
 const SKIP_DIRS = new Set(['node_modules', 'public', 'dist', '.git', '__tests__']);
 
@@ -212,6 +213,7 @@ function walkDir(dir, base = dir, entries) {
         const dirSegment = rel.split('/')[0] || '';
         if (dirSegment === 'companies' && (isOrphanDuplicate(frontmatter.slug, basename(full, '.md')) || isNamelessTitle(String(frontmatter.title ?? '')))) continue;
         if (dirSegment === 'prompts_es' && untranslatedEs.has(basename(full, '.md'))) continue;
+        if (dirSegment === 'prompts' && fillerPrompts.has(basename(full, '.md'))) continue;
         const lang = langFromDir(dirSegment);
         const type = detectType(dirSegment, frontmatter);
         const url = contentPathToUrl(rel, lang, frontmatter);

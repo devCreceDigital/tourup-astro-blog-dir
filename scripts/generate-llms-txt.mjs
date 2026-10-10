@@ -14,7 +14,7 @@
 import { readdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { join, basename } from 'node:path';
 import matter from 'gray-matter';
-import { isOrphanDuplicate, isNamelessTitle, untranslatedEsPromptSlugs } from './lib/content-dedupe.mjs';
+import { isOrphanDuplicate, isNamelessTitle, untranslatedEsPromptSlugs, placeholderPromptSlugs } from './lib/content-dedupe.mjs';
 
 export const SITE = (process.env.SITE_URL || 'https://guide.tourup.co').replace(/\/$/, '');
 const CONTENT = 'src/content';
@@ -33,11 +33,14 @@ export function loc(value, lang) {
   return String(value);
 }
 
-/** Una línea, sin saltos, recortada en límite de palabra. */
+/** Una línea, sin saltos. Si no cabe, corta en el último final de frase; si no hay, en límite de palabra. */
 export function clip(text, max = 180) {
   const flat = String(text ?? '').replace(/\s+/g, ' ').trim();
   if (flat.length <= max) return flat;
-  return flat.slice(0, max).replace(/\s+\S*$/, '') + '…';
+  const head = flat.slice(0, max);
+  const sentence = head.match(/^(.*[.!?])(?=\s|$)/);
+  if (sentence && sentence[1].length >= max * 0.45) return sentence[1];
+  return head.replace(/\s+\S*$/, '') + '…';
 }
 
 function readCollection(name) {
@@ -71,8 +74,10 @@ const categorias = readCollection('categorias_destino');
 const companies = readCollection('companies');
 // Los prompts /es/ sin traducir son noindex: no se anuncian a los LLM.
 const untranslatedEs = untranslatedEsPromptSlugs(join(CONTENT, 'prompts_es'), join(CONTENT, 'prompts'));
+// Los prompts con la lista de marcas por defecto son noindex (páginas casi idénticas): tampoco se anuncian.
+const fillerPrompts = placeholderPromptSlugs(join(CONTENT, 'prompts'));
 const prompts = {
-  en: readCollection('prompts'),
+  en: readCollection('prompts').filter((p) => !fillerPrompts.has(p.slug)),
   es: readCollection('prompts_es').filter((p) => !untranslatedEs.has(p.slug)),
 };
 
@@ -85,31 +90,38 @@ function buildLlmsTxt() {
     '',
   );
 
-  out.push('## Secciones principales', '');
+  out.push('## Main sections', '');
   out.push(
-    link('Home (EN)', urls.home('en')),
-    link('Inicio (ES)', urls.home('es')),
+    link('Home', urls.home('en')),
     link('Destinations in Peru', `${SITE}/en/destinations/`, 'every destination guide, with the registered companies operating there'),
-    link('Destinos de Perú', `${SITE}/es/destinos/`),
+    link('7-day Peru itinerary', `${SITE}/en/peru/itinerario-7-dias/`),
+    link('10-day Peru itinerary', `${SITE}/en/peru/itinerario-10-dias/`),
+    link('14-day Peru itinerary', `${SITE}/en/peru/itinerario-14-dias/`),
+    link('Machu Picchu tours from Cusco', `${SITE}/en/peru/cusco/tours-machu-picchu/`),
+    link('Peru travel FAQ', `${SITE}/en/peru/preguntas-frecuentes/`),
     link('Sustainable travel in Peru', `${SITE}/en/sustainability/`, 'companies with a valid sustainability certification, Green Destinations recognitions, sustainable itineraries'),
-    link('Turismo sostenible en Perú', `${SITE}/es/sostenibilidad/`),
     link('Sustainable itinerary: 1 day', `${SITE}/en/sustainability/1-day/`),
     link('Sustainable itinerary: 7 days (northern Peru)', `${SITE}/en/sustainability/7-days/`),
     link('Sustainable itinerary: 14 days (southern Peru)', `${SITE}/en/sustainability/14-days/`),
     link('Company directory', `${SITE}/en/companies/`, 'tour operators, agencies and DMCs in Peru (B2B)'),
-    link('Directorio de empresas', `${SITE}/es/empresas/`, 'operadores, agencias y DMC de Perú'),
-    link('AI prompts (EN)', `${SITE}/en/ai-prompts/`, 'frequent traveller queries and the brands AI assistants cite'),
-    link('Preguntas frecuentes sobre Perú', `${SITE}/es/peru/preguntas-frecuentes/`),
-    link('Peru FAQ', `${SITE}/en/peru/preguntas-frecuentes/`),
+    link('Traveller questions', `${SITE}/en/ai-prompts/`, 'frequent traveller questions answered with directory data'),
+    link('Guides', `${SITE}/blog/`),
+    '',
+    '## Español',
+    '',
+    link('Inicio', urls.home('es')),
+    link('Destinos de Perú', `${SITE}/es/destinos/`),
     link('Itinerario de 7 días', `${SITE}/es/peru/itinerario-7-dias/`),
     link('Itinerario de 10 días', `${SITE}/es/peru/itinerario-10-dias/`),
     link('Itinerario de 14 días', `${SITE}/es/peru/itinerario-14-dias/`),
     link('Tours a Machu Picchu desde Cusco', `${SITE}/es/peru/cusco/tours-machu-picchu/`),
-    link('Guides', `${SITE}/blog/`),
+    link('Preguntas frecuentes sobre Perú', `${SITE}/es/peru/preguntas-frecuentes/`),
+    link('Turismo sostenible en Perú', `${SITE}/es/sostenibilidad/`),
+    link('Directorio de empresas', `${SITE}/es/empresas/`, 'operadores, agencias y DMC de Perú'),
     '',
   );
 
-  for (const [lang, heading] of [['es', 'Destinos'], ['en', 'Destinations']]) {
+  for (const [lang, heading] of [['en', 'Destinations'], ['es', 'Destinos']]) {
     out.push(`## ${heading} (${lang.toUpperCase()})`, '');
     for (const d of destinos[lang]) {
       out.push(link(loc(d.data.name, lang) || d.slug, urls.destino(lang, d.slug), clip(loc(d.data.summary, lang), 160)));
@@ -136,7 +148,7 @@ function buildLlmsFullTxt() {
     return d ? loc(d.data.name, lang) || slug : slug;
   };
 
-  for (const lang of ['es', 'en']) {
+  for (const lang of ['en', 'es']) {
     out.push(`## ${lang === 'es' ? 'Destinos' : 'Destinations'} (${lang.toUpperCase()})`, '');
     for (const d of destinos[lang]) {
       out.push(`### ${loc(d.data.name, lang) || d.slug}`, `URL: ${urls.destino(lang, d.slug)}`, '');

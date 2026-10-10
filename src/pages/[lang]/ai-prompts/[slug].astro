@@ -46,11 +46,12 @@ const es = lang === 'es';
 const t = (esText: string, enText: string) => (es ? esText : enText);
 const { Content } = await prompt.render();
 
-const [companies, externalBrands, promptsEn, promptsEs] = await Promise.all([
+const [companies, externalBrands, promptsEn, promptsEs, destinos] = await Promise.all([
   getCollection('companies'),
   getCollection('external_brands'),
   getCollection('prompts'),
   getCollection('prompts_es'),
+  getCollection(es ? 'destinos' : 'destinos_en'),
 ]);
 
 const resolvedBrands = resolveMentions(prompt.data.brands_ai_mentions, indexCompanies(companies), externalBrands, lang);
@@ -81,7 +82,7 @@ const answer = manualAnswer && !/^Landing page answering/i.test(manualAnswer)
       mentions: resolvedBrands,
       realMentions,
       platforms: prompt.data.ai_platforms ?? [],
-      stats: directoryStats(companies, lang),
+      stats: directoryStats(companies, lang, destinos),
     });
 
 const destName = prompt.data.destination_cluster && !/^peru(_national)?$/i.test(prompt.data.destination_cluster)
@@ -156,7 +157,7 @@ const validDate = checkedDate && !Number.isNaN(checkedDate.getTime()) ? checkedD
   currentPath={pagePath}
   lang={lang}
   date={prompt.data.last_ai_check_date}
-  noindex={!translated}
+  noindex={!translated || !realMentions}
   hreflang={translated && hasTwin}
 >
   <JsonLdPromptLanding

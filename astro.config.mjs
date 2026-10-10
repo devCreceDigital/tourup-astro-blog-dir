@@ -1,13 +1,15 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
-import { namelessCompanySlugs, untranslatedEsPromptSlugs } from './scripts/lib/content-dedupe.mjs';
+import { namelessCompanySlugs, untranslatedEsPromptSlugs, placeholderPromptSlugs } from './scripts/lib/content-dedupe.mjs';
 import { contentDates, sourceFileForUrl } from './scripts/lib/content-dates.mjs';
 
 // Fichas sin nombre real en el dato de origen (título "-"): se publican con noindex, no van al sitemap.
 const nameless = namelessCompanySlugs('src/content/companies');
 // Fecha real del último cambio de cada archivo de contenido (git), para <lastmod>.
 const dates = contentDates();
+// Prompts con la lista de marcas por defecto (páginas casi idénticas): noindex, fuera del sitemap.
+const fillerPrompts = placeholderPromptSlugs('src/content/prompts');
 // Prompts /es/ que son copia sin traducir del inglés: noindex, fuera del sitemap.
 const untranslatedEs = untranslatedEsPromptSlugs('src/content/prompts_es', 'src/content/prompts');
 
@@ -66,7 +68,9 @@ export default defineConfig({
 				const m = page.match(/\/(?:companies|empresas)\/([^/]+)\/$/);
 				if (m && nameless.has(decodeURIComponent(m[1]))) return false;
 				const p = page.match(/\/es\/ai-prompts\/([^/]+)\/$/);
-				return !(p && untranslatedEs.has(decodeURIComponent(p[1])));
+				if (p && untranslatedEs.has(decodeURIComponent(p[1]))) return false;
+				const e = page.match(/\/en\/ai-prompts\/([^/]+)\/$/);
+				return !(e && fillerPrompts.has(decodeURIComponent(e[1])));
 			},
 			serialize: (entry) => {
 				if (entry.url.match(/\/(?:en|es)\/peru\/[^/]+\/tours\/[^/]+\/?$/)) {

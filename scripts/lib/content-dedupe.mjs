@@ -1,5 +1,6 @@
 import { basename, join } from 'node:path';
 import { readdirSync, readFileSync } from 'node:fs';
+import matter from 'gray-matter';
 
 /**
  * Hay fichas de empresa duplicadas cuyo nombre de archivo perdió los acentos
@@ -54,4 +55,28 @@ export function namelessCompanySlugs(dir) {
     if (isNamelessTitle(title)) out.add(basename(file, '.md'));
   }
   return out;
+}
+
+/**
+ * Prompts cuya lista de marcas es el valor por defecto que comparten casi todos (195 de 201):
+ * no son menciones reales de una IA para esa pregunta, y sus páginas son casi idénticas. Se
+ * publican con noindex y quedan fuera del sitemap y de los índices para IA. Misma regla que
+ * placeholderSignatures() de src/utils/prompts.ts: una firma repetida en más del 20 % de los
+ * prompts es relleno. Cuando se regeneren las menciones por pregunta, dejan de contar solas.
+ */
+export function placeholderPromptSlugs(dir, threshold = 0.2) {
+  const sigOf = (mentions) =>
+    (mentions ?? [])
+      .map((m) => (typeof m === 'string' ? m : `${m.entity_type}:${m.entity_slug ?? m.name}`))
+      .filter((x) => !/^(destino|categoria):/.test(x))
+      .sort()
+      .join('|');
+  const entries = readdirSync(dir)
+    .filter((f) => f.endsWith('.md'))
+    .map((f) => ({ slug: basename(f, '.md'), sig: sigOf(matter(readFileSync(join(dir, f), 'utf8')).data.brands_ai_mentions) }));
+  const counts = new Map();
+  for (const e of entries) if (e.sig) counts.set(e.sig, (counts.get(e.sig) ?? 0) + 1);
+  const min = Math.max(2, entries.length * threshold);
+  const filler = new Set([...counts].filter(([, n]) => n > min).map(([sig]) => sig));
+  return new Set(entries.filter((e) => filler.has(e.sig)).map((e) => e.slug));
 }

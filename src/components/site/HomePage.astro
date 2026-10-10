@@ -9,7 +9,7 @@ import Photo from './Photo.astro';
 import DestinationMosaic from './DestinationMosaic.astro';
 import type { Locale } from '../../utils/i18n';
 import { getLocalizedString } from '../../utils/i18n';
-import { directoryStats } from '../../utils/prompts';
+import { directoryStats, mentionSignature, placeholderSignatures } from '../../utils/prompts';
 import {
   ITINERARIES,
   destinationPath,
@@ -33,7 +33,7 @@ const [companies, destinos, prompts] = await Promise.all([
   getCollection(es ? 'destinos' : 'destinos_en'),
   getCollection('prompts'),
 ]);
-const stats = directoryStats(companies, lang);
+const stats = directoryStats(companies, lang, destinos);
 const destinationCount = destinos.filter((d) => d.id.replace(/\.md$/i, '') !== 'peru').length;
 const hero = (photos as any)['machu-picchu-hero'];
 
@@ -113,9 +113,15 @@ const popular = [
 ];
 
 // Preguntas reales de viajeros: primero las que tienen menciones propias de IA.
+// Primero las preguntas con menciones propias (las únicas indexables); después, por orden alfabético.
+const placeholders = placeholderSignatures(prompts.map((p) => p.data.brands_ai_mentions ?? []));
 const questions = prompts
-  .map((p) => ({ slug: p.id.replace(/\.md$/i, ''), title: getLocalizedString(p.data.title, 'en') }))
-  .sort((a, b) => a.title.localeCompare(b.title))
+  .map((p) => ({
+    slug: p.id.replace(/\.md$/i, ''),
+    title: getLocalizedString(p.data.title, 'en'),
+    real: !placeholders.has(mentionSignature(p.data.brands_ai_mentions)),
+  }))
+  .sort((a, b) => Number(b.real) - Number(a.real) || a.title.localeCompare(b.title))
   .slice(0, 8);
 
 const valley = t('Valle Sagrado', 'Sacred Valley');
@@ -267,8 +273,8 @@ const rolesText = stats.roles
         )}
       </p>
       <p class="directory-regions">
-        {t('Por región:', 'By region:')}{' '}
-        {stats.regions.slice(0, 5).map((r, i) => (
+        {t('Por destino:', 'By destination:')}{' '}
+        {stats.destinations.slice(0, 5).map((r, i) => (
           <span>{i > 0 && ' · '}{r.label} <span class="count">{r.count}</span></span>
         ))}
       </p>

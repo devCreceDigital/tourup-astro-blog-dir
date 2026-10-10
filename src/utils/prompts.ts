@@ -9,6 +9,7 @@
  */
 import { getLocalizedString, type Locale } from './i18n';
 import { cityLabel, companyDescription, companyDisplayName, companyPath, companyRole, hasCompanyName } from './seo';
+import { operatorsIn } from './graph';
 
 export interface Entry {
   id: string;
@@ -96,8 +97,8 @@ export function placeholderSignatures(allMentions: unknown[][], threshold = 0.2)
 export interface DirectoryStats {
   total: number;
   roles: { label: string; count: number }[];
-  /** Por región (Cusco, Lima…): `location.city` es el distrito (Wanchaq, Miraflores). */
-  regions: { label: string; count: number }[];
+  /** Por destino (Cusco, Lima…), con la misma cuenta que muestra la página de cada destino. */
+  destinations: { label: string; count: number }[];
 }
 
 const ROLE_PLURAL: Record<string, Record<Locale, string>> = {
@@ -110,7 +111,7 @@ const ROLE_PLURAL: Record<string, Record<Locale, string>> = {
 };
 
 /** Cifras reales del directorio (solo fichas con nombre, que son las indexables). */
-export function directoryStats(companies: Entry[], lang: Locale): DirectoryStats {
+export function directoryStats(companies: Entry[], lang: Locale, destinos: Entry[] = []): DirectoryStats {
   const named = companies.filter((c) => hasCompanyName(getLocalizedString(c.data.title, lang)));
   const tally = (key: (c: Entry) => string) => {
     const m = new Map<string, number>();
@@ -123,7 +124,12 @@ export function directoryStats(companies: Entry[], lang: Locale): DirectoryStats
   return {
     total: named.length,
     roles: tally((c) => ROLE_PLURAL[c.data.distribution_role]?.[lang] ?? companyRole(c.data, lang)),
-    regions: tally((c) => cityLabel(c.data.location?.region ?? c.data.nap?.region ?? c.data.location?.city)),
+    destinations: destinos
+      .map((d) => ({ slug: d.id.replace(/\.md$/i, ''), label: getLocalizedString(d.data.name, lang) }))
+      .filter((d) => d.slug !== 'peru' && d.label)
+      .map((d) => ({ label: d.label, count: operatorsIn(companies, d.slug, lang).length }))
+      .filter((d) => d.count > 0)
+      .sort((a, b) => b.count - a.count),
   };
 }
 
@@ -164,10 +170,10 @@ export function quickAnswer(opts: {
       : `For “${question}”, ${who} answers mention ${names}${more}. Each company in the TourUp directory has a profile with its tax ID (RUC), address and contact details.`;
   }
   const roles = listJoin(stats.roles.slice(0, 3).map((r) => `${r.count} ${r.label}`), lang);
-  const regions = listJoin(stats.regions.slice(0, 3).map((c) => `${c.label} (${c.count})`), lang);
+  const places = listJoin(stats.destinations.slice(0, 3).map((c) => `${c.label} (${c.count})`), lang);
   return es
-    ? `El directorio TourUp reúne ${stats.total} empresas de turismo registradas en Perú (${roles}), sobre todo en las regiones de ${regions}. Cada ficha muestra el RUC, la dirección y los datos de contacto de la empresa para comprobarla antes de reservar.`
-    : `The TourUp directory lists ${stats.total} registered travel companies in Peru (${roles}), mostly in the ${regions} regions. Each profile shows the company's tax ID (RUC), address and contact details so you can check it before booking.`;
+    ? `El directorio TourUp reúne ${stats.total} empresas de turismo registradas en Perú (${roles}), sobre todo en los destinos de ${places}. Cada ficha muestra el RUC, la dirección y los datos de contacto de la empresa para comprobarla antes de reservar.`
+    : `The TourUp directory lists ${stats.total} registered travel companies in Peru (${roles}), mostly in the destinations of ${places}. Each profile shows the company's tax ID (RUC), address and contact details so you can check it before booking.`;
 }
 
 /** Texto de apoyo de una tarjeta de empresa: descripción veraz en el idioma de la página. */

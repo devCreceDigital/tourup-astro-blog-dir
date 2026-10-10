@@ -2,7 +2,7 @@
 import { getCollection } from 'astro:content';
 import Layout from '../../../layouts/Layout.astro';
 import { getLocalizedString } from '../../../utils/i18n';
-import { companyDisplayName } from '../../../utils/seo';
+import { companyDisplayName, hasCompanyName } from '../../../utils/seo';
 
 export async function getStaticPaths() {
   return [{ params: { lang: 'en' }, props: { lang: 'en' } }];
@@ -12,7 +12,8 @@ interface Props { lang: string; }
 const { lang } = Astro.props;
 const loc = (field: any) => getLocalizedString(field, lang);
 
-const companies = await getCollection('companies');
+// Solo fichas con nombre real: las 9 sin nombre son noindex y no cuentan en las cifras del sitio.
+const companies = (await getCollection('companies')).filter((c) => hasCompanyName(loc(c.data.title)));
 
 const grouped = companies.reduce<Record<string, typeof companies>>((acc, c) => {
   const titleStr = typeof c.data.title === 'string' ? c.data.title : (c.data.title?.en || c.data.title?.es || c.id);
@@ -39,7 +40,7 @@ const currentPath = `/${lang}/companies/`;
 
 <Layout
   title="Directory of Tourism Companies in Peru – TourUp"
-  description={`Complete directory of ${companies.length} tourism service providers in Peru. Find verified operators, agencies and DMCs.`}
+  description={`Complete directory of ${companies.length} tourism service providers in Peru. Find registered operators, agencies and DMCs, each with its tax ID (RUC).`}
   currentPath={currentPath}
   lang={lang}
 >
